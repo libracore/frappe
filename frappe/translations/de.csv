@@ -2463,7 +2463,7 @@ DocType: Auto Email Report,Weekly,Wöchentlich
 DocType: Communication,In Reply To,Als Antwort auf
 DocType: DocType,Allow Import (via Data Import Tool),Lassen Sie Import (via Datenimport-Tool)
 apps/frappe/frappe/templates/print_formats/standard_macros.html +30,Sr,Sr
-DocType: DocField,Float,Wechselkurs
+DocType: DocField,Float,Gleitkommazahl
 apps/frappe/frappe/www/update-password.html +71,Invalid Password,Ungültiges Passwort
 DocType: Contact,Purchase Master Manager,Einkaufsstammdaten-Manager
 DocType: Module Def,Module Name,Modulname
