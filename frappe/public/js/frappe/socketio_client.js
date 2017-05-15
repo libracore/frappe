@@ -196,9 +196,16 @@ frappe.socket = {
 	},
 	setup_file_watchers: function() {
 		var host = window.location.origin;
+		if(!window.dev_server) {
+			return;
+		}
+
 		var port = '6787';
-		// remove the port number from string
-		host = host.split(':').slice(0, -1).join(":");
+		var parts = host.split(":");
+		// remove the port number from string if exists
+		if (parts.length > 2) {
+			host = host.split(':').slice(0, -1).join(":");
+		}
 		host = host + ':' + port;
 
 		frappe.socket.file_watcher = io.connect(host);

@@ -419,6 +419,11 @@ def validate_fields(meta):
 	def check_in_list_view(d):
 		if d.in_list_view and (d.fieldtype in not_allowed_in_list_view):
 			frappe.throw(_("'In List View' not allowed for type {0} in row {1}").format(d.fieldtype, d.idx))
+			
+	def check_in_global_search(d):
+		if d.in_global_search and d.fieldtype in no_value_fields:
+			frappe.throw(_("'In Global Search' not allowed for type {0} in row {1}")
+				.format(d.fieldtype, d.idx))
 
 	def check_dynamic_link_options(d):
 		if d.fieldtype=="Dynamic Link":
@@ -453,7 +458,7 @@ def validate_fields(meta):
 						group by `{fieldname}` having count(*) > 1 limit 1""".format(
 						doctype=d.parent, fieldname=d.fieldname))
 
-				except MySQLdb.OperationalError, e:
+				except MySQLdb.OperationalError as e:
 					if e.args and e.args[0]==1054:
 						# ignore if missing column, else raise
 						# this happens in case of Custom Field
@@ -582,6 +587,7 @@ def validate_fields(meta):
 		check_dynamic_link_options(d)
 		check_hidden_and_mandatory(d)
 		check_in_list_view(d)
+		check_in_global_search(d)
 		check_illegal_default(d)
 		check_unique_and_text(d)
 
@@ -717,9 +723,9 @@ def make_module_and_roles(doc, perm_fieldname="permissions"):
 				r = frappe.get_doc(dict(doctype= "Role", role_name=role, desk_access=1))
 				r.flags.ignore_mandatory = r.flags.ignore_permissions = True
 				r.insert()
-	except frappe.DoesNotExistError, e:
+	except frappe.DoesNotExistError as e:
 		pass
-	except frappe.SQLError, e:
+	except frappe.SQLError as e:
 		if e.args[0]==1146:
 			pass
 		else:

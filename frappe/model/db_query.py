@@ -33,6 +33,7 @@ class DatabaseQuery(object):
 		ignore_ifnull=False, save_user_settings=False, save_user_settings_fields=False,
 		update=None, add_total_row=None, user_settings=None):
 		if not ignore_permissions and not frappe.has_permission(self.doctype, "read", user=user):
+			frappe.flags.error_message = _('Insufficient Permission for {0}').format(frappe.bold(self.doctype))
 			raise frappe.PermissionError, self.doctype
 
 		# fitlers and fields swappable
@@ -198,6 +199,7 @@ class DatabaseQuery(object):
 		self.tables.append(table_name)
 		doctype = table_name[4:-1]
 		if (not self.flags.ignore_permissions) and (not frappe.has_permission(doctype)):
+			frappe.flags.error_message = _('Insufficient Permission for {0}').format(frappe.bold(doctype))
 			raise frappe.PermissionError, doctype
 
 	def set_field_tables(self):
@@ -250,8 +252,11 @@ class DatabaseQuery(object):
 			if match_conditions:
 				self.conditions.append("(" + match_conditions + ")")
 
-	def build_filter_conditions(self, filters, conditions):
+	def build_filter_conditions(self, filters, conditions, ignore_permissions=None):
 		"""build conditions from user filters"""
+		if ignore_permissions is not None:
+			self.flags.ignore_permissions = ignore_permissions
+
 		if isinstance(filters, dict):
 			filters = [filters]
 
@@ -299,9 +304,16 @@ class DatabaseQuery(object):
 
 			if f.operator.lower() == 'between' and \
 				(f.fieldname in ('creation', 'modified') or (df and (df.fieldtype=="Date" or df.fieldtype=="Datetime"))):
+
+				from_date = None
+				to_date = None
+				if f.value and isinstance(f.value, (list, tuple)):
+					if len(f.value) >= 1: from_date = f.value[0]
+					if len(f.value) >= 2: to_date = f.value[1]
+
 				value = "'%s' AND '%s'" % (
-					add_to_date(get_datetime(f.value[0]),days=-1).strftime("%Y-%m-%d %H:%M:%S.%f"),
-					get_datetime(f.value[1]).strftime("%Y-%m-%d %H:%M:%S.%f"))
+					add_to_date(get_datetime(from_date),days=-1).strftime("%Y-%m-%d %H:%M:%S.%f"),
+					get_datetime(to_date).strftime("%Y-%m-%d %H:%M:%S.%f"))
 				fallback = "'0000-00-00 00:00:00'"
 
 			elif df and df.fieldtype=="Date":

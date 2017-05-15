@@ -130,7 +130,7 @@ frappe.ui.form.PrintPreview = Class.extend({
 	},
 	new_page_preview: function(printit) {
 		var me = this;
-		var w = window.open(frappe.urllib.get_full_url("/print?"
+		var w = window.open(frappe.urllib.get_full_url("/printview?"
 			+"doctype="+encodeURIComponent(me.frm.doc.doctype)
 			+"&name="+encodeURIComponent(me.frm.doc.name)
 			+(printit ? "&trigger_print=1" : "")
@@ -143,7 +143,7 @@ frappe.ui.form.PrintPreview = Class.extend({
 	},
 	get_print_html: function(callback) {
 		frappe.call({
-			method: "frappe.www.print.get_html_and_style",
+			method: "frappe.www.printview.get_html_and_style",
 			args: {
 				doc: this.frm.doc,
 				print_format: this.selected_format(),
