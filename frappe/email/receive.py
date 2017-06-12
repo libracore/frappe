@@ -9,7 +9,7 @@ from email.header import decode_header
 import frappe
 from frappe import _
 from frappe.utils import (extract_email_id, convert_utc_to_user_timezone, now,
-	cint, cstr, strip, markdown)
+	cint, cstr, strip, markdown, parse_addr)
 from frappe.utils.scheduler import log
 from frappe.utils.file_manager import get_random_filename, save_file, MaxFileSizeReachedError
 import re
@@ -174,7 +174,9 @@ class EmailServer:
 			email_list = []
 			self.check_imap_uidvalidity()
 
-			self.imap.select("Inbox", readonly=True)
+			readonly = False if self.settings.email_sync_rule == "UNSEEN" else True
+
+			self.imap.select("Inbox", readonly=readonly)
 			response, message = self.imap.uid('search', None, self.settings.email_sync_rule)
 			if message[0]:
 				email_list =  message[0].split()
@@ -197,13 +199,13 @@ class EmailServer:
 
 		if not uid_validity or uid_validity != current_uid_validity:
 			# uidvalidity changed & all email uids are reindexed by server
-			frappe.db.sql("""update `tabCommunication` set uid=-1 where communication_medium='Email'
-				and email_account='{email_account}'""".format(email_account=self.settings.email_account))
-			frappe.db.sql("""update `tabEmail Account` set uidvalidity='{uidvalidity}', uidnext={uidnext} where
-				name='{email_account}'""".format(
-				uidvalidity=current_uid_validity,
-				uidnext=uidnext,
-				email_account=self.settings.email_account)
+			frappe.db.sql(
+				"""update `tabCommunication` set uid=-1 where communication_medium='Email'
+				and email_account=%s""", (self.settings.email_account,)
+			)
+			frappe.db.sql(
+				"""update `tabEmail Account` set uidvalidity=%s, uidnext=%s where
+				name=%s""", (current_uid_validity, uidnext, self.settings.email_account)
 			)
 
 			# uid validity not found pulling emails for first time
@@ -261,14 +263,16 @@ class EmailServer:
 				if not cint(self.settings.use_imap):
 					self.pop.dele(msg_num)
 				else:
-					# mark as seen
-					self.imap.uid('STORE', message_meta, '+FLAGS', '(\\SEEN)')
+					# mark as seen if email sync rule is UNSEEN (syncing only unseen mails)
+					if self.settings.email_sync_rule == "UNSEEN":
+						self.imap.uid('STORE', message_meta, '+FLAGS', '(\\SEEN)')
 		else:
 			if not cint(self.settings.use_imap):
 				self.pop.dele(msg_num)
 			else:
-				# mark as seen
-				self.imap.uid('STORE', message_meta, '+FLAGS', '(\\SEEN)')
+				# mark as seen if email sync rule is UNSEEN (syncing only unseen mails)
+				if self.settings.email_sync_rule == "UNSEEN":
+					self.imap.uid('STORE', message_meta, '+FLAGS', '(\\SEEN)')
 
 	def get_email_seen_status(self, uid, flag_string):
 		""" parse the email FLAGS response """
@@ -411,7 +415,7 @@ class Email:
 		if self.from_email:
 			self.from_email = self.from_email.lower()
 
-		self.from_real_name = email.utils.parseaddr(_from_email)[0] if "@" in _from_email else _from_email
+		self.from_real_name = parse_addr(_from_email)[0] if "@" in _from_email else _from_email
 
 	def decode_email(self, email):
 		if not email: return

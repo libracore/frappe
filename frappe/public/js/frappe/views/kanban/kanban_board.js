@@ -41,6 +41,12 @@ frappe.provide("frappe.views");
 							columns: columns,
 							cur_list: opts.cur_list
 						});
+					})
+					.fail(function() {
+						// redirect back to List
+						setTimeout(() => {
+							frappe.set_route('List', opts.doctype, 'List');
+						}, 2000);
 					});
 			},
 			update_cards: function (updater, cards) {
@@ -432,11 +438,13 @@ frappe.provide("frappe.views");
 			var cards = store.getState().cards;
 			var board = store.getState().board;
 			filtered_cards = get_cards_for_column(cards, column);
+			var filtered_cards_names = filtered_cards.map(card => card.name);
 
 			var order = column.order;
 			if(order) {
 				order = JSON.parse(order);
 				order.forEach(function(name) {
+					if (!filtered_cards_names.includes(name)) return;
 					frappe.views.KanbanBoardCard(get_card(name), self.$kanban_cards);
 				});
 				// new cards
@@ -1038,6 +1046,9 @@ frappe.provide("frappe.views");
 	function is_filters_modified(board, cur_list) {
 		return new Promise(function(resolve, reject) {
 			setTimeout(function() {
+				// sometimes the filter_list is not initiated, so early return
+				if(!cur_list.filter_list) resolve(false);
+
 				var list_filters = JSON.stringify(cur_list.filter_list.get_filters());
 				resolve(list_filters !== board.filters);
 			}, 2000);
