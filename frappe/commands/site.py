@@ -9,6 +9,7 @@ from frappe.commands.scheduler import _is_scheduler_enabled
 from frappe.limits import update_limits, get_limits
 from frappe.installer import update_site_config
 from frappe.utils import touch_file, get_site_path
+from six import text_type
 
 @click.command('new-site')
 @click.argument('site')
@@ -428,7 +429,7 @@ def set_limit(context, site, limit, value):
 
 @click.command('set-limits')
 @click.option('--site', help='site name')
-@click.option('--limit', 'limits', type=(unicode, unicode), multiple=True)
+@click.option('--limit', 'limits', type=(text_type, text_type), multiple=True)
 @pass_context
 def set_limits(context, site, limits):
 	_set_limits(context, site, limits)
@@ -446,7 +447,7 @@ def _set_limits(context, site, limits):
 		frappe.connect()
 		new_limits = {}
 		for limit, value in limits:
-			if limit not in ('emails', 'space', 'users', 'email_group',
+			if limit not in ('daily_emails', 'emails', 'space', 'users', 'email_group',
 				'expiry', 'support_email', 'support_chat', 'upgrade_url'):
 				frappe.throw(_('Invalid limit {0}').format(limit))
 
@@ -459,7 +460,7 @@ def _set_limits(context, site, limits):
 			elif limit=='space':
 				value = float(value)
 
-			elif limit in ('users', 'emails', 'email_group'):
+			elif limit in ('users', 'emails', 'email_group', 'daily_emails'):
 				value = int(value)
 
 			new_limits[limit] = value

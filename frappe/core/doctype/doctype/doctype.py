@@ -330,10 +330,10 @@ class DocType(Document):
 
 	def make_controller_template(self):
 		"""Make boilerplate controller template."""
-		make_boilerplate("controller.py", self)
+		make_boilerplate("controller._py", self)
 
 		if not (self.istable or self.issingle):
-			make_boilerplate("test_controller.py", self.as_dict())
+			make_boilerplate("test_controller._py", self.as_dict())
 
 		if not self.istable:
 			make_boilerplate("controller.js", self.as_dict())
@@ -512,14 +512,20 @@ def validate_fields(meta):
 				else:
 					frappe.throw(_("Fold can not be at the end of the form"))
 
-	def check_search_fields(meta):
+	def check_search_fields(meta, fields):
 		"""Throw exception if `search_fields` don't contain valid fields."""
 		if not meta.search_fields:
 			return
 
-		for fieldname in (meta.search_fields or "").split(","):
+		# No value fields should not be included in search field
+		search_fields = [field.strip() for field in (meta.search_fields or "").split(",")]
+		fieldtype_mapper = { field.fieldname: field.fieldtype \
+			for field in filter(lambda field: field.fieldname in search_fields, fields) }
+
+		for fieldname in search_fields:
 			fieldname = fieldname.strip()
-			if fieldname not in fieldname_list:
+			if (fieldtype_mapper.get(fieldname) in no_value_fields) or \
+				(fieldname not in fieldname_list):
 				frappe.throw(_("Search field {0} is not valid").format(fieldname))
 
 	def check_title_field(meta):
@@ -616,7 +622,7 @@ def validate_fields(meta):
 		check_unique_and_text(d)
 
 	check_fold(fields)
-	check_search_fields(meta)
+	check_search_fields(meta, fields)
 	check_title_field(meta)
 	check_timeline_field(meta)
 	check_is_published_field(meta)

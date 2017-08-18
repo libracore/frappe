@@ -271,7 +271,10 @@ frappe.views.ListRenderer = Class.extend({
 
 	setup_filterable: function () {
 		var me = this;
+
+		this.list_view.wrapper &&
 		this.list_view.wrapper.on('click', '.result-list .filterable', function (e) {
+			e.stopPropagation();
 			var filters = $(this).attr('data-filter').split('|');
 			var added = false;
 
@@ -294,7 +297,9 @@ frappe.views.ListRenderer = Class.extend({
 				me.list_view.refresh(true);
 			}
 		});
-		this.wrapper.on('click', '.list-item', function (e) {
+
+		this.list_view.wrapper &&
+		this.list_view.wrapper.on('click', '.list-item', function (e) {
 			// don't open in case of checkbox, like, filterable
 			if ($(e.target).hasClass('filterable')
 				|| $(e.target).hasClass('octicon-heart')
@@ -414,7 +419,6 @@ frappe.views.ListRenderer = Class.extend({
 		}
 		return '';
 	},
-
 	get_indicator_dot: function (doc) {
 		var indicator = frappe.get_indicator(doc, this.doctype);
 		if (!indicator) {
@@ -422,7 +426,6 @@ frappe.views.ListRenderer = Class.extend({
 		}
 		return `<span class='indicator ${indicator[1]}' title='${__(indicator[0])}'></span>`;
 	},
-
 	prepare_data: function (data) {
 		if (data.modified)
 			this.prepare_when(data, data.modified);

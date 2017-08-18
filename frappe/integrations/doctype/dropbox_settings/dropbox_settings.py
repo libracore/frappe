@@ -10,7 +10,7 @@ from frappe.model.document import Document
 import dropbox, json
 from frappe.utils.backups import new_backup
 from frappe.utils.background_jobs import enqueue
-from urlparse import urlparse, parse_qs
+from six.moves.urllib.parse import urlparse, parse_qs
 from frappe.integrations.utils import make_post_request
 from frappe.utils import (cint, split_emails, get_request_site_address, cstr,
 	get_files_path, get_backups_path, encode, get_url)
@@ -86,7 +86,7 @@ def backup_to_dropbox():
 		access_token = generate_oauth2_access_token_from_oauth1_token(dropbox_settings)
 
 		if not access_token.get('oauth2_token'):
-			return
+			return 'Failed backup upload', 'No Access Token exists! Please generate the access token for Dropbox.'
 
 		dropbox_settings['access_token'] = access_token['oauth2_token']
 		set_dropbox_access_token(access_token['oauth2_token'])
