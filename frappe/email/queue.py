@@ -65,8 +65,8 @@ def send(recipients=None, sender=None, subject=None, message=None, text_content=
 		send_after = add_days(nowdate(), send_after)
 
 	email_account = get_outgoing_email_account(True, append_to=reference_doctype)
-	if not sender or sender == "Administrator":
-		sender = email_account.default_sender
+	#if not sender or sender == "Administrator": #(SEG #154)
+	sender = email_account.default_sender
 
 	check_email_limit(recipients)
 
