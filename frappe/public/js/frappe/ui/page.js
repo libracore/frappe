@@ -369,7 +369,7 @@ frappe.ui.Page = Class.extend({
 			.appendTo(this.page_form);
 	},
 	add_select: function(label, options) {
-		var field = this.add_field({label:label, fieldtype:"Select"})
+		var field = this.add_field({label:label, fieldtype:"Select"});
 		return field.$wrapper.find("select").empty().add_options(options);
 	},
 	add_data: function(label) {
@@ -401,8 +401,13 @@ frappe.ui.Page = Class.extend({
 			.addClass('col-md-2')
 			.attr("title", __(df.label)).tooltip();
 
+		// html fields in toolbar are only for display
+		if (df.fieldtype=='HTML') {
+			return;
+		}
+
 		// hidden fields dont have $input
-		if(!f.$input) f.make_input();
+		if (!f.$input) f.make_input();
 
 		f.$input.addClass("input-sm").attr("placeholder", __(df.label));
 
