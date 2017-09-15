@@ -16,13 +16,15 @@ import schedule
 import time
 import MySQLdb
 import frappe.utils
+import os
 from frappe.utils import get_sites
 from datetime import datetime
-from background_jobs import enqueue, get_jobs, queue_timeout
+from frappe.utils.background_jobs import enqueue, get_jobs, queue_timeout
 from frappe.limits import has_expired
 from frappe.utils.data import get_datetime, now_datetime
 from frappe.core.doctype.user.user import STANDARD_USERS
 from frappe.installer import update_site_config
+from six import string_types
 
 DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
@@ -39,6 +41,11 @@ def start_scheduler():
 
 def enqueue_events_for_all_sites():
 	'''Loop through sites and enqueue events that are not already queued'''
+
+	if os.path.exists(os.path.join('.', '.restarting')):
+		# Don't add task to queue if webserver is in restart mode
+		return
+
 	with frappe.init_site():
 		jobs_per_site = get_jobs()
 		sites = get_sites()
@@ -192,7 +199,7 @@ def get_enabled_scheduler_events():
 
 	enabled_events = frappe.db.get_global("enabled_scheduler_events")
 	if enabled_events:
-		if isinstance(enabled_events, basestring):
+		if isinstance(enabled_events, string_types):
 			enabled_events = json.loads(enabled_events)
 
 		return enabled_events

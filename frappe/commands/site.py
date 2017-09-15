@@ -36,7 +36,7 @@ def _new_site(db_name, site, mariadb_root_username=None, mariadb_root_password=N
 	"""Install a new Frappe site"""
 
 	if not db_name:
-		db_name = hashlib.sha1(site).hexdigest()[:16]
+		db_name = hashlib.sha1(site.encode()).hexdigest()[:16]
 
 	from frappe.installer import install_db, make_site_dirs
 	from frappe.installer import install_app as _install_app
@@ -470,7 +470,7 @@ def _set_limits(context, site, limits):
 @click.command('clear-limits')
 @click.option('--site', help='site name')
 @click.argument('limits', nargs=-1, type=click.Choice(['emails', 'space', 'users', 'email_group',
-	'expiry', 'support_email', 'support_chat', 'upgrade_url']))
+	'expiry', 'support_email', 'support_chat', 'upgrade_url', 'daily_emails']))
 @pass_context
 def clear_limits(context, site, limits):
 	"""Clears given limit from the site config, and removes limit from site config if its empty"""

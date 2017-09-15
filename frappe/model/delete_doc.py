@@ -12,9 +12,10 @@ from frappe.utils.password import delete_all_passwords_for
 from frappe import _
 from frappe.model.naming import revert_series_if_last
 from frappe.utils.global_search import delete_for_document
+from six import string_types
 
 def delete_doc(doctype=None, name=None, force=0, ignore_doctypes=None, for_reload=False,
-	ignore_permissions=False, flags=None, ignore_on_trash=False):
+	ignore_permissions=False, flags=None, ignore_on_trash=False, ignore_missing=True):
 	"""
 		Deletes a doc(dt, dn) and validates if it is not submitted and not linked in a live record
 	"""
@@ -26,14 +27,17 @@ def delete_doc(doctype=None, name=None, force=0, ignore_doctypes=None, for_reloa
 		name = frappe.form_dict.get('dn')
 
 	names = name
-	if isinstance(name, basestring):
+	if isinstance(name, string_types):
 		names = [name]
 
 	for name in names or []:
 
 		# already deleted..?
 		if not frappe.db.exists(doctype, name):
-			return
+			if not ignore_missing:
+				raise frappe.DoesNotExistError
+			else:
+				return False
 
 		# delete passwords
 		delete_all_passwords_for(doctype, name)
@@ -240,6 +244,14 @@ def delete_dynamic_links(doctype, name):
 	frappe.db.sql('''delete from `tabEmail Unsubscribe`
 		where reference_doctype=%s and reference_name=%s''', (doctype, name))
 
+	# delete shares
+	delete_doc("DocShare", frappe.db.sql_list("""select name from `tabDocShare`
+		where share_doctype=%s and share_name=%s""", (doctype, name)),
+		ignore_on_trash=True, force=True)
+
+	# delete versions
+	frappe.db.sql('delete from tabVersion where ref_doctype=%s and docname=%s', (doctype, name))
+
 	# delete comments
 	frappe.db.sql("""delete from `tabCommunication`
 		where
@@ -263,14 +275,6 @@ def delete_dynamic_links(doctype, name):
 	frappe.db.sql("""update `tabCommunication`
 		set timeline_doctype=null, timeline_name=null
 		where timeline_doctype=%s and timeline_name=%s""", (doctype, name))
-
-	# delete shares
-	delete_doc("DocShare", frappe.db.sql_list("""select name from `tabDocShare`
-		where share_doctype=%s and share_name=%s""", (doctype, name)),
-		ignore_on_trash=True, force=True)
-
-	# delete versions
-	frappe.db.sql('delete from tabVersion where ref_doctype=%s and docname=%s', (doctype, name))
 
 def insert_feed(doc):
 	from frappe.utils import get_fullname

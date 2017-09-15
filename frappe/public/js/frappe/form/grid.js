@@ -94,15 +94,21 @@ frappe.ui.form.Grid = Class.extend({
 		this.remove_rows_button.on('click', function() {
 			var dirty = false;
 
-			me.get_selected().forEach(function(docname) {
-				me.grid_rows_by_docname[docname].remove();
-				dirty = true;
+			let tasks = [];
+
+			me.get_selected().forEach((docname) => {
+				tasks.push(() => {
+					me.grid_rows_by_docname[docname].remove();
+					dirty = true;
+				});
+				tasks.push(() => frappe.timeout(0.1));
 			});
-			if(dirty) {
-				setTimeout(function() {
-					me.refresh();
-				}, 100);
-			}
+
+			tasks.push(() => {
+				if (dirty) me.refresh();
+			});
+
+			frappe.run_serially(tasks);
 		});
 	},
 	select_row: function(name) {
@@ -603,10 +609,11 @@ frappe.ui.form.Grid = Class.extend({
 	},
 	setup_download: function() {
 		var me = this;
+		let title = me.df.label || frappe.model.unscrub(me.df.fieldname);
 		$(this.wrapper).find(".grid-download").removeClass("hide").on("click", function() {
 			var data = [];
 			var docfields = [];
-			data.push([__("Bulk Edit {0}", [me.df.label])]);
+			data.push([__("Bulk Edit {0}", [title])]);
 			data.push([]);
 			data.push([]);
 			data.push([]);
@@ -636,7 +643,7 @@ frappe.ui.form.Grid = Class.extend({
 				data.push(row);
 			});
 
-			frappe.tools.downloadify(data, null, me.df.label);
+			frappe.tools.downloadify(data, null, title);
 			return false;
 		});
 	},
