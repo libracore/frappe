@@ -4,6 +4,7 @@ import json, os, sys
 from distutils.spawn import find_executable
 import frappe
 from frappe.commands import pass_context, get_site
+from frappe.utils import update_progress_bar
 
 @click.command('build')
 @click.option('--make-copy', is_flag=True, default=False, help='Copy the files instead of symlinking')
@@ -344,6 +345,26 @@ def run_ui_tests(context, app=None, test=False, profile=False):
 	if os.environ.get('CI'):
 		sys.exit(ret)
 
+@click.command('run-setup-wizard-ui-test')
+@click.option('--app', help="App to run tests on, leave blank for all apps")
+@click.option('--profile', is_flag=True, default=False)
+@pass_context
+def run_setup_wizard_ui_test(context, app=None, profile=False):
+	"Run setup wizard UI test"
+	import frappe.test_runner
+
+	site = get_site(context)
+	frappe.init(site=site)
+	frappe.connect()
+
+	ret = frappe.test_runner.run_setup_wizard_ui_test(app=app, verbose=context.verbose,
+		profile=profile)
+	if len(ret.failures) == 0 and len(ret.errors) == 0:
+		ret = 0
+
+	if os.environ.get('CI'):
+		sys.exit(ret)
+
 @click.command('serve')
 @click.option('--port', default=8000)
 @click.option('--profile', is_flag=True, default=False)
@@ -464,6 +485,24 @@ def setup_help(context):
 		finally:
 			frappe.destroy()
 
+@click.command('rebuild-global-search')
+@pass_context
+def rebuild_global_search(context):
+	'''Setup help table in the current site (called after migrate)'''
+	from frappe.utils.global_search import (get_doctypes_with_global_search, rebuild_for_doctype)
+
+	for site in context.sites:
+		try:
+			frappe.init(site)
+			frappe.connect()
+			doctypes = get_doctypes_with_global_search()
+			for i, doctype in enumerate(doctypes):
+				rebuild_for_doctype(doctype)
+				update_progress_bar('Rebuilding Global Search', i, len(doctypes))
+
+		finally:
+			frappe.destroy()
+
 
 commands = [
 	build,
@@ -485,11 +524,13 @@ commands = [
 	reset_perms,
 	run_tests,
 	run_ui_tests,
+	run_setup_wizard_ui_test,
 	serve,
 	set_config,
 	watch,
 	_bulk_rename,
 	add_to_email_queue,
 	setup_global_help,
-	setup_help
+	setup_help,
+	rebuild_global_search
 ]

@@ -189,6 +189,7 @@ class Document(BaseDocument):
 		self.validate_higher_perm_levels()
 
 		self.flags.in_insert = True
+		self._validate_links()
 		self.run_before_save_methods()
 		self._validate()
 		self.set_docstatus()
@@ -260,6 +261,7 @@ class Document(BaseDocument):
 		self.check_if_latest()
 		self.set_parent_in_children()
 		self.validate_higher_perm_levels()
+		self._validate_links()
 		self.run_before_save_methods()
 
 		if self._action != "cancel":
@@ -327,6 +329,11 @@ class Document(BaseDocument):
 			frappe.db.sql("""delete from `tab{0}` where parent=%s
 				and parenttype=%s and parentfield=%s""".format(df.options),
 				(self.name, self.doctype, fieldname))
+
+	def get_doc_before_save(self):
+		if not getattr(self, '_doc_before_save', None):
+			self._doc_before_save = frappe.get_doc(self.doctype, self.name)
+		return self._doc_before_save
 
 	def set_new_name(self):
 		"""Calls `frappe.naming.se_new_name` for parent and child docs."""
@@ -397,7 +404,6 @@ class Document(BaseDocument):
 
 	def _validate(self):
 		self._validate_mandatory()
-		self._validate_links()
 		self._validate_selects()
 		self._validate_constants()
 		self._validate_length()
@@ -763,7 +769,7 @@ class Document(BaseDocument):
 
 		self._doc_before_save = None
 		if not self.is_new() and getattr(self.meta, 'track_changes', False):
-			self._doc_before_save = frappe.get_doc(self.doctype, self.name)
+			self.get_doc_before_save()
 
 		if self.flags.ignore_validate:
 			return

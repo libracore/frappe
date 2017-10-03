@@ -401,7 +401,7 @@ def send_one(email, smtpserver=None, auto_commit=True, now=False, from_test=Fals
 	try:
 		if not frappe.flags.in_test:
 			if not smtpserver: smtpserver = SMTPServer()
-			smtpserver.setup_email_account(email.reference_doctype)
+			smtpserver.setup_email_account(email.reference_doctype, sender=email.sender)
 
 		for recipient in recipients_list:
 			if recipient.status != "Not Sent":
