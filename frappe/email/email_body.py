@@ -51,7 +51,7 @@ class EMail:
 	Also sets all messages as multipart/alternative for cleaner reading in text-only clients
 	"""
 	def __init__(self, sender='', recipients=(), subject='', alternative=0, reply_to=None, cc=(), email_account=None, expose_recipients=None):
-		from email import Charset
+		from email import charset as Charset
 		Charset.add_charset('utf-8', Charset.QP, Charset.QP, 'utf-8')
 
 		if isinstance(recipients, string_types):
@@ -73,14 +73,14 @@ class EMail:
 		self.cc = cc or []
 		self.html_set = False
 
-		self.email_account = email_account or get_outgoing_email_account()
+		self.email_account = email_account or get_outgoing_email_account(sender=sender)
 
 	def set_html(self, message, text_content = None, footer=None, print_html=None,
 		formatted=None, inline_images=None, header=None):
 		"""Attach message in the html portion of multipart/alternative"""
 		if not formatted:
 			formatted = get_formatted_html(self.subject, message, footer, print_html,
-				email_account=self.email_account, header=header)
+				email_account=self.email_account, header=header, sender=self.sender)
 
 		# this is the first html part of a multi-part message,
 		# convert to text well
@@ -219,10 +219,7 @@ class EMail:
 			frappe.get_attr(hook)(self)
 
 	def set_header(self, key, value):
-		key = encode(key)
-		value = encode(value)
-
-		if self.msg_root.has_key(key):
+		if key in self.msg_root:
 			del self.msg_root[key]
 
 		self.msg_root[key] = value
@@ -234,9 +231,9 @@ class EMail:
 		return self.msg_root.as_string()
 
 def get_formatted_html(subject, message, footer=None, print_html=None,
-		email_account=None, header=None, unsubscribe_link=None):
+		email_account=None, header=None, unsubscribe_link=None, sender=None):
 	if not email_account:
-		email_account = get_outgoing_email_account(False)
+		email_account = get_outgoing_email_account(False, sender=sender)
 
 	rendered_email = frappe.get_template("templates/emails/standard.html").render({
 		"header": get_header(header),

@@ -7,7 +7,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import validate_email_add, get_fullname, strip_html, cstr
 from frappe.core.doctype.communication.comment import (notify_mentions,
-	update_comment_in_doc)
+	update_comment_in_doc, on_trash)
 from frappe.core.doctype.communication.email import (validate_email,
 	notify, _notify, update_parent_status)
 from frappe.utils.bot import BotReply
@@ -26,17 +26,16 @@ class Communication(Document):
 		if self.communication_type == "Communication" and self.communication_medium == "Email" \
 			and self.sent_or_received == "Received" and self.uid and self.uid != -1:
 			
-			flag = frappe.db.get_value("Email Flag Queue", {
+			email_flag_queue = frappe.db.get_value("Email Flag Queue", {
 				"communication": self.name,
 				"is_completed": 0})
-			if flag:
+			if email_flag_queue:
 				return
 
 			frappe.get_doc({
 				"doctype": "Email Flag Queue",
 				"action": "Read",
 				"communication": self.name,
-				"flag": "(\\SEEN)",
 				"uid": self.uid,
 				"email_account": self.email_account
 			}).insert(ignore_permissions=True)
@@ -111,6 +110,8 @@ class Communication(Document):
 			frappe.publish_realtime('delete_communication', self.as_dict(),
 				doctype= self.reference_doctype, docname = self.reference_name,
 				after_commit=True)
+			# delete the comments from _comment
+			on_trash(self)
 
 	def set_status(self):
 		if not self.is_new():
