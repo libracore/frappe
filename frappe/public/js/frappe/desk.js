@@ -419,7 +419,7 @@ frappe.Application = Class.extend({
 			// add backdrop
 			$('.modal-backdrop').css({
 				'opacity': 1,
-				'background-color': '#4B4C9D'
+				'background-color': '#627F43;'
 			});
 		}
 	},
