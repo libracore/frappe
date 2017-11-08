@@ -6,11 +6,12 @@ import frappe
 from frappe.utils import encode, cstr, cint, flt, comma_or
 
 import openpyxl
+import re
 from openpyxl.styles import Font
 from openpyxl import load_workbook
 from six import StringIO, string_types
 
-
+ILLEGAL_CHARACTERS_RE = re.compile(r'[\000-\010]|[\013-\014]|[\016-\037]')
 # return xlsx file object
 def make_xlsx(data, sheet_name, wb=None):
 
@@ -30,8 +31,9 @@ def make_xlsx(data, sheet_name, wb=None):
 			else:
 				value = item
 
-			if isinstance(value, basestring):
-				value = value.encode('unicode_escape').decode('utf-8')
+			if isinstance(item, string_types) and next(ILLEGAL_CHARACTERS_RE.finditer(value), None):
+				# Remove illegal characters from the string
+				value = re.sub(ILLEGAL_CHARACTERS_RE, '', value)
 
 			clean_row.append(value)
 
