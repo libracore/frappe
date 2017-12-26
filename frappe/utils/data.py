@@ -381,7 +381,7 @@ def fmt_money(amount, precision=None, currency=None):
 					fraction  = frappe.db.get_value("Currency", currency, "fraction_units") or 100
 					precision = len(cstr(fraction)) - 1
 				else:
-					precision = 2
+					precision = number_format_precision
 			elif len(decimals) < precision:
 				precision = len(decimals)
 
@@ -793,7 +793,17 @@ def make_filter_tuple(doctype, key, value):
 		return [doctype, key, value[0], value[1]]
 	else:
 		return [doctype, key, "=", value]
-	
+
+def make_filter_dict(filters):
+	'''convert this [[doctype, key, operator, value], ..]
+	to this { key: (operator, value), .. }
+	'''
+	_filter = frappe._dict()
+	for f in filters:
+		_filter[f[1]] = (f[2], f[3])
+
+	return _filter
+
 def scrub_urls(html):
 	html = expand_relative_urls(html)
 	# encoding should be responsibility of the composer
