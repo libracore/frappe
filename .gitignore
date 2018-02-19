@@ -11,7 +11,7 @@ build/
 frappe/docs/current
 .vscode
 node_modules
-
+yarn.lock
 
 # Not Recommended, but will remove once webpack ready
 package-lock.json
