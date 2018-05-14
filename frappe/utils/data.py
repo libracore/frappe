@@ -24,11 +24,11 @@ DATETIME_FORMAT = DATE_FORMAT + " " + TIME_FORMAT
 # datetime functions
 def getdate(string_date=None):
 	"""
-		 Coverts string date (yyyy-mm-dd) to datetime.date object
+	Converts string date (yyyy-mm-dd) to datetime.date object
 	"""
+
 	if not string_date:
 		return get_datetime().date()
-
 	if isinstance(string_date, datetime.datetime):
 		return string_date.date()
 
@@ -38,7 +38,6 @@ def getdate(string_date=None):
 	# dateutil parser does not agree with dates like 0000-00-00
 	if not string_date or string_date=="0000-00-00":
 		return None
-
 	return parser.parse(string_date).date()
 
 def get_datetime(datetime_str=None):
@@ -199,7 +198,6 @@ def get_time(time_str):
 def get_datetime_str(datetime_obj):
 	if isinstance(datetime_obj, string_types):
 		datetime_obj = get_datetime(datetime_obj)
-
 	return datetime_obj.strftime(DATETIME_FORMAT)
 
 def get_user_format():
@@ -210,7 +208,7 @@ def get_user_format():
 
 def formatdate(string_date=None, format_string=None):
 	"""
-	 	Convers the given string date to :data:`user_format`
+		Converts the given string date to :data:`user_format`
 		User format specified in defaults
 
 		 Examples:
@@ -226,11 +224,11 @@ def formatdate(string_date=None, format_string=None):
 	date = getdate(string_date)
 	if not format_string:
 		format_string = get_user_format().replace("mm", "MM")
-
 	try:
 		formatted_date = babel.dates.format_date(date, format_string, locale=(frappe.local.lang or "").replace("-", "_"))
 	except UnknownLocaleError:
-		formatted_date = date.strftime("%Y-%m-%d")
+		format_string = format_string.replace("MM", "%m").replace("dd", "%d").replace("yyyy", "%Y")
+		formatted_date = date.strftime(format_string)
 	return formatted_date
 
 def format_time(txt):
@@ -281,6 +279,44 @@ def flt(s, precision=None):
 def cint(s):
 	"""Convert to integer"""
 	try: num = int(float(s))
+	except: num = 0
+	return num
+
+def floor(s):
+	"""
+	A number representing the largest integer less than or equal to the specified number
+
+	Parameters
+	----------
+	s : int or str or Decimal object
+		The mathematical value to be floored
+
+	Returns
+	-------
+	int
+		number representing the largest integer less than or equal to the specified number
+
+	"""
+	try: num = cint(math.floor(flt(s)))
+	except: num = 0
+	return num
+
+def ceil(s):
+	"""
+	The smallest integer greater than or equal to the given number
+
+	Parameters
+	----------
+	s : int or str or Decimal object
+		The mathematical value to be ceiled
+
+	Returns
+	-------
+	int
+		smallest integer greater than or equal to the given number
+
+	"""
+	try: num = cint(math.ceil(flt(s)))
 	except: num = 0
 	return num
 
@@ -438,7 +474,7 @@ def get_number_format_info(format):
 	return number_format_info.get(format) or (".", ",", 2)
 
 #
-# convet currency to words
+# convert currency to words
 #
 def money_in_words(number, main_currency = None, fraction_currency=None):
 	"""
