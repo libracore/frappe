@@ -53,6 +53,8 @@ class TestGlobalSearch(unittest.TestCase):
 
 		results = global_search.search('extraterrestrial')
 		self.assertTrue('Carter explored themes of extraterrestrial involvement in ancient mass extinctions in this episode, the third in a trilogy.' in results[0].content)
+		results = global_search.search('awakens & duty & alien')
+		self.assertTrue('After Mulder awakens from his coma, he realizes his duty to prevent alien colonization. ' in results[0].content)
 
 	def test_update_doc(self):
 		self.insert_test_events()
@@ -69,13 +71,13 @@ class TestGlobalSearch(unittest.TestCase):
 	def test_update_fields(self):
 		self.insert_test_events()
 		results = global_search.search('Every Month')
-		self.assertEquals(len(results), 0)
+		self.assertEqual(len(results), 0)
 		doctype = "Event"
 		from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 		make_property_setter(doctype, "repeat_on", "in_global_search", 1, "Int")
 		global_search.rebuild_for_doctype(doctype)
 		results = global_search.search('Every Month')
-		self.assertEquals(len(results), 3)
+		self.assertEqual(len(results), 3)
 
 	def test_delete_doc(self):
 		self.insert_test_events()
@@ -84,13 +86,13 @@ class TestGlobalSearch(unittest.TestCase):
 		event = frappe.get_doc('Event', event_name)
 		test_subject = event.subject
 		results = global_search.search(test_subject)
-		self.assertEquals(len(results), 1)
+		self.assertEqual(len(results), 1)
 
 		frappe.delete_doc('Event', event_name)
 		global_search.sync_global_search()
 
 		results = global_search.search(test_subject)
-		self.assertEquals(len(results), 0)
+		self.assertEqual(len(results), 0)
 
 	def test_insert_child_table(self):
 		frappe.db.sql('delete from tabEvent')
@@ -178,4 +180,4 @@ class TestGlobalSearch(unittest.TestCase):
 				if field.fieldname == 'description':
 					field_as_text = global_search.get_formatted_value(doc.description, field)
 
-			self.assertEquals(case["result"], field_as_text)
+			self.assertEqual(case["result"], field_as_text)
