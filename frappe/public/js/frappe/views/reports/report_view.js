@@ -135,6 +135,7 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 	render(force) {
 		if (this.data.length === 0) return;
 		this.render_count();
+		this.setup_columns();
 
 		if (this.chart) {
 			this.refresh_charts();
@@ -224,7 +225,7 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 			getEditor: this.get_editing_object.bind(this),
 			checkboxColumn: true,
 			inlineFilters: true,
-			cellHeight: 37,
+			cellHeight: 35,
 			events: {
 				onRemoveColumn: (column) => {
 					this.remove_column_from_datatable(column);
@@ -858,13 +859,18 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 			align,
 			compareValue: compareFn,
 			format: (value, row, column, data) => {
-				const d = row.reduce((acc, curr) => {
-					if (!curr.column.docfield) return acc;
-					acc[curr.column.docfield.fieldname] = curr.content;
-					return acc;
-				}, {});
+				let doc = null;
+				if (Array.isArray(row)) {
+					doc = row.reduce((acc, curr) => {
+						if (!curr.column.docfield) return acc;
+						acc[curr.column.docfield.fieldname] = curr.content;
+						return acc;
+					}, {});
+				} else {
+					doc = row;
+				}
 
-				return frappe.format(value, column.docfield, { always_show_decimals: true }, d);
+				return frappe.format(value, column.docfield, { always_show_decimals: true }, doc);
 			}
 		};
 	}
@@ -1042,13 +1048,18 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 			{
 				label: __('Print'),
 				action: () => {
-					this.report_data = this.data.slice();
+					// prepare rows in their current state, sorted and filtered
+					const rows_in_order = this.datatable.datamanager.rowViewOrder.map(index => {
+						if (this.datatable.bodyRenderer.visibleRowIndices.includes(index)) {
+							return this.data[index];
+						}
+					}).filter(Boolean);
 
 					if (this.add_totals_row) {
 						const total_data = this.get_columns_totals(this.data);
 
 						total_data['name'] = __('Totals').bold();
-						this.report_data.push(total_data);
+						rows_in_order.push(total_data);
 					}
 
 					frappe.ui.get_print_settings(false, (print_settings) => {
@@ -1058,7 +1069,7 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 							subtitle: this.get_filters_html_for_print(),
 							print_settings: print_settings,
 							columns: this.columns,
-							data: this.report_data
+							data: rows_in_order
 						});
 					});
 				}
