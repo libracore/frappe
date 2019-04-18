@@ -170,6 +170,8 @@ def get_context(context):
 		self.add_custom_context_and_script(context)
 		if not context.max_attachment_size:
 			context.max_attachment_size = get_max_file_size() / 1024 / 1024
+		if not context.max_file_size:
+			context.max_file_size = get_max_file_size()
 
 		context.show_in_grid = self.show_in_grid
 
