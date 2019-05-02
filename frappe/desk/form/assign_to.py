@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 
 import frappe
 from frappe import _
+from frappe.utils import cint
 from frappe.desk.form.load import get_docinfo
 import frappe.share
 
@@ -133,14 +134,11 @@ def notify_assignment(assigned_by, owner, doc_type, doc_name, action='CLOSE',
 	if assigned_by==owner:
 		return
 
-	from frappe.boot import get_fullnames
-	user_info = get_fullnames()
-
 	# Search for email address in description -- i.e. assignee
 	from frappe.utils import get_link_to_form
 	assignment = get_link_to_form(doc_type, doc_name, label="%s: %s" % (doc_type, doc_name))
-	owner_name = user_info.get(owner, {}).get('fullname')
-	user_name = user_info.get(frappe.session.get('user'), {}).get('fullname')
+	owner_name = frappe.get_cached_value('User', owner, 'full_name')
+	user_name = frappe.get_cached_value('User', frappe.session.user, 'full_name')
 	if action=='CLOSE':
 		if owner == frappe.session.get('user'):
 			arg = {
@@ -163,7 +161,7 @@ def notify_assignment(assigned_by, owner, doc_type, doc_name, action='CLOSE',
 			'notify': notify
 		}
 
-	if arg and arg.get("notify"):
+	if arg and cint(arg.get("notify")):
 		_notify(arg)
 
 def _notify(args):
