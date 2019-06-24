@@ -347,6 +347,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 				this.render_datatable();
 			} else {
+				this.data = [];
 				this.toggle_nothing_to_show(true);
 			}
 
@@ -682,7 +683,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 			return Object.assign(column, {
 				id: column.fieldname,
-				name: column.label,
+				name: __(column.label),
 				width: parseInt(column.width) || null,
 				editable: false,
 				compareValue: compareFn,
@@ -797,8 +798,9 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			print_settings: print_settings,
 			landscape: landscape,
 			filters: this.get_filter_values(),
-			data: custom_format ? this.data : this.get_data_for_print(),
+			data: this.get_data_for_print(),
 			columns: custom_format ? this.columns : this.get_columns_for_print(),
+			original_data: this.data,
 			report: this
 		});
 	}
@@ -810,7 +812,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 		const custom_format = this.report_settings.html_format || null;
 		const columns = custom_format ? this.columns : this.get_columns_for_print();
-		const data = custom_format ? this.data : this.get_data_for_print();
+		const data = this.get_data_for_print();
 		const applied_filters = this.get_filter_values();
 
 		const filters_html = this.get_filters_html_for_print();
@@ -819,6 +821,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			subtitle: filters_html,
 			filters: applied_filters,
 			data: data,
+			original_data: this.data,
 			columns: columns,
 			report: this
 		});
@@ -923,8 +926,16 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	}
 
 	get_data_for_print() {
-		const indices = this.datatable.datamanager.getFilteredRowIndices();
-		let rows = indices.map(i => this.data[i]);
+
+		if (!this.data.length) {
+			return [];
+		}
+
+		const rows = this.datatable.datamanager.rowViewOrder.map(index => {
+			if (this.datatable.bodyRenderer.visibleRowIndices.includes(index)) {
+				return this.data[index];
+			}
+		}).filter(Boolean);
 		let totalRow = this.datatable.bodyRenderer.getTotalRow().reduce((row, cell) => {
 			row[cell.column.id] = cell.content;
 			return row;
