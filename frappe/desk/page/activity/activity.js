@@ -53,14 +53,7 @@ frappe.pages['activity'].on_page_load = function(wrapper) {
 		}
 
 		frappe.set_route("List", "Activity Log", "Report");
-	}, 'fa fa-th')
-
-	this.page.add_menu_item(__('Show Likes'), function() {
-		frappe.route_options = {
-			show_likes: true
-		};
-		me.page.list.refresh();
-	}, 'octicon octicon-heart');
+	}, 'fa fa-th');
 };
 
 frappe.pages['activity'].on_page_show = function() {
@@ -149,18 +142,15 @@ frappe.activity.render_heatmap = function(page) {
 		method: "frappe.desk.page.activity.activity.get_heatmap_data",
 		callback: function(r) {
 			if(r.message) {
-				var heatmap = new Chart(".heatmap", {
+				var heatmap = new frappe.Chart(".heatmap", {
 					type: 'heatmap',
-					height: 100,
 					start: new Date(moment().subtract(1, 'year').toDate()),
 					count_label: "actions",
 					discrete_domains: 1,
 					data: {}
 				});
 
-				heatmap.update({
-					dataPoints: r.message
-				});
+				heatmap.update(r.message);
 			}
 		}
 	})
@@ -195,8 +185,7 @@ frappe.views.Activity = class Activity extends frappe.views.BaseList {
 	get_args() {
 		return {
 			start: this.start,
-			page_length: this.page_length,
-			show_likes: (frappe.route_options || {}).show_likes || 0
+			page_length: this.page_length
 		};
 	}
 

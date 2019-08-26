@@ -7,42 +7,49 @@ from frappe.utils import cint
 from frappe.core.doctype.activity_log.feed import get_feed_match_conditions
 
 @frappe.whitelist()
-def get_feed(start, page_length, show_likes=False):
+def get_feed(start, page_length):
 	"""get feed"""
-	match_conditions = get_feed_match_conditions(frappe.session.user)
+	match_conditions_communication = get_feed_match_conditions(frappe.session.user, 'Communication')
+	match_conditions_comment = get_feed_match_conditions(frappe.session.user, 'Comment')
 
 	result = frappe.db.sql("""select X.*
-		from (select name, owner, modified, creation, seen, comment_type,
-			reference_doctype, reference_name, link_doctype, link_name, subject,
-			communication_type, communication_medium, content
-			from `tabCommunication`
+		from (select `tabCommunication`.name, `tabCommunication`.owner, `tabCommunication`.modified,
+				`tabCommunication`.creation, `tabCommunication`.seen, `tabCommunication`.comment_type,
+				`tabCommunication`.reference_doctype, `tabCommunication`.reference_name, `tabCommunication`.subject,
+				`tabCommunication`.communication_type, `tabCommunication`.communication_medium, `tabCommunication`.content,
+				`tabCommunication Link`.link_doctype, `tabCommunication Link`.link_name
+			from
+				`tabCommunication`
+					inner join `tabCommunication Link`
+						on `tabCommunication`.name=`tabCommunication Link`.parent
 			where
-			communication_type in ("Communication", "Comment")
-			and communication_medium != "Email"
-			and (comment_type is null or comment_type != "Like"
-				or (comment_type="Like" and (owner=%(user)s or reference_owner=%(user)s)))
-			{match_conditions}
-			{show_likes}
-			union
+				`tabCommunication`.communication_type = "Communication"
+				and `tabCommunication`.communication_medium != "Email"
+				and {match_conditions_communication}
+		UNION
 			select name, owner, modified, creation, '0', 'Updated',
-			reference_doctype, reference_name, link_doctype, link_name, subject,
-			'Comment', '', content
-			from `tabActivity Log`) X
+				reference_doctype, reference_name, link_doctype, link_name, subject,
+				'Comment', '', content
+			from
+				`tabActivity Log`
+		UNION
+			select name, owner, modified, creation, '0', comment_type,
+				reference_doctype, reference_name, link_doctype, link_name, '',
+				'Comment', '', content
+			from
+				`tabComment`
+			where
+				{match_conditions_comment}
+		) X
 		order by X.creation DESC
-		limit %(start)s, %(page_length)s"""
-		.format(match_conditions="and {0}".format(match_conditions) if match_conditions else "",
-			show_likes="and comment_type='Like'" if show_likes else ""),
-		{
+		LIMIT %(page_length)s
+		OFFSET %(start)s"""
+		.format(match_conditions_comment = match_conditions_comment,
+			match_conditions_communication = match_conditions_communication), {
 			"user": frappe.session.user,
 			"start": cint(start),
 			"page_length": cint(page_length)
 		}, as_dict=True)
-
-	if show_likes:
-		# mark likes as seen!
-		frappe.db.sql("""update `tabCommunication` set seen=1
-			where comment_type='Like' and reference_owner=%s""", frappe.session.user)
-		frappe.local.flags.commit = True
 
 	return result
 

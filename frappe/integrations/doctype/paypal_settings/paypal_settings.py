@@ -293,8 +293,9 @@ def create_recurring_profile(token, payerid):
 		addons = data.get("addons")
 		subscription_details = data.get("subscription_details")
 
-		if data.get('subscription_id') and addons:
-			updating = True
+		if data.get('subscription_id'):
+			if addons:
+				updating = True
 			manage_recurring_payment_profile_status(data['subscription_id'], 'Cancel', params, url)
 
 		params.update({

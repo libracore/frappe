@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import frappe
 import frappe.utils
 import json, jwt
-import base64
 from frappe import _
 from frappe.utils.password import get_decrypted_password
 from six import string_types
@@ -59,17 +58,16 @@ def get_oauth_keys(provider):
 			"client_secret": keys["client_secret"]
 		}
 
-def get_oauth2_authorize_url(provider, redirect_to):
+def get_oauth2_authorize_url(provider):
 	flow = get_oauth2_flow(provider)
 
-	state = { "site": frappe.utils.get_url(), "token": frappe.generate_hash(), "redirect_to": redirect_to 	}
-
+	state = { "site": frappe.utils.get_url(), "token": frappe.generate_hash() }
 	frappe.cache().set_value("{0}:{1}".format(provider, state["token"]), True, expires_in_sec=120)
 
 	# relative to absolute url
 	data = {
 		"redirect_uri": get_redirect_uri(provider),
-		"state": base64.b64encode(bytes(json.dumps(state).encode("utf-8")))
+		"state": json.dumps(state)
 	}
 
 	oauth2_providers = get_oauth2_providers()
@@ -144,7 +142,7 @@ def get_info_via_oauth(provider, code, decoder=None, id_token=False):
 		api_endpoint_args = oauth2_providers[provider].get("api_endpoint_args")
 		info = session.get(api_endpoint, params=api_endpoint_args).json()
 
-	if not (info.get("verified_email") or info.get("verified")):
+	if not (info.get("email_verified") or info.get("email")):
 		frappe.throw(_("Email not verified with {0}").format(provider.title()))
 
 	return info
@@ -169,7 +167,6 @@ def login_oauth_user(data=None, provider=None, state=None, email_id=None, key=No
 		data = json.loads(data)
 
 	if isinstance(state, string_types):
-		state = base64.b64decode(state)
 		state = json.loads(state)
 
 	if not (state and state["token"]):
@@ -207,13 +204,8 @@ def login_oauth_user(data=None, provider=None, state=None, email_id=None, key=No
 
 		frappe.response["login_token"] = login_token
 
-
 	else:
-		redirect_to = state.get("redirect_to")
-		redirect_post_login(
-			desk_user=frappe.local.response.get('message') == 'Logged In',
-			redirect_to=redirect_to,
-		)
+		redirect_post_login(desk_user=frappe.local.response.get('message') == 'Logged In')
 
 def update_oauth_user(user, data, provider):
 	if isinstance(data.get("location"), dict):
@@ -275,10 +267,9 @@ def update_oauth_user(user, data, provider):
 		save = True
 		user.set_social_login_userid(provider, userid="/".join(data["sub"].split("/")[-2:]))
 
-	elif not user.get_social_login_userid(provider):
+	elif provider=="fairlogin" and not user.get_social_login_userid(provider):
 		save = True
-		user_id_property = frappe.db.get_value("Social Login Key", provider, "user_id_property") or "sub"
-		user.set_social_login_userid(provider, userid=data[user_id_property])
+		user.set_social_login_userid(provider, userid=data["preferred_username"])
 
 	if save:
 		user.flags.ignore_permissions = True
@@ -294,12 +285,14 @@ def get_last_name(data):
 def get_email(data):
 	return data.get("email") or data.get("upn") or data.get("unique_name")
 
-def redirect_post_login(desk_user, redirect_to=None):
+def redirect_post_login(desk_user):
 	# redirect!
 	frappe.local.response["type"] = "redirect"
 
-	if not redirect_to:
-		# the #desktop is added to prevent a facebook redirect bug
-		redirect_to = "/desk#desktop" if desk_user else "/"
+	# the #desktop is added to prevent a facebook redirect bug
+	frappe.local.response["location"] = "/desk#desktop" if desk_user else "/me"
 
-	frappe.local.response["location"] = redirect_to
+def oauth_decoder(data):
+	if isinstance(data, bytes):
+		data = data.decode("utf-8")
+	return json.loads(data)

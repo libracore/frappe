@@ -181,6 +181,7 @@ export default class BulkOperations {
 					}
 					done();
 					dialog.hide();
+					frappe.show_alert(__('Updated successfully'));
 				});
 			},
 			primary_action_label: __('Update')

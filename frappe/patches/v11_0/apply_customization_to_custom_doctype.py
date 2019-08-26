@@ -53,4 +53,3 @@ def execute():
 			frappe.db.sql('DELETE FROM `tabCustom Field` WHERE name=%s', cf.name)
 
 		meta.save()
-

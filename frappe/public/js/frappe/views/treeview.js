@@ -62,7 +62,7 @@ frappe.views.TreeView = Class.extend({
 
 		this.page = this.parent.page;
 		frappe.container.change_to(this.page_name);
-		frappe.breadcrumbs.add(me.opts.breadcrumb || locals.DocType[me.doctype].module);
+		frappe.breadcrumbs.add(me.opts.breadcrumb || locals.DocType[me.doctype].module, me.doctype);
 
 		this.set_title();
 
@@ -383,14 +383,6 @@ frappe.views.TreeView = Class.extend({
 			if (has_perm) {
 				me.page.add_menu_item(menu_item["label"], menu_item["action"]);
 			}
-		});
-
-		// last menu item
-		me.page.add_menu_item(__('Add to Desktop'), () => {
-			const label = me.doctype === 'Account' ?
-				__('Chart of Accounts') :
-				__(me.doctype);
-			frappe.add_to_desktop(label, me.doctype);
 		});
 	}
 });

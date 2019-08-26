@@ -4,17 +4,7 @@ frappe.ui.notifications = {
 	config: {
 		"ToDo": { label: __("To Do") },
 		"Event": { label: __("Calendar"), route: "List/Event/Calendar" },
-		"Email": { label: __("Email"), route: "List/Communication/Inbox" },
-		"Likes": { label: __("Likes"),
-			click: function() {
-				frappe.route_options = { show_likes: true };
-				if (frappe.get_route()[0]=="activity") {
-					frappe.pages['activity'].page.list.refresh();
-				} else {
-					frappe.set_route("activity");
-				}
-			}
-		},
+		"Email": { label: __("Email"), route: "List/Communication/Inbox" }
 	},
 
 	update_notifications: function() {
@@ -67,10 +57,10 @@ frappe.ui.notifications = {
 		let label = this.config[name] ? this.config[name].label : name;
 		let title = target ? `title="Your Target"` : '';
 		let $list_item = !target
-			? $(`<li><a class="badge-hover" data-doctype="${name}" ${title}>${__(label)}
+			? $(`<li><a class="badge-hover" href="#" onclick="return false;" data-doctype="${name}" ${title}>${__(label)}
 				<span class="badge pull-right">${value}</span>
 			</a></li>`)
-			: $(`<li><a class="progress-small" ${title} data-doctype="${doc_dt}"
+			: $(`<li><a class="progress-small" href="#" onclick="return false;" ${title} data-doctype="${doc_dt}"
 				data-doc="${name}"><span class="dropdown-item-label">${__(label)}<span>
 				<div class="progress-chart"><div class="progress">
 					<div class="progress-bar" style="width: ${value}%"></div>

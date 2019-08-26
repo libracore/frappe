@@ -25,9 +25,11 @@ def get_contact_list(txt, page_length=20):
 			from tabContact
 			where name like %(txt)s or email_id like %(txt)s
 			%(condition)s
-			limit %(page_length)s
-		""", {'txt': "%%%s%%" % frappe.db.escape(txt),
-			'condition': match_conditions, 'page_length': page_length}, as_dict=True)
+			limit %(page_length)s""", {
+				'txt': '%' + txt + '%',
+				'condition': match_conditions,
+				'page_length': page_length
+			}, as_dict=True)
 		out = filter(None, out)
 
 	except:
@@ -89,7 +91,7 @@ def get_cached_contacts(txt):
 	if not txt:
 		return contacts
 
-	match = [d for d in contacts if (d.value and (txt in d.value or txt in d.description))]
+	match = [d for d in contacts if (d.value and ((d.value and txt in d.value) or (d.description and txt in d.description)))]
 	return match
 
 def update_contact_cache(contacts):

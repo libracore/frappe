@@ -27,7 +27,6 @@ def savedocs(doc, action):
 
 		# update recent documents
 		run_onload(doc)
-		frappe.get_user().update_recent(doc.doctype, doc.name)
 		send_updated_docs(doc)
 	except Exception:
 		frappe.errprint(frappe.utils.get_traceback())

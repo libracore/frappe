@@ -12,6 +12,7 @@ from frappe.modules.export_file import export_to_files
 from frappe.modules import make_boilerplate
 from frappe.core.doctype.page.page import delete_custom_role
 from frappe.core.doctype.custom_role.custom_role import get_custom_allowed_roles
+from frappe.desk.reportview import append_totals_row
 from six import iteritems
 
 
@@ -76,11 +77,6 @@ class Report(Document):
 		if not self.json:
 			self.json = '{}'
 
-		if self.json:
-			data = json.loads(self.json)
-			data["add_total_row"] = self.add_total_row
-			self.json = json.dumps(data)
-
 	def export_doc(self):
 		if frappe.flags.in_import:
 			return
@@ -118,7 +114,7 @@ class Report(Document):
 							if fieldtype and '/' in fieldtype:
 								fieldtype, options = fieldtype.split('/')
 
-					columns.append(frappe._dict(label=parts[0], fieldtype=fieldtype, fieldname=parts[0]))
+					columns.append(frappe._dict(label=parts[0], fieldtype=fieldtype, fieldname=parts[0], options=options))
 
 			out += data.get('result')
 		else:
@@ -129,6 +125,8 @@ class Report(Document):
 				columns = params.get('fields')
 			elif params.get('columns'):
 				columns = params.get('columns')
+			elif params.get('fields'):
+				columns = params.get('fields')
 			else:
 				columns = [['name', self.ref_doctype]]
 				for df in frappe.get_meta(self.ref_doctype).fields:
@@ -175,6 +173,9 @@ class Report(Document):
 			columns = _columns
 
 			out = out + [list(d) for d in result]
+
+			if params.get('add_totals_row'):
+				out = append_totals_row(out)
 
 		if as_dict:
 			data = []

@@ -363,33 +363,28 @@ frappe.views.CommunicationComposer = Class.extend({
 		var fields = this.dialog.fields_dict;
 		var attach = $(fields.select_attachments.wrapper);
 
-		var me = this
-		if (!me.attachments){
-			me.attachments = []
+		if (!this.attachments) {
+			this.attachments = [];
 		}
 
-		var args = {
-			args: {
-				from_form: 1,
-				folder:"Home/Attachments"
-			},
-			callback: function(attachment, r) { me.attachments.push(attachment); },
-			max_width: null,
-			max_height: null
+		let args = {
+			folder: 'Home/Attachments',
+			on_success: attachment => {
+				this.attachments.push(attachment);
+				this.render_attach();
+			}
 		};
 
-		if(me.frm) {
+		if(this.frm) {
 			args = {
-				args: (me.frm.attachments.get_args
-					? me.frm.attachments.get_args()
-					: { from_form: 1,folder:"Home/Attachments" }),
-				callback: function (attachment, r) {
-					me.frm.attachments.attachment_uploaded(attachment, r)
-				},
-				max_width: me.frm.cscript ? me.frm.cscript.attachment_max_width : null,
-				max_height: me.frm.cscript ? me.frm.cscript.attachment_max_height : null
+				doctype: this.frm.doctype,
+				docname: this.frm.docname,
+				folder: 'Home/Attachments',
+				on_success: attachment => {
+					this.frm.attachments.attachment_uploaded(attachment);
+					this.render_attach();
+				}
 			}
-
 		}
 
 		$("<h6 class='text-muted add-attachment' style='margin-top: 12px; cursor:pointer;'>"
@@ -397,11 +392,10 @@ frappe.views.CommunicationComposer = Class.extend({
 			<p class='add-more-attachments'>\
 			<a class='text-muted small'><i class='octicon octicon-plus' style='font-size: 12px'></i> "
 			+__("Add Attachment")+"</a></p>").appendTo(attach.empty())
-		attach.find(".add-more-attachments a").on('click',this,function() {
-			me.upload = frappe.ui.get_upload_dialog(args);
-		})
-		me.render_attach()
-
+		attach
+			.find(".add-more-attachments a")
+			.on('click',() => new frappe.ui.FileUploader(args));
+		this.render_attach();
 	},
 	render_attach:function(){
 		var fields = this.dialog.fields_dict;
@@ -427,6 +421,21 @@ frappe.views.CommunicationComposer = Class.extend({
 					+		'<i class="fa fa-share" style="vertical-align: middle; margin-left: 3px;"></i>'
 					+ '</label></p>', f))
 					.appendTo(attach)
+			});
+		}
+		this.select_attachments();
+	},
+	select_attachments:function(){
+		let me = this;
+		if(me.dialog.display) {
+			let wrapper = $(me.dialog.fields_dict.select_attachments.wrapper);
+
+			let unchecked_items = wrapper.find('[data-file-name]:not(:checked)').map(function() {
+				return $(this).attr("data-file-name");
+			});
+
+			$.each(unchecked_items, function(i, filename) {
+				wrapper.find('[data-file-name="'+ filename +'"]').prop("checked", true);
 			});
 		}
 	},
@@ -463,17 +472,7 @@ frappe.views.CommunicationComposer = Class.extend({
 
 
 		if(form_values.attach_document_print) {
-			if (cur_frm.print_preview.is_old_style(form_values.select_print_format || "")) {
-				cur_frm.print_preview.with_old_style({
-					format: form_values.select_print_format,
-					callback: function(print_html) {
-						me.send_email(btn, form_values, selected_attachments, print_html);
-					}
-				});
-			} else {
-				me.send_email(btn, form_values, selected_attachments, null, form_values.select_print_format || "");
-			}
-
+			me.send_email(btn, form_values, selected_attachments, null, form_values.select_print_format || "");
 		} else {
 			me.send_email(btn, form_values, selected_attachments);
 		}
@@ -501,7 +500,7 @@ frappe.views.CommunicationComposer = Class.extend({
 	},
 
 	save_as_draft: function() {
-		if (this.dialog) {
+		if (this.dialog && this.frm) {
 			try {
 				let message = this.dialog.get_value('content');
 				message = message.split(frappe.separator_element)[0];
@@ -562,6 +561,7 @@ frappe.views.CommunicationComposer = Class.extend({
 				print_format: print_format,
 				sender: form_values.sender,
 				sender_full_name: form_values.sender?frappe.user.full_name():undefined,
+				email_template: form_values.email_template,
 				attachments: selected_attachments,
 				_lang : me.lang_code,
 				read_receipt:form_values.send_read_receipt,

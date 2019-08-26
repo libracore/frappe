@@ -1,7 +1,7 @@
 @import "variables.less";
 @import "mixins.less";
 @import "common.less";
-@import "quill.less";
+@import "print.less";
 
 .nav-pills a, .nav-pills a:hover {
 	border-bottom: none;
@@ -72,6 +72,10 @@ a[disabled="disabled"] {
 
 	.alert-message {
 		padding: 10px 40px 10px 10px;
+
+		.indicator::before {
+			margin-bottom: 1px;
+		}
 	}
 
 	.close {
@@ -111,7 +115,7 @@ a[disabled="disabled"] {
 
 .missing-image {
 	background-color: @light-bg;
-	display: table-cell;
+	line-height: 140px;
 	vertical-align: middle;
 	text-align: center;
 	width: 140px;
@@ -267,6 +271,10 @@ textarea.form-control {
 	border-radius:10px;
 	cursor: pointer;
 	margin-right: 10px;
+}
+
+.progress, .progress-bar {
+	box-shadow: none;
 }
 
 a.progress-small {
@@ -453,17 +461,6 @@ li.user-progress {
 	padding: 18px 15px;
 	border-bottom: 1px solid @border-color;
 	border-radius: 0px;
-}
-
-// like pop-over
-.liked-by-popover {
-	min-width: 200px;
-	margin-top: -10px;
-	margin-bottom: -10px;
-
-	li {
-		margin: 15px 0px;
-	}
 }
 
 .screenshot {
@@ -761,7 +758,7 @@ li.user-progress {
 }
 
 .checkbox label {
-	padding-left: 0px;
+	padding-left: 2px;
 }
 
 .checkbox input[type=checkbox] {
@@ -1038,4 +1035,80 @@ img.img-loading:after {
 	.img-foreground();
 	font-family: 'Octicons';
 	content: "\f00b";
+}
+
+// utilities
+
+.whitespace-nowrap {
+	white-space: nowrap;
+}
+
+// popover
+.popover {
+	border-radius: 4px;
+
+	.popover-content {
+		padding: 12px;
+	}
+}
+
+// like pop-over
+.liked-by-popover {
+	.popover-content {
+		padding: 0px;
+		overflow: scroll;
+		max-height: 150px;
+	}
+	min-width: 100px;
+	ul {
+		margin: 0px;
+		li {
+			padding: 10px;
+			cursor: pointer;
+			&:hover {
+				background: @btn-bg;
+			}
+		}
+	}
+
+}
+
+body.full-width {
+	@media (min-width: @screen-md) {
+		.container {
+			width: 90%;
+		}
+	}
+}
+
+// utilities
+
+.whitespace-nowrap {
+	white-space: nowrap;
+}
+
+.modal-minimize {
+	position: initial;
+	.modal-backdrop {
+		display: none;
+	}
+	.modal-dialog {
+		z-index: 101;
+		position: fixed;
+		right: 15px;
+		bottom: 0;
+		margin: 0;
+		max-width: 500px;
+	}
+	.modal-body {
+		display: none;
+	}
+}
+
+.app-logo {
+	width: 24px;
+}
+
+.alt-pressed .alt-underline {
+	text-decoration: underline;
 }

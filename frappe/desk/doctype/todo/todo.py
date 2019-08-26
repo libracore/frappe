@@ -43,8 +43,11 @@ class ToDo(Document):
 
 	def on_trash(self):
 		# unlink todo from linked comments
-		frappe.db.sql("""update `tabCommunication` set link_doctype=null, link_name=null
-			where link_doctype=%(doctype)s and link_name=%(name)s""", {"doctype": self.doctype, "name": self.name})
+		frappe.db.sql("""
+			delete from `tabCommunication Link`
+			where link_doctype=%(doctype)s and link_name=%(name)s""", {
+				"doctype": self.doctype, "name": self.name
+		})
 
 		self.update_in_reference()
 
@@ -72,12 +75,12 @@ class ToDo(Document):
 				"_assign", json.dumps(assignments), update_modified=False)
 
 		except Exception as e:
-			if e.args[0] == 1146 and frappe.flags.in_install:
+			if frappe.db.is_table_missing(e) and frappe.flags.in_install:
 				# no table
 				return
 
-			elif e.args[0]==1054:
-				from frappe.model.db_schema import add_column
+			elif frappe.db.is_column_missing(e):
+				from frappe.database.schema import add_column
 				add_column(self.reference_type, "_assign", "Text")
 				self.update_in_reference()
 
@@ -94,7 +97,7 @@ def get_permission_query_conditions(user):
 	if "System Manager" in frappe.get_roles(user):
 		return None
 	else:
-		return """(tabToDo.owner = '{user}' or tabToDo.assigned_by = '{user}')"""\
+		return """(`tabToDo`.owner = {user} or `tabToDo`.assigned_by = {user})"""\
 			.format(user=frappe.db.escape(user))
 
 def has_permission(doc, user):

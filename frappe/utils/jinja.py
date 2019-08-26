@@ -6,10 +6,11 @@ def get_jenv():
 	import frappe
 
 	if not getattr(frappe.local, 'jenv', None):
-		from jinja2 import Environment, DebugUndefined
+		from jinja2 import DebugUndefined
+		from jinja2.sandbox import SandboxedEnvironment
 
 		# frappe will be loaded last, so app templates will get precedence
-		jenv = Environment(loader = get_jloader(),
+		jenv = SandboxedEnvironment(loader = get_jloader(),
 			undefined=DebugUndefined)
 		set_filters(jenv)
 
@@ -84,7 +85,6 @@ def get_allowed_functions_for_jenv():
 	import frappe
 	import frappe.utils
 	import frappe.utils.data
-	from frappe.utils.autodoc import automodule, get_version
 	from frappe.model.document import get_controller
 	from frappe.website.utils import (get_shade, get_toc, get_next_link)
 	from frappe.modules import scrub
@@ -125,6 +125,7 @@ def get_allowed_functions_for_jenv():
 			"get_hooks": frappe.get_hooks,
 			"get_meta": frappe.get_meta,
 			"get_doc": frappe.get_doc,
+			"get_cached_doc": frappe.get_cached_doc,
 			"get_list": frappe.get_list,
 			"get_all": frappe.get_all,
 			'get_system_settings': frappe.get_system_settings,
@@ -144,11 +145,6 @@ def get_allowed_functions_for_jenv():
 		'style': {
 			'border_color': '#d1d8dd'
 		},
-		"autodoc": {
-			"get_version": get_version,
-			"automodule": automodule,
-			"get_controller": get_controller
-		},
 		'get_toc': get_toc,
 		'get_next_link': get_next_link,
 		"_": frappe._,
@@ -165,6 +161,7 @@ def get_allowed_functions_for_jenv():
 		out['frappe']['date_format'] = date_format
 		out['frappe']["db"] = {
 			"get_value": frappe.db.get_value,
+			"get_single_value": frappe.db.get_single_value,
 			"get_default": frappe.db.get_default,
 			"escape": frappe.db.escape,
 		}

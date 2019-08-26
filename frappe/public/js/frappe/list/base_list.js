@@ -9,8 +9,7 @@ frappe.views.BaseList = class BaseList {
 		frappe.run_serially([
 			() => this.init(),
 			() => this.before_refresh(),
-			() => this.refresh(),
-			() => frappe.route_options = null
+			() => this.refresh()
 		]);
 	}
 
@@ -177,7 +176,7 @@ frappe.views.BaseList = class BaseList {
 			if (item.condition && item.condition() === false) {
 				return;
 			}
-			const $item = this.page.add_menu_item(item.label, item.action, item.standard);
+			const $item = this.page.add_menu_item(item.label, item.action, item.standard, item.shortcut);
 			if (item.class) {
 				$item && $item.addClass(item.class);
 			}
@@ -367,6 +366,9 @@ frappe.views.BaseList = class BaseList {
 			this.render();
 			this.after_render();
 			this.freeze(false);
+			if (this.settings.refresh) {
+				this.settings.refresh(this);
+			}
 		});
 	}
 
@@ -552,7 +554,9 @@ class FilterArea {
 			fields_dict[fieldname].set_value('');
 			return;
 		}
-		this.filter_list.get_filter(fieldname).remove();
+
+		let filter = this.filter_list.get_filter(fieldname);
+		if (filter) filter.remove();
 	}
 
 	clear(refresh = true) {
@@ -594,7 +598,6 @@ class FilterArea {
 		}
 
 		const doctype_fields = this.list_view.meta.fields;
-
 		fields = fields.concat(doctype_fields.filter(
 			df => df.in_standard_filter &&
 				frappe.model.is_value_type(df.fieldtype)
@@ -613,12 +616,17 @@ class FilterArea {
 					options = options.join("\n");
 				}
 			}
+			let default_value = (fieldtype === 'Link') ? frappe.defaults.get_user_default(options) : null;
+			if (['__default', '__global'].includes(default_value)) {
+				default_value = null;
+			}
 			return {
 				fieldtype: fieldtype,
 				label: __(df.label),
 				options: options,
 				fieldname: df.fieldname,
 				condition: condition,
+				default: default_value,
 				onchange: () => this.refresh_list_view(),
 				ignore_link_validation: fieldtype === 'Dynamic Link'
 			};

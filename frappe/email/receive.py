@@ -13,7 +13,7 @@ from frappe import _, safe_decode, safe_encode
 from frappe.utils import (extract_email_id, convert_utc_to_user_timezone, now,
 	cint, cstr, strip, markdown, parse_addr)
 from frappe.utils.scheduler import log
-from frappe.utils.file_manager import get_random_filename, save_file, MaxFileSizeReachedError
+from frappe.core.doctype.file.file import get_random_filename, MaxFileSizeReachedError
 
 class EmailSizeExceededError(frappe.ValidationError): pass
 class EmailTimeoutError(frappe.ValidationError): pass
@@ -481,7 +481,10 @@ class Email:
 		"""Detect chartset."""
 		charset = part.get_content_charset()
 		if not charset:
-			charset = chardet.detect(str(part))['encoding']
+			if six.PY2:
+				charset = chardet.detect(str(part))['encoding']
+			else:
+				charset = chardet.detect(part.encode())['encoding']
 
 		return charset
 
@@ -525,12 +528,18 @@ class Email:
 
 		for attachment in self.attachments:
 			try:
-				file_data = save_file(attachment['fname'], attachment['fcontent'],
-					doc.doctype, doc.name, is_private=1)
-				saved_attachments.append(file_data)
+				_file = frappe.get_doc({
+					"doctype": "File",
+					"file_name": attachment['fname'],
+					"attached_to_doctype": doc.doctype,
+					"attached_to_name": doc.name,
+					"is_private": 1,
+					"content": attachment['fcontent']})
+				_file.save()
+				saved_attachments.append(_file)
 
 				if attachment['fname'] in self.cid_map:
-					self.cid_map[file_data.name] = self.cid_map[attachment['fname']]
+					self.cid_map[_file.name] = self.cid_map[attachment['fname']]
 
 			except MaxFileSizeReachedError:
 				# WARNING: bypass max file size exception

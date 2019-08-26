@@ -12,13 +12,12 @@ frappe.views.FormFactory = class FormFactory extends frappe.views.Factory {
 			frappe.model.with_doctype(dt, function() {
 				me.page = frappe.container.add_page("Form/" + dt);
 				frappe.views.formview[dt] = me.page;
-				me.page.frm = new _f.Frm(dt, me.page, true);
+				me.page.frm = new frappe.ui.form.Form(dt, me.page, true);
 				me.show_doc(route);
 			});
 		} else {
 			me.show_doc(route);
 		}
-
 
 		if(!this.initialized) {
 			$(document).on("page-change", function() {

@@ -21,19 +21,10 @@ frappe.ui.toolbar.Toolbar = Class.extend({
 	make: function() {
 		this.setup_sidebar();
 		this.setup_help();
-		this.setup_modules_dialog();
 
 		this.bind_events();
 
 		$(document).trigger('toolbar_setup');
-	},
-
-
-	setup_modules_dialog() {
-		this.modules_select = new frappe.ui.toolbar.ModulesSelect();
-		$('.navbar-set-desktop-icons').on('click', () => {
-			this.modules_select.show();
-		});
 	},
 
 	bind_events: function() {
@@ -47,17 +38,20 @@ frappe.ui.toolbar.Toolbar = Class.extend({
 		});
 
 		//focus search-modal on show in mobile view
-		$('#search-modal').on('shown.bs.modal', function () {
+		$('#search-modal').on('shown.bs.modal', function() {
 			var search_modal = $(this);
 			setTimeout(function() {
 				search_modal.find('#modal-search').focus();
 			}, 300);
 		});
+		$('.navbar-toggle-full-width').click(() => {
+			frappe.ui.toolbar.toggle_full_width();
+		});
 	},
 
-	setup_sidebar: function () {
+	setup_sidebar: function() {
 		var header = $('header');
-		header.find(".toggle-sidebar").on("click", function () {
+		header.find(".toggle-sidebar").on("click", function() {
 			var layout_side_section = $('.layout-side-section');
 			var overlay_sidebar = layout_side_section.find('.overlay-sidebar');
 
@@ -75,7 +69,7 @@ frappe.ui.toolbar.Toolbar = Class.extend({
 			scroll_container.css("overflow-y", "hidden");
 
 			layout_side_section.find(".close-sidebar").on('click', close_sidebar);
-			layout_side_section.on("click", "a", close_sidebar);
+			layout_side_section.on("click", "a:not(.dropdown-toggle)", close_sidebar);
 
 			function close_sidebar(e) {
 				scroll_container.css("overflow-y", "");
@@ -91,7 +85,7 @@ frappe.ui.toolbar.Toolbar = Class.extend({
 		});
 	},
 
-	setup_help: function () {
+	setup_help: function() {
 		frappe.provide('frappe.help');
 		frappe.help.show_results = show_results;
 
@@ -99,15 +93,15 @@ frappe.ui.toolbar.Toolbar = Class.extend({
 		frappe.provide('frappe.searchdialog');
 		frappe.searchdialog.search = this.search;
 
-		$(".dropdown-help .dropdown-toggle").on("click", function () {
+		$(".dropdown-help .dropdown-toggle").on("click", function() {
 			$(".dropdown-help input").focus();
 		});
 
-		$(".dropdown-help .dropdown-menu").on("click", "input, button", function (e) {
+		$(".dropdown-help .dropdown-menu").on("click", "input, button", function(e) {
 			e.stopPropagation();
 		});
 
-		$("#input-help").on("keydown", function (e) {
+		$("#input-help").on("keydown", function(e) {
 			if(e.which == 13) {
 				$(this).val("");
 			}
@@ -130,8 +124,7 @@ frappe.ui.toolbar.Toolbar = Class.extend({
 
 			if(links.length === 0) {
 				$help_links.next().hide();
-			}
-			else {
+			} else {
 				$help_links.next().show();
 			}
 
@@ -164,8 +157,7 @@ frappe.ui.toolbar.Toolbar = Class.extend({
 				e.preventDefault();
 			}
 		}
-	},
-
+	}
 });
 
 $.extend(frappe.ui.toolbar, {
@@ -203,7 +195,22 @@ $.extend(frappe.ui.toolbar, {
 		</li>`).get(0);
 
 		parent_element.insertBefore(new_element, parent_element.children[index]);
-	}
+	},
+	toggle_full_width() {
+		let fullwidth = JSON.parse(localStorage.container_fullwidth || 'false');
+		fullwidth = !fullwidth;
+		localStorage.container_fullwidth = fullwidth;
+		frappe.ui.toolbar.set_fullwidth_if_enabled();
+	},
+	set_fullwidth_if_enabled() {
+		let fullwidth = JSON.parse(localStorage.container_fullwidth || 'false');
+		$(document.body).toggleClass('full-width', fullwidth);
+	},
+	show_shortcuts (e) {
+		e.preventDefault();
+		frappe.ui.keys.show_keyboard_shortcut_dialog();
+		return false;
+	},
 });
 
 frappe.ui.toolbar.clear_cache = function() {
@@ -216,22 +223,68 @@ frappe.ui.toolbar.clear_cache = function() {
 				location.reload(true);
 			}
 		}
-	})
+	});
 	return false;
-}
-
-frappe.ui.toolbar.download_backup = function() {
-	frappe.msgprint(__("Your download is being built, this may take a few moments..."));
-	$c('frappe.utils.backups.get_backup',{},function(r,rt) {});
-	return false;
-}
+};
 
 frappe.ui.toolbar.show_about = function() {
 	try {
 		frappe.ui.misc.about();
-	}
-	catch(e) {
+	} catch(e) {
 		console.log(e);
 	}
 	return false;
-}
+};
+
+frappe.ui.toolbar.setup_session_defaults = function() {
+	let fields = [];
+	frappe.call({
+		method: 'frappe.core.doctype.session_default_settings.session_default_settings.get_session_default_values',
+		callback: function (data) {
+			fields = JSON.parse(data.message);
+			let perms = frappe.perm.get_perm('Session Default Settings');
+			//add settings button only if user is a System Manager or has permission on 'Session Default Settings'
+			if ((in_list(frappe.user_roles, 'System Manager')) || (perms[0].read == 1))  {
+				fields[fields.length] = {
+					'fieldname': 'settings',
+					'fieldtype': 'Button',
+					'label': __('Settings'),
+					'click': () => {
+						frappe.set_route('Form', 'Session Default Settings', 'Session Default Settings');
+					}
+				};
+			}
+			frappe.prompt(fields, function(values) {
+				//if default is not set for a particular field in prompt
+				fields.forEach(function(d) {
+					if (!values[d.fieldname]) {
+						values[d.fieldname] = "";
+					}
+				});
+				frappe.call({
+					method: 'frappe.core.doctype.session_default_settings.session_default_settings.set_session_default_values',
+					args: {
+						default_values: values,
+					},
+					callback: function(data) {
+						if (data.message == "success") {
+							frappe.show_alert({
+								'message': __('Session Defaults Saved'),
+								'indicator': 'green'
+							});
+							frappe.ui.toolbar.clear_cache();
+						}	else {
+							frappe.show_alert({
+								'message': __('An error occurred while setting Session Defaults'),
+								'indicator': 'red'
+							});
+						}
+					}
+				});
+			},
+			__('Session Defaults'),
+			__('Save'),
+			);
+		}
+	});
+};

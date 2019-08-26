@@ -46,13 +46,16 @@ def import_custom_scripts(app):
 						frappe.get_doc({
 							"doctype":"Custom Script",
 							"dt": doctype,
-							"script_type": "Client",
 							"script": script
 						}).insert()
 
-def export_fixtures():
+def export_fixtures(app=None):
 	"""Export fixtures as JSON to `[app]/fixtures`"""
-	for app in frappe.get_installed_apps():
+	if app:
+		apps = [app]
+	else:
+		apps = frappe.get_installed_apps()
+	for app in apps:
 		for fixture in frappe.get_hooks("fixtures", app_name=app):
 			filters = None
 			or_filters = None
@@ -65,4 +68,4 @@ def export_fixtures():
 				os.mkdir(frappe.get_app_path(app, "fixtures"))
 
 			export_json(fixture, frappe.get_app_path(app, "fixtures", frappe.scrub(fixture) + ".json"),
-						filters=filters, or_filters=or_filters, order_by="idx asc, creation asc")
+				filters=filters, or_filters=or_filters, order_by="idx asc, creation asc")

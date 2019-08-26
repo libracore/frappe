@@ -153,12 +153,24 @@ def contact_query(doctype, txt, searchfield, start, page_len, filters):
 			`tabContact`.idx desc, `tabContact`.name
 		limit %(start)s, %(page_len)s """.format(
 			mcond=get_match_cond(doctype),
-			key=frappe.db.escape(searchfield)),
-		{
-			'txt': "%%%s%%" % frappe.db.escape(txt),
+			key=searchfield), {
+			'txt': '%' + txt + '%',
 			'_txt': txt.replace("%", ""),
 			'start': start,
 			'page_len': page_len,
 			'link_name': link_name,
 			'link_doctype': link_doctype
 		})
+
+
+def get_contact_with_phone_number(number):
+	if not number: return
+
+	contacts = frappe.get_all('Contact', or_filters={
+		'phone': ['like', '%{}'.format(number)],
+		'mobile_no': ['like', '%{}'.format(number)]
+	}, limit=1)
+
+	contact = contacts[0].name if contacts else None
+
+	return contact

@@ -85,7 +85,7 @@ class LDAPSettings(Document):
 		needed_roles = set()
 		needed_roles.add(self.default_role)
 
-		lower_groups = [g.lower() for g in additional_groups]
+		lower_groups = [g.lower() for g in additional_groups or []]
 
 		all_mapped_roles = {r.erpnext_role for r in self.ldap_groups}
 		matched_roles = {r.erpnext_role for r in self.ldap_groups if r.ldap_group.lower() in lower_groups}
@@ -111,13 +111,16 @@ class LDAPSettings(Document):
 				"send_welcome_email": 0,
 				"language": "",
 				"user_type": "System User",
-				"roles": [{
-					"role": self.default_role
-				}]
+				# "roles": [{
+				# 	"role": self.default_role
+				# }]
 			})
 			user = frappe.get_doc(doc)
 			user.insert(ignore_permissions=True)
-		self.sync_roles(user, groups)
+		# always add default role.
+		user.add_roles(self.default_role)
+		if self.ldap_group_field:
+			self.sync_roles(user, groups)
 		return user
 
 	def get_ldap_attributes(self):

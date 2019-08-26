@@ -89,18 +89,8 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Google Maps Settings",
-					"description": _("Google Maps integration"),
-				},
-				{
-					"type": "doctype",
-					"name": "GCalendar Settings",
-					"description": _("Configure your google calendar integration"),
-				},
-				{
-					"type": "doctype",
-					"name": "GCalendar Account",
-					"description": _("Configure accounts for google calendar"),
+					"name": "Google Settings",
+					"description": _("Google API Settings."),
 				},
 				{
 					"type": "doctype",
@@ -111,6 +101,16 @@ def get_data():
 					"type": "doctype",
 					"name": "GSuite Templates",
 					"description": _("Google GSuite Templates to integration with DocTypes"),
+				},
+				{
+					"type": "doctype",
+					"name": "Google Contacts",
+					"description": _("Google Contacts Integration."),
+				},
+				{
+					"type": "doctype",
+					"name": "Google Calendar",
+					"description": _("Google Calendar Integration."),
 				}
 			]
 		}

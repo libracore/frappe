@@ -43,6 +43,7 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 				me.$link.toggle(false);
 			}, 500);
 		});
+		this.$input.attr('data-target', this.df.options);
 		this.input = this.$input.get(0);
 		this.has_input = true;
 		this.translate_values = true;
@@ -54,7 +55,10 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 	},
 	get_reference_doctype() {
 		// this is used to get the context in which link field is loaded
-		return this.doctype || frappe.get_route()[0] === 'List' ? frappe.get_route()[1] : null;
+		if (this.doctype) return this.doctype;
+		else {
+			return frappe.get_route && frappe.get_route()[0] === 'List' ? frappe.get_route()[1] : null;
+		}
 	},
 	setup_buttons: function() {
 		if(this.only_input && !this.with_link_btn) {
@@ -121,7 +125,7 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 				if(!d.label) {	d.label = d.value; }
 
 				var _label = (me.translate_values) ? __(d.label) : d.label;
-				var html = "<strong>" + _label + "</strong>";
+				var html = d.html || "<strong>" + _label + "</strong>";
 				if(d.description && d.value!==d.description) {
 					html += '<br><span class="small">' + __(d.description) + '</span>';
 				}
@@ -153,7 +157,7 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 				'txt': term,
 				'doctype': doctype,
 				'ignore_user_permissions': me.df.ignore_user_permissions,
-				'reference_doctype': me.get_reference_doctype()
+				'reference_doctype': me.get_reference_doctype() || ""
 			};
 
 			me.set_custom_query(args);
@@ -166,6 +170,18 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 				callback: function(r) {
 					if(!me.$input.is(":focus")) {
 						return;
+					}
+
+					// show filter description in awesomplete
+					if (args.filters) {
+						let filter_string = me.get_filter_description(args.filters);
+						if (filter_string) {
+							r.results.push({
+								html: `<span class="text-muted">${filter_string}</span>`,
+								value: '',
+								action: () => {}
+							});
+						}
 					}
 
 					if(!me.df.only_select) {
@@ -198,7 +214,7 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 					me.awesomplete.list = me.$input.cache[doctype][term];
 				}
 			});
-		}, 618));
+		}, 500));
 
 		this.$input.on("blur", function() {
 			if(me.selected) {
@@ -259,6 +275,57 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 			}
 		});
 	},
+
+	get_filter_description(filters) {
+		let doctype = this.get_options();
+		let filter_array = [];
+		let meta = null;
+
+		frappe.model.with_doctype(doctype, () => {
+			meta = frappe.get_meta(doctype);
+		});
+
+		// convert object style to array
+		if (!Array.isArray(filters)) {
+			for (let fieldname in filters) {
+				let value = filters[fieldname];
+				if (!Array.isArray(value)) {
+					value = ['=', value];
+				}
+				filter_array.push([fieldname, ...value]); // fieldname, operator, value
+			}
+		} else {
+			filter_array = filters;
+		}
+
+		// add doctype if missing
+		filter_array = filter_array.map(filter => {
+			if (filter.length === 3) {
+				return [doctype, ...filter]; // doctype, fieldname, operator, value
+			}
+			return filter;
+		});
+
+		function get_filter_description(filter) {
+			let doctype = filter[0];
+			let fieldname = filter[1];
+			let docfield = frappe.meta.get_docfield(doctype, fieldname);
+			let label = docfield ? docfield.label : frappe.model.unscrub(fieldname);
+
+			let value = filter[3] == null || filter[3] === ''
+				? __('empty')
+				: String(filter[3]);
+
+			return [__(label).bold(), filter[2], value.bold()].join(' ');
+		}
+
+		let filter_string = filter_array
+			.map(get_filter_description)
+			.join(', ');
+
+		return __('Filters applied for {0}', [filter_string]);
+	},
+
 	set_custom_query: function(args) {
 		var set_nulls = function(obj) {
 			$.each(obj, function(key, value) {
