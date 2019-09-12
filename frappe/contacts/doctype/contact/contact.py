@@ -206,5 +206,8 @@ def get_contact_with_phone_number(number):
 	return contacts[0].parent if contacts else None
 
 def get_contact_name(email_id):
-	contact = frappe.get_list("Contact Email", filters={"email_id": email_id}, fields=["parent"], limit=1)
-	return contact[0].parent if contact else None
+	# contact = frappe.get_list("Contact Email", filters={"email_id": email_id}, fields=["parent"], limit=1)
+	# return contact[0].parent if contact else None
+	# corrected refactoring of contact, contact.email_id will maintain the primary email
+	contact_name = frappe.db.get_value('Contact', {'email_id': email})
+	return contact_name

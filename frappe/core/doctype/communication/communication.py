@@ -337,16 +337,20 @@ def get_contacts(email_strings):
 		email = get_email_without_link(email)
 		contact_name = get_contact_name(email)
 
-		if not contact_name:
-			contact = frappe.get_doc({
-				"doctype": "Contact",
-				"first_name": frappe.unscrub(email.split("@")[0]),
-			})
-			contact.add_email(email)
-			contact.insert(ignore_permissions=True)
-			contact_name = contact.name
+		try:
+			if not contact_name:
+				contact = frappe.get_doc({
+					"doctype": "Contact",
+					"first_name": frappe.unscrub(email.split("@")[0]),
+				})
+				contact.add_email(email)
+				contact.insert(ignore_permissions=True)
+				contact_name = contact.name
 
-		contacts.append(contact_name)
+			contacts.append(contact_name)
+		except:
+			# do nothing, contact was not found, but could also not be created
+			pass
 
 	return contacts
 
