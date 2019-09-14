@@ -30,7 +30,10 @@ def get_form_params():
 	"""Stringify GET request parameters."""
 	data = frappe._dict(frappe.local.form_dict)
 
-	del data["cmd"]
+	data.pop('cmd', None)
+	data.pop('data', None)
+	data.pop('ignore_permissions', None)
+
 	if "csrf_token" in data:
 		del data["csrf_token"]
 
@@ -69,6 +72,7 @@ def get_form_params():
 
 	# queries must always be server side
 	data.query = None
+	data.strict = None
 
 	return data
 
@@ -115,12 +119,16 @@ def save_report():
 @frappe.whitelist()
 def export_query():
 	"""export from report builder"""
+	title = frappe.form_dict.title
+	frappe.form_dict.pop('title', None)
+
 	form_params = get_form_params()
 	form_params["limit_page_length"] = None
 	form_params["as_list"] = True
 	doctype = form_params.doctype
 	add_totals_row = None
 	file_format_type = form_params["file_format_type"]
+	title = title or doctype
 
 	del form_params["doctype"]
 	del form_params["file_format_type"]
@@ -162,14 +170,14 @@ def export_query():
 		f.seek(0)
 		frappe.response['result'] = text_type(f.read(), 'utf-8')
 		frappe.response['type'] = 'csv'
-		frappe.response['doctype'] = doctype
+		frappe.response['doctype'] = title
 
 	elif file_format_type == "Excel":
 
 		from frappe.utils.xlsxutils import make_xlsx
 		xlsx_file = make_xlsx(data, doctype)
 
-		frappe.response['filename'] = doctype + '.xlsx'
+		frappe.response['filename'] = title + '.xlsx'
 		frappe.response['filecontent'] = xlsx_file.getvalue()
 		frappe.response['type'] = 'binary'
 
@@ -185,6 +193,10 @@ def append_totals_row(data):
 		for i in range(len(row)):
 			if isinstance(row[i], (float, int)):
 				totals[i] = (totals[i] or 0) + row[i]
+
+	if not isinstance(totals[0], (int, float)):
+		totals[0] = 'Total'
+
 	data.append(totals)
 
 	return data
@@ -214,22 +226,29 @@ def delete_items():
 	"""delete selected items"""
 	import json
 
-	il = sorted(json.loads(frappe.form_dict.get('items')), reverse=True)
+	items = sorted(json.loads(frappe.form_dict.get('items')), reverse=True)
 	doctype = frappe.form_dict.get('doctype')
 
-	failed = []
+	if len(items) > 10:
+		frappe.enqueue('frappe.desk.reportview.delete_bulk',
+			doctype=doctype, items=items)
+	else:
+		delete_bulk(doctype, items)
 
-	for i, d in enumerate(il):
+def delete_bulk(doctype, items):
+	for i, d in enumerate(items):
 		try:
 			frappe.delete_doc(doctype, d)
-			if len(il) >= 5:
+			if len(items) >= 5:
 				frappe.publish_realtime("progress",
-					dict(progress=[i+1, len(il)], title=_('Deleting {0}').format(doctype), description=d),
+					dict(progress=[i+1, len(items)], title=_('Deleting {0}').format(doctype), description=d),
 						user=frappe.session.user)
+			# Commit after successful deletion
+			frappe.db.commit()
 		except Exception:
-			failed.append(d)
-
-	return failed
+			# rollback if any record failed to delete
+			# if not rollbacked, queries get committed on after_request method in app.py
+			frappe.db.rollback()
 
 @frappe.whitelist()
 @frappe.read_only()

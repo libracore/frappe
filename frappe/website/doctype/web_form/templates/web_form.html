@@ -205,6 +205,8 @@ frappe.boot = {
 	max_file_size: {{ max_file_size }}
 };
 
+frappe._messages = {{ translated_messages }};
+
 // for backward compatibility of some libs
 frappe.sys_defaults = frappe.boot.sysdefaults;
 {% if row_template %}web_form_settings.web_form_row_template = "{{ row_template }}";{% endif %}
