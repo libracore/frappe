@@ -50,7 +50,7 @@ web_include_js = [
 	"website_script.js"
 ]
 
-web_include_css = ["assets/frappe/css/bluetheme.css"]
+web_include_css = ["assets/frappe/css/web_bluetheme.css"]
 
 website_route_rules = [
 	{"from_route": "/blog/<category>", "to_route": "Blog Post"},
