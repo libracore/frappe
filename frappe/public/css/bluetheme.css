@@ -67,7 +67,7 @@ h6.uppercase, .h6.uppercase {
 .btn-primary:focus, .btn-primary.focus {
     box-shadow: 0 0 0 0.1rem rgba(74, 120, 247, 0.16);}
 .btn-login{padding:8px}
-.btn:hover{color:#e7e7e7}
+.btn-primary:hover{color:#e7e7e7}
 .layout-side-section {font-size: 14px;}
 .list-sidebar .list-sidebar-label {
     color: #3668b5;
