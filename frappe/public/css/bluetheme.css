@@ -28,8 +28,9 @@ a.text-primary:hover {color: #2a60b3}
 body {
     font-family: Roboto, Arial, Droid Sans, sans-serif;
 	background-color: #f8f8f8;}
-small, .small {
-    font-size: 100%;}
+/*small, .small {
+    font-size: 100%;
+}
 .section-box {
 	border: 1px solid #eaeaea;
 	border-radius:0px !important;
@@ -128,6 +129,13 @@ border-bottom: 1px solid #efefef !important;}
    border:1px solid #ececec}
 .form-control:focus {
    box-shadow: 0 0 0 0.05rem rgba(33, 82, 158, 0.62) !important;}
+
+.form-page {
+    background-color: white;
+}
+.frappe-list {
+    background-color: white;
+}
 
 /*Icons for Desk*/
 .icon{
