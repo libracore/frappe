@@ -45,7 +45,8 @@ h1, .h1 {
 	border-bottom: 1px solid #eee;}
 @media (min-width: 768px) {
 .navbar-nav {
-    padding-top: 3px;}}
+    padding-top: 3px;}
+}
 .module-box {
 	border: 1px solid #eaeaea !important;
         border-radius: 0px !important;
@@ -106,10 +107,10 @@ border-bottom: 1px solid #efefef !important;}
 .page-card .page-card-head .indicator {
     color: #2b72e0 !important;
     font-size: 15px !important;}
-@media (max-width: 991px){
+/* @media (max-width: 991px){
 .navbar-desk {
     width: 15% !important;}
-}
+} */
 .indicator.blue::before, .indicator-right.blue::after{
    background:#397de6}
 .indicator.orange::before, .indicator-right.orange::after{
