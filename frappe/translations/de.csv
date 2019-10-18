@@ -3719,7 +3719,7 @@ DocType: DocType,"Once submitted, submittable documents cannot be changed. They 
 DocType: OAuth Authorization Code,Validity,Gültigkeit
 apps/frappe/frappe/config/website.py,Single Post (article).,Einzelne Einträge (verfasste Artikel)
 apps/frappe/frappe/public/js/frappe/list/list_sidebar.html,Reports,Berichte
-DocType: Page,No,Kein
+DocType: Page,No,Nein
 DocType: Property Setter,Set Value,Wert festlegen
 DocType: Webhook,Webhook Data,Webhook Daten
 apps/frappe/frappe/public/js/frappe/views/treeview.js,Creating {0},Erstellen von {0}
