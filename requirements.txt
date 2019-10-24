@@ -14,7 +14,7 @@ python-dateutil==2.7.5
 pytz==2018.7
 six==1.11.0
 termcolor==1.1.0
-werkzeug==0.14.1
+werkzeug
 semantic_version==2.6.0
 rauth>=0.6.2
 requests==2.20.1
