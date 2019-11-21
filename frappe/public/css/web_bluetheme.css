@@ -42,3 +42,7 @@
 .indicator.orange::before, .indicator-right.orange::after{
    background:#ffb65c
 }
+.login-content {
+  box-sizing: content-box;
+  height: auto;
+}
