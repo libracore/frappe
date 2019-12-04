@@ -94,7 +94,7 @@ frappe.views.CommunicationComposer = Class.extend({
 			{label:__("Send Read Receipt"), fieldtype:"Check",
 				fieldname:"send_read_receipt"},
 			{label:__("Attach Document Print"), fieldtype:"Check",
-				fieldname:"attach_document_print"},
+				fieldname:"attach_document_print", 'default': 1},
 			{label:__("Select Print Format"), fieldtype:"Select",
 				fieldname:"select_print_format"},
 			{label:__("Select Languages"), fieldtype:"Select",
