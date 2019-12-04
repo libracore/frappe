@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Frappe Technologies Pvt. Ltd. and Contributors
+// Copyright (c) 2018-2019, Frappe Technologies Pvt. Ltd., libracore and Contributors
 // MIT License. See license.txt
 
 frappe.last_edited_communication = {};
@@ -94,7 +94,7 @@ frappe.views.CommunicationComposer = Class.extend({
 			{label:__("Send Read Receipt"), fieldtype:"Check",
 				fieldname:"send_read_receipt"},
 			{label:__("Attach Document Print"), fieldtype:"Check",
-				fieldname:"attach_document_print", 'default': 1},
+				fieldname:"attach_document_print"},
 			{label:__("Select Print Format"), fieldtype:"Select",
 				fieldname:"select_print_format"},
 			{label:__("Select Languages"), fieldtype:"Select",
@@ -127,9 +127,9 @@ frappe.views.CommunicationComposer = Class.extend({
 		this.setup_last_edited_communication();
 		this.setup_email_template();
 
-		this.dialog.fields_dict.recipients.set_value(this.recipients || '');
-		this.dialog.fields_dict.cc.set_value(this.cc || '');
-		this.dialog.fields_dict.bcc.set_value(this.bcc || '');
+		this.dialog.set_value("recipients", this.recipients || '');
+		this.dialog.set_value("cc", this.cc || '');
+		this.dialog.set_value("bcc", this.bcc || '');
 
 		if(this.dialog.fields_dict.sender) {
 			this.dialog.fields_dict.sender.set_value(this.sender || '');
@@ -180,6 +180,10 @@ frappe.views.CommunicationComposer = Class.extend({
 					this.subject = `${__(this.frm.doctype)}: ${title}`;
 				}
 			}
+		}
+
+		if (this.frm && !this.recipients) {
+			this.recipients = this.frm.doc[this.frm.email_field];
 		}
 	},
 
@@ -690,6 +694,7 @@ frappe.views.CommunicationComposer = Class.extend({
 		}
 		fields.content.set_value(content);
 	},
+
 	html2text: function(html) {
 		// convert HTML to text and try and preserve whitespace
 		var d = document.createElement( 'div' );
@@ -702,4 +707,3 @@ frappe.views.CommunicationComposer = Class.extend({
 		return text.replace(/\n{3,}/g, '\n\n');
 	}
 });
-
