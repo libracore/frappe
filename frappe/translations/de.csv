@@ -1381,7 +1381,7 @@ DocType: Energy Point Rule,Multiplier Field,Multiplikatorfeld
 DocType: Dashboard Chart,Time Interval,Zeitintervall
 DocType: Activity Log,Keep track of all update feeds,Verfolgen Sie alle Update-Feeds
 DocType: OAuth Client,A list of resources which the Client App will have access to after the user allows it.<br> e.g. project,"Eine Liste der Ressourcen, die der Client-Anwendung Zugriff auf nach dem Benutzer erlaubt, es haben wird. <br> zB Projekt"
-DocType: Translation,Translated Text,Übersetzt Text
+DocType: Translation,Translated Text,Übersetzter Text
 DocType: Contact Us Settings,Query Options,Abfrageoptionen
 apps/frappe/frappe/public/js/frappe/social/components/PostLoader.vue,Fetching posts...,Beiträge werden abgerufen ...
 apps/frappe/frappe/integrations/doctype/google_contacts/google_contacts.py,Contact Synced with Google Contacts.,Kontakt Mit Google-Kontakten synchronisiert.
