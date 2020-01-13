@@ -174,8 +174,7 @@ apps/frappe/frappe/public/js/frappe/form/save.js,"Mandatory fields required in t
 apps/frappe/frappe/utils/password_strength.py,Capitalization doesn't help very much.,Großschreibung hilft nicht besonders viel.
 DocType: Error Snapshot,Friendly Title,Freundliche Anrede
 DocType: Newsletter,Email Sent?,Wurde die E-Mail versandt?
-apps/frappe/frappe/public/js/frappe/views/reports/report_view.js,Toggle Chart,"Diagramm/Grafik(?)  umschalten
-please verify context!"
+apps/frappe/frappe/public/js/frappe/views/reports/report_view.js,Toggle Chart,"Diagramm ein-/ausschalten"
 apps/frappe/frappe/desk/form/save.py,Did not cancel,Wurde nicht storniert
 DocType: Social Login Key,Client Information,Kundeninformation
 DocType: Workflow State,plus,Plus
