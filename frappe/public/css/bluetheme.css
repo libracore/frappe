@@ -107,7 +107,6 @@ border-bottom: 1px solid #efefef !important;}
 .page-card .page-card-head .indicator {
     color: #2b72e0 !important;
     font-size: 15px !important;}
-@media (max-width: 991px){
 .indicator.blue::before, .indicator-right.blue::after{
    background:#397de6}
 .indicator.orange::before, .indicator-right.orange::after{
