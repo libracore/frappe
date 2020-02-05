@@ -28,8 +28,9 @@ a.text-primary:hover {color: #2a60b3}
 body {
     font-family: Roboto, Arial, Droid Sans, sans-serif;
 	background-color: #f8f8f8;}
-small, .small {
-    font-size: 100%;}
+/*small, .small {
+    font-size: 100%;
+}*/
 .section-box {
 	border: 1px solid #eaeaea;
 	border-radius:0px !important;
@@ -44,7 +45,8 @@ h1, .h1 {
 	border-bottom: 1px solid #eee;}
 @media (min-width: 768px) {
 .navbar-nav {
-    padding-top: 3px;}}
+    padding-top: 3px;}
+}
 .module-box {
 	border: 1px solid #eaeaea !important;
         border-radius: 0px !important;
@@ -67,7 +69,7 @@ h6.uppercase, .h6.uppercase {
 .btn-primary:focus, .btn-primary.focus {
     box-shadow: 0 0 0 0.1rem rgba(74, 120, 247, 0.16);}
 .btn-login{padding:8px}
-.btn:hover{color:#e7e7e7}
+.btn-primary:hover{color:#e7e7e7}
 .layout-side-section {font-size: 14px;}
 .list-sidebar .list-sidebar-label {
     color: #3668b5;
@@ -125,7 +127,13 @@ border-bottom: 1px solid #efefef !important;}
    border:1px solid #ececec}
 .form-control:focus {
    box-shadow: 0 0 0 0.05rem rgba(33, 82, 158, 0.62) !important;}
-.navbar-right .dropdown-help {display:none}
+
+.form-page {
+    background-color: white;
+}
+.frappe-list {
+    background-color: white;
+}
 
 /*Icons for Desk*/
 .icon{
@@ -190,3 +198,15 @@ border-bottom: 1px solid #efefef !important;}
    background: url(/assets/frappe/images/agriculture.png)}
 .non-profit-blue{
    background: url(/assets/frappe/images/charity.png)}
+.erpnextswiss-blue{
+   background: url(/assets/frappe/images/diamond.png)}
+.erpnextaustria-blue{
+   background: url(/assets/frappe/images/globe.png)}
+.finkzeit-blue{
+   background: url(/assets/frappe/images/fink.png)}
+.firetesting-blue{
+   background: url(/assets/frappe/images/flame.png)}
+.factory-blue{
+   background: url(/assets/frappe/images/factory.png)}
+.cobinet-blue{
+   background: url(/assets/frappe/images/cobinet.png)}

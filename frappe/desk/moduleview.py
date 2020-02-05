@@ -490,6 +490,8 @@ def get_report_list(module, is_standard="No"):
 	return out
 
 @frappe.whitelist()
-def flush_home_settings():
-    home_setting = frappe.db.get_value('User', frappe.session.user, 'home_settings')
-    frappe.cache().hset('home_settings', frappe.session.user, home_settings)
+def flush_home_settings(user=None):
+    if not user:
+        user = frappe.session.user
+    home_setting = frappe.db.get_value('User', user, 'home_settings')
+    frappe.cache().hset('home_settings', user, home_settings)
