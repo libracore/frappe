@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
+# Copyright (c) 2015-2020, libracore, Frappe Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
 
 from __future__ import unicode_literals
@@ -488,3 +488,8 @@ def get_report_list(module, is_standard="No"):
 		})
 
 	return out
+
+@frappe.whitelist()
+def flush_home_settings():
+    home_setting = frappe.db.get_value('User', frappe.session.user, 'home_settings')
+    frappe.cache().hset('home_settings', frappe.session.user, home_settings)
