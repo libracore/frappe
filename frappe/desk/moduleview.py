@@ -494,4 +494,4 @@ def flush_home_settings(user=None):
     if not user:
         user = frappe.session.user
     home_settings = frappe.db.get_value('User', user, 'home_settings')
-    frappe.cache().hset('home_settings', user, home_settings)
+    frappe.cache().hset('home_settings', user, json.loads(home_settings))
