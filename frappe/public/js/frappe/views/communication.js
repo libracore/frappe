@@ -64,6 +64,7 @@ frappe.views.CommunicationComposer = Class.extend({
 			}
 		})
 		this.prepare();
+		this.dialog.set_value("attach_document_print", 1);	// force-enable attach document
 		this.dialog.show();
 	},
 
