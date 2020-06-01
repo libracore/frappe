@@ -1371,9 +1371,15 @@ def get_print(doctype=None, name=None, print_format=None, style=None, html=None,
 
 	if not html:
 		html = build_page("printview")
-
 	if as_pdf:
-		return get_pdf(html, output = output, options = options)
+		if doctype == "Sales Invoice":
+			# include ZUGFeRD document creation when available
+			from erpnextswiss.erpnextswiss.zugferd.zugferd import create_zugferd_pdf
+			if not doc and name:
+				doc = get_doc(doctype, name)
+			return create_zugferd_pdf(docname=name, verify=True, format=print_format, doc=doc, doctype=doctype, no_letterhead=no_letterhead)
+		else:
+			return get_pdf(html, output = output, options = options)
 	else:
 		return html
 
