@@ -29,10 +29,10 @@ def get_pdf(html, options=None, output=None):
 		reader = PdfFileReader(io.BytesIO(filedata))
 
 	except IOError as e:
-		if ("ContentNotFoundError" in e.message
-			or "ContentOperationNotPermittedError" in e.message
-			or "UnknownContentError" in e.message
-			or "RemoteHostClosedError" in e.message):
+		if ("ContentNotFoundError" in str(e)
+			or "ContentOperationNotPermittedError" in str(e)
+			or "UnknownContentError" in str(e)
+			or "RemoteHostClosedError" in str(e)):
 
 			# allow pdfs with missing images if file got created
 			if filedata:
@@ -40,6 +40,7 @@ def get_pdf(html, options=None, output=None):
 					output.appendPagesFromReader(reader)
 
 			else:
+				frappe.log_error(html, "PDF creation error: content not found")
 				frappe.throw(_("PDF generation failed because of broken image links"))
 		else:
 			raise
