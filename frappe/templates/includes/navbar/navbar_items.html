@@ -5,7 +5,7 @@
 <li class="nav-item dropdown {% if submenu %} dropdown-submenu {% endif %}">
 	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 		data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		{{ item.label }}
+		{{ _(item.label) }}
 	</a>
   	<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 		{% for child in item.child_items %}
@@ -17,7 +17,7 @@
 <li class="dropdown {% if submenu %} dropdown-submenu {% endif %}">
 	<a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button"
 		data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		{{ item.label }}
+		{{ _(item.label) }}
 	</a>
 	<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 		{% for child in item.child_items %}
@@ -33,13 +33,13 @@
 <li class="nav-item">
 	<a class="nav-link" href="{{ (item.url or '')|abs_url }}"
 		{{ item.target or ''}}>
-		{{ item.label }}
+		{{ _(item.label) }}
 	</a>
 </li>
 {% else %}
 <a class="dropdown-item" href="{{ (item.url or '') | abs_url }}"
 	{{ item.target or '' }}>
-	{{ item.label }}
+	{{ _(item.label) }}
 </a>
 {% endif %}
 
