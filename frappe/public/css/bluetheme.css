@@ -13,7 +13,14 @@
     color: #ffffff;}
 .navbar-default .navbar-nav > li > a:hover {
 	color: #cccccc;}
-.navbar-form .awesomplete {width: 400px;}
+.navbar-form .awesomplete {
+    width: 200px;
+}
+@media (min-width: 1200px) {
+    .navbar-form .awesomplete {
+        width: 400px;
+    }
+}
 .navbar {min-height: 46px;}
 .navbar-light{background-color: #1a3f77 !important;}
 .navbar-light .navbar-nav .nav-link{color: #ffffff;}
