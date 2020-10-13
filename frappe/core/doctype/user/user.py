@@ -280,7 +280,8 @@ class User(Document):
 			'user': self.name,
 			'title': subject,
 			'login_url': get_url(),
-			'user_fullname': full_name
+			'user_fullname': full_name,
+			'language': self.language
 		}
 
 		args.update(add_args)
