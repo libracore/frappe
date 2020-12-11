@@ -1346,7 +1346,7 @@ def format(*args, **kwargs):
 	import frappe.utils.formatters
 	return frappe.utils.formatters.format_value(*args, **kwargs)
 
-def get_print(doctype=None, name=None, print_format=None, style=None, html=None, as_pdf=False, doc=None, output = None, no_letterhead = 0, password=None):
+def get_print(doctype=None, name=None, print_format=None, style=None, html=None, as_pdf=False, doc=None, output = None, no_letterhead = 0, password=None, ignore_zugferd=False):
 	"""Get Print Format for given document.
 
 	:param doctype: DocType of document.
@@ -1372,7 +1372,7 @@ def get_print(doctype=None, name=None, print_format=None, style=None, html=None,
 	if not html:
 		html = build_page("printview")
 	if as_pdf:
-		if doctype == "Sales Invoice":
+		if doctype == "Sales Invoice" and not ignore_zugferd:
 			# include ZUGFeRD document creation when available
 			from erpnextswiss.erpnextswiss.zugferd.zugferd import create_zugferd_pdf
 			if not doc and name:
