@@ -11,6 +11,7 @@ from frappe.model.utils.user_settings import get_user_settings
 from frappe.permissions import get_doc_permissions
 from frappe.desk.form.document_follow import is_document_followed
 from frappe import _
+from six.moves.urllib.parse import quote
 
 @frappe.whitelist()
 def getdoc(doctype, name, user=None):
@@ -100,7 +101,8 @@ def get_docinfo(doc=None, doctype=None, name=None):
 		"views": get_view_logs(doc.doctype, doc.name),
 		"energy_point_logs": get_point_logs(doc.doctype, doc.name),
 		"milestones": get_milestones(doc.doctype, doc.name),
-		"is_document_followed": is_document_followed(doc.doctype, doc.name, frappe.session.user)
+		"is_document_followed": is_document_followed(doc.doctype, doc.name, frappe.session.user),
+		"document_email": get_document_email(doc.doctype, doc.name)
 	}
 
 def get_milestones(doctype, name):
@@ -255,3 +257,14 @@ def get_view_logs(doctype, docname):
 		if view_logs:
 			logs = view_logs
 	return logs
+	
+def get_document_email(doctype, name):
+	email = get_automatic_email_link()
+	if not email:
+		return None
+
+	email = email.split("@")
+	return "{0}+{1}+{2}@{3}".format(email[0], quote(doctype), quote(name), email[1])
+
+def get_automatic_email_link():
+	return frappe.db.get_value("Email Account", {"enable_incoming": 1, "enable_automatic_linking": 1}, "email_id")
