@@ -6,9 +6,8 @@ from __future__ import unicode_literals
 import frappe
 import os
 from werkzeug.exceptions import NotFound
-from werkzeug.middleware.shared_data import SharedDataMiddleware
-from frappe.utils import get_site_name, cstr
-
+from werkzeug.wsgi import SharedDataMiddleware
+from frappe.utils import get_site_name, get_site_path, get_site_base_path, get_path, cstr
 
 class StaticDataMiddleware(SharedDataMiddleware):
 	def __call__(self, environ, start_response):
