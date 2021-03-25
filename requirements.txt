@@ -63,5 +63,5 @@ psycopg2-binary==2.7.5
 sqlparse==0.2.4
 Pygments==2.2.0
 frontmatter
-PyYAML==5.1
+PyYAML==5.4
 xlrd
