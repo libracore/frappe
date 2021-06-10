@@ -151,6 +151,7 @@ class EmailAccount(Document):
 			"use_ssl": self.use_ssl,
 			"username": getattr(self, "login_id", None) or self.email_id,
 			"use_imap": self.use_imap,
+            "use_imap_tls": self.use_imap_tls,
 			"email_sync_rule": email_sync_rule,
 			"uid_validity": self.uidvalidity,
 			"incoming_port": get_port(self),

@@ -12,6 +12,7 @@
   "email_server",
   "use_imap",
   "use_ssl",
+  "use_imap_tls",
   "incoming_port",
   "attachment_limit",
   "append_to",
@@ -106,10 +107,17 @@
    "fieldname": "incoming_port",
    "fieldtype": "Data",
    "label": "Port"
+  },
+  {
+   "default": "0",
+   "description": "Disable SSL to use TLS",
+   "fieldname": "use_imap_tls",
+   "fieldtype": "Check",
+   "label": "Use TLS"
   }
  ],
  "icon": "icon-inbox",
- "modified": "2019-08-31 17:56:48.834704",
+ "modified": "2021-06-10 08:56:28.934133",
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Email Domain",
