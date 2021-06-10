@@ -16,7 +16,7 @@ from frappe.email.smtp import SMTPServer
 from frappe.email.receive import EmailServer, Email
 from poplib import error_proto
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from frappe.desk.form import assign_to
 from frappe.utils.user import get_system_managers
 from frappe.utils.background_jobs import enqueue, get_jobs
@@ -634,6 +634,28 @@ class EmailAccount(Document):
 			frappe.db.sql(""" update `tabEmail Flag Queue` set is_completed=1
 				where name in ({docnames})""".format(docnames=docnames))
 
+	def cleanup_mailbox(self):
+		if not self.use_imap:
+			return
+
+		if cint(self.auto_cleanup_mailbox):
+			today = date.today()
+			cutoff_date = today - timedelta(days=self.cleanup_after_days)
+			before_date = cutoff_date.strftime("%d-%b-%Y")
+			search_args = '(BEFORE "%s")' % before_date
+			email_server = self.get_incoming_server(in_receive=True)
+			if not email_server:
+				return
+
+			email_server.imap.select('Inbox')
+			typ, data = email_server.imap.search(None, 'ALL', search_args)
+			for num in data[0].split():
+				email_server.imap.store(num, '+FLAGS', '\\Deleted')
+			email_server.imap.expunge()
+			email_server.imap.close()
+			email_server.imap.logout()
+		return
+        
 	def set_communication_seen_status(self, docnames, seen=0):
 		""" mark Email Flag Queue of self.email_account mails as read"""
 		if not docnames:
@@ -726,6 +748,12 @@ def pull_from_email_account(email_account):
 
 	# mark Email Flag Queue mail as read
 	email_account.mark_emails_as_read_unread()
+    
+	# cleanup mailbox if enabled
+	if cint(email_account.use_imap) and cint(email_account.enable_automatic_linking) and cint(email_account.auto_cleanup_mailbox):
+		email_account.cleanup_mailbox()
+
+	return
 
 def get_max_email_uid(email_account):
 	# get maximum uid of emails
