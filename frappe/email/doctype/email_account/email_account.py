@@ -639,21 +639,24 @@ class EmailAccount(Document):
 			return
 
 		if cint(self.auto_cleanup_mailbox):
-			today = date.today()
-			cutoff_date = today - timedelta(days=self.cleanup_after_days)
-			before_date = cutoff_date.strftime("%d-%b-%Y")
-			search_args = '(BEFORE "%s")' % before_date
-			email_server = self.get_incoming_server(in_receive=True)
-			if not email_server:
-				return
+			try:
+				today = date.today()
+				cutoff_date = today - timedelta(days=self.cleanup_after_days)
+				before_date = cutoff_date.strftime("%d-%b-%Y")
+				search_args = '(BEFORE "%s")' % before_date
+				email_server = self.get_incoming_server(in_receive=True)
+				if not email_server:
+					return
 
-			email_server.imap.select('Inbox')
-			typ, data = email_server.imap.search(None, 'ALL', search_args)
-			for num in data[0].split():
-				email_server.imap.store(num, '+FLAGS', '\\Deleted')
-			email_server.imap.expunge()
-			email_server.imap.close()
-			email_server.imap.logout()
+				email_server.imap.select('Inbox')
+				typ, data = email_server.imap.search(None, 'ALL', search_args)
+				for num in data[0].split():
+					email_server.imap.store(num, '+FLAGS', '\\Deleted')
+				email_server.imap.expunge()
+				email_server.imap.close()
+				email_server.imap.logout()
+			except Exception as err:
+				frappe.log_error(err, "IMAP Auto Cleanup failed")
 		return
         
 	def set_communication_seen_status(self, docnames, seen=0):
