@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 import six
+import ssl
 from six import iteritems, text_type
 from six.moves import range
 import time, _socket, poplib, imaplib, email, email.utils, datetime, chardet, re
@@ -51,6 +52,9 @@ class EmailServer:
 				self.imap = Timed_IMAP4_SSL(self.settings.host, self.settings.incoming_port, timeout=frappe.conf.get("pop_timeout"))
 			else:
 				self.imap = Timed_IMAP4(self.settings.host, self.settings.incoming_port, timeout=frappe.conf.get("pop_timeout"))
+				if cint(self.settings.use_imap_tls):
+					context = ssl.create_default_context()
+					self.imap.starttls()
 			self.imap.login(self.settings.username, self.settings.password)
 			# connection established!
 			return True

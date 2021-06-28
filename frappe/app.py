@@ -10,8 +10,8 @@ import logging
 from werkzeug.wrappers import Request
 from werkzeug.local import LocalManager
 from werkzeug.exceptions import HTTPException, NotFound
-from werkzeug.middleware.profiler import ProfilerMiddleware
-from werkzeug.middleware.shared_data import SharedDataMiddleware
+from werkzeug.contrib.profiler import ProfilerMiddleware
+from werkzeug.wsgi import SharedDataMiddleware
 
 import frappe
 import frappe.handler

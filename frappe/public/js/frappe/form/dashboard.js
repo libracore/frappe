@@ -355,8 +355,8 @@ frappe.ui.form.Dashboard = Class.extend({
 			type: "GET",
 			method: method,
 			args: {
-				doctype: this.frm.doctype,
-				name: this.frm.doc.name,
+				doctype: cur_frm.doctype, 
+				name: cur_frm.docname, 
 				items: items
 			},
 			callback: function(r) {
