@@ -114,7 +114,11 @@ def handle():
 
 				if frappe.local.request.method=="POST":
 					if frappe.local.form_dict.data is None:
-						data = json.loads(frappe.local.request.get_data())
+						try:
+							data = json.loads(frappe.local.request.get_data())
+						except:
+                            # in case request data is not a string (=bytes)
+							data = json.loads(frappe.local.request.get_data().decode("utf-8"))
 					else:
 						data = json.loads(frappe.local.form_dict.data)
 					data.update({
