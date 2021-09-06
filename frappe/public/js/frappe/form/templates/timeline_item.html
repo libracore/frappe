@@ -103,7 +103,7 @@
 						&ndash; {%= data.comment_on %}</span>
 					<span class="text-muted commented-on-small {% if (data.futur_date) { %}timeline-futur{% } %}">
 						&ndash; {%= data.comment_on_small %}</span>
-					<span class="comment-likes hidden-xs"
+					<!-- <span class="comment-likes hidden-xs"
 						data-liked-by=\'{{ JSON.stringify(data._liked_by) }}\'>
 						<i class="octicon octicon-heart like-action
 							{% if (!data.liked_by_user) { %}
@@ -113,7 +113,7 @@
 							data-name="{%= data.name %}"></i>
 						<span class="likes-count text-muted">
 							{{ (data._liked_by || []).length }}</span>
-					</span>
+					</span> -->
 				</div>
 			</div>
 			<div class="reply timeline-content-show">
