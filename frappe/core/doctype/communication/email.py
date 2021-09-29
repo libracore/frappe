@@ -47,6 +47,12 @@ def make(doctype=None, name=None, content=None, subject=None, sent_or_received =
 		raise frappe.PermissionError("You are not allowed to send emails related to: {doctype} {name}".format(
 			doctype=doctype, name=name))
 
+	# hack: if use mailbox address as sender is not active, use user
+	email_accounts = frappe.get_all("Email Account", filters={'email_id': sender}, fields=['name', 'always_use_account_email_id_as_sender'])
+	if sender and len(email_accounts) > 0:
+		if cint(email_accounts[0]['always_use_account_email_id_as_sender']) == 0:
+			sender = None
+
 	if not sender:
 		sender = get_formatted_email(frappe.session.user)
 
