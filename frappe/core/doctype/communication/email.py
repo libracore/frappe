@@ -158,13 +158,21 @@ def _notify(doc, print_html=None, print_format=None, attachments=None,
 	else:
 		unsubscribe_message = ""
 
+	# hack: if use mailbox address with disabled reply-to, remove reply-to
+	reply_to = doc.incoming_email_account
+	if doc.incoming_email_account:
+		email_accounts = frappe.get_all("Email Account", filters={'email_id': doc.incoming_email_account}, fields=['name', 'disable_reply_to'])
+		if email_accounts and len(email_accounts) > 0:
+			if cint(email_accounts[0]['disable_reply_to']) == 1:
+				reply_to = None
+            
 	frappe.sendmail(
 		recipients=(recipients or []),
 		cc=(cc or []),
 		bcc=(bcc or []),
 		expose_recipients="header",
 		sender=doc.sender,
-		reply_to=doc.incoming_email_account,
+		reply_to=reply_to,
 		subject=doc.subject,
 		content=doc.content,
 		reference_doctype=doc.reference_doctype,

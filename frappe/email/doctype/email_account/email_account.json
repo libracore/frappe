@@ -18,6 +18,7 @@
   "service",
   "mailbox_settings",
   "enable_incoming",
+  "disable_reply_to",
   "use_imap",
   "use_imap_tls",
   "email_server",
@@ -418,10 +419,17 @@
    "fieldname": "cleanup_after_days",
    "fieldtype": "Int",
    "label": "Cleanup after days"
+  },
+  {
+   "default": "0",
+   "description": "Select this option to prevent this account from being set as reply to",
+   "fieldname": "disable_reply_to",
+   "fieldtype": "Check",
+   "label": "Disable reply to"
   }
  ],
  "icon": "fa fa-inbox",
- "modified": "2021-06-10 10:03:37.563923",
+ "modified": "2021-10-08 11:58:53.862534",
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Email Account",
