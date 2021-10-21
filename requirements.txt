@@ -59,7 +59,7 @@ coverage
 urllib3
 GitPython==2.1.11
 sqlparse==0.2.4
-Pygments==2.2.0
+Pygments==2.7.4
 frontmatter
 PyYAML==5.1
 xlrd
