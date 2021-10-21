@@ -4,7 +4,7 @@ dropbox==9.1.0
 gunicorn
 jinja2
 markdown2==2.3.5
-PyMySQL
+pymysql==0.10.1
 maxminddb-geolite2
 python-dateutil
 pytz
@@ -58,8 +58,6 @@ stripe
 coverage
 urllib3
 GitPython==2.1.11
-psycopg2==2.7.5
-psycopg2-binary==2.7.5
 sqlparse==0.2.4
 Pygments==2.2.0
 frontmatter
