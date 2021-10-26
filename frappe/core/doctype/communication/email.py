@@ -275,7 +275,7 @@ def prepare_to_notify(doc, print_html=None, print_format=None, attachments=None)
 	if not doc.sender_full_name:
 		doc.sender_full_name = doc.outgoing_email_account.name or _("Notification")
 
-	if doc.sender:
+	if doc.sender and "<" not in doc.sender:
 		# combine for sending to get the format 'Jane <jane@example.com>'
 		doc.sender = "{0} <{1}>".format(doc.sender_full_name, doc.sender)
 
