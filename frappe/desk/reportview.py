@@ -9,8 +9,9 @@ from six.moves import range
 import frappe.permissions
 from frappe.model.db_query import DatabaseQuery
 from frappe import _
-from six import text_type, string_types, StringIO
+from io import StringIO
 from frappe.core.doctype.access_log.access_log import make_access_log
+from frappe.utils import cstr
 
 @frappe.whitelist()
 @frappe.read_only()
@@ -35,13 +36,13 @@ def get_form_params():
 	if "csrf_token" in data:
 		del data["csrf_token"]
 
-	if isinstance(data.get("filters"), string_types):
+	if isinstance(data.get("filters"), str):
 		data["filters"] = json.loads(data["filters"])
-	if isinstance(data.get("fields"), string_types):
+	if isinstance(data.get("fields"), str):
 		data["fields"] = json.loads(data["fields"])
-	if isinstance(data.get("docstatus"), string_types):
+	if isinstance(data.get("docstatus"), str):
 		data["docstatus"] = json.loads(data["docstatus"])
-	if isinstance(data.get("save_user_settings"), string_types):
+	if isinstance(data.get("save_user_settings"), str):
 		data["save_user_settings"] = json.loads(data["save_user_settings"])
 	else:
 		data["save_user_settings"] = True
@@ -170,11 +171,11 @@ def export_query():
 		writer = csv.writer(f)
 		for r in data:
 			# encode only unicode type strings and not int, floats etc.
-			writer.writerow([handle_html(frappe.as_unicode(v)).encode('utf-8') \
-				if isinstance(v, string_types) else v for v in r])
+			writer.writerow([handle_html(frappe.as_unicode(v)) \
+				if isinstance(v, str) else v for v in r])
 
 		f.seek(0)
-		frappe.response['result'] = text_type(f.read(), 'utf-8')
+		frappe.response['result'] = cstr(f.read())
 		frappe.response['type'] = 'csv'
 		frappe.response['doctype'] = title
 
@@ -378,7 +379,7 @@ def build_match_conditions(doctype, user=None, as_condition=True):
 		return match_conditions
 
 def get_filters_cond(doctype, filters, conditions, ignore_permissions=None, with_match_conditions=False):
-	if isinstance(filters, string_types):
+	if isinstance(filters, str):
 		filters = json.loads(filters)
 
 	if filters:
@@ -387,7 +388,7 @@ def get_filters_cond(doctype, filters, conditions, ignore_permissions=None, with
 			filters = filters.items()
 			flt = []
 			for f in filters:
-				if isinstance(f[1], string_types) and f[1][0] == '!':
+				if isinstance(f[1], str) and f[1][0] == '!':
 					flt.append([doctype, f[0], '!=', f[1][1:]])
 				elif isinstance(f[1], (list, tuple)) and \
 					f[1][0] in (">", "<", ">=", "<=", "like", "not like", "in", "not in", "between"):
