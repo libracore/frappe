@@ -3,13 +3,13 @@
 from __future__ import unicode_literals
 
 import pdfkit, os, frappe
-from frappe.utils import scrub_urls
+from frappe.utils import scrub_urls, cint
 from frappe import _
 import six, re, io
 from bs4 import BeautifulSoup
 from PyPDF2 import PdfFileReader, PdfFileWriter
 
-def get_pdf(html, options=None, output=None):
+def get_pdf(html, options=None, output=None, print_format=None):
 	html = scrub_urls(html)
 	html, options = prepare_options(html, options)
 
@@ -17,7 +17,15 @@ def get_pdf(html, options=None, output=None):
 		"disable-javascript": "",
 		"disable-local-file-access": "",
 	})
-
+    
+	# add options from print format
+	if print_format:
+		pf = frappe.get_doc("Print Format", print_format)
+		if cint(pf.disable_smart_shrinking) == 1:
+			options.update({
+				"disable-smart-shrinking": ""
+			})
+		frappe.log_error("{0}".format(options))
 	filedata = ''
 
 	try:
