@@ -25,7 +25,6 @@ def get_pdf(html, options=None, output=None, print_format=None):
 			options.update({
 				"disable-smart-shrinking": ""
 			})
-		frappe.log_error("{0}".format(options))
 	filedata = ''
 
 	try:
