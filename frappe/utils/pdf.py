@@ -19,7 +19,7 @@ def get_pdf(html, options=None, output=None, print_format=None):
 	})
     
 	# add options from print format
-	if print_format:
+	if print_format and frappe.db.exists("Print Format", print_format):
 		pf = frappe.get_doc("Print Format", print_format)
 		if cint(pf.disable_smart_shrinking) == 1:
 			options.update({
