@@ -19,7 +19,7 @@ def get_pdf(html, options=None, output=None, print_format=None):
 	})
     
 	# add options from print format
-	if print_format:
+	if print_format and frappe.db.exists("Print Format", print_format):
 		pf = frappe.get_doc("Print Format", print_format)
 		if cint(pf.disable_smart_shrinking) == 1:
 			options.update({
@@ -124,9 +124,10 @@ def read_options_from_html(html):
 	toggle_visible_pdf(soup)
 
 	# use regex instead of soup-parser
-	for attr in ("margin-top", "margin-bottom", "margin-left", "margin-right", "page-size", "header-spacing"):
+	for attr in ("margin-top", "margin-bottom", "margin-left", "margin-right", "page-size", "page-width", "page-height", "header-spacing"):
 		try:
-			pattern = re.compile(r"(\.print-format)([\S|\s][^}]*?)(" + str(attr) + r":)(.+)(mm;)")
+			ending = "(;)" if attr == "page-size" else "(mm;)"
+			pattern = re.compile(r"(\.print-format)([\S|\s][^}]*?)(" + str(attr) + r":)(.+)" + ending)
 			match = pattern.findall(html)
 			if match:
 				options[attr] = str(match[-1][3]).strip()

@@ -74,7 +74,9 @@ def login_via_office365(code, state):
 	login_via_oauth2_id_token("office_365", code, state, decoder=oauth_decoder)
 
 @frappe.whitelist(allow_guest=True)
-def login_via_auth0(code, state):
+def login_via_auth0(code=None, state=None, error=None):
+    if not code or not state:
+        frappe.throw( _("Access denied ({0})").format(error), _("Access denied") )
     login_via_oauth2("auth0", code, state, decoder=oauth_decoder)
 	
 @frappe.whitelist(allow_guest=True)
