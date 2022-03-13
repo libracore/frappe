@@ -1379,7 +1379,7 @@ def get_print(doctype=None, name=None, print_format=None, style=None, html=None,
 				doc = get_doc(doctype, name)
 			return create_zugferd_pdf(docname=name, verify=True, format=print_format, doc=doc, doctype=doctype, no_letterhead=no_letterhead)
 		else:
-			return get_pdf(html, output = output, options = options)
+			return get_pdf(html, output=output, options=options, print_format=print_format)
 	else:
 		return html
 

@@ -3,13 +3,13 @@
 from __future__ import unicode_literals
 
 import pdfkit, os, frappe
-from frappe.utils import scrub_urls
+from frappe.utils import scrub_urls, cint
 from frappe import _
 import six, re, io
 from bs4 import BeautifulSoup
 from PyPDF2 import PdfFileReader, PdfFileWriter
 
-def get_pdf(html, options=None, output=None):
+def get_pdf(html, options=None, output=None, print_format=None):
 	html = scrub_urls(html)
 	html, options = prepare_options(html, options)
 
@@ -17,7 +17,14 @@ def get_pdf(html, options=None, output=None):
 		"disable-javascript": "",
 		"disable-local-file-access": "",
 	})
-
+    
+	# add options from print format
+	if print_format and frappe.db.exists("Print Format", print_format):
+		pf = frappe.get_doc("Print Format", print_format)
+		if cint(pf.disable_smart_shrinking) == 1:
+			options.update({
+				"disable-smart-shrinking": ""
+			})
 	filedata = ''
 
 	try:
@@ -117,9 +124,10 @@ def read_options_from_html(html):
 	toggle_visible_pdf(soup)
 
 	# use regex instead of soup-parser
-	for attr in ("margin-top", "margin-bottom", "margin-left", "margin-right", "page-size", "header-spacing"):
+	for attr in ("margin-top", "margin-bottom", "margin-left", "margin-right", "page-size", "page-width", "page-height", "header-spacing"):
 		try:
-			pattern = re.compile(r"(\.print-format)([\S|\s][^}]*?)(" + str(attr) + r":)(.+)(mm;)")
+			ending = "(;)" if attr == "page-size" else "(mm;)"
+			pattern = re.compile(r"(\.print-format)([\S|\s][^}]*?)(" + str(attr) + r":)(.+)" + ending)
 			match = pattern.findall(html)
 			if match:
 				options[attr] = str(match[-1][3]).strip()
