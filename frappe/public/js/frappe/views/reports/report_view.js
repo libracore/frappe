@@ -1220,7 +1220,7 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 
 						frappe.render_pdf(html, print_settings);
 
-					}, this.report_doc.letter_head);
+					}, (this.report_doc ? this.report_doc.letter_head : false));
 				}
 			},
 			{
