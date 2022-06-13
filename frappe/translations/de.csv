@@ -588,7 +588,7 @@ apps/frappe/frappe/public/js/frappe/form/multi_select_dialog.js,Date Range,Datum
 apps/frappe/frappe/public/js/frappe/list/list_sidebar.html,Gantt,Gantt-Diagramm
 apps/frappe/frappe/public/js/frappe/views/reports/print_tree.html,Page {0} of {1},Seite {0} von {1}
 DocType: About Us Settings,Introduce your company to the website visitor.,Vorstellung des Unternehmens für Besucher der Webseite.
-apps/frappe/frappe/utils/password.py,"Encryption key is invalid, Please check site_config.json","Verschlüsselungsschlüssel ist ungültig, bitte check site_config.json"
+apps/frappe/frappe/utils/password.py,"Encryption key is invalid, Please check site_config.json","Verschlüsselungsschlüssel ist ungültig, bitte prüfen Sie site_config.json"
 DocType: SMS Settings,Receiver Parameter,Empfängerparameter
 apps/frappe/frappe/public/js/frappe/file_uploader/FilePreview.vue,Toggle Public/Private,Öffentlich / Privat umschalten
 DocType: Data Migration Mapping Detail,Remote Fieldname,Entfernter Feldname
