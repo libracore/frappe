@@ -1181,6 +1181,49 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 				}
 			},
 			{
+				label: __('PDF'),
+				action: () => {
+					const rows_in_order = this.datatable.datamanager.rowViewOrder.map(index => {
+						if (this.datatable.bodyRenderer.visibleRowIndices.includes(index)) {
+							return this.data[index];
+						}
+					}).filter(Boolean);
+
+					if (this.add_totals_row) {
+						const total_data = this.get_columns_totals(this.data);
+						total_data['name'] = __('Totals').bold();
+						rows_in_order.push(total_data);
+					}
+
+					let dialog = frappe.ui.get_print_settings(false, print_settings => {
+						var title =  this.report_name || __(this.doctype);
+
+						const content = frappe.render_template('print_grid', {
+							title: title,
+							subtitle: this.get_filters_html_for_print(),
+							filters: this.filters,
+							data: rows_in_order,
+							original_data: this.data,
+							columns: this.columns,
+							report: this
+						});
+
+						const html = frappe.render_template('print_template', {
+							title: title,
+							content: content,
+							base_url: frappe.urllib.get_base_url(),
+							print_css: frappe.boot.print_css,
+							print_settings: print_settings,
+							landscape: (print_settings.orientation == 'Landscape'),
+							columns: this.columns
+						});
+
+						frappe.render_pdf(html, print_settings);
+
+					}, (this.report_doc ? this.report_doc.letter_head : false));
+				}
+			},
+			{
 				label: __('Toggle Chart'),
 				action: () => this.toggle_charts()
 			},
