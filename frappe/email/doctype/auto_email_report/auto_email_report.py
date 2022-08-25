@@ -144,9 +144,13 @@ class AutoEmailReport(Document):
 
 	def send(self):
 		if self.filter_meta and not self.filters:
-			frappe.throw(_("Please set filters value in Report Filter table."))
+			frappe.log_error(_("Please set filters value in Report Filter table."), "Failed to send auto email report {0}".format(self.name))
 
-		data = self.get_report_content()
+		try:
+			data = self.get_report_content()
+		except Exception as err:
+			frappe.log_error(err , "Failed to send auto email report {0}".format(self.name))
+			return
 		if not data:
 			return
 
