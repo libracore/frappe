@@ -9,7 +9,7 @@ maxminddb-geolite2
 python-dateutil
 pytz
 six
-werkzeug
+werkzeug==0.16.0
 semantic_version
 rauth>=0.6.2
 requests
@@ -19,7 +19,7 @@ babel==2.6.0
 ipython
 html2text==2016.9.19
 email_reply_parser
-click
+click=7.0.0
 num2words==0.5.5
 watchdog==0.8.0
 bleach==3.3.0
