@@ -85,7 +85,7 @@ class Comment(Document):
 	
 	def list_fix(self):
 		# Hot fix "<li >" / "<li>" Issue
-		if '<li >' in self.content:
+		if '<li >' in (self.content or ""):
 			self.content = self.content.replace("<li >", "<li>")
 
 
