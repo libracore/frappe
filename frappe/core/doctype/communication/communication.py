@@ -392,9 +392,14 @@ def parse_email(communication, email_strings):
 			for email in email_string.split(","):
 				if delimiter in email:
 					email = email.split("@")[0]
-
-					doctype = unquote(email.split(delimiter)[1])
-					docname = unquote(email.split(delimiter)[2])
+					try:
+						doctype = unquote(email.split(delimiter)[1])
+						docname = unquote(email.split(delimiter)[2])
+					except:
+						# Unexpected format, other than `admin+doctype+docname@example.com`
+						# create errorlog and skip
+						frappe.log_error("could not extract doctype and docname from email and add to timeline link<br>:{0}".format(str(email_string)), 'parse_email')
+						pass
 
 					if doctype and docname and frappe.db.exists(doctype, docname):
 						communication.add_link(doctype, docname)
