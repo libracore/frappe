@@ -43,7 +43,7 @@ openpyxl
 pyotp
 pyqrcode
 pypng
-premailer
+premailer==3.10.0
 croniter
 googlemaps==3.1.1
 braintree

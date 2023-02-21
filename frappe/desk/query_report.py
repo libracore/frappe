@@ -271,7 +271,7 @@ def get_prepared_report_result(report, filters, dn="", user=None):
 
 				latest_report_data = {
 					"columns": columns,
-					"result": data
+					"result": get_filtered_data(report.ref_doctype, columns, data, user)
 				}
 		except Exception:
 			frappe.log_error(frappe.get_traceback())
