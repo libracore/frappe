@@ -348,8 +348,13 @@ def get_contacts(email_strings):
 
 	contacts = []
 	for email in email_addrs:
-		email = get_email_without_link(email)
-		contact_name = get_contact_name(email)
+		contact_name = None
+		try:
+			email = get_email_without_link(email)
+			contact_name = get_contact_name(email)
+		except:
+			#do nothing, get_email_without_link or get_contact_name failed
+			return contacts
 
 		try:
 			if not contact_name:
