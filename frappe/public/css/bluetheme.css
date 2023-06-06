@@ -141,7 +141,77 @@ border-bottom: 1px solid #efefef !important;}
     background-color: white;
 }
 
-/*Icons for Desk*/
+/* BESSERE BERICHTDARSTELLUNG, Double Scroll Issue */
+/* Äussere Scrollbar vermeiden in Listen und Berichten (1) */
+.page-body {
+	min-height: calc(100vh - 60px);
+}
+/* Äussere Scrollbar vermeiden in Listen und Berichten (2) */
+.page-container[id^=page-List] .layout-main-section-wrapper {
+	margin-bottom: 0 !important;
+}
+/* Listen- und Berichtansicht (nicht Kalender): Footer immer sichtbar, Scrollbar erscheint innerhalb Tabelle */
+.page-container[id^="page-List"][id$="/List"] .frappe-list .result,
+.page-container[id^="page-List"][id$="/List"] .frappe-list .no-result,
+.page-container[id^="page-List"][id$="/List"] .frappe-list .freeze,
+.page-container[id^="page-List"][id$="/Report"] .frappe-list .result,
+.page-container[id^="page-List"][id$="/Report"] .frappe-list .no-result,
+.page-container[id^="page-List"][id$="/Report"] .frappe-list .freeze,
+.page-container[id^="page-List"][id*="/Report/"] .frappe-list .result,
+.page-container[id^="page-List"][id*="/Report/"] .frappe-list .no-result,
+.page-container[id^="page-List"][id*="/Report/"] .frappe-list .freeze {
+	overflow-y: auto;
+	height: calc(100vh - 284px) !important;
+}
+/* Analoge Regel für Gantt Chart */
+.page-container[id^="page-List"][id$="/Gantt"] .frappe-list .gantt-container {
+	overflow-y: auto;
+	height: calc(100vh - 284px) !important;
+}
+/* Kalender: keine innere Scrollbar auch wenn "überfüllt" */
+.fc-scroller {
+	overflow: hidden !important;
+}
+/* Query Report: Gesamthöhe des Berichtes skaliert mit Seite mit */
+#page-query-report .layout-main {
+	height: calc(100vh - 190px);
+}
+/* 2x Flex-Layout, damit Tabellenansicht in Berichten immer den Bildschirm ausfüllt und nie zwei vertikale Scrollbars anzeigt */
+/* Obere Ebene Flex-Layout (.report-wrapper variabel) */
+.layout-main-section {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.layout-main-section > * {
+	flex-grow: 0;
+}
+.layout-main-section > .report-wrapper {
+	flex-grow: 1;
+}
+.layout-main-section-wrapper {
+	height: 100%;
+}
+.datatable-wrapper {
+	height: 100%;
+}
+/* Untere Ebene Flex-Layout (.dt-scrollable variabel) */
+.datatable {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.datatable > * {
+	flex-grow: 0;
+}
+.datatable > .dt-scrollable {
+	height: initial !important; /* Sinnlose Höhenangabe abhängig von Viewport-Breite(!) überschreiben mit Flexlayout */
+	max-height: initial !important;
+	width: initial !important;
+	flex-grow: 1;
+}
+
+/* Icons for Desk */
 .icon{
     display: inline-block;
     height: 25px;
