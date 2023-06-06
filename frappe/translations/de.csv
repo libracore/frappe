@@ -2344,7 +2344,7 @@ DocType: S3 Backup Settings,ap-northeast-2,ap-nordost-2
 DocType: Custom Field,Is Mandatory Field,Ist Pflichtfeld
 DocType: User,Website User,Webseitenbenutzer
 apps/frappe/frappe/printing/page/print_format_builder/print_format_builder_column_selector.html,Some columns might get cut off when printing to PDF. Try to keep number of columns under 10.,"Einige Spalten werden beim Drucken in PDF möglicherweise abgeschnitten. Versuchen Sie, die Anzahl der Spalten unter 10 zu halten."
-apps/frappe/frappe/public/js/frappe/ui/filters/filter.js,Not equals,ist nicht gleich
+apps/frappe/frappe/public/js/frappe/ui/filters/filter.js,Not equals,nicht gleich
 DocType: Data Import Beta,Don't Send Emails,Senden Sie keine E-Mails
 DocType: Integration Request,Integration Request Service,Integration Anfrage Service
 DocType: Access Log,Access Log,Zugriffsprotokoll
