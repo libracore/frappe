@@ -24,6 +24,10 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 		this.set_input_attributes();
 		this.$input.on("focus", function() {
 			setTimeout(function() {
+				// When the field is clicked, put just the value into it (remove the field title)
+				me.set_formatted_input(me.value);
+				me.awesomplete.open();
+
 				if(me.$input.val() && me.get_options()) {
 					let doctype = me.get_options();
 					let name = me.$input.val();
@@ -43,6 +47,7 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 				me.$link.toggle(false);
 			}, 500);
 		});
+
 		this.$input.attr('data-target', this.df.options);
 		this.input = this.$input.get(0);
 		this.has_input = true;
@@ -59,6 +64,37 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 		else {
 			return frappe.get_route && frappe.get_route()[0] === 'List' ? frappe.get_route()[1] : null;
 		}
+	},
+	get_input_value: function() {
+		if(this.frm) {
+			var formfield = this.frm.fields_dict[this.df.fieldname];
+			if(typeof formfield !== 'undefined') {
+				return formfield.get_model_value();
+			} else {
+				return this.$input ? this.$input.val() : undefined;
+			}
+		}
+	},
+	set_input: function(value) {
+		this.value = value;				
+		
+		// Clear the link field title if the value has changed
+		// (in that case a new title will be fetched  and this function will be called again by set_fetch_values)
+		if(this.frm && this.frm.doc.link_values && this.frm.doc.link_values[this.df.fieldname] != this.value) {
+			this.frm.doc.link_titles[this.df.fieldname] = null;
+		}
+		
+		// Set the field title if still available
+		if(this.frm && this.frm.doc.link_titles && value != null
+		&& this.frm.doc.link_titles[this.df.fieldname] != null
+		&& this.frm.doc.link_titles[this.df.fieldname] != value) {
+		  this.formatted_value = value + ': ' + this.frm.doc.link_titles[this.df.fieldname];			
+		}
+		else {
+			this.formatted_value = value;
+		}
+		this.set_formatted_input(this.formatted_value);
+		this.set_mandatory && this.set_mandatory(value);
 	},
 	setup_buttons: function() {
 		if(this.only_input && !this.with_link_btn) {
@@ -222,10 +258,15 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 				me.selected = false;
 				return;
 			}
-			var value = me.get_input_value();
-			if(value!==me.last_value) {
+			var value = me.$input.val();
+			
+			// Lost focus: Revalidate the field value if it was changed manually
+			if(value !== me.formatted_value) {
 				me.parse_validate_and_set_in_model(value);
 			}
+			
+			// Add back the field title if available
+			me.set_input(me.value);
 		});
 
 		this.$input.on("awesomplete-open", function() {
@@ -271,6 +312,7 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 
 		this.$input.on("awesomplete-selectcomplete", function(e) {
 			var o = e.originalEvent;
+			
 			if(o.text.value.indexOf("__link_option") !== -1) {
 				me.$input.val("");
 			}
@@ -427,40 +469,57 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 
 		if(value) {
 			return new Promise((resolve) => {
-				var fetch = '';
+				let fetch = [];
+				let ref_dt = this.get_options();
 
 				if(this.frm && this.frm.fetch_dict[df.fieldname]) {
-					fetch = this.frm.fetch_dict[df.fieldname].columns.join(', ');
+					fetch = this.frm.fetch_dict[df.fieldname].columns;
 				}
 
-				return frappe.call({
-					method:'frappe.desk.form.utils.validate_link',
-					type: "GET",
-					args: {
-						'value': value,
-						'options': doctype,
-						'fetch': fetch
-					},
-					no_spinner: true,
-					callback: function(r) {
-						if(r.message=='Ok') {
-							if(r.fetch_values && docname) {
-								me.set_fetch_values(df, docname, r.fetch_values);
-							}
-							resolve(r.valid_value);
-						} else {
-							resolve("");
-						}
-					}
+				frappe.model.with_doctype(ref_dt, function () {
+					let title_field = frappe.get_meta(ref_dt).title_field || "name";
+					fetch.push(title_field);
+					fetch = fetch.join(', ');
+
+					return frappe.call({
+					  method:'frappe.desk.form.utils.validate_link',
+					  type: "GET",
+					  args: {
+						  'value': value,
+						  'options': doctype,
+						  'fetch': fetch
+					  },
+					  no_spinner: true,
+					  callback: function(r) {
+						  if(r.message=='Ok') {
+							  if(r.fetch_values && docname) {
+								  me.set_fetch_values(df, docname, value, r.fetch_values);
+							  }
+							  resolve(r.valid_value);
+						  } else {
+							  resolve("");
+						  }
+					  }
+					});
 				});
 			});
 		}
 	},
-	set_fetch_values: function(df, docname, fetch_values) {
-		var fl = this.frm.fetch_dict[df.fieldname].fields;
-		for(var i=0; i < fl.length; i++) {
-			frappe.model.set_value(df.parent, docname, fl[i], fetch_values[i], df.fieldtype);
+	set_fetch_values: function(df, docname, value, fetch_values) {
+		var me = this;
+		if(me.frm.fetch_dict[df.fieldname]) {
+			var fl = me.frm.fetch_dict[df.fieldname].fields;
+			for(var i=0; i < fl.length; i++) {
+				frappe.model.set_value(df.parent, docname, fl[i], fetch_values[i], df.fieldtype);
+			}
 		}
+		// Even if fetch_dict is empty, the link title has been fetched, now show it in the field
+		setTimeout(function() {
+			var new_title = fetch_values[fetch_values.length - 1];
+			me.frm.doc.link_titles[df.fieldname] = new_title;
+			me.frm.doc.link_values[df.fieldname] = value;			
+			me.set_input(me.value);
+		}, 100);
 	}
 });
 
