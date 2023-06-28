@@ -136,6 +136,9 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		this.page.add_inner_button(__("Set Chart"), () => {
 			this.get_possible_chart_options();
 		});
+        this.page.add_inner_button(__("Hide Chart"), () => {
+            $(".chart-container").toggle(); 
+        });
 	}
 
 	refresh_report() {

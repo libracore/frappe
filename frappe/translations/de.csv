@@ -2578,6 +2578,7 @@ apps/frappe/frappe/config/settings.py,Drag and Drop tool to build and customize 
 apps/frappe/frappe/core/doctype/user/user.py,Temporarily Disabled,Zeitweise nicht verfügbar
 DocType: Address,Sikkim,Sikkim
 apps/frappe/frappe/public/js/frappe/views/reports/query_report.js,Set Chart,Diagramm setzen
+apps/frappe/frappe/public/js/frappe/views/reports/query_report.js,Hide Chart,Diagramm ausblenden
 apps/frappe/frappe/core/doctype/user_permission/user_permission_list.js,Are you sure?,Bist du sicher?
 apps/frappe/frappe/public/js/frappe/ui/filters/filter.js,Set,Menge
 apps/frappe/frappe/desk/search.py,This query style is discontinued,Dieser Abfragestil wird eingestellt
