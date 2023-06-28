@@ -271,10 +271,6 @@ class BaseDocument(object):
 	def as_dict(self, no_nulls=False, no_default_fields=False, convert_dates_to_str=False):
 		doc = self.get_valid_dict(convert_dates_to_str=convert_dates_to_str)
 		doc["doctype"] = self.doctype
-		if hasattr(self,'link_titles'):
-			doc["link_titles"] = self.link_titles
-		if hasattr(self,'link_values'):
-			doc["link_values"] = self.link_values
 		for df in self.meta.get_table_fields():
 			children = self.get(df.fieldname) or []
 			doc[df.fieldname] = [d.as_dict(no_nulls=no_nulls) for d in children]
