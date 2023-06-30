@@ -70,10 +70,9 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 			var formfield = this.frm.fields_dict[this.df.fieldname];
 			if(typeof formfield !== 'undefined') {
 				return formfield.get_model_value();
-			} else {
-				return this.$input ? this.$input.val() : undefined;
 			}
 		}
+		return this.$input ? this.$input.val() : undefined;
 	},
 	set_input: function(value) {
 		this.value = value;				
