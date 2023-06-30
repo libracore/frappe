@@ -516,6 +516,10 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 		// Even if fetch_dict is empty, the link title has been fetched, now show it in the field
 		setTimeout(function() {
 			var new_title = fetch_values[fetch_values.length - 1];
+			if(typeof me.frm.doc.link_titles === 'undefined') {
+				me.frm.doc.link_titles = {};
+				me.frm.doc.link_values = {};
+			}
 			me.frm.doc.link_titles[df.fieldname] = new_title;
 			me.frm.doc.link_values[df.fieldname] = value;			
 			me.set_input(me.value);
