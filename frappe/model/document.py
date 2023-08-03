@@ -726,7 +726,7 @@ class Document(BaseDocument):
 					frappe.throw(_("Options not set for link field {0}").format(df.fieldname))
 
 				meta = frappe.get_meta(doctype)
-				if meta.title_field:
+				if hasattr(meta, "title_field") and meta.title_field:
 					link_titles[df.fieldname] = frappe.db.get_value(doctype, docname, meta.title_field, cache=True)
 					link_values[df.fieldname] = docname
 
