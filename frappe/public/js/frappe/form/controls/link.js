@@ -506,6 +506,9 @@ frappe.ui.form.ControlLink = frappe.ui.form.ControlData.extend({
 	},
 	set_fetch_values: function(df, docname, value, fetch_values) {
 		var me = this;
+		if(!me.frm){
+			return;
+		}		
 		if(me.frm.fetch_dict[df.fieldname]) {
 			var fl = me.frm.fetch_dict[df.fieldname].fields;
 			for(var i=0; i < fl.length; i++) {
