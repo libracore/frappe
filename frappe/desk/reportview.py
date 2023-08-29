@@ -226,7 +226,7 @@ def get_labels(fields, doctype):
 		label = df.label if df else fieldname.title()
 		if label in labels:
 			label = doctype + ": " + label
-		labels.append(label)
+		labels.append(_(label))
 
 	return labels
 
