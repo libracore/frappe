@@ -7,11 +7,11 @@ import requests
 import six
 
 # imports - standard imports
-from   collections import Sequence, MutableSequence, Mapping, MutableMapping
-if six.PY2:
-	from urlparse import urlparse 	  # PY2
-else:
-	from urllib.parse import urlparse # PY3
+try:
+    from   collections import Sequence, MutableSequence, Mapping, MutableMapping
+except:
+    # Py 3.10+ compatibility
+    from collections.abc import Sequence, MutableSequence, Mapping, MutableMapping
 import json
 
 # imports - module imports
