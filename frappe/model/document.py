@@ -163,6 +163,8 @@ class Document(BaseDocument):
 			else:
 				self.set(df.fieldname, [])
 
+		self.fetch_link_titles()
+
 		# sometimes __setup__ can depend on child values, hence calling again at the end
 		if hasattr(self, "__setup__"):
 			self.__setup__()
@@ -701,6 +703,35 @@ class Document(BaseDocument):
 		for d in self.get_all_children():
 			if not d.name:
 				set_new_name(d)
+
+	def fetch_link_titles(self):
+		"""Stores the titles of all linked documents in self.link_titles[link_field_name],
+		and the associated values (doc names) in self.link_values[link_field_name]. The values
+		are provided to check whether the link title still matches the currently selected linked doc."""
+
+		if getattr(self, "_metaclass", False):
+			return
+
+		link_titles = {}
+		link_values = {}
+
+		for df in self.meta.get_link_fields():
+			docname = self.get(df.fieldname)
+
+			if docname:
+				if df.fieldtype != "Link":
+					frappe.throw(_("Link field {0} does not have doctype 'Link'").format(df.fieldname))
+				doctype = df.options
+				if not doctype:
+					frappe.throw(_("Options not set for link field {0}").format(df.fieldname))
+
+				meta = frappe.get_meta(doctype)
+				if hasattr(meta, "title_field") and meta.title_field:
+					link_titles[df.fieldname] = frappe.db.get_value(doctype, docname, meta.title_field, cache=True)
+					link_values[df.fieldname] = docname
+
+		self.set("link_titles", link_titles)
+		self.set("link_values", link_values)
 
 	def validate_update_after_submit(self):
 		if self.flags.ignore_validate_update_after_submit:
