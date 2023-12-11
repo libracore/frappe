@@ -332,7 +332,7 @@ def build_xlsx_data(columns, data, visible_idx,include_indentation):
 
 	# add column headings
 	for idx in range(len(data.columns)):
-		result[0].append(columns[idx]["label"])
+		result[0].append(_(columns[idx]["label"]))
 
 	# build table from result
 	for i, row in enumerate(data.result):

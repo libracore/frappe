@@ -20,6 +20,8 @@ class WebsiteSlideshow(Document):
 
 	def validate_images(self):
 		''' atleast one image file should be public for slideshow '''
+		if 'slideshow_items' not in self.as_dict() or len(self.slideshow_items) == 0:      # skip on empty tables, otherwise false positives might occur on Home, ...
+			return
 		files = map(lambda row: row.image, self.slideshow_items)
 		if files:
 			result = frappe.get_all("File", filters={ "file_url":("in", list(files)) }, fields="is_private")

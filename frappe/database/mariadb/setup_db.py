@@ -100,11 +100,8 @@ def import_db_from_sql(source_sql=None, verbose=False):
 
 
 def check_database_settings():
-	versions = get_mariadb_versions()
-	if versions['major'] <= '10.2':
-		expected_variables = expected_settings_10_2_earlier
-	else:
-		expected_variables = expected_settings_10_3_later
+	#versions = get_mariadb_versions()
+	expected_variables = expected_settings_10_3_later
 
 	mariadb_variables = frappe._dict(frappe.db.sql("""show variables"""))
 	# Check each expected value vs. actuals:
