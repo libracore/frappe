@@ -8,7 +8,6 @@ from frappe import _
 import six, re, io
 from bs4 import BeautifulSoup
 from PyPDF2 import PdfFileReader, PdfFileWriter
-from frappe.www.printview import get_print_format_doc
 
 def get_pdf(html, options=None, output=None, print_format=None):
 	html = scrub_urls(html)
@@ -20,12 +19,21 @@ def get_pdf(html, options=None, output=None, print_format=None):
 	})
 	
 	# add options from print format
-	print_format_doc = get_print_format_doc(print_format, frappe.get_meta(frappe.form_dict.doctype))
-	if print_format_doc:
-		if cint(print_format_doc.disable_smart_shrinking) == 1:
+	if print_format and frappe.db.exists("Print Format", print_format):
+		pf = frappe.get_doc("Print Format", print_format)
+		if cint(pf.disable_smart_shrinking) == 1:
 			options.update({
 				"disable-smart-shrinking": ""
 			})
+	else:
+		# fallback for standard format
+		from frappe.www.printview import get_print_format_doc
+		print_format_doc = get_print_format_doc(print_format, frappe.get_meta(frappe.form_dict.doctype))
+		if print_format_doc:
+			if cint(print_format_doc.disable_smart_shrinking) == 1:
+				options.update({
+					"disable-smart-shrinking": ""
+				})
 	
 	filedata = ''
 	try:
