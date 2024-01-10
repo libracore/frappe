@@ -25,7 +25,7 @@ def get_pdf(html, options=None, output=None, print_format=None):
 			options.update({
 				"disable-smart-shrinking": ""
 			})
-	else:
+	elif frappe.form_dict.doctype:
 		# fallback for standard format
 		from frappe.www.printview import get_print_format_doc
 		print_format_doc = get_print_format_doc(print_format, frappe.get_meta(frappe.form_dict.doctype))
