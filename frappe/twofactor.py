@@ -36,7 +36,7 @@ def two_factor_is_enabled(user=None):
 						enabled = False
 						break
 
-	if not user or not enabled:
+	if not user or enabled:
 		return enabled
 	return two_factor_is_enabled_for_(user)
 
