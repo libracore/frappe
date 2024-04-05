@@ -243,8 +243,20 @@ class User(Document):
 			(self.first_name and " " or '') + (self.last_name or '')
 
 	def password_reset_mail(self, link):
-		self.send_login_mail(_("Password Reset"),
-			"password_reset", {"link": link}, now=True)
+		password_reset_template = frappe.get_hooks("password_reset_template")
+		if password_reset_template:
+			template = password_reset_template[-1]
+		else:
+			template = "password_reset"
+		
+		password_reset_subject = frappe.get_hooks("password_reset_subject")
+		if password_reset_subject:
+			subject = password_reset_subject[-1]
+		else:
+			subject = _("Password Reset")
+		
+		self.send_login_mail(subject,
+			template, {"link": link}, now=True)
 
 	def send_welcome_mail_to_user(self):
 		from frappe.utils import get_url
