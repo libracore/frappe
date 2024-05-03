@@ -527,7 +527,10 @@ class EmailAccount(Document):
 
 		Message-ID is formatted as `{message_id}@{site}`'''
 		parent = None
-		in_reply_to = (email.mail.get("In-Reply-To") or "").strip(" <>")
+		in_reply_to = ""
+		if email.mail.get("In-Reply-To"):
+			in_reply_to = email.mail.get("In-Reply-To").split("<")[1] if "<" in email.mail.get("In-Reply-To") else email.mail.get("In-Reply-To")
+		in_reply_to = (in_reply_to or "").strip(" <>")
 
 		if in_reply_to and "@{0}".format(frappe.local.site) in in_reply_to:
 			# reply to a communication sent from the system

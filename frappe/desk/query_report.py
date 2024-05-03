@@ -271,7 +271,7 @@ def get_prepared_report_result(report, filters, dn="", user=None):
 
 				latest_report_data = {
 					"columns": columns,
-					"result": data
+					"result": get_filtered_data(report.ref_doctype, columns, data, user)
 				}
 		except Exception:
 			frappe.log_error(frappe.get_traceback())
@@ -332,7 +332,7 @@ def build_xlsx_data(columns, data, visible_idx,include_indentation):
 
 	# add column headings
 	for idx in range(len(data.columns)):
-		result[0].append(columns[idx]["label"])
+		result[0].append(_(columns[idx]["label"]))
 
 	# build table from result
 	for i, row in enumerate(data.result):
@@ -533,7 +533,10 @@ def has_match(row, linked_doctypes, doctype_match_filters, ref_doctype, if_owner
 					if isinstance(row, dict):
 						cell_value = row.get(idx)
 					elif isinstance(row, list):
-						cell_value = row[idx]
+						if isinstance(idx, int):
+							cell_value = row[idx]
+						else:
+							continue
 
 					if dt in match_filters and cell_value not in match_filters.get(dt) and frappe.db.exists(dt, cell_value):
 						match = False

@@ -725,7 +725,7 @@ def remove_file(fid=None, attached_to_doctype=None, attached_to_name=None, from_
 			attached_to_doctype, attached_to_name, file_name = attached
 
 	ignore_permissions, comment = False, None
-	if attached_to_doctype and attached_to_name and not from_delete:
+	if attached_to_doctype and attached_to_name:
 		doc = frappe.get_doc(attached_to_doctype, attached_to_name)
 		ignore_permissions = doc.has_permission("write") or False
 		if frappe.flags.in_web_form:

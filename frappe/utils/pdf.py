@@ -17,7 +17,7 @@ def get_pdf(html, options=None, output=None, print_format=None):
 		"disable-javascript": "",
 		"disable-local-file-access": "",
 	})
-    
+	
 	# add options from print format
 	if print_format and frappe.db.exists("Print Format", print_format):
 		pf = frappe.get_doc("Print Format", print_format)
@@ -25,8 +25,17 @@ def get_pdf(html, options=None, output=None, print_format=None):
 			options.update({
 				"disable-smart-shrinking": ""
 			})
+	elif frappe.form_dict.doctype:
+		# fallback for standard format
+		from frappe.www.printview import get_print_format_doc
+		print_format_doc = get_print_format_doc(print_format, frappe.get_meta(frappe.form_dict.doctype))
+		if print_format_doc:
+			if cint(print_format_doc.disable_smart_shrinking) == 1:
+				options.update({
+					"disable-smart-shrinking": ""
+				})
+	
 	filedata = ''
-
 	try:
 		# Set filename property to false, so no file is actually created
 		filedata = pdfkit.from_string(html, False, options=options or {})

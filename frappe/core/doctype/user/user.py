@@ -251,7 +251,11 @@ class User(Document):
 		link = self.reset_password()
 		subject = None
 		method = frappe.get_hooks("welcome_email")
-		if method:
+		welcome_email_template = frappe.get_hooks("welcome_email_template")
+		welcome_email_subject = frappe.get_hooks("welcome_email_subject")
+		if welcome_email_subject:
+			subject = welcome_email_subject[-1]
+		if method and not welcome_email_subject:
 			subject = frappe.get_attr(method[-1])()
 		if not subject:
 			site_name = frappe.db.get_default('site_name') or frappe.get_conf().get("site_name")
@@ -259,8 +263,12 @@ class User(Document):
 				subject = _("Welcome to {0}".format(site_name))
 			else:
 				subject = _("Complete Registration")
+		if welcome_email_template:
+			template = welcome_email_template[-1]
+		else:
+			template = "new_user"
 
-		self.send_login_mail(subject, "new_user",
+		self.send_login_mail(subject, template,
 				dict(
 					link=link,
 					site_url=get_url(),

@@ -24,6 +24,9 @@ class Comment(Document):
 	def validate(self):
 		if not self.comment_email:
 			self.comment_email = frappe.session.user
+		
+		# Hot fix "<li >" / "<li>" Issue
+		self.list_fix()
 
 	def on_update(self):
 		update_comment_in_doc(self)
@@ -79,6 +82,11 @@ class Comment(Document):
 				},
 				header = [_('New Mention'), 'orange']
 			)
+	
+	def list_fix(self):
+		# Hot fix "<li >" / "<li>" Issue
+		if '<li >' in (self.content or ""):
+			self.content = self.content.replace("<li >", "<li>")
 
 
 def on_doctype_update():
