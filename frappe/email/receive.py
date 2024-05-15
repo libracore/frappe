@@ -485,7 +485,10 @@ class Email:
 		"""Detect chartset."""
 		charset = part.get_content_charset()
 		if not charset:
-			charset = chardet.detect(frappe.safe_encode(part))['encoding']
+			try:
+				charset = chardet.detect(frappe.safe_encode(part))['encoding']
+			except:
+				charset = 'utf-8'
 
 		return charset
 
