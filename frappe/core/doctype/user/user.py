@@ -243,15 +243,31 @@ class User(Document):
 			(self.first_name and " " or '') + (self.last_name or '')
 
 	def password_reset_mail(self, link):
-		self.send_login_mail(_("Password Reset"),
-			"password_reset", {"link": link}, now=True)
+		password_reset_template = frappe.get_hooks("password_reset_template")
+		if password_reset_template:
+			template = password_reset_template[-1]
+		else:
+			template = "password_reset"
+		
+		password_reset_subject = frappe.get_hooks("password_reset_subject")
+		if password_reset_subject:
+			subject = password_reset_subject[-1]
+		else:
+			subject = _("Password Reset")
+		
+		self.send_login_mail(subject,
+			template, {"link": link}, now=True)
 
 	def send_welcome_mail_to_user(self):
 		from frappe.utils import get_url
 		link = self.reset_password()
 		subject = None
 		method = frappe.get_hooks("welcome_email")
-		if method:
+		welcome_email_template = frappe.get_hooks("welcome_email_template")
+		welcome_email_subject = frappe.get_hooks("welcome_email_subject")
+		if welcome_email_subject:
+			subject = welcome_email_subject[-1]
+		if method and not welcome_email_subject:
 			subject = frappe.get_attr(method[-1])()
 		if not subject:
 			site_name = frappe.db.get_default('site_name') or frappe.get_conf().get("site_name")
@@ -259,8 +275,12 @@ class User(Document):
 				subject = _("Welcome to {0}".format(site_name))
 			else:
 				subject = _("Complete Registration")
+		if welcome_email_template:
+			template = welcome_email_template[-1]
+		else:
+			template = "new_user"
 
-		self.send_login_mail(subject, "new_user",
+		self.send_login_mail(subject, template,
 				dict(
 					link=link,
 					site_url=get_url(),

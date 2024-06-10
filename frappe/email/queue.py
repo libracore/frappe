@@ -254,10 +254,10 @@ def get_emails_sent_today():
 
 def get_unsubscribe_message(unsubscribe_message, expose_recipients):
 	if unsubscribe_message:
-		unsubscribe_html = '''<a href="<!--unsubscribe url-->"
+		unsubscribe_html = '''<a href="<!--unsubscribe_url-->"
 			target="_blank">{0}</a>'''.format(unsubscribe_message)
 	else:
-		unsubscribe_link = '''<a href="<!--unsubscribe url-->"
+		unsubscribe_link = '''<a href="<!--unsubscribe_url-->"
 			target="_blank">{0}</a>'''.format(_('Unsubscribe'))
 		unsubscribe_html = _("{0} to stop receiving emails of this type").format(unsubscribe_link)
 
@@ -272,7 +272,7 @@ def get_unsubscribe_message(unsubscribe_message, expose_recipients):
 		text = "\n<!--cc message-->"
 	else:
 		text = ""
-	text += "\n\n{unsubscribe_message}: <!--unsubscribe url-->\n".format(unsubscribe_message=unsubscribe_message)
+	text += "\n\n{unsubscribe_message}: <!--unsubscribe_url-->\n".format(unsubscribe_message=unsubscribe_message)
 
 	return frappe._dict({
 		"html": html,
@@ -480,15 +480,15 @@ def prepare_message(email, recipient, recipients_list):
 	email_account = get_outgoing_email_account(raise_exception_not_set=False, sender=email.sender)
 	if frappe.conf.use_ssl and email_account.track_email_status:
 		# Using SSL => Publically available domain => Email Read Reciept Possible
-		message = message.replace("<!--email open check-->", quopri.encodestring('<img src="https://{}/api/method/frappe.core.doctype.communication.email.mark_email_as_seen?name={}"/>'.format(frappe.local.site, email.communication).encode()).decode())
+		message = message.replace("<!--email_open_check-->", quopri.encodestring('<img src="https://{}/api/method/frappe.core.doctype.communication.email.mark_email_as_seen?name={}"/>'.format(frappe.local.site, email.communication).encode()).decode())
 	else:
 		# No SSL => No Email Read Reciept
-		message = message.replace("<!--email open check-->", quopri.encodestring("".encode()).decode())
+		message = message.replace("<!--email_open_check-->", quopri.encodestring("".encode()).decode())
 
 	if email.add_unsubscribe_link and email.reference_doctype: # is missing the check for unsubscribe message but will not add as there will be no unsubscribe url
 		unsubscribe_url = get_unsubcribed_url(email.reference_doctype, email.reference_name, recipient,
 		email.unsubscribe_method, email.unsubscribe_params)
-		message = message.replace("<!--unsubscribe url-->", quopri.encodestring(unsubscribe_url.encode()).decode())
+		message = message.replace("<!--unsubscribe_url-->", quopri.encodestring(unsubscribe_url.encode()).decode())
 
 	if email.expose_recipients == "header":
 		pass
