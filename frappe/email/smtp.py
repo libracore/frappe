@@ -52,29 +52,6 @@ def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sen
 		or frappe.local.outgoing_email_account.get("default")):
 		email_account = None
 
-		if append_to:
-			if sender_email_id:
-				email_account = _get_email_account({"enable_outgoing": 1, "email_id": sender_email_id})
-			# append_to is only valid when enable_incoming is checked
-
-			# in case of multiple Email Accounts with same append_to
-			# narrow it down based on email_id
-			if not email_account:
-				email_account = _get_email_account({
-					"enable_outgoing": 1,
-					"enable_incoming": 1,
-					"append_to": append_to,
-					"email_id": sender_email_id
-				})
-
-			# else find the first Email Account with append_to
-			if not email_account:
-				email_account = _get_email_account({
-					"enable_outgoing": 1,
-					"enable_incoming": 1,
-					"append_to": append_to
-				})
-
 		if not email_account and sender_email_id:
 			# check if the sender has email account with enable_outgoing
 			email_account = _get_email_account({"enable_outgoing": 1, "email_id": sender_email_id})
