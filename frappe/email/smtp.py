@@ -52,7 +52,7 @@ def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sen
 		or frappe.local.outgoing_email_account.get("default")):
 		email_account = None
 
-		if not email_account and sender_email_id:
+		if sender_email_id:
 			# check if the sender has email account with enable_outgoing
 			email_account = _get_email_account({"enable_outgoing": 1, "email_id": sender_email_id})
 
