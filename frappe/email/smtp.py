@@ -55,7 +55,8 @@ def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sen
 		if append_to:
 			if sender_email_id:
 				email_account = _get_email_account({"enable_outgoing": 1, "email_id": sender_email_id})
-			# append_to is only valid when enable_incoming is checked
+				if not email_account and '@' in sender_email_id:
+					email_account = _get_email_account({"enable_outgoing": 1, "domain": sender_email_id.split("@")[1]})
 
 			# in case of multiple Email Accounts with same append_to
 			# narrow it down based on email_id
@@ -78,6 +79,8 @@ def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sen
 		if not email_account and sender_email_id:
 			# check if the sender has email account with enable_outgoing
 			email_account = _get_email_account({"enable_outgoing": 1, "email_id": sender_email_id})
+			if not email_account and '@' in sender_email_id:
+				email_account = _get_email_account({"enable_outgoing": 1, "domain": sender_email_id.split("@")[1]})
 
 		if not email_account:
 			# sender don't have the outging email account
