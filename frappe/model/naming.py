@@ -105,7 +105,9 @@ def make_autoname(key='', doctype='', doc=''):
            DE/09/01/0001 where 09 is the year, 01 is the month and 0001 is the series
     """
     if key == "hash":
-        hashlength = cint(frappe.get_doc("System Settings", "System Settings").get("hashname_length")) or 10
+        hashlength = 10
+        if frappe.db.exists("System Settings", "System Settings"):
+            hashlength = cint(frappe.get_doc("System Settings", "System Settings").get("hashname_length")) or 10
         hashname = None
         for i in range(0, 100):         # limit recursion to prevent endless loop
             hashname = frappe.generate_hash(doctype, hashlength)
