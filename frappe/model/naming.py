@@ -107,7 +107,7 @@ def make_autoname(key='', doctype='', doc=''):
     if key == "hash":
         hashlength = 10
         if frappe.db.exists("System Settings", "System Settings"):
-            hashlength = cint(frappe.get_doc("System Settings", "System Settings").get("hashname_length")) or 10
+            hashlength = cint(frappe.db.get_value("System Settings", "System Settings", "hashname_length")) or 10
         hashname = None
         for i in range(0, 100):         # limit recursion to prevent endless loop
             hashname = frappe.generate_hash(doctype, hashlength)
