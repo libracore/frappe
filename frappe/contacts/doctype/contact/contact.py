@@ -28,6 +28,9 @@ class Contact(Document):
             self.name = self.name + '-' + link.link_name.strip()
             break
 
+        if self.mvd_name:
+            self.name = self.mvd_name
+
     def validate(self):
         self.set_primary_email()
         self.set_primary("phone")
