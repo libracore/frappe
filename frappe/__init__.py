@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
+# Copyright (c) 2015-2024, libracore, Frappe Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
 """
 globals attached to frappe module
@@ -23,7 +23,7 @@ if sys.version[0] == '2':
 	reload(sys)
 	sys.setdefaultencoding("utf-8")
 
-__version__ = '2023.6.0'
+__version__ = '2023.6.1'
 __title__ = "Frappe Framework"
 
 local = Local()
