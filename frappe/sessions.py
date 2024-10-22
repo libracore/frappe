@@ -1,155 +1,166 @@
-# Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
-# MIT License. See license.txt
-
-from __future__ import unicode_literals
+# Copyright (c) 2021, Frappe Technologies Pvt. Ltd. and Contributors
+# License: MIT. See LICENSE
 """
 Boot session from cache or build
 
 Session bootstraps info needed by common client side activities including
 permission, homepage, default variables, system defaults etc
 """
-import frappe, json
-from frappe import _
-import frappe.utils
-from frappe.utils import cint, cstr
-import frappe.model.meta
-import frappe.defaults
-import frappe.translate
-from frappe.utils.change_log import get_change_log
+import json
+from urllib.parse import unquote
+
 import redis
-from six.moves.urllib.parse import unquote
-from six import text_type
+
+import frappe
+import frappe.defaults
+import frappe.model.meta
+import frappe.translate
+import frappe.utils
+from frappe import _
+from frappe.apps import get_apps, get_default_path, is_desk_apps
 from frappe.cache_manager import clear_user_cache
+from frappe.query_builder import Order
+from frappe.utils import cint, cstr, get_assets_json
+from frappe.utils.change_log import has_app_update_notifications
+from frappe.utils.data import add_to_date
+
 
 @frappe.whitelist()
-def clear(user=None):
+def clear():
 	frappe.local.session_obj.update(force=True)
 	frappe.local.db.commit()
 	clear_user_cache(frappe.session.user)
-	frappe.response['message'] = _("Cache Cleared")
+	frappe.response["message"] = _("Cache Cleared")
 
-def clear_sessions(user=None, keep_current=False, device=None, force=False):
-	'''Clear other sessions of the current user. Called at login / logout
+
+def clear_sessions(user=None, keep_current=False, force=False):
+	"""Clear other sessions of the current user. Called at login / logout
 
 	:param user: user name (default: current user)
 	:param keep_current: keep current session (default: false)
-	:param device: delete sessions of this device (default: desktop)
 	:param force: triggered by the user (default false)
-	'''
+	"""
 
 	reason = "Logged In From Another Session"
 	if force:
 		reason = "Force Logged out by the user"
 
-	for sid in get_sessions_to_clear(user, keep_current, device):
+	for sid in get_sessions_to_clear(user, keep_current, force):
 		delete_session(sid, reason=reason)
 
-def get_sessions_to_clear(user=None, keep_current=False, device=None):
-	'''Returns sessions of the current user. Called at login / logout
+
+def get_sessions_to_clear(user=None, keep_current=False, force=False):
+	"""Returns sessions of the current user. Called at login / logout
 
 	:param user: user name (default: current user)
 	:param keep_current: keep current session (default: false)
-	:param device: delete sessions of this device (default: desktop)
-	'''
+	:param force: ignore simultaneous sessions count, log the user out of all except current (default: false)
+	"""
 	if not user:
 		user = frappe.session.user
 
-	if not device:
-		device = frappe.session.data.device or "desktop"
-
 	offset = 0
-	if user == frappe.session.user:
-		simultaneous_sessions = frappe.db.get_value('User', user, 'simultaneous_sessions') or 1
-		offset = simultaneous_sessions - 1
+	if not force and user == frappe.session.user:
+		simultaneous_sessions = frappe.db.get_value("User", user, "simultaneous_sessions") or 1
+		offset = simultaneous_sessions
 
-	condition = ''
+	session = frappe.qb.DocType("Sessions")
+	session_id = frappe.qb.from_(session).where(session.user == user)
 	if keep_current:
-		condition = ' AND sid != {0}'.format(frappe.db.escape(frappe.session.sid))
+		if not force:
+			offset = max(0, offset - 1)
+		session_id = session_id.where(session.sid != frappe.session.sid)
 
-	return frappe.db.sql_list("""
-		SELECT `sid` FROM `tabSessions`
-		WHERE user=%s
-		AND device=%s
-		{condition}
-		ORDER BY `lastupdate` DESC
-		LIMIT 100 OFFSET {offset}""".format(condition=condition, offset=offset),
-		(user, device))
+	query = (
+		session_id.select(session.sid).offset(offset).limit(100).orderby(session.lastupdate, order=Order.desc)
+	)
+
+	return query.run(pluck=True)
+
 
 def delete_session(sid=None, user=None, reason="Session Expired"):
 	from frappe.core.doctype.activity_log.feed import logout_feed
 
-	frappe.cache().hdel("session", sid)
-	frappe.cache().hdel("last_db_session_update", sid)
+	if frappe.flags.read_only:
+		# This isn't manually initiated logout, most likely user's cookies were expired in such case
+		# we should just ignore it till database is back up again.
+		return
+
 	if sid and not user:
-		user_details = frappe.db.sql("""select user from tabSessions where sid=%s""", sid, as_dict=True)
-		if user_details: user = user_details[0].get("user")
+		table = frappe.qb.DocType("Sessions")
+		user_details = frappe.qb.from_(table).where(table.sid == sid).select(table.user).run(as_dict=True)
+		if user_details:
+			user = user_details[0].get("user")
 
 	logout_feed(user, reason)
-	frappe.db.sql("""delete from tabSessions where sid=%s""", sid)
+	frappe.db.delete("Sessions", {"sid": sid})
 	frappe.db.commit()
+
+	frappe.cache.hdel("session", sid)
+	frappe.cache.hdel("last_db_session_update", sid)
+
 
 def clear_all_sessions(reason=None):
 	"""This effectively logs out all users"""
 	frappe.only_for("Administrator")
-	if not reason: reason = "Deleted All Active Session"
-	for sid in frappe.db.sql_list("select sid from `tabSessions`"):
+	if not reason:
+		reason = "Deleted All Active Session"
+	for sid in frappe.qb.from_("Sessions").select("sid").run(pluck=True):
 		delete_session(sid, reason=reason)
 
-def get_expired_sessions():
-	'''Returns list of expired sessions'''
-	expired = []
-	for device in ("desktop", "mobile"):
-		expired += frappe.db.sql_list("""SELECT `sid`
-				FROM `tabSessions`
-				WHERE (NOW() - `lastupdate`) > %s
-				AND device = %s""", (get_expiry_period_for_query(device), device))
 
-	return expired
+def get_expired_sessions():
+	"""Returns list of expired sessions"""
+
+	sessions = frappe.qb.DocType("Sessions")
+	return (
+		frappe.qb.from_(sessions).select(sessions.sid).where(sessions.lastupdate < get_expired_threshold())
+	).run(pluck=True)
+
 
 def clear_expired_sessions():
 	"""This function is meant to be called from scheduler"""
 	for sid in get_expired_sessions():
 		delete_session(sid, reason="Session Expired")
 
+
 def get():
 	"""get session boot info"""
-	from frappe.desk.notifications import \
-		get_notification_info_for_boot, get_notifications
 	from frappe.boot import get_bootinfo, get_unseen_notes
+	from frappe.utils.change_log import get_change_log
 
 	bootinfo = None
-	if not getattr(frappe.conf,'disable_session_cache', None):
+	if not getattr(frappe.conf, "disable_session_cache", None):
 		# check if cache exists
-		bootinfo = frappe.cache().hget("bootinfo", frappe.session.user)
+		bootinfo = frappe.cache.hget("bootinfo", frappe.session.user)
 		if bootinfo:
-			bootinfo['from_cache'] = 1
-			bootinfo["notification_info"].update(get_notifications())
-			bootinfo["user"]["recent"] = json.dumps(\
-				frappe.cache().hget("user_recent", frappe.session.user))
+			bootinfo["from_cache"] = 1
+			bootinfo["user"]["recent"] = json.dumps(frappe.cache.hget("user_recent", frappe.session.user))
 
 	if not bootinfo:
 		# if not create it
 		bootinfo = get_bootinfo()
-		bootinfo["notification_info"] = get_notification_info_for_boot()
-		frappe.cache().hset("bootinfo", frappe.session.user, bootinfo)
+		frappe.cache.hset("bootinfo", frappe.session.user, bootinfo)
 		try:
-			frappe.cache().ping()
+			frappe.cache.ping()
 		except redis.exceptions.ConnectionError:
 			message = _("Redis cache server not running. Please contact Administrator / Tech support")
-			if 'messages' in bootinfo:
-				bootinfo['messages'].append(message)
+			if "messages" in bootinfo:
+				bootinfo["messages"].append(message)
 			else:
-				bootinfo['messages'] = [message]
+				bootinfo["messages"] = [message]
 
 		# check only when clear cache is done, and don't cache this
 		if frappe.local.request:
 			bootinfo["change_log"] = get_change_log()
 
-	bootinfo["metadata_version"] = frappe.cache().get_value("metadata_version")
+	bootinfo["metadata_version"] = frappe.cache.get_value("metadata_version")
 	if not bootinfo["metadata_version"]:
 		bootinfo["metadata_version"] = frappe.reset_metadata_version()
 
 	bootinfo.notes = get_unseen_notes()
+	bootinfo.assets_json = get_assets_json()
+	bootinfo.read_only = bool(frappe.flags.read_only)
 
 	for hook in frappe.get_hooks("extend_bootinfo"):
 		frappe.get_attr(hook)(bootinfo=bootinfo)
@@ -157,10 +168,25 @@ def get():
 	bootinfo["lang"] = frappe.translate.get_user_lang()
 	bootinfo["disable_async"] = frappe.conf.disable_async
 
-	bootinfo["setup_complete"] = cint(frappe.db.get_single_value('System Settings', 'setup_complete'))
+	bootinfo["setup_complete"] = cint(frappe.get_system_settings("setup_complete"))
+	bootinfo["apps_data"] = {
+		"apps": get_apps() or [],
+		"is_desk_apps": 1 if bool(is_desk_apps(get_apps())) else 0,
+		"default_path": get_default_path() or "",
+	}
 
+	bootinfo["desk_theme"] = frappe.db.get_value("User", frappe.session.user, "desk_theme") or "Light"
+	bootinfo["user"]["impersonated_by"] = frappe.session.data.get("impersonated_by")
+	bootinfo["navbar_settings"] = frappe.get_cached_doc("Navbar Settings")
+	bootinfo.has_app_updates = has_app_update_notifications()
 
 	return bootinfo
+
+
+@frappe.whitelist()
+def get_boot_assets_json():
+	return get_assets_json()
+
 
 def get_csrf_token():
 	if not frappe.local.session.data.csrf_token:
@@ -168,27 +194,24 @@ def get_csrf_token():
 
 	return frappe.local.session.data.csrf_token
 
+
 def generate_csrf_token():
 	frappe.local.session.data.csrf_token = frappe.generate_hash()
-	frappe.local.session_obj.update(force=True)
+	if not frappe.flags.in_test:
+		frappe.local.session_obj.update(force=True)
 
-	# send sid and csrf token to the user
-	# handles the case when a user logs in again from another tab
-	# and it leads to invalid request in the current tab
-	frappe.publish_realtime(event="csrf_generated",
-		message={"sid": frappe.local.session.sid, "csrf_token": frappe.local.session.data.csrf_token},
-		user=frappe.session.user, after_commit=True)
 
 class Session:
+	__slots__ = ("user", "user_type", "full_name", "data", "time_diff", "sid", "_update_in_cache")
+
 	def __init__(self, user, resume=False, full_name=None, user_type=None):
-		self.sid = cstr(frappe.form_dict.get('sid') or
-			unquote(frappe.request.cookies.get('sid', 'Guest')))
+		self.sid = cstr(frappe.form_dict.get("sid") or unquote(frappe.request.cookies.get("sid", "Guest")))
 		self.user = user
-		self.device = frappe.form_dict.get("device") or "desktop"
 		self.user_type = user_type
 		self.full_name = full_name
-		self.data = frappe._dict({'data': frappe._dict({})})
+		self.data = frappe._dict({"data": frappe._dict({})})
 		self.time_diff = None
+		self._update_in_cache = False
 
 		# set local session
 		frappe.local.session = self.data
@@ -198,71 +221,80 @@ class Session:
 
 		else:
 			if self.user:
+				self.validate_user()
 				self.start()
+
+	def validate_user(self):
+		if not frappe.get_cached_value("User", self.user, "enabled"):
+			frappe.throw(
+				_("User {0} is disabled. Please contact your System Manager.").format(self.user),
+				frappe.ValidationError,
+			)
 
 	def start(self):
 		"""start a new session"""
 		# generate sid
-		if self.user=='Guest':
-			sid = 'Guest'
+		if self.user == "Guest":
+			sid = "Guest"
 		else:
 			sid = frappe.generate_hash()
 
 		self.data.user = self.user
-		self.data.sid = sid
+		self.sid = self.data.sid = sid
 		self.data.data.user = self.user
 		self.data.data.session_ip = frappe.local.request_ip
 		if self.user != "Guest":
-			self.data.data.update({
-				"last_updated": frappe.utils.now(),
-				"session_expiry": get_expiry_period(self.device),
-				"full_name": self.full_name,
-				"user_type": self.user_type,
-				"device": self.device,
-				"session_country": get_geo_ip_country(frappe.local.request_ip) if frappe.local.request_ip else None,
-			})
+			self.data.data.update(
+				{
+					"last_updated": frappe.utils.now(),
+					"session_expiry": get_expiry_period(),
+					"full_name": self.full_name,
+					"user_type": self.user_type,
+				}
+			)
 
 		# insert session
-		if self.user!="Guest":
+		if self.user != "Guest":
 			self.insert_session_record()
 
 			# update user
-			user = frappe.get_doc("User", self.data['user'])
-			frappe.db.sql("""UPDATE `tabUser`
-				SET
-					last_login = %(now)s,
-					last_ip = %(ip)s,
-					last_active = %(now)s
-				WHERE name=%(name)s""", {
-					'now': frappe.utils.now(),
-					'ip': frappe.local.request_ip,
-					'name': self.data['user']
-				})
+			user = frappe.get_doc("User", self.data["user"])
+			user_doctype = frappe.qb.DocType("User")
+			(
+				frappe.qb.update(user_doctype)
+				.set(user_doctype.last_login, frappe.utils.now())
+				.set(user_doctype.last_ip, frappe.local.request_ip)
+				.set(user_doctype.last_active, frappe.utils.now())
+				.where(user_doctype.name == self.data["user"])
+			).run()
+
 			user.run_notifications("before_change")
 			user.run_notifications("on_update")
 			frappe.db.commit()
 
 	def insert_session_record(self):
-		frappe.db.sql("""insert into `tabSessions`
-			(`sessiondata`, `user`, `lastupdate`, `sid`, `status`, `device`)
-			values (%s , %s, NOW(), %s, 'Active', %s)""",
-				(str(self.data['data']), self.data['user'], self.data['sid'], self.device))
+		Sessions = frappe.qb.DocType("Sessions")
+		now = frappe.utils.now()
 
-		# also add to memcache
-		frappe.cache().hset("session", self.data.sid, self.data)
+		(
+			frappe.qb.into(Sessions)
+			.columns(Sessions.sessiondata, Sessions.user, Sessions.lastupdate, Sessions.sid, Sessions.status)
+			.insert((str(self.data["data"]), self.data["user"], now, self.data["sid"], "Active"))
+		).run()
+		frappe.cache.hset("session", self.data.sid, self.data)
 
 	def resume(self):
 		"""non-login request: load a session"""
 		import frappe
 		from frappe.auth import validate_ip_address
+
 		data = self.get_session_record()
 
 		if data:
-			# set language
-			self.data.update({'data': data, 'user':data.user, 'sid': self.sid})
+			self.data.update({"data": data, "user": data.user, "sid": self.sid})
 			self.user = data.user
+			self.validate_user()
 			validate_ip_address(self.user)
-			self.device = data.device
 		else:
 			self.start_as_guest()
 
@@ -273,6 +305,7 @@ class Session:
 	def get_session_record(self):
 		"""get session record, or return the standard Guest Record"""
 		from frappe.auth import clear_cookies
+
 		r = self.get_session_data()
 
 		if not r:
@@ -284,52 +317,53 @@ class Session:
 		return r
 
 	def get_session_data(self):
-		if self.sid=="Guest":
-			return frappe._dict({"user":"Guest"})
+		if self.sid == "Guest":
+			return frappe._dict({"user": "Guest"})
 
 		data = self.get_session_data_from_cache()
 		if not data:
+			self._update_in_cache = True
 			data = self.get_session_data_from_db()
 		return data
 
 	def get_session_data_from_cache(self):
-		data = frappe.cache().hget("session", self.sid)
+		data = frappe.cache.hget("session", self.sid)
 		if data:
 			data = frappe._dict(data)
 			session_data = data.get("data", {})
 
 			# set user for correct timezone
-			self.time_diff = frappe.utils.time_diff_in_seconds(frappe.utils.now(),
-				session_data.get("last_updated"))
+			self.time_diff = frappe.utils.time_diff_in_seconds(
+				frappe.utils.now(), session_data.get("last_updated")
+			)
 			expiry = get_expiry_in_seconds(session_data.get("session_expiry"))
 
 			if self.time_diff > expiry:
-				print('deleting...')
-				self.delete_session()
+				self._delete_session()
 				data = None
 
 		return data and data.data
 
 	def get_session_data_from_db(self):
-		self.device = frappe.db.sql('SELECT `device` FROM `tabSessions` WHERE `sid`=%s', self.sid)
-		self.device = self.device and self.device[0][0] or 'desktop'
+		sessions = frappe.qb.DocType("Sessions")
 
-		rec = frappe.db.sql("""
-			SELECT `user`, `sessiondata`
-			FROM `tabSessions` WHERE `sid`=%s AND
-			(NOW() - lastupdate) < %s
-			""", (self.sid, get_expiry_period_for_query(self.device)))
+		record = (
+			frappe.qb.from_(sessions)
+			.select(sessions.user, sessions.sessiondata)
+			.where(sessions.sid == self.sid)
+			.where(sessions.lastupdate > get_expired_threshold())
+		).run()
 
-		if rec:
-			data = frappe._dict(eval(rec and rec[0][1] or '{}'))
-			data.user = rec[0][0]
+		if record:
+			data = frappe._dict(frappe.safe_eval(record and record[0][1] or "{}"))
+			data.user = record[0][0]
 		else:
-			self.delete_session()
+			self._delete_session()
 			data = None
 
 		return data
 
-	def delete_session(self):
+	def _delete_session(self):
 		delete_session(self.sid, reason="Session Expired")
 
 	def start_as_guest(self):
@@ -339,76 +373,88 @@ class Session:
 
 	def update(self, force=False):
 		"""extend session expiry"""
-		if (frappe.session['user'] == "Guest" or frappe.form_dict.cmd=="logout"):
+
+		if frappe.session.user == "Guest":
 			return
 
 		now = frappe.utils.now()
 
-		self.data['data']['last_updated'] = now
-		self.data['data']['lang'] = text_type(frappe.lang)
+		Sessions = frappe.qb.DocType("Sessions")
 
 		# update session in db
-		last_updated = frappe.cache().hget("last_db_session_update", self.sid)
+		last_updated = frappe.cache.hget("last_db_session_update", self.sid)
 		time_diff = frappe.utils.time_diff_in_seconds(now, last_updated) if last_updated else None
 
 		# database persistence is secondary, don't update it too often
 		updated_in_db = False
-		if force or (time_diff==None) or (time_diff > 600):
+		if (force or (time_diff is None) or (time_diff > 600)) and not frappe.flags.read_only:
+			self.data.data.last_updated = now
+			self.data.data.lang = str(frappe.lang)
 			# update sessions table
-			frappe.db.sql("""update `tabSessions` set sessiondata=%s,
-				lastupdate=NOW() where sid=%s""" , (str(self.data['data']),
-				self.data['sid']))
+			(
+				frappe.qb.update(Sessions)
+				.where(Sessions.sid == self.data["sid"])
+				.set(Sessions.sessiondata, str(self.data["data"]))
+				.set(Sessions.lastupdate, now)
+			).run()
 
-			# update last active in user table
-			frappe.db.sql("""update `tabUser` set last_active=%(now)s where name=%(name)s""", {
-				"now": now,
-				"name": frappe.session.user
-			})
+			frappe.db.set_value("User", frappe.session.user, "last_active", now, update_modified=False)
 
 			frappe.db.commit()
-			frappe.cache().hset("last_db_session_update", self.sid, now)
-
 			updated_in_db = True
 
-		# set in memcache
-		frappe.cache().hset("session", self.sid, self.data)
+			frappe.cache.hset("last_db_session_update", self.sid, now)
+			frappe.cache.hset("session", self.sid, self.data)
 
 		return updated_in_db
 
-def get_expiry_period_for_query(device=None):
-	if frappe.db.db_type == 'postgres':
-		return get_expiry_period(device)
-	else:
-		return get_expiry_in_seconds(device=device)
+	def set_impersonsated(self, original_user):
+		self.data.data.impersonated_by = original_user
+		# Forcefully flush session
+		self.update(force=True)
 
-def get_expiry_in_seconds(expiry=None, device=None):
+
+def get_expiry_period_for_query():
+	if frappe.db.db_type == "postgres":
+		return get_expiry_period()
+	else:
+		return get_expiry_in_seconds()
+
+
+def get_expiry_in_seconds(expiry=None):
 	if not expiry:
-		expiry = get_expiry_period(device)
+		expiry = get_expiry_period()
+
 	parts = expiry.split(":")
 	return (cint(parts[0]) * 3600) + (cint(parts[1]) * 60) + cint(parts[2])
 
-def get_expiry_period(device="desktop"):
-	if device=="mobile":
-		key = "session_expiry_mobile"
-		default = "720:00:00"
-	else:
-		key = "session_expiry"
-		default = "06:00:00"
 
-	exp_sec = frappe.defaults.get_global_default(key) or default
+def get_expired_threshold():
+	"""Get cutoff time before which all sessions are considered expired."""
+
+	now = frappe.utils.now()
+	expiry_in_seconds = get_expiry_in_seconds()
+
+	return add_to_date(now, seconds=-expiry_in_seconds, as_string=True)
+
+
+def get_expiry_period():
+	exp_sec = frappe.defaults.get_global_default("session_expiry") or "240:00:00"
 
 	# incase seconds is missing
-	if len(exp_sec.split(':')) == 2:
-		exp_sec = exp_sec + ':00'
+	if len(exp_sec.split(":")) == 2:
+		exp_sec = exp_sec + ":00"
 
 	return exp_sec
+
 
 def get_geo_from_ip(ip_addr):
 	try:
 		from geolite2 import geolite2
+
 		with geolite2 as f:
 			reader = f.reader()
-			data   = reader.get(ip_addr)
+			data = reader.get(ip_addr)
 
 			return frappe._dict(data)
 	except ImportError:
@@ -417,6 +463,7 @@ def get_geo_from_ip(ip_addr):
 		return
 	except TypeError:
 		return
+
 
 def get_geo_ip_country(ip_addr):
 	match = get_geo_from_ip(ip_addr)

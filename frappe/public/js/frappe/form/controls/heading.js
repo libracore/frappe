@@ -1,5 +1,5 @@
-frappe.ui.form.ControlHeading = frappe.ui.form.ControlHTML.extend({
-	get_content: function() {
-		return "<h4>" + __(this.df.label) + "</h4>";
+frappe.ui.form.ControlHeading = class ControlHeading extends frappe.ui.form.ControlHTML {
+	get_content() {
+		return "<h4>" + __(this.df.label, null, this.df.parent) + "</h4>";
 	}
-});
+};

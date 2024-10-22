@@ -1,27 +1,42 @@
-# -*- coding: utf-8 -*-
 # Copyright (c) 2015, Frappe Technologies and contributors
-# For license information, please see license.txt
+# License: MIT. See LICENSE
 
-from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
+from frappe.query_builder import Interval
+from frappe.query_builder.functions import Now
+
 
 class ErrorLog(Document):
+	# begin: auto-generated types
+	# This code is auto-generated. Do not modify anything in this block.
+
+	from typing import TYPE_CHECKING
+
+	if TYPE_CHECKING:
+		from frappe.types import DF
+
+		error: DF.Code | None
+		method: DF.Data | None
+		reference_doctype: DF.Link | None
+		reference_name: DF.Data | None
+		seen: DF.Check
+		trace_id: DF.Data | None
+
+	# end: auto-generated types
 	def onload(self):
-		if not self.seen:
-			self.db_set('seen', 1, update_modified=0)
+		if not self.seen and not frappe.flags.read_only:
+			self.db_set("seen", 1, update_modified=0)
 			frappe.db.commit()
 
-def set_old_logs_as_seen():
-	# set logs as seen
-	frappe.db.sql("""UPDATE `tabError Log` SET `seen`=1
-		WHERE `seen`=0 AND `creation` < (NOW() - INTERVAL '7' DAY)""")
+	@staticmethod
+	def clear_old_logs(days=30):
+		table = frappe.qb.DocType("Error Log")
+		frappe.db.delete(table, filters=(table.modified < (Now() - Interval(days=days))))
 
-	# clear old logs
-	frappe.db.sql("""DELETE FROM `tabError Log` WHERE `creation` < (NOW() - INTERVAL '30' DAY)""")
 
 @frappe.whitelist()
 def clear_error_logs():
-	'''Flush all Error Logs'''
-	frappe.only_for('System Manager')
-	frappe.db.sql('''DELETE FROM `tabError Log`''')
+	"""Flush all Error Logs"""
+	frappe.only_for("System Manager")
+	frappe.db.truncate("Error Log")

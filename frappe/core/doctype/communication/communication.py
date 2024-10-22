@@ -1,46 +1,153 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
-# MIT License. See license.txt
+# License: MIT. See LICENSE
 
-from __future__ import unicode_literals, absolute_import
+from collections import Counter
+from email.utils import getaddresses
+from urllib.parse import unquote
+
+from bs4 import BeautifulSoup
+
 import frappe
 from frappe import _
-from frappe.model.document import Document
-from frappe.utils import validate_email_address, get_fullname, strip_html, cstr
-from frappe.core.doctype.communication.email import (validate_email,
-	notify, _notify, update_parent_mins_to_first_response)
-from frappe.core.utils import get_parent_doc
-from frappe.utils.bot import BotReply
-from frappe.utils import parse_addr
-from frappe.core.doctype.comment.comment import update_comment_in_doc
-from email.utils import parseaddr
-from six.moves.urllib.parse import unquote
-from collections import Counter
+from frappe.automation.doctype.assignment_rule.assignment_rule import (
+	apply as apply_assignment_rule,
+)
 from frappe.contacts.doctype.contact.contact import get_contact_name
+from frappe.core.doctype.comment.comment import update_comment_in_doc
+from frappe.core.doctype.communication.email import validate_email
+from frappe.core.doctype.communication.mixins import CommunicationEmailMixin
+from frappe.core.utils import get_parent_doc
+from frappe.model.document import Document
+from frappe.utils import (
+	cstr,
+	parse_addr,
+	split_emails,
+	strip_html,
+	time_diff_in_seconds,
+	validate_email_address,
+)
+from frappe.utils.user import is_system_user
 
 exclude_from_linked_with = True
 
-class Communication(Document):
-	no_feed_on_delete = True
 
+class Communication(Document, CommunicationEmailMixin):
+	# begin: auto-generated types
+	# This code is auto-generated. Do not modify anything in this block.
+
+	from typing import TYPE_CHECKING
+
+	if TYPE_CHECKING:
+		from frappe.core.doctype.communication_link.communication_link import CommunicationLink
+		from frappe.types import DF
+
+		_user_tags: DF.Data | None
+		bcc: DF.Code | None
+		cc: DF.Code | None
+		comment_type: DF.Literal[
+			"",
+			"Comment",
+			"Like",
+			"Info",
+			"Label",
+			"Workflow",
+			"Created",
+			"Submitted",
+			"Cancelled",
+			"Updated",
+			"Deleted",
+			"Assigned",
+			"Assignment Completed",
+			"Attachment",
+			"Attachment Removed",
+			"Shared",
+			"Unshared",
+			"Relinked",
+		]
+		communication_date: DF.Datetime | None
+		communication_medium: DF.Literal[
+			"", "Email", "Chat", "Phone", "SMS", "Event", "Meeting", "Visit", "Other"
+		]
+		communication_type: DF.Literal[
+			"Communication", "Comment", "Chat", "Notification", "Feedback", "Automated Message"
+		]
+		content: DF.TextEditor | None
+		delivery_status: DF.Literal[
+			"",
+			"Sent",
+			"Bounced",
+			"Opened",
+			"Marked As Spam",
+			"Rejected",
+			"Delayed",
+			"Soft-Bounced",
+			"Clicked",
+			"Recipient Unsubscribed",
+			"Error",
+			"Expired",
+			"Sending",
+			"Read",
+			"Scheduled",
+		]
+		email_account: DF.Link | None
+		email_status: DF.Literal["Open", "Spam", "Trash"]
+		email_template: DF.Link | None
+		feedback_request: DF.Data | None
+		has_attachment: DF.Check
+		imap_folder: DF.Data | None
+		in_reply_to: DF.Link | None
+		message_id: DF.SmallText | None
+		phone_no: DF.Data | None
+		rating: DF.Int
+		read_by_recipient: DF.Check
+		read_by_recipient_on: DF.Datetime | None
+		read_receipt: DF.Check
+		recipients: DF.Code | None
+		reference_doctype: DF.Link | None
+		reference_name: DF.DynamicLink | None
+		reference_owner: DF.ReadOnly | None
+		seen: DF.Check
+		send_after: DF.Datetime | None
+		sender: DF.Data | None
+		sender_full_name: DF.Data | None
+		sent_or_received: DF.Literal["Sent", "Received"]
+		status: DF.Literal["Open", "Replied", "Closed", "Linked"]
+		subject: DF.SmallText
+		text_content: DF.Code | None
+		timeline_links: DF.Table[CommunicationLink]
+		uid: DF.Int
+		unread_notification_sent: DF.Check
+		user: DF.Link | None
+	# end: auto-generated types
 	"""Communication represents an external communication like Email."""
+
+	no_feed_on_delete = True
+	DOCTYPE = "Communication"
+
 	def onload(self):
 		"""create email flag queue"""
-		if self.communication_type == "Communication" and self.communication_medium == "Email" \
-			and self.sent_or_received == "Received" and self.uid and self.uid != -1:
-
-			email_flag_queue = frappe.db.get_value("Email Flag Queue", {
-				"communication": self.name,
-				"is_completed": 0})
+		if (
+			self.communication_type == "Communication"
+			and self.communication_medium == "Email"
+			and self.sent_or_received == "Received"
+			and self.uid
+			and self.uid != -1
+		):
+			email_flag_queue = frappe.db.get_value(
+				"Email Flag Queue", {"communication": self.name, "is_completed": 0}
+			)
 			if email_flag_queue:
 				return
 
-			frappe.get_doc({
-				"doctype": "Email Flag Queue",
-				"action": "Read",
-				"communication": self.name,
-				"uid": self.uid,
-				"email_account": self.email_account
-			}).insert(ignore_permissions=True)
+			frappe.get_doc(
+				{
+					"doctype": "Email Flag Queue",
+					"action": "Read",
+					"communication": self.name,
+					"uid": self.uid,
+					"email_account": self.email_account,
+				}
+			).insert(ignore_permissions=True)
 			frappe.db.commit()
 
 	def validate(self):
@@ -56,7 +163,8 @@ class Communication(Document):
 			self.seen = 1
 			self.sent_or_received = "Sent"
 
-		self.set_status()
+		if not self.send_after:  # Handle empty string, always set NULL
+			self.send_after = None
 
 		validate_email(self)
 
@@ -67,28 +175,40 @@ class Communication(Document):
 
 		self.set_sender_full_name()
 
+		if self.is_new():
+			self.set_status()
+			self.mark_email_as_spam()
+
 	def validate_reference(self):
 		if self.reference_doctype and self.reference_name:
 			if not self.reference_owner:
-				self.reference_owner = frappe.db.get_value(self.reference_doctype, self.reference_name, "owner")
+				self.reference_owner = frappe.db.get_value(
+					self.reference_doctype, self.reference_name, "owner"
+				)
 
 			# prevent communication against a child table
 			if frappe.get_meta(self.reference_doctype).istable:
-				frappe.throw(_("Cannot create a {0} against a child document: {1}")
-					.format(_(self.communication_type), _(self.reference_doctype)))
+				frappe.throw(
+					_("Cannot create a {0} against a child document: {1}").format(
+						_(self.communication_type), _(self.reference_doctype)
+					)
+				)
 
 			# Prevent circular linking of Communication DocTypes
 			if self.reference_doctype == "Communication":
 				circular_linking = False
 				doc = get_parent_doc(self)
 				while doc.reference_doctype == "Communication":
-					if get_parent_doc(doc).name==self.name:
+					if get_parent_doc(doc).name == self.name:
 						circular_linking = True
 						break
 					doc = get_parent_doc(doc)
 
 				if circular_linking:
-					frappe.throw(_("Please make sure the Reference Communication Docs are not circularly linked."), frappe.CircularLinkingError)
+					frappe.throw(
+						_("Please make sure the Reference Communication Docs are not circularly linked."),
+						frappe.CircularLinkingError,
+					)
 
 	def after_insert(self):
 		if not (self.reference_doctype and self.reference_name):
@@ -98,54 +218,162 @@ class Communication(Document):
 			frappe.db.set_value("Communication", self.reference_name, "status", "Replied")
 
 		if self.communication_type == "Communication":
-			# send new comment to listening clients
-			frappe.publish_realtime('new_communication', self.as_dict(),
-				doctype=self.reference_doctype, docname=self.reference_name,
-				after_commit=True)
+			self.notify_change("add")
 
-		elif self.communication_type in ("Chat", "Notification", "Bot"):
+		elif self.communication_type in ("Chat", "Notification"):
 			if self.reference_name == frappe.session.user:
 				message = self.as_dict()
-				message['broadcast'] = True
-				frappe.publish_realtime('new_message', message, after_commit=True)
+				message["broadcast"] = True
+				frappe.publish_realtime("new_message", message, after_commit=True)
 			else:
 				# reference_name contains the user who is addressed in the messages' page comment
-				frappe.publish_realtime('new_message', self.as_dict(),
-					user=self.reference_name, after_commit=True)
+				frappe.publish_realtime(
+					"new_message", self.as_dict(), user=self.reference_name, after_commit=True
+				)
+
+	def set_signature_in_email_content(self):
+		"""Set sender's User.email_signature or default outgoing's EmailAccount.signature to the email"""
+		if not self.content:
+			return
+
+		soup = BeautifulSoup(self.content, "html.parser")
+		email_body = soup.find("div", {"class": "ql-editor read-mode"})
+
+		if not email_body:
+			return
+
+		user_email_signature = (
+			frappe.db.get_value(
+				"User",
+				self.sender,
+				"email_signature",
+			)
+			if self.sender
+			else None
+		)
+
+		signature = user_email_signature or frappe.db.get_value(
+			"Email Account",
+			{"default_outgoing": 1, "add_signature": 1},
+			"signature",
+		)
+
+		if not signature:
+			return
+
+		soup = BeautifulSoup(signature, "html.parser")
+		html_signature = soup.find("div", {"class": "ql-editor read-mode"})
+		_signature = None
+		if html_signature:
+			_signature = html_signature.renderContents()
+
+		if (cstr(_signature) or signature) not in self.content:
+			self.content = f'{self.content}</p><br><p class="signature">{signature}'
+
+	def before_save(self):
+		if not self.flags.skip_add_signature:
+			self.set_signature_in_email_content()
 
 	def on_update(self):
 		# add to _comment property of the doctype, so it shows up in
 		# comments count for the list view
 		update_comment_in_doc(self)
 
-		if self.comment_type != 'Updated':
-			update_parent_mins_to_first_response(self)
-			self.bot_reply()
+		parent = get_parent_doc(self)
+		if (method := getattr(parent, "on_communication_update", None)) and callable(method):
+			parent.on_communication_update(self)
+			return
+
+		if self.comment_type != "Updated":
+			update_parent_document_on_communication(self)
 
 	def on_trash(self):
 		if self.communication_type == "Communication":
-			# send delete comment to listening clients
-			frappe.publish_realtime('delete_communication', self.as_dict(),
-				doctype= self.reference_doctype, docname = self.reference_name,
-				after_commit=True)
+			self.notify_change("delete")
+
+	@property
+	def sender_mailid(self):
+		return parse_addr(self.sender)[1] if self.sender else ""
+
+	@staticmethod
+	def _get_emails_list(emails=None, exclude_displayname=False):
+		"""Returns list of emails from given email string.
+
+		* Removes duplicate mailids
+		* Removes display name from email address if exclude_displayname is True
+		"""
+		emails = split_emails(emails) if isinstance(emails, str) else (emails or [])
+		if exclude_displayname:
+			return [email.lower() for email in {parse_addr(email)[1] for email in emails} if email]
+		return [email for email in set(emails) if email]
+
+	def to_list(self, exclude_displayname=True):
+		"""Returns to list."""
+		return self._get_emails_list(self.recipients, exclude_displayname=exclude_displayname)
+
+	def cc_list(self, exclude_displayname=True):
+		"""Returns cc list."""
+		return self._get_emails_list(self.cc, exclude_displayname=exclude_displayname)
+
+	def bcc_list(self, exclude_displayname=True):
+		"""Returns bcc list."""
+		return self._get_emails_list(self.bcc, exclude_displayname=exclude_displayname)
+
+	def get_attachments(self):
+		return frappe.get_all(
+			"File",
+			fields=["name", "file_name", "file_url", "is_private"],
+			filters={
+				"attached_to_name": self.name,
+				"attached_to_doctype": self.DOCTYPE,
+			},
+		)
+
+	def notify_change(self, action):
+		frappe.publish_realtime(
+			"docinfo_update",
+			{"doc": self.as_dict(), "key": "communications", "action": action},
+			doctype=self.reference_doctype,
+			docname=self.reference_name,
+			after_commit=True,
+		)
 
 	def set_status(self):
-		if not self.is_new():
-			return
-
 		if self.reference_doctype and self.reference_name:
 			self.status = "Linked"
-		elif self.communication_type=="Communication":
+		elif self.communication_type == "Communication":
 			self.status = "Open"
 		else:
 			self.status = "Closed"
 
-		# set email status to spam
-		email_rule = frappe.db.get_value("Email Rule", { "email_id": self.sender, "is_spam":1 })
-		if self.communication_type == "Communication" and self.communication_medium == "Email" \
-			and self.sent_or_received == "Sent" and email_rule:
+		if self.send_after and self.is_new():
+			self.delivery_status = "Scheduled"
 
+	def mark_email_as_spam(self):
+		if (
+			self.communication_type == "Communication"
+			and self.communication_medium == "Email"
+			and self.sent_or_received == "Received"
+			and frappe.db.exists("Email Rule", {"email_id": self.sender, "is_spam": 1})
+		):
 			self.email_status = "Spam"
+
+	@classmethod
+	def find(cls, name, ignore_error=False):
+		try:
+			return frappe.get_doc(cls.DOCTYPE, name)
+		except frappe.DoesNotExistError:
+			if ignore_error:
+				return
+			raise
+
+	@classmethod
+	def find_one_by_filters(cls, *, order_by=None, **kwargs):
+		name = frappe.db.get_value(cls.DOCTYPE, kwargs, order_by=order_by)
+		return cls.find(name) if name else None
+
+	def update_db(self, **kwargs):
+		frappe.db.set_value(self.DOCTYPE, self.name, kwargs)
 
 	def set_sender_full_name(self):
 		if not self.sender_full_name and self.sender:
@@ -156,7 +384,7 @@ class Communication(Document):
 				self.sender_full_name = self.sender
 				self.sender = None
 			else:
-				if self.sent_or_received=='Sent':
+				if self.sent_or_received == "Sent":
 					validate_email_address(self.sender, throw=True)
 				sender_name, sender_email = parse_addr(self.sender)
 				if sender_name == sender_email:
@@ -166,86 +394,41 @@ class Communication(Document):
 				self.sender_full_name = sender_name
 
 				if not self.sender_full_name:
-					self.sender_full_name = frappe.db.get_value('User', self.sender, 'full_name')
+					self.sender_full_name = frappe.db.get_value("User", self.sender, "full_name")
 
 				if not self.sender_full_name:
-					first_name, last_name = frappe.db.get_value('Contact',
-						filters={'email_id': sender_email},
-						fieldname=['first_name', 'last_name']
+					first_name, last_name = frappe.db.get_value(
+						"Contact", filters={"email_id": sender_email}, fieldname=["first_name", "last_name"]
 					) or [None, None]
-					self.sender_full_name = (first_name or '') + (last_name or '')
+					self.sender_full_name = (first_name or "") + (last_name or "")
 
 				if not self.sender_full_name:
 					self.sender_full_name = sender_email
 
-	def send(self, print_html=None, print_format=None, attachments=None,
-		send_me_a_copy=False, recipients=None):
-		"""Send communication via Email.
-
-		:param print_html: Send given value as HTML attachment.
-		:param print_format: Attach print format of parent document."""
-
-		self.send_me_a_copy = send_me_a_copy
-		self.notify(print_html, print_format, attachments, recipients)
-
-	def notify(self, print_html=None, print_format=None, attachments=None,
-		recipients=None, cc=None, bcc=None,fetched_from_email_account=False):
-		"""Calls a delayed task 'sendmail' that enqueus email in Email Queue queue
-
-		:param print_html: Send given value as HTML attachment
-		:param print_format: Attach print format of parent document
-		:param attachments: A list of filenames that should be attached when sending this email
-		:param recipients: Email recipients
-		:param cc: Send email as CC to
-		:param fetched_from_email_account: True when pulling email, the notification shouldn't go to the main recipient
-
-		"""
-		notify(self, print_html, print_format, attachments, recipients, cc, bcc,
-			fetched_from_email_account)
-
-	def _notify(self, print_html=None, print_format=None, attachments=None,
-		recipients=None, cc=None, bcc=None):
-
-		_notify(self, print_html, print_format, attachments, recipients, cc, bcc)
-
-	def bot_reply(self):
-		if self.comment_type == 'Bot' and self.communication_type == 'Chat':
-			reply = BotReply().get_reply(self.content)
-			if reply:
-				frappe.get_doc({
-					"doctype": "Communication",
-					"comment_type": "Bot",
-					"communication_type": "Bot",
-					"content": cstr(reply),
-					"reference_doctype": self.reference_doctype,
-					"reference_name": self.reference_name
-				}).insert()
-				frappe.local.flags.commit = True
-
 	def set_delivery_status(self, commit=False):
-		'''Look into the status of Email Queue linked to this Communication and set the Delivery Status of this Communication'''
+		"""Look into the status of Email Queue linked to this Communication and set the Delivery Status of this Communication"""
 		delivery_status = None
-		status_counts = Counter(frappe.db.sql_list('''select status from `tabEmail Queue` where communication=%s''', self.name))
+		status_counts = Counter(
+			frappe.get_all("Email Queue", pluck="status", filters={"communication": self.name})
+		)
 		if self.sent_or_received == "Received":
 			return
 
-		if status_counts.get('Not Sent') or status_counts.get('Sending'):
-			delivery_status = 'Sending'
+		if status_counts.get("Not Sent") or status_counts.get("Sending"):
+			delivery_status = "Sending"
 
-		elif status_counts.get('Error'):
-			delivery_status = 'Error'
+		elif status_counts.get("Error"):
+			delivery_status = "Error"
 
-		elif status_counts.get('Expired'):
-			delivery_status = 'Expired'
+		elif status_counts.get("Expired"):
+			delivery_status = "Expired"
 
-		elif status_counts.get('Sent'):
-			delivery_status = 'Sent'
+		elif status_counts.get("Sent"):
+			delivery_status = "Sent"
 
 		if delivery_status:
-			self.db_set('delivery_status', delivery_status)
-
-			frappe.publish_realtime('update_communication', self.as_dict(),
-				doctype=self.reference_doctype, docname=self.reference_name, after_commit=True)
+			self.db_set("delivery_status", delivery_status)
+			self.notify_change("update")
 
 			# for list views and forms
 			self.notify_update()
@@ -254,40 +437,46 @@ class Communication(Document):
 				frappe.db.commit()
 
 	def parse_email_for_timeline_links(self):
-		parse_email(self, [self.recipients, self.cc, self.bcc])
+		if not frappe.db.get_value("Email Account", filters={"enable_automatic_linking": 1}):
+			return
+
+		for doctype, docname in parse_email([self.recipients, self.cc, self.bcc]):
+			if not frappe.db.get_value(doctype, docname, ignore=True):
+				continue
+
+			self.add_link(doctype, docname)
+
+			if not self.reference_doctype:
+				self.reference_doctype = doctype
+				self.reference_name = docname
 
 	# Timeline Links
 	def set_timeline_links(self):
-		contacts = get_contacts([self.sender, self.recipients, self.cc, self.bcc])
-		for contact_name in contacts:
-			self.add_link('Contact', contact_name)
+		contacts = []
+		create_contact_enabled = self.email_account and frappe.db.get_value(
+			"Email Account", self.email_account, "create_contact"
+		)
+		contacts = get_contacts(
+			[self.sender, self.recipients, self.cc, self.bcc], auto_create_contact=create_contact_enabled
+		)
 
-			#link contact's dynamic links to communication
+		for contact_name in contacts:
+			self.add_link("Contact", contact_name)
+
+			# link contact's dynamic links to communication
 			add_contact_links_to_communication(self, contact_name)
 
 	def deduplicate_timeline_links(self):
-		if self.timeline_links:
-			links, duplicate = [], False
+		if not self.timeline_links:
+			return
 
-			for l in self.timeline_links:
-				t = (l.link_doctype, l.link_name)
-				if not t in links:
-					links.append(t)
-				else:
-					duplicate = True
-
-			if duplicate:
-				del self.timeline_links[:] # make it python 2 compatible as list.clear() is python 3 only
-				for l in links:
-					self.add_link(link_doctype=l[0], link_name=l[1])
+		unique_links = {(link.link_doctype, link.link_name) for link in self.timeline_links}
+		self.timeline_links = []
+		for doctype, name in unique_links:
+			self.add_link(doctype, name)
 
 	def add_link(self, link_doctype, link_name, autosave=False):
-		self.append("timeline_links",
-			{
-				"link_doctype": link_doctype,
-				"link_name": link_name
-			}
-		)
+		self.append("timeline_links", {"link_doctype": link_doctype, "link_name": link_name})
 
 		if autosave:
 			self.save(ignore_permissions=True)
@@ -296,126 +485,225 @@ class Communication(Document):
 		return self.timeline_links
 
 	def remove_link(self, link_doctype, link_name, autosave=False, ignore_permissions=True):
-		for l in self.timeline_links:
+		for l in list(self.timeline_links):
 			if l.link_doctype == link_doctype and l.link_name == link_name:
 				self.timeline_links.remove(l)
 
 		if autosave:
 			self.save(ignore_permissions=ignore_permissions)
 
+
 def on_doctype_update():
 	"""Add indexes in `tabCommunication`"""
 	frappe.db.add_index("Communication", ["reference_doctype", "reference_name"])
 	frappe.db.add_index("Communication", ["status", "communication_type"])
+	frappe.db.add_index("Communication", ["message_id(140)"])
 
-def has_permission(doc, ptype, user):
-	if ptype=="read":
+
+def has_permission(doc, ptype, user=None, debug=False):
+	if ptype == "read":
 		if doc.reference_doctype == "Communication" and doc.reference_name == doc.name:
 			return
 
 		if doc.reference_doctype and doc.reference_name:
-			if frappe.has_permission(doc.reference_doctype, ptype="read", doc=doc.reference_name):
-				return True
+			return frappe.has_permission(
+				doc.reference_doctype, ptype="read", doc=doc.reference_name, user=user, debug=debug
+			)
+
 
 def get_permission_query_conditions_for_communication(user):
-	if not user: user = frappe.session.user
+	if not user:
+		user = frappe.session.user
 
 	roles = frappe.get_roles(user)
 
 	if "Super Email User" in roles or "System Manager" in roles:
 		return None
 	else:
-		accounts = frappe.get_all("User Email", filters={ "parent": user },
-			fields=["email_account"],
-			distinct=True, order_by="idx")
+		accounts = frappe.get_all(
+			"User Email", filters={"parent": user}, fields=["email_account"], distinct=True, order_by="idx"
+		)
 
 		if not accounts:
 			return """`tabCommunication`.communication_medium!='Email'"""
 
-		email_accounts = [ '"%s"'%account.get("email_account") for account in accounts ]
-		return """`tabCommunication`.email_account in ({email_accounts})"""\
-			.format(email_accounts=','.join(email_accounts))
+		email_accounts = ['"%s"' % account.get("email_account") for account in accounts]
+		return """`tabCommunication`.email_account in ({email_accounts})""".format(
+			email_accounts=",".join(email_accounts)
+		)
 
-def get_contacts(email_strings):
+
+def get_contacts(email_strings: list[str], auto_create_contact=False) -> list[str]:
+	email_addrs = get_emails(email_strings)
+	contacts = []
+	for email in email_addrs:
+		email = get_email_without_link(email)
+		contact_name = get_contact_name(email)
+
+		if not contact_name and email and auto_create_contact:
+			email_parts = email.split("@")
+			first_name = frappe.unscrub(email_parts[0])
+
+			try:
+				contact_name = f"{first_name}-{email_parts[1]}" if first_name == "Contact" else first_name
+				contact = frappe.get_doc(
+					{"doctype": "Contact", "first_name": contact_name, "name": contact_name}
+				)
+				contact.add_email(email_id=email, is_primary=True)
+				contact.insert(ignore_permissions=True)
+				contact_name = contact.name
+			except Exception:
+				contact_name = None
+				contact.log_error("Unable to add contact")
+
+		if contact_name:
+			contacts.append(contact_name)
+
+	return contacts
+
+
+def get_emails(email_strings: list[str]) -> list[str]:
 	email_addrs = []
 
 	for email_string in email_strings:
 		if email_string:
-			for email in email_string.split(","):
-				parsed_email = parseaddr(email)[1]
-				if parsed_email:
-					email_addrs.append(parsed_email)
+			result = getaddresses([email_string])
+			email_addrs.extend(email[1] for email in result)
+	return email_addrs
 
-	contacts = []
-	for email in email_addrs:
-		contact_name = None
-		try:
-			email = get_email_without_link(email)
-			contact_name = get_contact_name(email)
-		except:
-			#do nothing, get_email_without_link or get_contact_name failed
-			return contacts
-
-		try:
-			if not contact_name:
-				contact = frappe.get_doc({
-					"doctype": "Contact",
-					"first_name": frappe.unscrub(email.split("@")[0]),
-				})
-				contact.add_email(email, is_primary=True)               # if this is not set, it will always recreate contact
-				contact.insert(ignore_permissions=True)
-				contact_name = contact.name
-
-			contacts.append(contact_name)
-		except:
-			# do nothing, contact was not found, but could also not be created
-			pass
-
-	return contacts
 
 def add_contact_links_to_communication(communication, contact_name):
-	contact_links = frappe.get_list("Dynamic Link", filters={
-			"parenttype": "Contact",
-			"parent": contact_name
-		}, fields=["link_doctype", "link_name"])
+	contact_links = frappe.get_all(
+		"Dynamic Link",
+		filters={"parenttype": "Contact", "parent": contact_name},
+		fields=["link_doctype", "link_name"],
+	)
 
 	if contact_links:
 		for contact_link in contact_links:
 			communication.add_link(contact_link.link_doctype, contact_link.link_name)
 
-def parse_email(communication, email_strings):
-	"""
-		Parse email to add timeline links.
-		When automatic email linking is enabled, an email from email_strings can contain
-		a doctype and docname ie in the format `admin+doctype+docname@example.com`,
-		the email is parsed and doctype and docname is extracted and timeline link is added.
-	"""
-	delimiter = "+"
 
+def parse_email(email_strings):
+	"""
+	Parse email to add timeline links.
+	When automatic email linking is enabled, an email from email_strings can contain
+	a doctype and docname ie in the format `admin+doctype+docname@example.com` or `admin+doctype=docname@example.com`,
+	the email is parsed and doctype and docname is extracted.
+	"""
 	for email_string in email_strings:
-		if email_string:
-			for email in email_string.split(","):
-				if delimiter in email:
-					email = email.split("@")[0]
-					try:
-						doctype = unquote(email.split(delimiter)[1])
-						docname = unquote(email.split(delimiter)[2])
+		if not email_string:
+			continue
 
-						if doctype and docname and frappe.db.exists(doctype, docname):
-						    communication.add_link(doctype, docname)
+		for email in email_string.split(","):
+			email_username = email.split("@", 1)[0]
+			email_local_parts = email_username.split("+")
+			docname = doctype = None
+			if len(email_local_parts) == 3:
+				doctype = unquote(email_local_parts[1])
+				docname = unquote(email_local_parts[2])
 
-					except:
-						# Unexpected format, other than `admin+doctype+docname@example.com`
-						# create errorlog and skip
-						frappe.log_error("could not extract doctype and docname from email and add to timeline link\n:{0}".format(str(email_string)), 'parse_email')
-						pass
+			elif len(email_local_parts) == 2:
+				document_parts = email_local_parts[1].split("=", 1)
+				if len(document_parts) != 2:
+					continue
+
+				doctype = unquote(document_parts[0])
+				docname = unquote(document_parts[1])
+
+			if doctype and docname:
+				yield doctype, docname
+
 
 def get_email_without_link(email):
 	"""
-		returns email address without doctype links
-		returns admin@example.com for email admin+doctype+docname@example.com
+	returns email address without doctype links
+	returns admin@example.com for email admin+doctype+docname@example.com
 	"""
-	email_id = email.split("@")[0].split("+")[0]
-	email_host = email.split("@")[1]
+	if not frappe.get_all("Email Account", filters={"enable_automatic_linking": 1}):
+		return email
 
-	return "{0}@{1}".format(email_id, email_host)
+	try:
+		_email = email.split("@")
+		email_id = _email[0].split("+", 1)[0]
+		email_host = _email[1]
+	except IndexError:
+		return email
+
+	return f"{email_id}@{email_host}"
+
+
+def update_parent_document_on_communication(doc):
+	"""Update mins_to_first_communication of parent document based on who is replying."""
+
+	parent = get_parent_doc(doc)
+	if not parent:
+		return
+
+	# update parent mins_to_first_communication only if we create the Email communication
+	# ignore in case of only Comment is added
+	if doc.communication_type == "Comment":
+		return
+
+	status_field = parent.meta.get_field("status")
+	if status_field:
+		options = (status_field.options or "").splitlines()
+
+		# if status has a "Open" option and status is "Replied", then update the status for received communication
+		if (
+			("Open" in options)
+			and parent.status == "Replied"
+			and doc.sent_or_received == "Received"
+			or (
+				parent.doctype == "Issue" and ("Open" in options) and doc.sent_or_received == "Received"
+			)  # For 'Issue', current status is not considered.
+		):
+			parent.db_set("status", "Open")
+			parent.run_method("handle_hold_time", "Replied")
+			apply_assignment_rule(parent)
+
+	update_first_response_time(parent, doc)
+	set_avg_response_time(parent, doc)
+	parent.run_method("notify_communication", doc)
+	parent.notify_update()
+
+
+def update_first_response_time(parent, communication):
+	if parent.meta.has_field("first_response_time") and not parent.get("first_response_time"):
+		if (
+			is_system_user(communication.sender)
+			or frappe.get_cached_value("User", frappe.session.user, "user_type") == "System User"
+		):
+			if communication.sent_or_received == "Sent":
+				first_responded_on = communication.creation
+				if parent.meta.has_field("first_responded_on"):
+					parent.db_set("first_responded_on", first_responded_on)
+				first_response_time = round(time_diff_in_seconds(first_responded_on, parent.creation), 2)
+				parent.db_set("first_response_time", first_response_time)
+
+
+def set_avg_response_time(parent, communication):
+	if parent.meta.has_field("avg_response_time") and communication.sent_or_received == "Sent":
+		# avg response time for all the responses
+		communications = frappe.get_list(
+			"Communication",
+			filters={"reference_doctype": parent.doctype, "reference_name": parent.name},
+			fields=["sent_or_received", "name", "creation"],
+			order_by="creation",
+		)
+
+		if len(communications):
+			response_times = []
+			for i in range(len(communications)):
+				if (
+					communications[i].sent_or_received == "Sent"
+					and communications[i - 1].sent_or_received == "Received"
+				):
+					response_time = round(
+						time_diff_in_seconds(communications[i].creation, communications[i - 1].creation), 2
+					)
+					if response_time > 0:
+						response_times.append(response_time)
+			if response_times:
+				avg_response_time = sum(response_times) / len(response_times)
+				parent.db_set("avg_response_time", avg_response_time)

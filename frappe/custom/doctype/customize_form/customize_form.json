@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "autoname": "DL.####",
  "creation": "2013-01-29 17:55:08",
  "doctype": "DocType",
@@ -6,31 +7,70 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "details_tab",
   "doc_type",
   "properties",
   "label",
-  "default_print_format",
-  "max_attachments",
-  "allow_copy",
+  "search_fields",
+  "link_filters",
+  "column_break_5",
   "istable",
+  "is_calendar_and_gantt",
   "editable_grid",
   "quick_entry",
   "track_changes",
   "track_views",
   "allow_auto_repeat",
-  "image_view",
-  "column_break_5",
-  "title_field",
+  "allow_import",
+  "queue_in_background",
+  "naming_section",
+  "naming_rule",
+  "autoname",
+  "form_settings_section",
   "image_field",
-  "search_fields",
+  "max_attachments",
+  "column_break_21",
+  "allow_copy",
+  "make_attachments_public",
+  "view_settings_section",
+  "title_field",
+  "show_title_field_in_link",
+  "translated_doctype",
+  "default_print_format",
+  "default_view",
+  "force_re_route_to_default_view",
+  "column_break_29",
+  "show_preview_popup",
+  "email_settings_section",
+  "default_email_template",
+  "column_break_26",
+  "email_append_to",
+  "sender_field",
+  "sender_name_field",
+  "subject_field",
   "section_break_8",
   "sort_field",
   "column_break_10",
   "sort_order",
+  "document_actions_section",
+  "actions",
+  "document_links_section",
+  "links",
+  "document_states_section",
+  "states",
   "fields_section_break",
-  "fields"
+  "fields",
+  "form_tab",
+  "form_builder"
  ],
  "fields": [
+  {
+   "fieldname": "naming_rule",
+   "fieldtype": "Select",
+   "label": "Naming Rule",
+   "length": 40,
+   "options": "\nSet by user\nBy fieldname\nBy \"Naming Series\" field\nExpression\nExpression (old style)\nRandom\nBy script"
+  },
   {
    "fieldname": "doc_type",
    "fieldtype": "Link",
@@ -93,13 +133,6 @@
    "label": "Track Changes"
   },
   {
-   "default": "0",
-   "depends_on": "eval: doc.image_field",
-   "fieldname": "image_view",
-   "fieldtype": "Check",
-   "label": "Image View"
-  },
-  {
    "fieldname": "column_break_5",
    "fieldtype": "Column Break"
   },
@@ -123,9 +156,11 @@
    "label": "Search Fields"
   },
   {
+   "collapsible": 1,
    "depends_on": "doc_type",
    "fieldname": "section_break_8",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "List Settings"
   },
   {
    "fieldname": "sort_field",
@@ -143,8 +178,8 @@
    "options": "ASC\nDESC"
   },
   {
+   "collapsible": 1,
    "depends_on": "doc_type",
-   "description": "Customize Label, Print Hide, Default etc.",
    "fieldname": "fields_section_break",
    "fieldtype": "Section Break",
    "label": "Fields"
@@ -154,7 +189,8 @@
    "fieldname": "fields",
    "fieldtype": "Table",
    "label": "Fields",
-   "options": "Customize Form Field"
+   "options": "Customize Form Field",
+   "reqd": 1
   },
   {
    "default": "0",
@@ -167,16 +203,215 @@
    "fieldname": "allow_auto_repeat",
    "fieldtype": "Check",
    "label": "Allow Auto Repeat"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_import",
+   "fieldtype": "Check",
+   "label": "Allow Import (via Data Import Tool)"
+  },
+  {
+   "depends_on": "email_append_to",
+   "fieldname": "subject_field",
+   "fieldtype": "Data",
+   "label": "Subject Field"
+  },
+  {
+   "depends_on": "email_append_to",
+   "fieldname": "sender_field",
+   "fieldtype": "Data",
+   "label": "Sender Email Field",
+   "mandatory_depends_on": "email_append_to"
+  },
+  {
+   "default": "0",
+   "fieldname": "email_append_to",
+   "fieldtype": "Check",
+   "label": "Allow document creation via Email"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_preview_popup",
+   "fieldtype": "Check",
+   "label": "Show Preview Popup"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "doc_type",
+   "fieldname": "view_settings_section",
+   "fieldtype": "Section Break",
+   "label": "View Settings"
+  },
+  {
+   "fieldname": "column_break_29",
+   "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "email_append_to",
+   "depends_on": "doc_type",
+   "fieldname": "email_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Email Settings"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "links",
+   "depends_on": "doc_type",
+   "fieldname": "document_links_section",
+   "fieldtype": "Section Break",
+   "label": "Document Links"
+  },
+  {
+   "fieldname": "links",
+   "fieldtype": "Table",
+   "label": "Links",
+   "options": "DocType Link"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "actions",
+   "depends_on": "doc_type",
+   "fieldname": "document_actions_section",
+   "fieldtype": "Section Break",
+   "label": "Document Actions"
+  },
+  {
+   "fieldname": "actions",
+   "fieldtype": "Table",
+   "label": "Actions",
+   "options": "DocType Action"
+  },
+  {
+   "fieldname": "default_email_template",
+   "fieldtype": "Link",
+   "label": "Default Email Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "column_break_26",
+   "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "doc_type",
+   "fieldname": "naming_section",
+   "fieldtype": "Section Break",
+   "label": "Naming"
+  },
+  {
+   "description": "Naming Options:\n<ol><li><b>field:[fieldname]</b> - By Field</li><li><b>naming_series:</b> - By Naming Series (field called naming_series must be present)</li><li><b>Prompt</b> - Prompt user for a name</li><li><b>[series]</b> - Series by prefix (separated by a dot); for example PRE.#####</li>\n<li><b>format:EXAMPLE-{MM}morewords{fieldname1}-{fieldname2}-{#####}</b> - Replace all braced words (fieldnames, date words (DD, MM, YY), series) with their value. Outside braces, any characters can be used.</li></ol>",
+   "fieldname": "autoname",
+   "fieldtype": "Data",
+   "label": "Auto Name"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "states",
+   "depends_on": "doc_type",
+   "fieldname": "document_states_section",
+   "fieldtype": "Section Break",
+   "label": "Document States"
+  },
+  {
+   "fieldname": "states",
+   "fieldtype": "Table",
+   "label": "States",
+   "options": "DocType State"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_title_field_in_link",
+   "fieldtype": "Check",
+   "label": "Show Title in Link Fields"
+  },
+  {
+   "default": "0",
+   "fieldname": "translated_doctype",
+   "fieldtype": "Check",
+   "label": "Translate Link Fields"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "form_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Form Settings"
+  },
+  {
+   "fieldname": "column_break_21",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "make_attachments_public",
+   "fieldtype": "Check",
+   "label": "Make Attachments Public by Default"
+  },
+  {
+   "default": "0",
+   "description": "Enabling this will submit documents in background",
+   "fieldname": "queue_in_background",
+   "fieldtype": "Check",
+   "label": "Queue in Background (BETA)"
+  },
+  {
+   "fieldname": "default_view",
+   "fieldtype": "Select",
+   "label": "Default View"
+  },
+  {
+   "default": "0",
+   "depends_on": "default_view",
+   "fieldname": "force_re_route_to_default_view",
+   "fieldtype": "Check",
+   "label": "Force Re-route to Default View"
+  },
+  {
+   "default": "0",
+   "description": "Enables Calendar and Gantt views.",
+   "fieldname": "is_calendar_and_gantt",
+   "fieldtype": "Check",
+   "label": "Is Calendar and Gantt"
+  },
+  {
+   "fieldname": "form_builder",
+   "fieldtype": "HTML",
+   "label": "Form Builder"
+  },
+  {
+   "fieldname": "form_tab",
+   "fieldtype": "Tab Break",
+   "label": "Form"
+  },
+  {
+   "fieldname": "link_filters",
+   "fieldtype": "JSON",
+   "hidden": 1,
+   "label": "Link Filters"
+  },
+  {
+   "fieldname": "details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Details"
+  },
+  {
+   "depends_on": "email_append_to",
+   "fieldname": "sender_name_field",
+   "fieldtype": "Data",
+   "label": "Sender Name Field"
   }
  ],
  "hide_toolbar": 1,
  "icon": "fa fa-glass",
  "idx": 1,
+ "index_web_pages_for_search": 1,
  "issingle": 1,
- "modified": "2019-07-01 22:50:50.372465",
+ "links": [],
+ "modified": "2023-12-01 18:18:23.086134",
  "modified_by": "Administrator",
  "module": "Custom",
  "name": "Customize Form",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -193,5 +428,6 @@
  "search_fields": "doc_type",
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
  "track_changes": 1
 }

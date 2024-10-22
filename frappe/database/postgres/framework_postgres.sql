@@ -27,6 +27,7 @@ CREATE TABLE "tabDocField" (
   "search_index" smallint NOT NULL DEFAULT 0,
   "hidden" smallint NOT NULL DEFAULT 0,
   "set_only_once" smallint NOT NULL DEFAULT 0,
+  "show_dashboard" smallint NOT NULL DEFAULT 0,
   "allow_in_quick_entry" smallint NOT NULL DEFAULT 0,
   "print_hide" smallint NOT NULL DEFAULT 0,
   "report_hide" smallint NOT NULL DEFAULT 0,
@@ -40,6 +41,8 @@ CREATE TABLE "tabDocField" (
   "show_preview_popup" smallint NOT NULL DEFAULT 0,
   "trigger" varchar(255) DEFAULT NULL,
   "collapsible_depends_on" text,
+  "mandatory_depends_on" text,
+  "read_only_depends_on" text,
   "depends_on" text,
   "permlevel" bigint NOT NULL DEFAULT 0,
   "ignore_user_permissions" smallint NOT NULL DEFAULT 0,
@@ -49,12 +52,22 @@ CREATE TABLE "tabDocField" (
   "default" text,
   "description" text,
   "in_list_view" smallint NOT NULL DEFAULT 0,
+  "fetch_if_empty" smallint NOT NULL DEFAULT 0,
+  "in_filter" smallint NOT NULL DEFAULT 0,
+  "remember_last_selected_value" smallint NOT NULL DEFAULT 0,
+  "ignore_xss_filter" smallint NOT NULL DEFAULT 0,
+  "print_hide_if_no_value" smallint NOT NULL DEFAULT 0,
+  "allow_bulk_edit" smallint NOT NULL DEFAULT 0,
   "in_standard_filter" smallint NOT NULL DEFAULT 0,
   "in_preview" smallint NOT NULL DEFAULT 0,
   "read_only" smallint NOT NULL DEFAULT 0,
   "precision" varchar(255) DEFAULT NULL,
+  "max_height" varchar(10) DEFAULT NULL,
   "length" bigint NOT NULL DEFAULT 0,
   "translatable" smallint NOT NULL DEFAULT 0,
+  "hide_border" smallint NOT NULL DEFAULT 0,
+  "hide_days" smallint NOT NULL DEFAULT 0,
+  "hide_seconds" smallint NOT NULL DEFAULT 0,
   PRIMARY KEY ("name")
 ) ;
 
@@ -101,6 +114,57 @@ CREATE TABLE "tabDocPerm" (
 create index on "tabDocPerm" ("parent");
 
 --
+-- Table structure for table "tabDocType Action"
+--
+
+DROP TABLE IF EXISTS "tabDocType Action";
+CREATE TABLE "tabDocType Action" (
+  "name" varchar(255) NOT NULL,
+  "creation" timestamp(6) DEFAULT NULL,
+  "modified" timestamp(6) DEFAULT NULL,
+  "modified_by" varchar(255) DEFAULT NULL,
+  "owner" varchar(255) DEFAULT NULL,
+  "docstatus" smallint NOT NULL DEFAULT 0,
+  "parent" varchar(255) DEFAULT NULL,
+  "parentfield" varchar(255) DEFAULT NULL,
+  "parenttype" varchar(255) DEFAULT NULL,
+  "idx" bigint NOT NULL DEFAULT 0,
+  "label" varchar(140) NOT NULL,
+  "group" text DEFAULT NULL,
+  "action_type" varchar(140) NOT NULL,
+  "action" varchar(140) NOT NULL,
+  PRIMARY KEY ("name")
+) ;
+
+create index on "tabDocType Action" ("parent");
+
+--
+-- Table structure for table "tabDocType Link"
+--
+
+DROP TABLE IF EXISTS "tabDocType Link";
+CREATE TABLE "tabDocType Link" (
+  "name" varchar(255) NOT NULL,
+  "creation" timestamp(6) DEFAULT NULL,
+  "modified" timestamp(6) DEFAULT NULL,
+  "modified_by" varchar(255) DEFAULT NULL,
+  "owner" varchar(255) DEFAULT NULL,
+  "docstatus" smallint NOT NULL DEFAULT 0,
+  "parent" varchar(255) DEFAULT NULL,
+  "parentfield" varchar(255) DEFAULT NULL,
+  "parenttype" varchar(255) DEFAULT NULL,
+  "idx" bigint NOT NULL DEFAULT 0,
+  "label" varchar(140) DEFAULT NULL,
+  "group" varchar(140) DEFAULT NULL,
+  "link_doctype" varchar(140) NOT NULL,
+  "link_fieldname" varchar(140) NOT NULL,
+  PRIMARY KEY ("name")
+) ;
+
+create index on "tabDocType Link" ("parent");
+
+
+--
 -- Table structure for table "tabDocType"
 --
 
@@ -112,12 +176,10 @@ CREATE TABLE "tabDocType" (
   "modified_by" varchar(255) DEFAULT NULL,
   "owner" varchar(255) DEFAULT NULL,
   "docstatus" smallint NOT NULL DEFAULT 0,
-  "parent" varchar(255) DEFAULT NULL,
-  "parentfield" varchar(255) DEFAULT NULL,
-  "parenttype" varchar(255) DEFAULT NULL,
   "idx" bigint NOT NULL DEFAULT 0,
   "search_fields" varchar(255) DEFAULT NULL,
   "issingle" smallint NOT NULL DEFAULT 0,
+  "is_virtual" smallint NOT NULL DEFAULT 0,
   "is_tree" smallint NOT NULL DEFAULT 0,
   "istable" smallint NOT NULL DEFAULT 0,
   "editable_grid" smallint NOT NULL DEFAULT 1,
@@ -126,7 +188,7 @@ CREATE TABLE "tabDocType" (
   "restrict_to_domain" varchar(255) DEFAULT NULL,
   "app" varchar(255) DEFAULT NULL,
   "autoname" varchar(255) DEFAULT NULL,
-  "name_case" varchar(255) DEFAULT NULL,
+  "naming_rule" varchar(40) DEFAULT NULL,
   "title_field" varchar(255) DEFAULT NULL,
   "image_field" varchar(255) DEFAULT NULL,
   "timeline_field" varchar(255) DEFAULT NULL,
@@ -163,6 +225,13 @@ CREATE TABLE "tabDocType" (
   "allow_guest_to_view" smallint NOT NULL DEFAULT 0,
   "route" varchar(255) DEFAULT NULL,
   "is_published_field" varchar(255) DEFAULT NULL,
+  "website_search_field" varchar(255) DEFAULT NULL,
+  "email_append_to" smallint NOT NULL DEFAULT 0,
+  "subject_field" varchar(255) DEFAULT NULL,
+  "sender_field" varchar(255) DEFAULT NULL,
+  "show_title_field_in_link" smallint NOT NULL DEFAULT 0,
+  "migration_hash" varchar(255) DEFAULT NULL,
+  "translated_doctype" smallint NOT NULL DEFAULT 0,
   PRIMARY KEY ("name")
 ) ;
 
@@ -172,7 +241,7 @@ CREATE TABLE "tabDocType" (
 
 DROP TABLE IF EXISTS "tabSeries";
 CREATE TABLE "tabSeries" (
-  "name" varchar(100) DEFAULT NULL,
+  "name" varchar(100),
   "current" bigint NOT NULL DEFAULT 0,
   PRIMARY KEY ("name")
 ) ;
@@ -188,7 +257,6 @@ CREATE TABLE "tabSessions" (
   "sessiondata" text,
   "ipaddress" varchar(16) DEFAULT NULL,
   "lastupdate" timestamp(6) DEFAULT NULL,
-  "device" varchar(255) DEFAULT 'desktop',
   "status" varchar(20) DEFAULT NULL
 );
 
@@ -216,7 +284,7 @@ CREATE TABLE "__Auth" (
 	"doctype" VARCHAR(140) NOT NULL,
 	"name" VARCHAR(255) NOT NULL,
 	"fieldname" VARCHAR(140) NOT NULL,
-	"password" VARCHAR(255) NOT NULL,
+	"password" TEXT NOT NULL,
 	"encrypted" int NOT NULL DEFAULT 0,
 	PRIMARY KEY ("doctype", "name", "fieldname")
 );

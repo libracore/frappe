@@ -1,7 +1,6 @@
-from __future__ import unicode_literals
-
 import frappe
 from frappe.utils import cstr
+
 
 def execute():
 	# Update Social Logins in User
@@ -10,7 +9,7 @@ def execute():
 	# Create Social Login Key(s) from Social Login Keys
 	frappe.reload_doc("integrations", "doctype", "social_login_key", force=True)
 
-	if not frappe.db.exists('DocType', 'Social Login Keys'):
+	if not frappe.db.exists("DocType", "Social Login Keys"):
 		return
 
 	social_login_keys = frappe.get_doc("Social Login Keys", "Social Login Keys")
@@ -57,28 +56,38 @@ def execute():
 
 	frappe.delete_doc("DocType", "Social Login Keys")
 
+
 def run_patch():
 	frappe.reload_doc("core", "doctype", "user", force=True)
 	frappe.reload_doc("core", "doctype", "user_social_login", force=True)
 
-	users = frappe.get_all("User", fields=["*"], filters={"name":("not in", ["Administrator", "Guest"])})
+	users = frappe.get_all("User", fields=["*"], filters={"name": ("not in", ["Administrator", "Guest"])})
 
 	for user in users:
 		idx = 0
 		if user.frappe_userid:
-			insert_user_social_login(user.name, user.modified_by, 'frappe', idx, userid=user.frappe_userid)
+			insert_user_social_login(user.name, user.modified_by, "frappe", idx, userid=user.frappe_userid)
 			idx += 1
 
 		if user.fb_userid or user.fb_username:
-			insert_user_social_login(user.name, user.modified_by, 'facebook', idx, userid=user.fb_userid, username=user.fb_username)
+			insert_user_social_login(
+				user.name, user.modified_by, "facebook", idx, userid=user.fb_userid, username=user.fb_username
+			)
 			idx += 1
 
 		if user.github_userid or user.github_username:
-			insert_user_social_login(user.name, user.modified_by, 'github', idx, userid=user.github_userid, username=user.github_username)
+			insert_user_social_login(
+				user.name,
+				user.modified_by,
+				"github",
+				idx,
+				userid=user.github_userid,
+				username=user.github_username,
+			)
 			idx += 1
 
 		if user.google_userid:
-			insert_user_social_login(user.name, user.modified_by, 'google', idx, userid=user.google_userid)
+			insert_user_social_login(user.name, user.modified_by, "google", idx, userid=user.google_userid)
 			idx += 1
 
 
@@ -96,7 +105,7 @@ def insert_user_social_login(user, modified_by, provider, idx, userid=None, user
 		"User",
 		"social_logins",
 		cstr(idx),
-		provider
+		provider,
 	]
 
 	if userid:
@@ -107,26 +116,38 @@ def insert_user_social_login(user, modified_by, provider, idx, userid=None, user
 		source_cols.append("username")
 		values.append(username)
 
-
 	query = """INSERT INTO `tabUser Social Login` (`{source_cols}`)
 		VALUES ({values})
-	""".format(
-		source_cols = "`, `".join(source_cols),
-		values= ", ".join([frappe.db.escape(d) for d in values])
-	)
+	""".format(source_cols="`, `".join(source_cols), values=", ".join([frappe.db.escape(d) for d in values]))
 
 	frappe.db.sql(query)
 
+
 def get_provider_field_map():
-	return frappe._dict({
-		"frappe": ["frappe_userid"],
-		"facebook": ["fb_userid", "fb_username"],
-		"github": ["github_userid", "github_username"],
-		"google": ["google_userid"],
-	})
+	return frappe._dict(
+		{
+			"frappe": ["frappe_userid"],
+			"facebook": ["fb_userid", "fb_username"],
+			"github": ["github_userid", "github_username"],
+			"google": ["google_userid"],
+		}
+	)
+
 
 def get_provider_fields(provider):
-		return get_provider_field_map().get(provider)
+	return get_provider_field_map().get(provider)
+
 
 def get_standard_cols():
-	return ["name", "creation", "modified", "owner", "modified_by", "parent", "parenttype", "parentfield", "idx", "provider"]
+	return [
+		"name",
+		"creation",
+		"modified",
+		"owner",
+		"modified_by",
+		"parent",
+		"parenttype",
+		"parentfield",
+		"idx",
+		"provider",
+	]

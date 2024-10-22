@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
 # Copyright (c) 2015, Frappe Technologies and Contributors
-# See license.txt
-from __future__ import unicode_literals
-
-import frappe
-import unittest
+# License: MIT. See LICENSE
+from frappe.tests.utils import FrappeTestCase
 
 # test_records = frappe.get_test_records('Kanban Board')
 
-class TestKanbanBoard(unittest.TestCase):
+
+class TestKanbanBoard(FrappeTestCase):
 	pass

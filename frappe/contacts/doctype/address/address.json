@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
  "creation": "2013-01-10 16:34:32",
@@ -11,11 +12,11 @@
   "address_type",
   "address_line1",
   "address_line2",
-  "pincode",
   "city",
   "county",
   "state",
   "country",
+  "pincode",
   "column_break0",
   "email_id",
   "phone",
@@ -24,7 +25,6 @@
   "is_shipping_address",
   "disabled",
   "linked_with",
-  "is_your_company_address",
   "links"
  ],
  "fields": [
@@ -51,12 +51,14 @@
    "fieldname": "address_line1",
    "fieldtype": "Data",
    "label": "Address Line 1",
+   "length": 240,
    "reqd": 1
   },
   {
    "fieldname": "address_line2",
    "fieldtype": "Data",
-   "label": "Address Line 2"
+   "label": "Address Line 2",
+   "length": 240
   },
   {
    "fieldname": "city",
@@ -75,7 +77,7 @@
   {
    "fieldname": "state",
    "fieldtype": "Data",
-   "label": "State"
+   "label": "State/Province"
   },
   {
    "fieldname": "country",
@@ -139,12 +141,6 @@
    "options": "fa fa-pushpin"
   },
   {
-   "default": "0",
-   "fieldname": "is_your_company_address",
-   "fieldtype": "Check",
-   "label": "Is Your Company Address"
-  },
-  {
    "fieldname": "links",
    "fieldtype": "Table",
    "label": "Links",
@@ -153,11 +149,11 @@
  ],
  "icon": "fa fa-map-marker",
  "idx": 5,
- "modified": "2022-02-07 11:30:55.333788",
+ "links": [],
+ "modified": "2023-11-20 17:28:41.698356",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
- "name_case": "Title Case",
  "owner": "Administrator",
  "permissions": [
   {
@@ -210,12 +206,21 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "set_user_permissions": 1,
    "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "if_owner": 1,
+   "print": 1,
+   "read": 1,
+   "role": "All",
    "write": 1
   }
  ],
  "search_fields": "country, state",
  "sort_field": "modified",
- "sort_order": "DESC"
+ "sort_order": "DESC",
+ "states": []
 }

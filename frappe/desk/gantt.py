@@ -1,9 +1,10 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
-# MIT License. See license.txt
+# License: MIT. See LICENSE
 
-from __future__ import unicode_literals
+import json
 
-import frappe, json
+import frappe
+
 
 @frappe.whitelist()
 def update_task(args, field_map):

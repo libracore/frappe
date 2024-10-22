@@ -1,22 +1,21 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
-$.extend(frappe.model, {
+Object.assign(frappe.model, {
 	docinfo: {},
-	sync: function(r) {
+	sync: function (r) {
 		/* docs:
 			extract docs, docinfo (attachments, comments, assignments)
 			from incoming request and set in `locals` and `frappe.model.docinfo`
 		*/
 		var isPlain;
-		if(!r.docs && !r.docinfo) r = {docs:r};
+		if (!r.docs && !r.docinfo) r = { docs: r };
 
 		isPlain = $.isPlainObject(r.docs);
-		if(isPlain) r.docs = [r.docs];
+		if (isPlain) r.docs = [r.docs];
 
-		if(r.docs) {
-
-			for(var i=0, l=r.docs.length; i<l; i++) {
+		if (r.docs) {
+			for (var i = 0, l = r.docs.length; i < l; i++) {
 				var d = r.docs[i];
 
 				if (locals[d.doctype] && locals[d.doctype][d.name]) {
@@ -28,54 +27,59 @@ $.extend(frappe.model, {
 
 				d.__last_sync_on = new Date();
 
-				if(d.doctype==="DocType") {
+				if (d.doctype === "DocType") {
 					frappe.meta.sync(d);
 				}
 
-				if(d.localname) {
-					frappe.model.new_names[d.localname] = d.name;
-					$(document).trigger('rename', [d.doctype, d.localname, d.name]);
-					delete locals[d.doctype][d.localname];
-
-					// update docinfo to new dict keys
-					if(i===0) {
-						frappe.model.docinfo[d.doctype][d.name] = frappe.model.docinfo[d.doctype][d.localname];
-						frappe.model.docinfo[d.doctype][d.localname] = undefined;
-					}
+				if (d.localname) {
+					frappe.model.rename_after_save(d, i);
 				}
 			}
-
-
-
 		}
 
+		frappe.model.sync_docinfo(r);
+		return r.docs;
+	},
+
+	rename_after_save: (d, i) => {
+		frappe.model.new_names[d.localname] = d.name;
+		$(document).trigger("rename", [d.doctype, d.localname, d.name]);
+		delete locals[d.doctype][d.localname];
+
+		// update docinfo to new dict keys
+		if (i === 0) {
+			frappe.model.docinfo[d.doctype][d.name] = frappe.model.docinfo[d.doctype][d.localname];
+			frappe.model.docinfo[d.doctype][d.localname] = undefined;
+		}
+	},
+
+	sync_docinfo: (r) => {
 		// set docinfo (comments, assign, attachments)
-		if(r.docinfo) {
-			var doc;
-			if(r.docs) {
-				doc = r.docs[0];
-			} else {
-				if(cur_frm) doc = cur_frm.doc;
+		if (r.docinfo) {
+			const { doctype, name } = r.docinfo;
+			if (!frappe.model.docinfo[doctype]) {
+				frappe.model.docinfo[doctype] = {};
 			}
-			if(doc) {
-				if(!frappe.model.docinfo[doc.doctype])
-					frappe.model.docinfo[doc.doctype] = {};
-				frappe.model.docinfo[doc.doctype][doc.name] = r.docinfo;
-			}
+			frappe.model.docinfo[doctype][name] = r.docinfo;
+
+			// copy values to frappe.boot.user_info
+			Object.assign(frappe.boot.user_info, r.docinfo.user_info);
 		}
 
 		return r.docs;
 	},
-	add_to_locals: function(doc) {
-		if(!locals[doc.doctype])
-			locals[doc.doctype] = {};
 
-		if(!doc.name && doc.__islocal) { // get name (local if required)
-			if(!doc.parentfield) frappe.model.clear_doc(doc);
+	add_to_locals: function (doc) {
+		if (!locals[doc.doctype]) locals[doc.doctype] = {};
+
+		if (!doc.name && doc.__islocal) {
+			// get name (local if required)
+			if (!doc.parentfield) frappe.model.clear_doc(doc);
 
 			doc.name = frappe.model.get_new_name(doc.doctype);
 
-			if(!doc.parentfield) frappe.provide("frappe.model.docinfo." + doc.doctype + "." + doc.name);
+			if (!doc.parentfield)
+				frappe.provide("frappe.model.docinfo." + doc.doctype + "." + doc.name);
 		}
 
 		locals[doc.doctype][doc.name] = doc;
@@ -84,15 +88,14 @@ $.extend(frappe.model, {
 		let is_table = meta ? meta.istable : doc.parentfield;
 		// add child docs to locals
 		if (!is_table) {
-			for(var i in doc) {
+			for (var i in doc) {
 				var value = doc[i];
 
-				if($.isArray(value)) {
-					for (var x=0, y=value.length; x < y; x++) {
+				if ($.isArray(value)) {
+					for (var x = 0, y = value.length; x < y; x++) {
 						var d = value[x];
 
-						if(typeof d=='object' && !d.parent)
-							d.parent = doc.name;
+						if (typeof d == "object" && !d.parent) d.parent = doc.name;
 
 						frappe.model.add_to_locals(d);
 					}
@@ -100,14 +103,15 @@ $.extend(frappe.model, {
 			}
 		}
 	},
-	update_in_locals: function(doc) {
+
+	update_in_locals: function (doc) {
 		// update values in the existing local doc instead of replacing
 		let local_doc = locals[doc.doctype][doc.name];
-		let clear_keys = function(source, target) {
-			Object.keys(target).map(key => {
+		let clear_keys = function (source, target) {
+			Object.keys(target).map((key) => {
 				if (source[key] == undefined) delete target[key];
 			});
-		}
+		};
 
 		for (let fieldname in doc) {
 			let df = frappe.meta.get_field(doc.doctype, fieldname);
@@ -122,7 +126,7 @@ $.extend(frappe.model, {
 				}
 
 				// child table, override each row and append new rows if required
-				for (let i=0; i < doc[fieldname].length; i++ ) {
+				for (let i = 0; i < doc[fieldname].length; i++) {
 					let d = doc[fieldname][i];
 					let local_d = local_doc[fieldname][i];
 					if (local_d) {
@@ -146,7 +150,6 @@ $.extend(frappe.model, {
 						// row exists, just copy the values
 						Object.assign(local_d, d);
 						clear_keys(d, local_d);
-
 					} else {
 						local_doc[fieldname].push(d);
 						if (!d.parent) d.parent = doc.name;
@@ -157,7 +160,6 @@ $.extend(frappe.model, {
 				// remove extra rows
 				if (local_doc[fieldname].length > doc[fieldname].length) {
 					for (let i = doc[fieldname].length; i < local_doc[fieldname].length; i++) {
-
 						// clear from local
 						let d = local_doc[fieldname][i];
 						if (locals[d.doctype] && locals[d.doctype][d.name]) {
@@ -165,7 +167,6 @@ $.extend(frappe.model, {
 						}
 					}
 					local_doc[fieldname].length = doc[fieldname].length;
-
 				}
 			} else {
 				// literal
@@ -175,6 +176,5 @@ $.extend(frappe.model, {
 
 		// clear keys on parent
 		clear_keys(doc, local_doc);
-	}
-
+	},
 });

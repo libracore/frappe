@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "allow_rename": 1,
  "autoname": "field:role_name",
  "creation": "2013-01-08 15:50:01",
@@ -7,12 +8,13 @@
  "engine": "InnoDB",
  "field_order": [
   "role_name",
-  "disabled",
-  "desk_access",
-  "two_factor_auth",
-  "column_break_5",
+  "home_page",
   "restrict_to_domain",
-  "description"
+  "column_break_4",
+  "disabled",
+  "is_custom",
+  "desk_access",
+  "two_factor_auth"
  ],
  "fields": [
   {
@@ -51,21 +53,32 @@
    "options": "Domain"
   },
   {
-   "fieldname": "column_break_5",
+   "description": "Route: Example \"/app\"",
+   "fieldname": "home_page",
+   "fieldtype": "Data",
+   "label": "Home Page"
+  },
+  {
+   "fieldname": "column_break_4",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "description",
-   "fieldtype": "Data",
-   "label": "Description"
+   "default": "0",
+   "fieldname": "is_custom",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Custom"
   }
  ],
  "icon": "fa fa-bookmark",
  "idx": 1,
- "modified": "2022-01-13 00:07:17.264938",
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-09-19 17:07:08.672124",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Role",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -82,6 +95,8 @@
  ],
  "quick_entry": 1,
  "sort_field": "modified",
- "sort_order": "ASC",
- "track_changes": 1
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "translated_doctype": 1
 }

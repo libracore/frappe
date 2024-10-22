@@ -1,39 +1,63 @@
-import frappe, subprocess, os
-from six.moves import input
+import os
 
-def setup_database(force, source_sql, verbose):
-	root_conn = get_root_connection()
+import frappe
+from frappe.database.db_manager import DbManager
+from frappe.utils import cint
+
+
+def setup_database():
+	root_conn = get_root_connection(frappe.flags.root_login, frappe.flags.root_password)
 	root_conn.commit()
-	root_conn.sql("DROP DATABASE IF EXISTS `{0}`".format(frappe.conf.db_name))
-	root_conn.sql("DROP USER IF EXISTS {0}".format(frappe.conf.db_name))
-	root_conn.sql("CREATE DATABASE `{0}`".format(frappe.conf.db_name))
-	root_conn.sql("CREATE user {0} password '{1}'".format(frappe.conf.db_name,
-		frappe.conf.db_password))
-	root_conn.sql("GRANT ALL PRIVILEGES ON DATABASE `{0}` TO {0}".format(frappe.conf.db_name))
+	root_conn.sql("end")
+	root_conn.sql(f'DROP DATABASE IF EXISTS "{frappe.conf.db_name}"')
 
-	# we can't pass psql password in arguments in postgresql as mysql. So
-	# set password connection parameter in environment variable
-	subprocess_env = os.environ.copy()
-	subprocess_env['PGPASSWORD'] = str(frappe.conf.db_password)
-	# bootstrap db
-	subprocess.check_output([
-		'psql', frappe.conf.db_name, '-h', frappe.conf.db_host or 'localhost', '-U',
-		frappe.conf.db_name, '-f',
-		os.path.join(os.path.dirname(__file__), 'framework_postgres.sql')
-	], env=subprocess_env)
+	# If user exists, just update password
+	if root_conn.sql(f"SELECT 1 FROM pg_roles WHERE rolname='{frappe.conf.db_name}'"):
+		root_conn.sql(f"ALTER USER \"{frappe.conf.db_name}\" WITH PASSWORD '{frappe.conf.db_password}'")
+	else:
+		root_conn.sql(f"CREATE USER \"{frappe.conf.db_name}\" WITH PASSWORD '{frappe.conf.db_password}'")
+	root_conn.sql(f'CREATE DATABASE "{frappe.conf.db_name}"')
+	root_conn.sql(f'GRANT ALL PRIVILEGES ON DATABASE "{frappe.conf.db_name}" TO "{frappe.conf.db_name}"')
+	if psql_version := root_conn.sql("SHOW server_version_num", as_dict=True):
+		semver_version_num = psql_version[0].get("server_version_num") or "140000"
+		if cint(semver_version_num) > 150000:
+			root_conn.sql(f'ALTER DATABASE "{frappe.conf.db_name}" OWNER TO "{frappe.conf.db_name}"')
+	root_conn.close()
 
+
+def bootstrap_database(verbose, source_sql=None):
+	frappe.connect()
+	import_db_from_sql(source_sql, verbose)
 	frappe.connect()
 
-def setup_help_database(help_db_name):
-	root_conn = get_root_connection()
-	root_conn.sql("DROP DATABASE IF EXISTS `{0}`".format(help_db_name))
-	root_conn.sql("DROP USER IF EXISTS {0}".format(help_db_name))
-	root_conn.sql("CREATE DATABASE `{0}`".format(help_db_name))
-	root_conn.sql("CREATE user {0} password '{1}'".format(help_db_name, help_db_name))
-	root_conn.sql("GRANT ALL PRIVILEGES ON DATABASE `{0}` TO {0}".format(help_db_name))
+	if "tabDefaultValue" not in frappe.db.get_tables():
+		import sys
+
+		from click import secho
+
+		secho(
+			"Table 'tabDefaultValue' missing in the restored site. "
+			"This happens when the backup fails to restore. Please check that the file is valid\n"
+			"Do go through the above output to check the exact error message from MariaDB",
+			fg="red",
+		)
+		sys.exit(1)
+
+
+def import_db_from_sql(source_sql=None, verbose=False):
+	if verbose:
+		print("Starting database import...")
+	db_name = frappe.conf.db_name
+	if not source_sql:
+		source_sql = os.path.join(os.path.dirname(__file__), "framework_postgres.sql")
+	DbManager(frappe.local.db).restore_database(
+		verbose, db_name, source_sql, db_name, frappe.conf.db_password
+	)
+	if verbose:
+		print("Imported from database %s" % source_sql)
+
 
 def get_root_connection(root_login=None, root_password=None):
-	import getpass
 	if not frappe.local.flags.root_connection:
 		if not root_login:
 			root_login = frappe.conf.get("root_login") or None
@@ -45,8 +69,30 @@ def get_root_connection(root_login=None, root_password=None):
 			root_password = frappe.conf.get("root_password") or None
 
 		if not root_password:
-			root_password = getpass.getpass("Postgres super user password: ")
+			from getpass import getpass
 
-		frappe.local.flags.root_connection = frappe.database.get_db(user=root_login, password=root_password)
+			root_password = getpass("Postgres super user password: ")
+
+		frappe.local.flags.root_connection = frappe.database.get_db(
+			host=frappe.conf.db_host,
+			port=frappe.conf.db_port,
+			user=root_login,
+			password=root_password,
+			cur_db_name=root_login,
+		)
 
 	return frappe.local.flags.root_connection
+
+
+def drop_user_and_database(db_name, root_login, root_password):
+	root_conn = get_root_connection(
+		frappe.flags.root_login or root_login, frappe.flags.root_password or root_password
+	)
+	root_conn.commit()
+	root_conn.sql(
+		"SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = %s",
+		(db_name,),
+	)
+	root_conn.sql("end")
+	root_conn.sql(f"DROP DATABASE IF EXISTS {db_name}")
+	root_conn.sql(f"DROP USER IF EXISTS {db_name}")

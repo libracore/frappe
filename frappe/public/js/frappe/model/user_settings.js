@@ -1,11 +1,14 @@
-frappe.provide('frappe.model.user_settings');
+frappe.provide("frappe.model.user_settings");
 
 $.extend(frappe.model.user_settings, {
-	get: function(doctype) {
-		return frappe.call('frappe.model.utils.user_settings.get', { doctype })
-			.then(r => JSON.parse(r.message || '{}'));
+	get: function (doctype) {
+		return frappe
+			.call("frappe.model.utils.user_settings.get", { doctype })
+			.then((r) => JSON.parse(r.message || "{}"));
 	},
-	save: function(doctype, key, value) {
+	save: function (doctype, key, value) {
+		if (frappe.session.user === "Guest") return Promise.resolve();
+
 		const old_user_settings = frappe.model.user_settings[doctype] || {};
 		const new_user_settings = $.extend(true, {}, old_user_settings); // deep copy
 
@@ -22,32 +25,33 @@ $.extend(frappe.model.user_settings, {
 			// update if changed
 			return this.update(doctype, new_user_settings);
 		}
-		return Promise.resolve();
+		return Promise.resolve(new_user_settings);
 	},
-	remove: function(doctype, key) {
+	remove: function (doctype, key) {
 		var user_settings = frappe.model.user_settings[doctype] || {};
 		delete user_settings[key];
 
 		return this.update(doctype, user_settings);
 	},
-	update: function(doctype, user_settings) {
+	update: function (doctype, user_settings) {
+		if (frappe.session.user === "Guest") return Promise.resolve();
 		return frappe.call({
-			method: 'frappe.model.utils.user_settings.save',
+			method: "frappe.model.utils.user_settings.save",
 			args: {
 				doctype: doctype,
-				user_settings: user_settings
+				user_settings: user_settings,
 			},
-			callback: function(r) {
+			callback: function (r) {
 				frappe.model.user_settings[doctype] = r.message;
-			}
+			},
 		});
-	}
+	},
 });
 
-frappe.get_user_settings = function(doctype, key) {
+frappe.get_user_settings = function (doctype, key) {
 	var settings = frappe.model.user_settings[doctype] || {};
-	if(key) {
+	if (key) {
 		settings = settings[key] || {};
 	}
 	return settings;
-}
+};

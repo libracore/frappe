@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "allow_import": 1,
  "autoname": "hash",
  "creation": "2016-02-17 12:21:16.175465",
@@ -6,22 +7,24 @@
  "document_type": "Setup",
  "engine": "InnoDB",
  "field_order": [
+  "contributed",
   "language",
   "section_break_4",
-  "source_name",
+  "source_text",
+  "context",
   "column_break_6",
-  "target_name",
+  "translated_text",
   "section_break_6",
-  "status",
-  "contributed_translation_doctype_name"
+  "contribution_status",
+  "contribution_docname"
  ],
  "fields": [
   {
    "fieldname": "language",
    "fieldtype": "Link",
-   "in_standard_filter": 1,
    "label": "Language",
    "options": "Language",
+   "reqd": 1,
    "search_index": 1
   },
   {
@@ -29,46 +32,62 @@
    "fieldtype": "Section Break"
   },
   {
-   "description": "If your data is in HTML, please copy paste the exact HTML code with the tags.",
-   "fieldname": "source_name",
-   "fieldtype": "Code",
-   "label": "Source Text"
-  },
-  {
    "fieldname": "column_break_6",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "target_name",
-   "fieldtype": "Code",
-   "in_list_view": 1,
-   "label": "Translated Text"
   },
   {
    "fieldname": "section_break_6",
    "fieldtype": "Section Break"
   },
   {
-   "default": "Saved",
-   "depends_on": "eval: !doc.__islocal",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Saved\nContributed\nVerified\nPR sent\nDeleted",
+   "fieldname": "context",
+   "fieldtype": "Data",
+   "label": "Context"
+  },
+  {
+   "default": "0",
+   "fieldname": "contributed",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Contributed",
    "read_only": 1
   },
   {
-   "fieldname": "contributed_translation_doctype_name",
+   "depends_on": "doc.contributed",
+   "fieldname": "contribution_status",
+   "fieldtype": "Select",
+   "label": "Contribution Status",
+   "options": "\nPending\nVerified\nRejected",
+   "read_only": 1
+  },
+  {
+   "fieldname": "contribution_docname",
    "fieldtype": "Data",
    "hidden": 1,
-   "label": "Contributed Translation Doctype Name",
+   "label": "Contribution Document Name",
    "read_only": 1
+  },
+  {
+   "description": "If your data is in HTML, please copy paste the exact HTML code with the tags.",
+   "fieldname": "source_text",
+   "fieldtype": "Code",
+   "label": "Source Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "translated_text",
+   "fieldtype": "Code",
+   "in_list_view": 1,
+   "label": "Translated Text",
+   "reqd": 1
   }
  ],
- "modified": "2019-06-18 19:03:38.640990",
+ "links": [],
+ "modified": "2022-07-04 06:53:54.997004",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Translation",
+ "naming_rule": "Random",
  "owner": "Administrator",
  "permissions": [
   {
@@ -86,6 +105,7 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "title_field": "source_name",
+ "states": [],
+ "title_field": "source_text",
  "track_changes": 1
 }

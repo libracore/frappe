@@ -1,93 +1,53 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
-# MIT License. See license.txt
+# License: MIT. See LICENSE
 
-from __future__ import unicode_literals
+import json
+
+from bs4 import BeautifulSoup
 
 import frappe
-from frappe.utils import time_diff_in_seconds, now, now_datetime, DATETIME_FORMAT
-from dateutil.relativedelta import relativedelta
-from six import string_types
-import json
+from frappe import _
+from frappe.desk.doctype.notification_log.notification_log import (
+	enqueue_create_notification,
+	get_title,
+	get_title_html,
+)
+from frappe.desk.doctype.notification_settings.notification_settings import (
+	get_subscribed_documents,
+)
+from frappe.utils import get_fullname
+
 
 @frappe.whitelist()
 @frappe.read_only()
 def get_notifications():
-	if (frappe.flags.in_install or
-		not frappe.db.get_single_value('System Settings', 'setup_complete')):
-		return {
-			"open_count_doctype": {},
-			"open_count_module": {},
-			"open_count_other": {},
-			"targets": {},
-			"new_messages": []
-		}
+	out = {
+		"open_count_doctype": {},
+		"targets": {},
+	}
+	if frappe.flags.in_install or not frappe.db.get_single_value("System Settings", "setup_complete"):
+		return out
 
 	config = get_notification_config()
 
+	if not config:
+		return out
+
 	groups = list(config.get("for_doctype")) + list(config.get("for_module"))
-	cache = frappe.cache()
 
 	notification_count = {}
 	notification_percent = {}
 
 	for name in groups:
-		count = cache.hget("notification_count:" + name, frappe.session.user)
+		count = frappe.cache.hget("notification_count:" + name, frappe.session.user)
 		if count is not None:
 			notification_count[name] = count
 
-	return {
-		"open_count_doctype": get_notifications_for_doctypes(config, notification_count),
-		"open_count_module": get_notifications_for_modules(config, notification_count),
-		"open_count_other": get_notifications_for_other(config, notification_count),
-		"targets": get_notifications_for_targets(config, notification_percent),
-		"new_messages": get_new_messages()
-	}
+	out["open_count_doctype"] = get_notifications_for_doctypes(config, notification_count)
+	out["targets"] = get_notifications_for_targets(config, notification_percent)
 
-def get_new_messages():
-	last_update = frappe.cache().hget("notifications_last_update", frappe.session.user)
-	now_timestamp = now()
-	frappe.cache().hset("notifications_last_update", frappe.session.user, now_timestamp)
+	return out
 
-	if not last_update:
-		return []
-
-	if last_update and time_diff_in_seconds(now_timestamp, last_update) > 1800:
-		# no update for 30 mins, consider only the last 30 mins
-		last_update = (now_datetime() - relativedelta(seconds=1800)).strftime(DATETIME_FORMAT)
-
-	return frappe.db.sql("""select sender_full_name, content
-		from `tabCommunication`
-			where communication_type in ('Chat', 'Notification')
-			and reference_doctype='user'
-			and reference_name = %s
-			and creation > %s
-			order by creation desc""", (frappe.session.user, last_update), as_dict=1)
-
-def get_notifications_for_modules(config, notification_count):
-	"""Notifications for modules"""
-	return get_notifications_for("for_module", config, notification_count)
-
-def get_notifications_for_other(config, notification_count):
-	"""Notifications for other items"""
-	return get_notifications_for("for_other", config, notification_count)
-
-def get_notifications_for(notification_type, config, notification_count):
-	open_count = {}
-	notification_map = config.get(notification_type) or {}
-	for m in notification_map:
-		try:
-			if m in notification_count:
-				open_count[m] = notification_count[m]
-			else:
-				open_count[m] = frappe.get_attr(notification_map[m])()
-
-				frappe.cache().hset("notification_count:" + m, frappe.session.user, open_count[m])
-		except frappe.PermissionError:
-			frappe.clear_messages()
-			pass
-			# frappe.msgprint("Permission Error in notifications for {0}".format(m))
-
-	return open_count
 
 def get_notifications_for_doctypes(config, notification_count):
 	"""Notifications for DocTypes"""
@@ -103,8 +63,9 @@ def get_notifications_for_doctypes(config, notification_count):
 			else:
 				try:
 					if isinstance(condition, dict):
-						result = len(frappe.get_list(d, fields=["name"],
-							filters=condition, limit_page_length = 100, as_list=True, ignore_ifnull=True))
+						result = frappe.get_list(
+							d, fields=["count(*) as count"], filters=condition, ignore_ifnull=True
+						)[0].count
 					else:
 						result = frappe.get_attr(condition)()
 
@@ -121,9 +82,10 @@ def get_notifications_for_doctypes(config, notification_count):
 
 				else:
 					open_count_doctype[d] = result
-					frappe.cache().hset("notification_count:" + d, frappe.session.user, result)
+					frappe.cache.hset("notification_count:" + d, frappe.session.user, result)
 
 	return open_count_doctype
+
 
 def get_notifications_for_targets(config, notification_percent):
 	"""Notifications for doc targets"""
@@ -149,8 +111,13 @@ def get_notifications_for_targets(config, notification_percent):
 				value_field = d["value_field"]
 				try:
 					if isinstance(condition, dict):
-						doc_list = frappe.get_list(doctype, fields=["name", target_field, value_field],
-							filters=condition, limit_page_length = 100, ignore_ifnull=True)
+						doc_list = frappe.get_list(
+							doctype,
+							fields=["name", target_field, value_field],
+							filters=condition,
+							limit_page_length=100,
+							ignore_ifnull=True,
+						)
 
 				except frappe.PermissionError:
 					frappe.clear_messages()
@@ -163,36 +130,46 @@ def get_notifications_for_targets(config, notification_percent):
 					for doc in doc_list:
 						value = doc[value_field]
 						target = doc[target_field]
-						doc_target_percents[doctype][doc.name] = (value/target * 100) if value < target else 100
+						doc_target_percents[doctype][doc.name] = (
+							(value / target * 100) if value < target else 100
+						)
 
 	return doc_target_percents
+
 
 def clear_notifications(user=None):
 	if frappe.flags.in_install:
 		return
-
 	config = get_notification_config()
-	for_doctype = list(config.get('for_doctype')) if config.get('for_doctype') else []
-	for_module = list(config.get('for_module')) if config.get('for_module') else []
+
+	if not config:
+		return
+
+	for_doctype = list(config.get("for_doctype")) if config.get("for_doctype") else []
+	for_module = list(config.get("for_module")) if config.get("for_module") else []
 	groups = for_doctype + for_module
-	cache = frappe.cache()
 
 	for name in groups:
 		if user:
-			cache.hdel("notification_count:" + name, user)
+			frappe.cache.hdel("notification_count:" + name, user)
 		else:
-			cache.delete_key("notification_count:" + name)
+			frappe.cache.delete_key("notification_count:" + name)
 
-	frappe.publish_realtime('clear_notifications')
+
+def clear_notification_config(user):
+	frappe.cache.hdel("notification_config", user)
+
 
 def delete_notification_count_for(doctype):
-	frappe.cache().delete_key("notification_count:" + doctype)
-	frappe.publish_realtime('clear_notifications')
+	frappe.cache.delete_key("notification_count:" + doctype)
+
 
 def clear_doctype_notifications(doc, method=None, *args, **kwargs):
 	config = get_notification_config()
-	if isinstance(doc, string_types):
-		doctype = doc # assuming doctype name was passed directly
+	if not config:
+		return
+	if isinstance(doc, str):
+		doctype = doc  # assuming doctype name was passed directly
 	else:
 		doctype = doc.doctype
 
@@ -200,9 +177,11 @@ def clear_doctype_notifications(doc, method=None, *args, **kwargs):
 		delete_notification_count_for(doctype)
 		return
 
-def get_notification_info_for_boot():
-	out = get_notifications()
+
+@frappe.whitelist()
+def get_notification_info():
 	config = get_notification_config()
+	out = get_notifications()
 	can_read = frappe.get_user().get_can_read()
 	conditions = {}
 	module_doctypes = {}
@@ -215,15 +194,21 @@ def get_notification_info_for_boot():
 		if d in doctype_info:
 			module_doctypes.setdefault(doctype_info[d], []).append(d)
 
-	out.update({
-		"conditions": conditions,
-		"module_doctypes": module_doctypes,
-	})
+	out.update(
+		{
+			"conditions": conditions,
+			"module_doctypes": module_doctypes,
+		}
+	)
 
 	return out
 
+
 def get_notification_config():
+	user = frappe.session.user or "Guest"
+
 	def _get():
+		subscribed_documents = get_subscribed_documents()
 		config = frappe._dict()
 		hooks = frappe.get_hooks()
 		if hooks:
@@ -231,72 +216,213 @@ def get_notification_config():
 				nc = frappe.get_attr(notification_config)()
 				for key in ("for_doctype", "for_module", "for_other", "targets"):
 					config.setdefault(key, {})
-					config[key].update(nc.get(key, {}))
+					if key == "for_doctype":
+						if len(subscribed_documents) > 0:
+							key_config = nc.get(key, {})
+							subscribed_docs_config = frappe._dict()
+							for document in subscribed_documents:
+								if key_config.get(document):
+									subscribed_docs_config[document] = key_config.get(document)
+							config[key].update(subscribed_docs_config)
+						else:
+							config[key].update(nc.get(key, {}))
+					else:
+						config[key].update(nc.get(key, {}))
 		return config
 
-	return frappe.cache().get_value("notification_config", _get)
+	return frappe.cache.hget("notification_config", user, _get)
+
 
 def get_filters_for(doctype):
-	'''get open filters for doctype'''
+	"""get open filters for doctype"""
 	config = get_notification_config()
-	return config.get('for_doctype').get(doctype, {})
+	doctype_config = config.get("for_doctype").get(doctype, {})
+	return None if isinstance(doctype_config, str) else doctype_config
+
 
 @frappe.whitelist()
 @frappe.read_only()
-def get_open_count(doctype, name, items=[]):
-	'''Get open count for given transactions and filters
+def get_open_count(doctype: str, name: str, items=None):
+	"""Get count for internal and external links for given transactions
 
 	:param doctype: Reference DocType
 	:param name: Reference Name
-	:param transactions: List of transactions (json/dict)
-	:param filters: optional filters (json/list)'''
+	:param items: Optional list of transactions (json/dict)"""
 
 	if frappe.flags.in_migrate or frappe.flags.in_install:
-		return {
-			'count': []
-		}
+		return {"count": []}
 
-	frappe.has_permission(doc=frappe.get_doc(doctype, name), throw=True)
-
-	meta = frappe.get_meta(doctype)
+	doc = frappe.get_doc(doctype, name)
+	doc.check_permission()
+	meta = doc.meta
 	links = meta.get_dashboard_data()
 
 	# compile all items in a list
-	if not items:
+	if items is None:
+		items = []
 		for group in links.transactions:
-			items.extend(group.get('items'))
+			items.extend(group.get("items"))
 
 	if not isinstance(items, list):
 		items = json.loads(items)
 
-	out = []
-	for d in items:
-		if d in links.get('internal_links', {}):
-			# internal link
-			continue
-
-		filters = get_filters_for(d)
-		fieldname = links.get('non_standard_fieldnames', {}).get(d, links.fieldname)
-		data = {'name': d}
-		if filters:
-			# get the fieldname for the current document
-			# we only need open documents related to the current document
-			filters[fieldname] = name
-			total = len(frappe.get_all(d, fields='name',
-				filters=filters, limit=100, distinct=True, ignore_ifnull=True))
-			data['open_count'] = total
-
-		total = len(frappe.get_all(d, fields='name',
-			filters={fieldname: name}, limit=100, distinct=True, ignore_ifnull=True))
-		data['count'] = total
-		out.append(data)
-
 	out = {
-		'count': out,
+		"external_links_found": [],
+		"internal_links_found": [],
 	}
 
-	module = frappe.get_meta_module(doctype)
-	if hasattr(module, 'get_timeline_data'):
-		out['timeline_data'] = module.get_timeline_data(doctype, name)
+	for d in items:
+		internal_link_for_doctype = links.get("internal_links", {}).get(d) or links.get(
+			"internal_and_external_links", {}
+		).get(d)
+		if internal_link_for_doctype:
+			internal_links_data_for_d = get_internal_links(doc, internal_link_for_doctype, d)
+			if internal_links_data_for_d["count"]:
+				out["internal_links_found"].append(internal_links_data_for_d)
+			else:
+				try:
+					external_links_data_for_d = get_external_links(d, name, links)
+					out["external_links_found"].append(external_links_data_for_d)
+				except Exception:
+					out["external_links_found"].append({"doctype": d, "open_count": 0, "count": 0})
+		else:
+			external_links_data_for_d = get_external_links(d, name, links)
+			out["external_links_found"].append(external_links_data_for_d)
+
+	out = {
+		"count": out,
+	}
+
+	if not meta.custom:
+		module = frappe.get_meta_module(doctype)
+		if hasattr(module, "get_timeline_data"):
+			out["timeline_data"] = module.get_timeline_data(doctype, name)
 
 	return out
+
+
+def get_internal_links(doc, link, link_doctype):
+	names = []
+	data = {"doctype": link_doctype}
+
+	if isinstance(link, str):
+		# get internal links in parent document
+		value = doc.get(link)
+		if value and value not in names:
+			names.append(value)
+	elif isinstance(link, list):
+		# get internal links in child documents
+		table_fieldname, link_fieldname = link
+		for row in doc.get(table_fieldname) or []:
+			value = row.get(link_fieldname)
+			if value and value not in names:
+				names.append(value)
+
+	data["open_count"] = 0
+	data["count"] = len(names)
+	data["names"] = names
+
+	return data
+
+
+def get_external_links(doctype, name, links):
+	fieldname = links.get("non_standard_fieldnames", {}).get(doctype, links.get("fieldname"))
+	filters = {fieldname: name}
+
+	# updating filters based on dynamic_links
+	if dynamic_link_filters := get_dynamic_link_filters(doctype, links, fieldname):
+		filters.update(dynamic_link_filters)
+
+	total_count = get_doc_count(doctype, filters)
+
+	open_count = 0
+	if open_count_filters := get_filters_for(doctype):
+		filters.update(open_count_filters)
+		open_count = get_doc_count(doctype, filters)
+
+	return {"doctype": doctype, "count": total_count, "open_count": open_count}
+
+
+def get_doc_count(doctype, filters):
+	return len(
+		frappe.get_all(
+			doctype,
+			fields="name",
+			filters=filters,
+			limit=100,
+			distinct=True,
+			ignore_ifnull=True,
+		)
+	)
+
+
+def get_dynamic_link_filters(doctype, links, fieldname):
+	"""
+	- Updating filters based on dynamic_links specified in the dashboard data.
+	- Eg: "dynamic_links": {"fieldname": ["dynamic_fieldvalue", "dynamic_fieldname"]},
+	"""
+	dynamic_link = links.get("dynamic_links", {}).get(fieldname)
+
+	if not dynamic_link:
+		return
+
+	doctype_value, doctype_fieldname = dynamic_link
+
+	meta = frappe.get_meta(doctype)
+	if not meta.has_field(doctype_fieldname):
+		return
+
+	return {doctype_fieldname: doctype_value}
+
+
+def notify_mentions(ref_doctype, ref_name, content):
+	if ref_doctype and ref_name and content:
+		mentions = extract_mentions(content)
+
+		if not mentions:
+			return
+
+		sender_fullname = get_fullname(frappe.session.user)
+		title = get_title(ref_doctype, ref_name)
+
+		recipients = [
+			frappe.db.get_value(
+				"User",
+				{"enabled": 1, "name": name, "user_type": "System User", "allowed_in_mentions": 1},
+				"email",
+			)
+			for name in mentions
+		]
+
+		notification_message = _("""{0} mentioned you in a comment in {1} {2}""").format(
+			frappe.bold(sender_fullname), frappe.bold(ref_doctype), get_title_html(title)
+		)
+
+		notification_doc = {
+			"type": "Mention",
+			"document_type": ref_doctype,
+			"document_name": ref_name,
+			"subject": notification_message,
+			"from_user": frappe.session.user,
+			"email_content": content,
+		}
+
+		enqueue_create_notification(recipients, notification_doc)
+
+
+def extract_mentions(txt):
+	"""Find all instances of @mentions in the html."""
+	soup = BeautifulSoup(txt, "html.parser")
+	emails = []
+	for mention in soup.find_all(class_="mention"):
+		if mention.get("data-is-group") == "true":
+			try:
+				user_group = frappe.get_cached_doc("User Group", mention["data-id"])
+				emails += [d.user for d in user_group.user_group_members]
+			except frappe.DoesNotExistError:
+				pass
+			continue
+		email = mention["data-id"]
+		emails.append(email)
+
+	return emails

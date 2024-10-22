@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "creation": "2019-08-13 17:24:05.470876",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -100,8 +101,9 @@
   }
  ],
  "issingle": 1,
- "modified": "2019-08-21 17:33:28.516614",
- "modified_by": "qwe@qwe.com",
+ "links": [],
+ "modified": "2023-12-08 15:52:37.525003",
+ "modified_by": "Administrator",
  "module": "Integrations",
  "name": "Google Drive",
  "owner": "Administrator",
@@ -115,19 +117,10 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "role": "All",
-   "share": 1,
-   "write": 1
   }
  ],
  "sort_field": "modified",
- "sort_order": "ASC",
+ "sort_order": "DESC",
+ "states": [],
  "track_changes": 1
 }

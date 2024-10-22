@@ -1,9 +1,11 @@
 {
+ "actions": [],
  "allow_import": 1,
  "autoname": "EV.#####",
  "creation": "2013-06-10 13:17:47",
  "doctype": "DocType",
  "document_type": "Document",
+ "email_append_to": 1,
  "engine": "InnoDB",
  "field_order": [
   "details",
@@ -17,14 +19,17 @@
   "starts_on",
   "ends_on",
   "status",
+  "sender",
   "all_day",
   "sync_with_google_calendar",
+  "add_video_conferencing",
   "sb_00",
   "google_calendar",
-  "pulled_from_google_calendar",
-  "cb_00",
   "google_calendar_id",
+  "cb_00",
   "google_calendar_event_id",
+  "google_meet_link",
+  "pulled_from_google_calendar",
   "section_break_13",
   "repeat_on",
   "repeat_till",
@@ -50,7 +55,7 @@
   },
   {
    "fieldname": "subject",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "in_global_search": 1,
    "in_list_view": 1,
    "label": "Subject",
@@ -70,7 +75,7 @@
    "label": "Event Type",
    "oldfieldname": "event_type",
    "oldfieldtype": "Select",
-   "options": "Private\nPublic\nCancelled",
+   "options": "Private\nPublic",
    "reqd": 1,
    "search_index": 1
   },
@@ -218,11 +223,11 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "Open\nClosed"
+   "options": "Open\nCompleted\nClosed\nCancelled"
   },
   {
    "collapsible": 1,
-   "depends_on": "eval:doc.sync_with_google_calendar",
+   "depends_on": "eval:doc.sync_with_google_calendar || doc.pulled_from_google_calendar",
    "fieldname": "sb_00",
    "fieldtype": "Section Break",
    "label": "Google Calendar"
@@ -242,7 +247,9 @@
    "fieldname": "google_calendar_event_id",
    "fieldtype": "Data",
    "label": "Google Calendar Event ID",
-   "read_only": 1
+   "no_copy": 1,
+   "read_only": 1,
+   "length": 320
   },
   {
    "default": "0",
@@ -262,14 +269,38 @@
    "fieldtype": "Check",
    "label": "Pulled from Google Calendar",
    "read_only": 1
+  },
+  {
+   "fieldname": "sender",
+   "fieldtype": "Data",
+   "label": "Sender",
+   "options": "Email",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.sync_with_google_calendar",
+   "description": "via Google Meet",
+   "fieldname": "add_video_conferencing",
+   "fieldtype": "Check",
+   "label": "Add Video Conferencing"
+  },
+  {
+   "fieldname": "google_meet_link",
+   "fieldtype": "Data",
+   "label": "Google Meet Link",
+   "no_copy": 1,
+   "read_only": 1
   }
  ],
  "icon": "fa fa-calendar",
  "idx": 1,
- "modified": "2019-08-08 16:01:19.489396",
+ "links": [],
+ "modified": "2023-06-23 10:33:15.685368",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Event",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -297,8 +328,11 @@
   }
  ],
  "read_only": 1,
+ "sender_field": "sender",
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
+ "subject_field": "subject",
  "title_field": "subject",
  "track_changes": 1,
  "track_seen": 1,

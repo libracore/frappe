@@ -2,13 +2,7 @@
 // MIT License. See license.txt
 
 frappe.ui.Tags = class {
-	constructor({
-		parent, placeholder, tagsList,
-		onTagAdd,
-		onTagRemove,
-		onTagClick,
-		onChange
-	}) {
+	constructor({ parent, placeholder, tagsList, onTagAdd, onTagRemove, onTagClick, onChange }) {
 		this.tagsList = tagsList || [];
 		this.onTagAdd = onTagAdd;
 		this.onTagRemove = onTagRemove;
@@ -19,14 +13,16 @@ frappe.ui.Tags = class {
 	}
 
 	setup(parent, placeholder) {
-		this.$wrapper = $(`<div class="tags-wrapper"></div>`).appendTo(parent);
-		this.$ul = $(`<ul class="tags-list"></ul>`).appendTo(this.$wrapper);
-		this.$input = $(`<input class="tags-input"></input>`);
+		this.$ul = parent;
+		this.$input = $(`<input class="tags-input form-control"></input>`);
 
-		this.$inputWrapper = this.getListElement(this.$input);
-		this.$placeholder = this.getListElement($(`<span class="tags-placeholder text-muted">${placeholder}</span>`));
+		this.$inputWrapper = this.get_list_element(this.$input);
+		this.$placeholder =
+			$(`<button class="add-tags-btn text-muted btn btn-link icon-btn" id="add_tags">
+				${__(placeholder)}
+			</button>`);
+		this.$placeholder.appendTo(this.$ul.find(".form-sidebar-items"));
 		this.$inputWrapper.appendTo(this.$ul);
-		this.$placeholder.appendTo(this.$ul);
 
 		this.deactivate();
 		this.bind();
@@ -34,19 +30,23 @@ frappe.ui.Tags = class {
 	}
 
 	bind() {
-		this.$input.keypress((e) => {
-			if(e.which == 13 || e.keyCode == 13) {
-				const tagValue = frappe.utils.xss_sanitise(this.$input.val());
-				this.addTag(tagValue);
-				this.$input.val('');
-			}
-		});
+		const me = this;
+		const select_tag = function () {
+			const tagValue = frappe.utils.xss_sanitise(me.$input.val());
+			me.addTag(tagValue);
+			me.$input.val("");
+		};
 
-		this.$input.on('blur', () => {
+		this.$input.keypress((e) => {
+			if (e.which == 13 || e.keyCode == 13) select_tag();
+		});
+		this.$input.focusout(select_tag);
+
+		this.$input.on("blur", () => {
 			this.deactivate();
 		});
 
-		this.$placeholder.on('click', () => {
+		this.$placeholder.on("click", () => {
 			this.activate();
 			this.$input.focus(); // focus only when clicked
 		});
@@ -67,10 +67,10 @@ frappe.ui.Tags = class {
 	}
 
 	addTag(label) {
-		label = toTitle(label);
-		if(label && label!== '' && !this.tagsList.includes(label)) {
-			let $tag = this.getTag(label);
-			this.getListElement($tag).insertBefore(this.$inputWrapper);
+		if (label && label !== "" && !this.tagsList.includes(label)) {
+			let $tag = this.get_tag(label);
+			let row = this.get_list_element($tag, "form-tag-row");
+			row.insertAfter(this.$inputWrapper);
 			this.tagsList.push(label);
 			this.onTagAdd && this.onTagAdd(label);
 		}
@@ -78,7 +78,7 @@ frappe.ui.Tags = class {
 
 	removeTag(label) {
 		label = frappe.utils.xss_sanitise(label);
-		if(this.tagsList.includes(label)) {
+		if (this.tagsList.includes(label)) {
 			this.tagsList.splice(this.tagsList.indexOf(label), 1);
 			this.onTagRemove && this.onTagRemove(label);
 		}
@@ -89,42 +89,33 @@ frappe.ui.Tags = class {
 	}
 
 	clearTags() {
-		this.$ul.find('.frappe-tag').remove();
+		this.$ul.find(".form-tag-row").remove();
 		this.tagsList = [];
 	}
 
-	getListElement($element, className) {
-		let $li = $(`<li class="tags-list-item ${className}"></li>`);
+	get_list_element($element, class_name = "") {
+		let $li = $(`<li class="${class_name}"></li>`);
 		$element.appendTo($li);
 		return $li;
 	}
 
-	getTag(label) {
-		let $tag = $(`<div class="frappe-tag btn-group" data-tag-label="${label}">
-		<button class="btn btn-default btn-xs toggle-tag"
-			title="${ __("toggle Tag") }"
-			data-tag-label="${label}">${label}
-		</button>
-		<button class="btn btn-default btn-xs remove-tag"
-			title="${ __("Remove Tag") }"
-			data-tag-label="${label}">
-			<i class="fa fa-remove text-muted"></i>
-		</button></div>`);
-
-		let $removeTag = $tag.find(".remove-tag");
-
-		$removeTag.on("click", () => {
-			this.removeTag($removeTag.attr('data-tag-label'));
-			$removeTag.closest('.tags-list-item').remove();
-		});
-
-		if(this.onTagClick) {
-			let $toggle_tag = $tag.find(".toggle-tag");
-			$toggle_tag.on("click", () => {
-				this.onTagClick($toggle_tag.attr('data-tag-label'));
+	get_tag(label) {
+		let colored = true;
+		let $tag = frappe.get_data_pill(
+			label,
+			label,
+			(target, pill_wrapper) => {
+				this.removeTag(target);
+				pill_wrapper.closest(".form-tag-row").remove();
+			},
+			null,
+			colored
+		);
+		if (this.onTagClick) {
+			$tag.on("click", ".pill-label", () => {
+				this.onTagClick(label);
 			});
 		}
-
 		return $tag;
 	}
-}
+};

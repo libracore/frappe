@@ -64,6 +64,10 @@
   "name": "English (United States)"
  },
  {
+  "code": "eo",
+  "name": "In-Context Translation"
+ },
+ {
   "code": "es",
   "name": "Espa\u00f1ol"
  },
@@ -118,6 +122,10 @@
  {
   "code": "fi",
   "name": "Suomi"
+ },
+ {
+  "code": "fil",
+  "name": "Filipino"
  },
  {
   "code": "fr",
@@ -198,6 +206,10 @@
  {
   "code": "ml",
   "name": "\u0d2e\u0d32\u0d2f\u0d3e\u0d33\u0d02"
+ },
+ {
+  "code": "mn",
+  "name": "\u041c\u043e\u043d\u0433\u043e\u043b (Mongolian)"
  },
  {
   "code": "mr",

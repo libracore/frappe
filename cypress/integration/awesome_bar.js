@@ -1,47 +1,37 @@
-context('Awesome Bar', () => {
+context("Awesome Bar", () => {
 	before(() => {
-		cy.visit('/login');
+		cy.visit("/login");
 		cy.login();
-		cy.visit('/desk');
+		cy.visit("/app/website");
 	});
 
 	beforeEach(() => {
-		cy.get('.navbar-header .navbar-home').click();
+		cy.get(".navbar .navbar-home").click();
+		cy.findByPlaceholderText("Search or type a command (Ctrl + G)").as("awesome_bar");
+		cy.get("@awesome_bar").type("{selectall}");
 	});
 
-	it('navigates to doctype list', () => {
-		cy.get('#navbar-search').type('todo', { delay: 200 });
-		cy.get('#navbar-search + ul').should('be.visible');
-		cy.get('#navbar-search').type('{downarrow}{enter}', { delay: 100 });
-
-		cy.get('h1').should('contain', 'To Do');
-
-		cy.location('hash').should('eq', '#List/ToDo/List');
+	it("navigates to doctype list", () => {
+		cy.get("@awesome_bar").type("todo");
+		cy.wait(100);
+		cy.get(".awesomplete").findByRole("listbox").should("be.visible");
+		cy.get("@awesome_bar").type("{enter}");
+		cy.get(".title-text").should("contain", "To Do");
+		cy.location("pathname").should("eq", "/app/todo");
 	});
 
-	it('find text in doctype list', () => {
-		cy.get('#navbar-search')
-			.type('test in todo{downarrow}{enter}', { delay: 200 });
-
-		cy.get('h1').should('contain', 'To Do');
-
-		cy.get('.toggle-filter')
-			.should('have.length', 1)
-			.should('contain', 'ID like %test%');
+	it("navigates to new form", () => {
+		cy.get("@awesome_bar").type("new blog post");
+		cy.wait(100);
+		cy.get("@awesome_bar").type("{enter}");
+		cy.get(".title-text:visible").should("have.text", "New Blog Post");
 	});
 
-	it('navigates to new form', () => {
-		cy.get('#navbar-search')
-			.type('new blog post{downarrow}{enter}', { delay: 200 });
-
-		cy.get('.title-text:visible').should('have.text', 'New Blog Post 1');
-	});
-
-	it('calculates math expressions', () => {
-		cy.get('#navbar-search')
-			.type('55 + 32{downarrow}{enter}', { delay: 200 });
-
-		cy.get('.modal-title').should('contain', 'Result');
-		cy.get('.msgprint').should('contain', '55 + 32 = 87');
+	it("calculates math expressions", () => {
+		cy.get("@awesome_bar").type("55 + 32");
+		cy.wait(100);
+		cy.get("@awesome_bar").type("{downarrow}{enter}");
+		cy.get(".modal-title").should("contain", "Result");
+		cy.get(".msgprint").should("contain", "55 + 32 = 87");
 	});
 });

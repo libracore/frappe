@@ -1,17 +1,32 @@
-# -*- coding: utf-8 -*-
 # Copyright (c) 2017, Frappe Technologies and contributors
-# For license information, please see license.txt
+# License: MIT. See LICENSE
 
-from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 
-class PrintStyle(Document):
-	def validate(self):
-		if (self.standard==1
-			and not frappe.local.conf.get("developer_mode")
-			and not (frappe.flags.in_import or frappe.flags.in_test)):
 
+class PrintStyle(Document):
+	# begin: auto-generated types
+	# This code is auto-generated. Do not modify anything in this block.
+
+	from typing import TYPE_CHECKING
+
+	if TYPE_CHECKING:
+		from frappe.types import DF
+
+		css: DF.Code
+		disabled: DF.Check
+		preview: DF.AttachImage | None
+		print_style_name: DF.Data
+		standard: DF.Check
+
+	# end: auto-generated types
+	def validate(self):
+		if (
+			self.standard == 1
+			and not frappe.local.conf.get("developer_mode")
+			and not (frappe.flags.in_import or frappe.flags.in_test)
+		):
 			frappe.throw(frappe._("Standard Print Style cannot be changed. Please duplicate to edit."))
 
 	def on_update(self):
@@ -20,4 +35,5 @@ class PrintStyle(Document):
 	def export_doc(self):
 		# export
 		from frappe.modules.utils import export_module_json
-		export_module_json(self, self.standard == 1, 'Printing')
+
+		export_module_json(self, self.standard == 1, "Printing")

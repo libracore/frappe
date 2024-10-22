@@ -1,35 +1,31 @@
 <template>
 	<div class="file-web-link margin-bottom">
-		<a href class="text-muted text-medium"
-			@click.prevent="$emit('hide-web-link')"
-		>
-			{{ __('← Back to upload files') }}
+		<a href class="text-muted text-medium" @click.prevent="emit('hide-web-link')">
+			{{ __("← Back to upload files") }}
 		</a>
 		<div class="input-group">
-			<div class="input-group-addon">
-				<span class="text-muted text-medium">{{ __('Web Link') }}</span>
-			</div>
 			<input
 				type="text"
 				class="form-control"
 				:placeholder="__('Attach a web link')"
 				v-model="url"
-			>
+			/>
 		</div>
 	</div>
 </template>
-<script>
-export default {
-	name: 'WebLink',
-	data() {
-		return {
-			url: '',
-		}
-	}
-}
+
+<script setup>
+import { ref } from "vue";
+
+// emits
+let emit = defineEmits(["hide-web-link"]);
+
+let url = ref("");
+
+defineExpose({ url });
 </script>
 
-<style>
+<style scoped>
 .file-web-link .input-group {
 	margin-top: 10px;
 }

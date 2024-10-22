@@ -1,6 +1,7 @@
 {% extends "templates/web.html" %}
 
-{% block title %}{{ heading or "Contact Us"}}{% endblock %}
+{% set title = heading or "Contact Us" %}
+{% block header %}<h1>{{ heading or _("Contact Us") }}</h1>{% endblock %}
 
 {% block page_content %}
 <style>
@@ -22,10 +23,10 @@
 				<select name="subject" class="form-control">
 				{% if query_options -%}
 					{% for option in query_options.split("\n") -%}
-					<option value="{{ option }}">{{ option }}</option>
+					<option value="{{ option }}">{{ _(option) }}</option>
 					{%- endfor %}
 				{% else %}
-					<option value="General">General</option>
+					<option value="General">{{ _("General") }}</option>
 				{% endif %}
 				</select>
 			</div>
@@ -66,7 +67,11 @@
 				<i class='fa fa-phone'></i> <span itemprop="telephone">{{ phone }}</span><br>
 			{% endif %}
 			{% if email_id %}
-				<i class='fa fa-envelope'></i> <span itemprop="email">{{ email_id }}</span><br>
+				<i class='fa fa-envelope'></i>
+				<span itemprop="email">
+					<a href="mailto:{{ email_id }}">{{ email_id }}</a>
+				</span>
+				<br>
 			{% endif %}
 			{% if skype %}
 				<i class='fa fa-skype'></i> <span itemprop="email">{{ skype }}</span><br>

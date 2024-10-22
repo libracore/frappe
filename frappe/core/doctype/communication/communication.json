@@ -1,9 +1,12 @@
 {
+ "actions": [],
  "allow_import": 1,
  "creation": "2013-01-29 10:47:14",
+ "default_view": "List",
  "description": "Keeps track of all communications",
  "doctype": "DocType",
  "document_type": "Setup",
+ "email_append_to": 1,
  "engine": "InnoDB",
  "field_order": [
   "subject",
@@ -28,6 +31,7 @@
   "additional_info",
   "communication_date",
   "read_receipt",
+  "send_after",
   "column_break_14",
   "sender_full_name",
   "read_by_recipient",
@@ -49,6 +53,7 @@
   "email_inbox",
   "message_id",
   "uid",
+  "imap_folder",
   "email_status",
   "has_attachment",
   "feedback_section",
@@ -121,7 +126,7 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Delivery Status",
-   "options": "\nSent\nBounced\nOpened\nMarked As Spam\nRejected\nDelayed\nSoft-Bounced\nClicked\nRecipient Unsubscribed\nError\nExpired\nSending\nRead"
+   "options": "\nSent\nBounced\nOpened\nMarked As Spam\nRejected\nDelayed\nSoft-Bounced\nClicked\nRecipient Unsubscribed\nError\nExpired\nSending\nRead\nScheduled"
   },
   {
    "fieldname": "section_break_8",
@@ -150,7 +155,7 @@
    "fieldname": "communication_type",
    "fieldtype": "Select",
    "label": "Communication Type",
-   "options": "Communication\nComment\nChat\nBot\nNotification\nFeedback",
+   "options": "Communication\nComment\nChat\nNotification\nFeedback\nAutomated Message",
    "read_only": 1,
    "reqd": 1
   },
@@ -161,7 +166,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Comment Type",
-   "options": "\nComment\nLike\nInfo\nLabel\nWorkflow\nCreated\nSubmitted\nCancelled\nUpdated\nDeleted\nAssigned\nAssignment Completed\nAttachment\nAttachment Removed\nShared\nUnshared\nBot\nRelinked",
+   "options": "\nComment\nLike\nInfo\nLabel\nWorkflow\nCreated\nSubmitted\nCancelled\nUpdated\nDeleted\nAssigned\nAssignment Completed\nAttachment\nAttachment Removed\nShared\nUnshared\nRelinked",
    "read_only": 1
   },
   {
@@ -314,7 +319,7 @@
   },
   {
    "fieldname": "message_id",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "ignore_xss_filter": 1,
    "label": "Message ID",
    "length": 995,
@@ -379,11 +384,25 @@
    "label": "Timeline Links",
    "options": "Communication Link",
    "permlevel": 2
+  },
+  {
+   "fieldname": "imap_folder",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "IMAP Folder",
+   "read_only": 1
+  },
+  {
+   "fieldname": "send_after",
+   "fieldtype": "Datetime",
+   "label": "Send After"
   }
  ],
  "icon": "fa fa-comment",
  "idx": 1,
- "modified": "2019-09-05 14:22:27.664645",
+ "links": [],
+ "make_attachments_public": 1,
+ "modified": "2024-02-09 12:10:01.200845",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Communication",
@@ -422,6 +441,15 @@
    "write": 1
   },
   {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Inbox User"
+  },
+  {
    "delete": 1,
    "email": 1,
    "if_owner": 1,
@@ -430,8 +458,11 @@
   }
  ],
  "search_fields": "subject",
+ "sender_field": "sender",
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
+ "subject_field": "subject",
  "title_field": "subject",
  "track_changes": 1,
  "track_seen": 1

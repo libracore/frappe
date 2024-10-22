@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang={{ lang }} dir={{ layout_direction }}>
 	<head>
 		<meta charset="utf-8">
 
@@ -8,11 +8,7 @@
 			{# link tag does not work in footer in wkhtmltopdf,
 				so this is a workaround to include bootstrap and still have auto footer height working #}
 			<style>
-			{{ bootstrap }}
-			</style>
-
-			<style>
-			{{ fontawesome }}
+			{{ css }}
 			</style>
 
 		{% else %}

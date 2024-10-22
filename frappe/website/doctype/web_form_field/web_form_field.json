@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "creation": "2014-09-01 14:14:14.292173",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -9,7 +10,6 @@
   "label",
   "allow_read_on_all_link_options",
   "reqd",
-  "depends_on",
   "read_only",
   "show_in_filter",
   "hidden",
@@ -17,6 +17,12 @@
   "options",
   "max_length",
   "max_value",
+  "precision",
+  "property_depends_on_section",
+  "depends_on",
+  "mandatory_depends_on",
+  "column_break_16",
+  "read_only_depends_on",
   "section_break_6",
   "description",
   "column_break_8",
@@ -27,24 +33,24 @@
    "fieldname": "fieldname",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Fieldname"
+   "label": "Field"
   },
   {
    "fieldname": "fieldtype",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Fieldtype",
-   "options": "Attach\nAttach Image\nCheck\nCurrency\nData\nDate\nDatetime\nFloat\nHTML\nInt\nLink\nRating\nSelect\nSmall Text\nText\nText Editor\nTable\nSection Break\nColumn Break"
+   "options": "Attach\nAttach Image\nCheck\nCurrency\nColor\nData\nDate\nDatetime\nDuration\nFloat\nHTML\nInt\nLink\nPassword\nPhone\nRating\nSelect\nSignature\nSmall Text\nText\nText Editor\nTable\nTime\nSection Break\nColumn Break\nPage Break"
   },
   {
    "fieldname": "label",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Label"
+   "label": "Custom Label"
   },
   {
    "default": "0",
-   "depends_on": "eval:doc.fieldtype === 'Link'",
+   "depends_on": "eval:doc.fieldtype === 'Link' && parent.login_required",
    "fieldname": "allow_read_on_all_link_options",
    "fieldtype": "Check",
    "label": "Allow Read On All Link Options"
@@ -53,12 +59,13 @@
    "default": "0",
    "fieldname": "reqd",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Mandatory"
   },
   {
    "fieldname": "depends_on",
    "fieldtype": "Code",
-   "label": "Depends On"
+   "label": "Display Depends On"
   },
   {
    "default": "0",
@@ -116,15 +123,46 @@
    "fieldname": "default",
    "fieldtype": "Data",
    "label": "Default"
+  },
+  {
+   "fieldname": "property_depends_on_section",
+   "fieldtype": "Section Break",
+   "label": "Property Depends On"
+  },
+  {
+   "fieldname": "mandatory_depends_on",
+   "fieldtype": "Code",
+   "label": "Mandatory Depends On",
+   "options": "JS"
+  },
+  {
+   "fieldname": "column_break_16",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "read_only_depends_on",
+   "fieldtype": "Code",
+   "label": "Read Only Depends On",
+   "options": "JS"
+  },
+  {
+   "depends_on": "eval:in_list([\"Float\", \"Currency\", \"Percent\"], doc.fieldtype)",
+   "description": "Set non-standard precision for a Float or Currency field",
+   "fieldname": "precision",
+   "fieldtype": "Select",
+   "label": "Precision",
+   "options": "\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
   }
  ],
  "istable": 1,
- "modified": "2019-06-07 12:17:10.547133",
+ "links": [],
+ "modified": "2024-04-15 16:11:58.469820",
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Web Form Field",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",
- "sort_order": "DESC"
+ "sort_order": "DESC",
+ "states": []
 }

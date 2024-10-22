@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "allow_events_in_timeline": 1,
  "allow_import": 1,
  "allow_rename": 1,
@@ -11,6 +12,7 @@
   "first_name",
   "middle_name",
   "last_name",
+  "full_name",
   "email_id",
   "user",
   "address",
@@ -33,8 +35,8 @@
   "email_ids",
   "phone_nos",
   "contact_details",
-  "is_primary_contact",
   "links",
+  "is_primary_contact",
   "more_info",
   "department",
   "unsubscribed"
@@ -51,8 +53,7 @@
    "in_global_search": 1,
    "label": "First Name",
    "oldfieldname": "first_name",
-   "oldfieldtype": "Data",
-   "reqd": 1
+   "oldfieldtype": "Data"
   },
   {
    "bold": 1,
@@ -72,7 +73,7 @@
    "oldfieldname": "email_id",
    "oldfieldtype": "Data",
    "options": "Email",
-   "read_only": 0,
+   "read_only": 1,
    "search_index": 1
   },
   {
@@ -115,7 +116,8 @@
    "label": "Phone",
    "oldfieldname": "contact_no",
    "oldfieldtype": "Data",
-   "read_only": 0
+   "options": "Phone",
+   "read_only": 1
   },
   {
    "fieldname": "image",
@@ -193,13 +195,15 @@
   {
    "fieldname": "phone_nos",
    "fieldtype": "Table",
-   "label": "Numbers",
+   "label": "Contact Numbers",
    "options": "Contact Phone"
   },
   {
    "fieldname": "mobile_no",
    "fieldtype": "Data",
-   "label": "Mobile No"
+   "label": "Mobile No",
+   "options": "Phone",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -239,16 +243,26 @@
    "fieldname": "company_name",
    "fieldtype": "Data",
    "label": "Company Name"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Full Name",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-user",
  "idx": 1,
  "image_field": "image",
- "modified": "2019-10-31 15:23:38.999884",
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-08 15:52:37.525003",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
  "name_case": "Title Case",
+ "naming_rule": "By script",
  "owner": "Administrator",
  "permissions": [
   {
@@ -261,7 +275,6 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "set_user_permissions": 1,
    "share": 1,
    "write": 1
   },
@@ -368,12 +381,18 @@
    "write": 1
   },
   {
-   "permlevel": 1,
+   "create": 1,
+   "delete": 1,
+   "if_owner": 1,
    "read": 1,
    "report": 1,
-   "role": "All"
+   "role": "All",
+   "write": 1
   }
  ],
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
- "sort_order": "ASC"
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "full_name"
 }
