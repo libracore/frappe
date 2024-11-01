@@ -2250,3 +2250,8 @@ def _get_rss_memory_usage():
 
 	rss = psutil.Process().memory_info().rss // (1024 * 1024)
 	return rss
+
+
+def cmp(a, b):
+    # refernce: https://docs.python.org/3.0/whatsnew/3.0.html#ordering-comparisons
+    return int(a > b) - int(a < b)
