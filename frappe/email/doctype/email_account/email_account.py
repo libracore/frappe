@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and contributors
+# Copyright (c) 2015-2024, libracore, Frappe Technologies Pvt. Ltd. and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals, print_function
@@ -9,7 +9,7 @@ import json
 import socket
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import validate_email_address, cint, get_datetime, DATE_FORMAT, strip, comma_or, sanitize_html
+from frappe.utils import validate_email_address, cint, cstr, get_datetime, DATE_FORMAT, strip, comma_or, sanitize_html
 from frappe.utils.user import is_system_user
 from frappe.utils.jinja import render_template
 from frappe.email.smtp import SMTPServer
@@ -168,7 +168,7 @@ class EmailAccount(Document):
 		try:
 			email_server.connect()
 		except (error_proto, imaplib.IMAP4.error) as e:
-			message = e.message.lower().replace(" ","")
+			message = cstr(e).lower().replace(" ","")
 			if in_receive and any(map(lambda t: t in message, ['authenticationfail', 'loginviayourwebbrowser', #abbreviated to work with both failure and failed
 				'loginfailed', 'err[auth]', 'errtemporaryerror'])): #temporary error to deal with godaddy
 				# if called via self.receive and it leads to authentication error, disable incoming
@@ -180,7 +180,7 @@ class EmailAccount(Document):
 				return None
 
 			else:
-				frappe.throw(e.message)
+				frappe.throw(e)
 
 		except socket.error:
 			if in_receive:
