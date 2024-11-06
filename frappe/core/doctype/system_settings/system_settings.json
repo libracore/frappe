@@ -18,6 +18,7 @@
   "number_format",
   "float_precision",
   "currency_precision",
+  "rounding_method",
   "sec_backup_limit",
   "backup_limit",
   "background_workers",
@@ -405,11 +406,18 @@
    "fieldname": "hashname_length",
    "fieldtype": "Int",
    "label": "Hash-Name Length"
+  },
+  {
+   "default": "Banker's Rounding (legacy)",
+   "fieldname": "rounding_method",
+   "fieldtype": "Select",
+   "label": "Rounding Method",
+   "options": "Banker's Rounding (legacy)\nBanker's Rounding\nCommercial Rounding"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
- "modified": "2024-08-23 08:56:46.733557",
+ "modified": "2024-11-06 10:49:12.418047",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
