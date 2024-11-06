@@ -62,8 +62,18 @@ class TestMoney(unittest.TestCase):
     
     def test_rounding(self):
         from frappe.utils import rounded
+        self.assertEqual(rounded(1.004, 2), 1.00)
         self.assertEqual(rounded(1.005, 2), 1.01)
+        self.assertEqual(rounded(1.006, 2), 1.01)
+        self.assertEqual(rounded(2.004, 2), 2.00)
         self.assertEqual(rounded(2.005, 2), 2.01)
+        self.assertEqual(rounded(2.006, 2), 2.01)
+        self.assertEqual(rounded(-1.004, 2), -1.00)
+        self.assertEqual(rounded(-1.005, 2), -1.01)
+        self.assertEqual(rounded(-1.006, 2), -1.01)
+        self.assertEqual(rounded(-2.004, 2), -2.00)
+        self.assertEqual(rounded(-2.005, 2), -2.01)
+        self.assertEqual(rounded(-2.006, 2), -2.01)
         self.assertEqual(rounded(0, 2), 0.00)
         self.assertEqual(rounded(2754.525, 2), 2754.53)
         self.assertEqual(rounded(-2754.525, 2), -2754.53)
