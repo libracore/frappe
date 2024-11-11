@@ -2,14 +2,15 @@
 *.py~
 *.comp.js
 *.DS_Store
-locale
 .wnf-lang-status
 *.swp
 *.egg-info
 dist/
-build/
+# build/
 frappe/docs/current
+frappe/public/dist
 .vscode
+.vs
 node_modules
 .kdev4/
 *.kdev4
@@ -28,13 +29,12 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+# build/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -66,10 +66,10 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+.cypress-coverage
 
 # Translations
 *.mo
-*.pot
 
 # Django stuff:
 *.log
@@ -189,3 +189,6 @@ typings/
 # cypress
 cypress/screenshots
 cypress/videos
+
+# JetBrains IDEs
+.idea/
