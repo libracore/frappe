@@ -224,9 +224,9 @@ class File(Document):
 
 			size = width, height
 			if crop:
-				image = ImageOps.fit(image, size, Image.ANTIALIAS)
+				image = ImageOps.fit(image, size, Image.LANCZOS)
 			else:
-				image.thumbnail(size, Image.ANTIALIAS)
+				image.thumbnail(size, Image.LANCZOS)
 
 			thumbnail_url = filename + "_" + suffix + "." + extn
 

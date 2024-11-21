@@ -13,7 +13,7 @@ def resize_images(path, maxdim=700):
 			if extn in ("jpg", "jpeg", "png", "gif"):
 				im = Image.open(os.path.join(basepath, fname))
 				if im.size[0] > size[0] or im.size[1] > size[1]:
-					im.thumbnail(size, Image.ANTIALIAS)
+					im.thumbnail(size, Image.LANCZOS)
 					im.save(os.path.join(basepath, fname))
 
 					print("resized {0}".format(os.path.join(basepath, fname)))

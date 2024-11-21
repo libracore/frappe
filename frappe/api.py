@@ -81,7 +81,15 @@ def handle():
 					frappe.local.response.update({"data": doc})
 
 				if frappe.local.request.method=="PUT":
-					data = json.loads(frappe.local.form_dict.data)
+					if not frappe.local.form_dict.data:
+						try:
+							data = json.loads(frappe.local.request.get_data())
+						except:
+							# in case request data is not a string (=bytes)
+							data = json.loads(frappe.local.request.get_data().decode("utf-8"))
+					else:
+						data = json.loads(frappe.local.form_dict.data)
+					
 					doc = frappe.get_doc(doctype, name)
 
 					if "flags" in data:
