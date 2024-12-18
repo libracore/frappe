@@ -11,7 +11,7 @@ import frappe.utils
 from frappe.utils import cint, flt, get_datetime, datetime, date_diff, today
 import frappe.utils.user
 from frappe import conf
-from frappe.sessions import Session, clear_sessions, delete_session
+from frappe.sessions import Session, clear_sessions, delete_session, get_expiry_in_seconds
 from frappe.modules.patch_handler import check_session_stopped
 from frappe.translate import get_lang_code
 from frappe.utils.password import check_password, delete_login_failed_cache
@@ -320,12 +320,25 @@ class CookieManager:
 		# sid expires in 3 days
 		expires = datetime.datetime.now() + datetime.timedelta(days=3)
 		if frappe.session.sid:
-			self.cookies["sid"] = {"value": frappe.session.sid, "expires": expires}
+			self.set_cookie("sid", frappe.session.sid, max_age=get_expiry_in_seconds(), httponly=True)
 		if frappe.session.session_country:
 			self.cookies["country"] = {"value": frappe.session.get("session_country")}
 
-	def set_cookie(self, key, value, expires=None):
-		self.cookies[key] = {"value": value, "expires": expires}
+	def set_cookie(self, key, value, expires=None,
+		secure=False,
+		httponly=False,
+		samesite="Lax",
+		max_age=None,):
+		if not secure and hasattr(frappe.local, "request"):
+			secure = frappe.local.request.scheme == "https"
+		self.cookies[key] = {
+			"value": value,
+			"expires": expires,
+			"secure": secure,
+			"httponly": httponly,
+			"samesite": samesite,
+			"max_age": max_age,
+		}
 
 	def delete_cookie(self, to_delete):
 		if not isinstance(to_delete, (list, tuple)):
@@ -335,8 +348,15 @@ class CookieManager:
 
 	def flush_cookies(self, response):
 		for key, opts in self.cookies.items():
-			response.set_cookie(key, quote((opts.get("value") or "").encode('utf-8')),
-				expires=opts.get("expires"))
+			response.set_cookie(
+				key,
+				quote((opts.get("value") or "").encode("utf-8")),
+				expires=opts.get("expires"),
+				secure=opts.get("secure"),
+				httponly=opts.get("httponly"),
+				samesite=opts.get("samesite"),
+				max_age=opts.get("max_age"),
+			)
 
 		# expires yesterday!
 		expires = datetime.datetime.now() + datetime.timedelta(days=-1)
