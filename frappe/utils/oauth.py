@@ -193,6 +193,7 @@ def login_oauth_user(data=None, provider=None, state=None, email_id=None, key=No
 			success=False, http_status_code=403)
 
 	frappe.local.login_manager.user = user
+	frappe.local.login_manager.oauth = True
 	frappe.local.login_manager.post_login()
 
 	# because of a GET request!

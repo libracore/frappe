@@ -100,6 +100,7 @@ class LoginManager:
 		self.info = None
 		self.full_name = None
 		self.user_type = None
+		self.oauth = False
 
 		if frappe.local.form_dict.get('cmd')=='login' or frappe.local.request.path=="/api/method/login":
 			if self.login()==False: return
