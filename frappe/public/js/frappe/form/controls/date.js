@@ -45,20 +45,20 @@ frappe.ui.form.ControlDate = frappe.ui.form.ControlData.extend({
 			lang = 'en';
 		}
 
-		let date_format = sysdefaults && sysdefaults.date_format
+		this.date_format = sysdefaults && sysdefaults.date_format
 			? sysdefaults.date_format : 'yyyy-mm-dd';
+		this.expected_format = this.date_format;
 
 		let now_date = new Date();
 
 		this.today_text = __("Today");
-		this.date_format = frappe.defaultDateFormat;
 		this.datepicker_options = {
 			language: lang,
 			autoClose: true,
 			todayButton: true,
-			dateFormat: date_format,
+			dateFormat: this.date_format,
 			startDate: now_date,
-			keyboardNav: false,
+			keyboardNav: true,
 			firstDay: 1,
 			onSelect: () => {
 				this.$input.trigger('change');
@@ -66,7 +66,7 @@ frappe.ui.form.ControlDate = frappe.ui.form.ControlData.extend({
 			onShow: () => {
 				this.datepicker.$datepicker
 					.find('.datepicker--button:visible')
-					.text(this.today_text);
+					.html('<div>'+this.today_text+'<br><div style="font-size:70%;color:gray">'+__('Hotkey: t')+'</div></div>');
 
 				this.update_datepicker_position();
 			}
@@ -128,10 +128,7 @@ frappe.ui.form.ControlDate = frappe.ui.form.ControlData.extend({
 	},
 	validate: function(value) {
 		if(value && !frappe.datetime.validate(value)) {
-			let sysdefaults = frappe.sys_defaults;
-			let date_format = sysdefaults && sysdefaults.date_format
-				? sysdefaults.date_format : 'yyyy-mm-dd';
-			frappe.msgprint(__("Date {0} must be in format: {1}", [value, date_format]));
+			frappe.msgprint(__("Date {0} must be in format: {1}", ["'"+__(this.df.label)+"'", this.expected_format]));
 			return '';
 		}
 		return value;
