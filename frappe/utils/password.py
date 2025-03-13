@@ -10,6 +10,7 @@ from cryptography.fernet import Fernet, InvalidToken
 from passlib.hash import pbkdf2_sha256, mysql41
 from passlib.registry import register_crypt_handler
 from passlib.context import CryptContext
+from frappe.core.doctype.activity_log.feed import update_password_feed
 
 class LegacyPassword(pbkdf2_sha256):
 	name = "frappe_legacy"
@@ -106,6 +107,9 @@ def update_password(user, pwd, doctype='User', fieldname='password', logout_all_
 	if logout_all_sessions:
 		from frappe.sessions import clear_sessions
 		clear_sessions(user=user, keep_current=True, force=True)
+
+	# log password update to activity log (note: login entry is not written in this case)
+	update_password_feed(user)
 
 def delete_all_passwords_for(doctype, name):
 	try:
