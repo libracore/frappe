@@ -13,10 +13,12 @@
   "setup_complete",
   "date_and_number_format",
   "date_format",
+  "hashname_length",
   "column_break_7",
   "number_format",
   "float_precision",
   "currency_precision",
+  "rounding_method",
   "sec_backup_limit",
   "backup_limit",
   "background_workers",
@@ -397,11 +399,25 @@
    "fieldname": "allow_guests_to_upload_files",
    "fieldtype": "Check",
    "label": "Allow Guests to Upload Files"
+  },
+  {
+   "default": "10",
+   "description": "Defines the length of the hash-name keys, default is 10.",
+   "fieldname": "hashname_length",
+   "fieldtype": "Int",
+   "label": "Hash-Name Length"
+  },
+  {
+   "default": "Banker's Rounding (legacy)",
+   "fieldname": "rounding_method",
+   "fieldtype": "Select",
+   "label": "Rounding Method",
+   "options": "Banker's Rounding (legacy)\nBanker's Rounding\nCommercial Rounding"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
- "modified": "2019-08-16 08:26:45.936626",
+ "modified": "2024-11-06 10:49:12.418047",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",

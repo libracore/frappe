@@ -14,6 +14,7 @@ import frappe.permissions
 import frappe.share
 import re
 import json
+import urllib.parse
 
 from frappe.website.utils import is_signup_enabled
 from frappe.utils.background_jobs import enqueue
@@ -550,7 +551,9 @@ def get_perm_info(role):
 	return get_all_perms(role)
 
 @frappe.whitelist(allow_guest=True)
-def update_password(new_password, logout_all_sessions=0, key=None, old_password=None):
+def update_password(new_password, logout_all_sessions=0, key=None, old_password=None, url_encoded=0):
+	if cint(url_encoded) == 1:
+		new_password = urllib.parse.unquote(new_password)
 	result = test_password_strength(new_password, key, old_password)
 	feedback = result.get("feedback", None)
 
