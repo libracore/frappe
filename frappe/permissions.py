@@ -83,6 +83,10 @@ def has_permission(
 	*,
 	parent_doctype=None,
 	debug=False,
+<<<<<<< HEAD
+=======
+	ignore_share_permissions=False,
+>>>>>>> version-15
 ) -> bool:
 	"""Return True if user has permission `ptype` for given `doctype`.
 	If `doc` is passed, also check user, share and owner permissions.
@@ -185,7 +189,11 @@ def has_permission(
 
 		return False
 
+<<<<<<< HEAD
 	if not perm:
+=======
+	if not perm and not ignore_share_permissions:
+>>>>>>> version-15
 		debug and _debug_log("Checking if document/doctype is explicitly shared with user")
 		perm = false_if_not_shared()
 
@@ -591,11 +599,19 @@ def can_import(doctype, raise_exception=False):
 	return True
 
 
+<<<<<<< HEAD
 def can_export(doctype, raise_exception=False):
 	if "System Manager" in frappe.get_roles():
 		return True
 	else:
 		role_permissions = frappe.permissions.get_role_permissions(doctype)
+=======
+def can_export(doctype, raise_exception=False, is_owner=False):
+	if "System Manager" in frappe.get_roles():
+		return True
+	else:
+		role_permissions = frappe.permissions.get_role_permissions(doctype, is_owner=is_owner)
+>>>>>>> version-15
 		has_access = role_permissions.get("export") or role_permissions.get("if_owner").get("export")
 		if not has_access and raise_exception:
 			raise frappe.PermissionError(_("You are not allowed to export {} doctype").format(doctype))
@@ -833,3 +849,42 @@ def has_child_permission(
 
 def is_system_user(user: str | None = None) -> bool:
 	return frappe.get_cached_value("User", user or frappe.session.user, "user_type") == "System User"
+<<<<<<< HEAD
+=======
+
+
+def check_doctype_permission(doctype: str, ptype: str = "read") -> None:
+	"""
+	Designed specfically to override DoesNotExistError in some scenarios.
+	Ignores share permissions.
+	"""
+
+	_message_log = frappe.local.message_log
+	frappe.local.message_log = []
+	try:
+		frappe.has_permission(doctype, ptype, throw=True, ignore_share_permissions=True)
+	except frappe.PermissionError:
+		frappe.flags.disable_traceback = True
+		raise
+
+	frappe.local.message_log = _message_log
+
+
+def handle_does_not_exist_error(fn):
+	"""
+	Decorator to override DoesNotExistError when handling exceptions.
+	Requires the first argument to be an Exception.
+	"""
+
+	@functools.wraps(fn)
+	def wrapper(e, *args, **kwargs):
+		if isinstance(e, frappe.DoesNotExistError) and (doctype := getattr(e, "doctype", None)):
+			try:
+				check_doctype_permission(doctype)
+			except frappe.PermissionError as _e:
+				return fn(_e, *args, **kwargs)
+
+		return fn(e, *args, **kwargs)
+
+	return wrapper
+>>>>>>> version-15

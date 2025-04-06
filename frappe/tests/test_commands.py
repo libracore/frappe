@@ -1,13 +1,23 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 # imports - standard imports
+=======
+>>>>>>> version-15
 import gzip
 import importlib
 import json
 import os
 import shlex
+<<<<<<< HEAD
 import subprocess
+=======
+import signal
+import subprocess
+import sys
+import time
+>>>>>>> version-15
 import types
 import unittest
 from contextlib import contextmanager
@@ -17,13 +27,21 @@ from pathlib import Path
 from unittest.case import skipIf
 from unittest.mock import patch
 
+<<<<<<< HEAD
 # imports - third party imports
 import click
+=======
+import click
+import requests
+>>>>>>> version-15
 from click import Command
 from click.testing import CliRunner, Result
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
+<<<<<<< HEAD
 # imports - module imports
+=======
+>>>>>>> version-15
 import frappe
 import frappe.commands.scheduler
 import frappe.commands.site
@@ -600,6 +618,10 @@ class TestBackups(BaseTestCommands):
 			frappe.conf.db_name,
 			frappe.conf.db_name,
 			frappe.conf.db_password + "INCORRECT PASSWORD",
+<<<<<<< HEAD
+=======
+			db_socket=frappe.conf.db_socket,
+>>>>>>> version-15
 			db_host=frappe.conf.db_host,
 			db_port=frappe.conf.db_port,
 			db_type=frappe.conf.db_type,
@@ -831,6 +853,13 @@ class TestBenchBuild(BaseTestCommands):
 
 
 class TestDBUtils(BaseTestCommands):
+<<<<<<< HEAD
+=======
+	@skipIf(
+		not (frappe.conf.db_type == "mariadb"),
+		"Only for MariaDB",
+	)
+>>>>>>> version-15
 	def test_db_add_index(self):
 		field = "reset_password_key"
 		self.execute("bench --site {site} add-database-index --doctype User --column " + field, {})
@@ -917,3 +946,44 @@ class TestSchedulerCLI(BaseTestCommands):
 		self.execute("bench --site {site} scheduler resume")
 		self.assertEqual(self.returncode, 0)
 		self.assertRegex(self.stdout, r"Scheduler is resumed for site .*")
+<<<<<<< HEAD
+=======
+
+
+class TestGunicornWorker(FrappeTestCase):
+	port = 8005
+
+	def spawn_gunicorn(self, args):
+		self.handle = subprocess.Popen(
+			[
+				sys.executable,
+				"-m",
+				"gunicorn",
+				"-b",
+				f"127.0.0.1:{self.port}",
+				"-w1",
+				"frappe.app:application",
+				"--preload",
+				*args,
+			],
+		)
+		time.sleep(1)  # let worker startup finish
+		self.addCleanup(self.kill_gunicorn)
+
+	def kill_gunicorn(self):
+		self.handle.send_signal(signal.SIGINT)
+		try:
+			self.handle.communicate(timeout=1)
+		except subprocess.TimeoutExpired:
+			self.handle.kill()
+
+	def test_gunicorn_ping_sync(self):
+		self.spawn_gunicorn([])
+		path = f"http://{self.TEST_SITE}:{self.port}/api/method/ping"
+		self.assertEqual(requests.get(path).status_code, 200)
+
+	def test_gunicorn_ping_gthread(self):
+		self.spawn_gunicorn(["--threads=2"])
+		path = f"http://{self.TEST_SITE}:{self.port}/api/method/ping"
+		self.assertEqual(requests.get(path).status_code, 200)
+>>>>>>> version-15

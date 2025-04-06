@@ -2,65 +2,32 @@
 	"env": {
 		"browser": true,
 		"node": true,
-		"es6": true
+		"es2022": true
 	},
 	"parserOptions": {
-		"ecmaVersion": 8,
 		"sourceType": "module"
 	},
 	"extends": "eslint:recommended",
 	"rules": {
-		"indent": [
-			"error",
-			"tab",
-			{ "SwitchCase": 1 }
-		],
-		"brace-style": [
-			"error",
-			"1tbs"
-		],
-		"space-unary-ops": [
-			"error",
-			{ "words": true }
-		],
-		"linebreak-style": [
-			"error",
-			"unix"
-		],
-		"quotes": [
-			"off"
-		],
-		"semi": [
-			"warn",
-			"always"
-		],
-		"camelcase": [
-			"off"
-		],
-		"no-unused-vars": [
-			"warn"
-		],
-		"no-redeclare": [
-			"warn"
-		],
-		"no-console": [
-			"warn"
-		],
-		"no-extra-boolean-cast": [
-			"off"
-		],
-		"no-control-regex": [
-			"off"
-		],
-		"space-before-blocks": "warn",
-		"keyword-spacing": "warn",
-		"comma-spacing": "warn",
-		"key-spacing": "warn",
+		"indent": "off",
+		"brace-style": "off",
+		"no-mixed-spaces-and-tabs": "off",
+		"no-useless-escape": "off",
+		"space-unary-ops": ["error", { "words": true }],
+		"linebreak-style": "off",
+		"quotes": ["off"],
+		"semi": "off",
+		"camelcase": "off",
+		"no-unused-vars": "off",
+		"no-console": ["warn"],
+		"no-extra-boolean-cast": ["off"],
+		"no-control-regex": ["off"],
 	},
 	"root": true,
 	"globals": {
 		"frappe": true,
 		"Vue": true,
+		"SetVueGlobals": true,
 		"__": true,
 		"repl": true,
 		"Class": true,
@@ -76,8 +43,13 @@
 		"is_null": true,
 		"in_list": true,
 		"has_common": true,
+		"posthog": true,
 		"has_words": true,
 		"validate_email": true,
+		"open_web_template_values_editor": true,
+		"validate_name": true,
+		"validate_phone": true,
+		"validate_url": true,
 		"get_number_format": true,
 		"format_number": true,
 		"format_currency": true,
@@ -85,6 +57,7 @@
 		"open_url_post": true,
 		"toTitle": true,
 		"lstrip": true,
+		"rstrip": true,
 		"strip": true,
 		"strip_html": true,
 		"replace_all": true,
@@ -95,6 +68,7 @@
 		"CANCEL": true,
 		"copy_dict": true,
 		"get_number_format_info": true,
+		"strip_number_groups": true,
 		"print_table": true,
 		"Layout": true,
 		"web_form_settings": true,
@@ -129,9 +103,7 @@
 		"Webcam": true,
 		"PhotoSwipe": true,
 		"PhotoSwipeUI_Default": true,
-		"fluxify": true,
 		"io": true,
-		"QUnit": true,
 		"JsBarcode": true,
 		"L": true,
 		"Chart": true,
@@ -139,10 +111,14 @@
 		"Cypress": true,
 		"cy": true,
 		"it": true,
+		"describe": true,
 		"expect": true,
 		"context": true,
 		"before": true,
 		"beforeEach": true,
-		"qz": true
+		"after": true,
+		"qz": true,
+		"localforage": true,
+		"extend_cscript": true
 	}
 }

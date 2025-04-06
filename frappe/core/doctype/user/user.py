@@ -33,6 +33,10 @@ from frappe.utils import (
 )
 from frappe.utils.data import sha256_hash
 from frappe.utils.deprecations import deprecated
+<<<<<<< HEAD
+=======
+from frappe.utils.html_utils import sanitize_html
+>>>>>>> version-15
 from frappe.utils.password import check_password, get_password_reset_limit
 from frappe.utils.password import update_password as _update_password
 from frappe.utils.user import get_system_managers
@@ -174,10 +178,15 @@ class User(Document):
 		if self.name not in STANDARD_USERS:
 			self.email = self.name
 			self.validate_email_type(self.name)
+<<<<<<< HEAD
 		self.add_system_manager_role()
+=======
+
+>>>>>>> version-15
 		self.populate_role_profile_roles()
 		self.check_roles_added()
 		self.set_system_user()
+		self.clean_name()
 		self.set_full_name()
 		self.check_enable_disable()
 		self.ensure_unique_roles()
@@ -254,6 +263,14 @@ class User(Document):
 		"""Returns true if current user is the session user"""
 		return self.name == frappe.session.user
 
+<<<<<<< HEAD
+=======
+	def clean_name(self):
+		for field in ("first_name", "middle_name", "last_name"):
+			if field_value := self.get(field):
+				self.set(field, sanitize_html(field_value, always_sanitize=True))
+
+>>>>>>> version-15
 	def set_full_name(self):
 		self.full_name = " ".join(filter(None, [self.first_name, self.last_name]))
 
@@ -262,15 +279,13 @@ class User(Document):
 		if not cint(self.enabled) and self.name in STANDARD_USERS:
 			frappe.throw(_("User {0} cannot be disabled").format(self.name))
 
-		if not cint(self.enabled):
-			self.a_system_manager_should_exist()
-
 		# clear sessions if disabled
 		if not cint(self.enabled) and getattr(frappe.local, "login_manager", None):
 			frappe.local.login_manager.logout(user=self.name)
 
 		# toggle notifications based on the user's status
 		toggle_notifications(self.name, enable=cint(self.enabled))
+<<<<<<< HEAD
 
 	def add_system_manager_role(self):
 		if self.is_system_manager_disabled():
@@ -303,6 +318,8 @@ class User(Document):
 
 	def is_system_manager_disabled(self):
 		return frappe.db.get_value("Role", {"name": "System Manager"}, ["disabled"])
+=======
+>>>>>>> version-15
 
 	def email_new_password(self, new_password=None):
 		if new_password and not self.flags.in_insert:
@@ -411,12 +428,13 @@ class User(Document):
 		if password_expired:
 			url = "/update-password?key=" + key + "&password_expired=true"
 
-		link = get_url(url)
+		link = get_url(url, allow_header_override=False)
 		if send_email:
 			self.password_reset_mail(link)
 
 		return link
 
+<<<<<<< HEAD
 	def get_other_system_managers(self):
 		user_doctype = DocType("User").as_("user")
 		user_role_doctype = DocType("Has Role").as_("user_role")
@@ -431,6 +449,8 @@ class User(Document):
 			.limit(1)
 		).run()
 
+=======
+>>>>>>> version-15
 	def get_fullname(self):
 		"""get first_name space last_name"""
 		return (self.first_name or "") + (self.first_name and " " or "") + (self.last_name or "")
@@ -498,6 +518,7 @@ class User(Document):
 
 		if custom_template:
 			from frappe.email.doctype.email_template.email_template import get_email_template
+<<<<<<< HEAD
 
 			email_template = get_email_template(custom_template, args)
 			subject = email_template.get("subject")
@@ -521,13 +542,29 @@ class User(Document):
 
 		if not self.get_other_system_managers():
 			throw(_("There should remain at least one System Manager"))
+=======
+
+			email_template = get_email_template(custom_template, args)
+			subject = email_template.get("subject")
+			content = email_template.get("message")
+
+		frappe.sendmail(
+			recipients=self.email,
+			sender=sender,
+			subject=subject,
+			template=template if not custom_template else None,
+			content=content if custom_template else None,
+			args=args,
+			header=[subject, "green"],
+			delayed=(not now) if now is not None else self.flags.delay_emails,
+			retry=3,
+		)
+>>>>>>> version-15
 
 	def on_trash(self):
 		frappe.clear_cache(user=self.name)
 		if self.name in STANDARD_USERS:
 			throw(_("User {0} cannot be deleted").format(self.name))
-
-		self.a_system_manager_should_exist()
 
 		# disable the user and log him/her out
 		self.enabled = 0
@@ -888,6 +925,8 @@ def update_password(
 
 	user_doc, redirect_url = reset_user_data(user)
 
+	user_doc.validate_reset_password()
+
 	# get redirect url from cache
 	redirect_to = frappe.cache.hget("redirect_after_login", user)
 	if redirect_to:
@@ -1084,6 +1123,7 @@ def reset_password(user: str) -> str:
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
 def user_query(doctype, txt, searchfield, start, page_len, filters):
+<<<<<<< HEAD
 	from frappe.desk.reportview import get_filters_cond, get_match_cond
 
 	doctype = "User"
@@ -1121,6 +1161,38 @@ def user_query(doctype, txt, searchfield, start, page_len, filters):
 		dict(start=start, page_len=page_len, txt=txt),
 	)
 
+=======
+	doctype = "User"
+
+	list_filters = {
+		"enabled": 1,
+		"docstatus": ["<", 2],
+	}
+
+	# Check if we have a search term, and decide the filters depending on the search term
+	or_filters = [[searchfield, "like", f"%{txt}%"]]
+	if "name" in searchfield:
+		or_filters += [[field, "like", f"%{txt}%"] for field in ("first_name", "middle_name", "last_name")]
+
+	if filters:
+		if not (filters.get("ignore_user_type") and frappe.session.data.user_type == "System User"):
+			list_filters["user_type"] = ["!=", "Website User"]
+
+		filters.pop("ignore_user_type", None)
+		list_filters.update(filters)
+
+	return frappe.get_list(
+		doctype,
+		filters=list_filters,
+		fields=["name", "full_name"],
+		limit_start=start,
+		limit_page_length=page_len,
+		order_by="name asc",
+		or_filters=or_filters,
+		as_list=True,
+	)
+
+>>>>>>> version-15
 
 def get_total_users():
 	"""Returns total no. of system users"""

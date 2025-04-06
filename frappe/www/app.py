@@ -43,7 +43,10 @@ def get_context(context):
 
 	# TODO: Find better fix
 	boot_json = CLOSING_SCRIPT_TAG_PATTERN.sub("", boot_json)
+<<<<<<< HEAD
 	boot_json = json.dumps(boot_json)
+=======
+>>>>>>> version-15
 
 	include_js = hooks.get("app_include_js", []) + frappe.conf.get("app_include_js", [])
 	include_css = hooks.get("app_include_css", []) + frappe.conf.get("app_include_css", [])
@@ -63,7 +66,11 @@ def get_context(context):
 			"layout_direction": "rtl" if is_rtl() else "ltr",
 			"lang": frappe.local.lang,
 			"sounds": hooks["sounds"],
+<<<<<<< HEAD
 			"boot": boot if context.get("for_mobile") else boot_json,
+=======
+			"boot": boot if context.get("for_mobile") else json.loads(boot_json),
+>>>>>>> version-15
 			"desk_theme": boot.get("desk_theme") or "Light",
 			"csrf_token": csrf_token,
 			"google_analytics_id": frappe.conf.get("google_analytics_id"),

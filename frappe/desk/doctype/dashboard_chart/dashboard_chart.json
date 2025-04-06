@@ -33,6 +33,10 @@
   "time_interval",
   "timeseries",
   "type",
+<<<<<<< HEAD
+=======
+  "currency",
+>>>>>>> version-15
   "filters_section",
   "filters_json",
   "dynamic_filters_section",
@@ -286,10 +290,23 @@
    "fieldtype": "Table",
    "label": "Roles",
    "options": "Has Role"
+<<<<<<< HEAD
   }
  ],
  "links": [],
  "modified": "2024-06-03 13:29:57.960271",
+=======
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  }
+ ],
+ "links": [],
+ "modified": "2025-02-01 21:06:05.808591",
+>>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Dashboard Chart",

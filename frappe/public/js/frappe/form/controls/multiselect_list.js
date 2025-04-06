@@ -14,6 +14,11 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 					</li>
 					<div class="selectable-items">
 					</div>
+					<li class="text-right">
+						<button class="btn btn-primary btn-xs clear-selections text-nowrap">
+							Clear All
+    					</button>
+					</li>
 				</ul>
 			</div>
 		`;
@@ -27,6 +32,12 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 		this.$list_wrapper.on("click", ".dropdown-menu", (e) => {
 			e.stopPropagation();
 		});
+<<<<<<< HEAD
+=======
+		this.$list_wrapper.on("click", ".clear-selections", (e) => {
+			this.clear_all_selections();
+		});
+>>>>>>> version-15
 		this.$list_wrapper.on("click", ".selectable-item", (e) => {
 			let $target = $(e.currentTarget);
 			this.toggle_select_item($target);
@@ -108,6 +119,17 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 			this.$list_wrapper.addClass(this.df.input_class);
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	clear_all_selections() {
+		this.values = [];
+		this._selected_values = [];
+		this.update_status();
+		this.set_selectable_items(this._options);
+		this.parse_validate_and_set_in_model("");
+	}
+>>>>>>> version-15
 
 	toggle_select_item($selectable_item) {
 		$selectable_item.toggleClass("selected");

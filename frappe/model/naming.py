@@ -11,6 +11,10 @@ from typing import TYPE_CHECKING, Optional
 import frappe
 from frappe import _
 from frappe.model import log_types
+<<<<<<< HEAD
+=======
+from frappe.monitor import get_trace_id
+>>>>>>> version-15
 from frappe.query_builder import DocType
 from frappe.utils import cint, cstr, now_datetime
 
@@ -264,8 +268,12 @@ def make_autoname(key="", doctype="", doc="", *, ignore_validate=False):
 	                DE/09/01/00001 where 09 is the year, 01 is the month and 00001 is the series
 	"""
 	if key == "hash":
+<<<<<<< HEAD
 		# Makeshift "ULID": first 4 chars are based on timestamp, other 6 are random
 		return _get_timestamp_prefix() + _generate_random_string(6)
+=======
+		return (_get_timestamp_prefix() + _generate_random_string(7))[:10]
+>>>>>>> version-15
 
 	series = NamingSeries(key)
 	return series.generate_next_name(doc, ignore_validate=ignore_validate)
@@ -275,7 +283,18 @@ def _get_timestamp_prefix():
 	ts = int(time.time() * 10)  # time in deciseconds
 	# we ~~don't need~~ can't get ordering over entire lifetime, so we wrap the time.
 	ts = ts % (32**4)
+<<<<<<< HEAD
 	return base64.b32hexencode(ts.to_bytes(length=5, byteorder="big")).decode()[-4:].lower()
+=======
+	ts_part = base64.b32hexencode(ts.to_bytes(length=5, byteorder="big")).decode()[-3:].lower()
+
+	# First character is from request/job specific UUID, all documents created in this "session" will
+	# have same prefix. This avoids collision between parallel jobs with reasonable probabililistic
+	# guarantees.
+	request_part = (get_trace_id() or "")[-1:]
+
+	return request_part + ts_part
+>>>>>>> version-15
 
 
 def _generate_random_string(length=10):

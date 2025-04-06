@@ -149,6 +149,12 @@ class Newsletter(WebsiteGenerator):
 			frappe.throw(_("Newsletter must be published to send webview link in email"))
 
 	def validate_scheduling_date(self):
+<<<<<<< HEAD
+=======
+		if getattr(frappe.flags, "is_scheduler_running", False):
+			return
+
+>>>>>>> version-15
 		if (
 			self.schedule_sending
 			and frappe.utils.get_datetime(self.schedule_send) < frappe.utils.now_datetime()
@@ -396,6 +402,7 @@ def get_list_context(context=None):
 
 def send_scheduled_email():
 	"""Send scheduled newsletter to the recipients."""
+<<<<<<< HEAD
 	scheduled_newsletter = frappe.get_all(
 		"Newsletter",
 		filters={
@@ -412,6 +419,26 @@ def send_scheduled_email():
 			newsletter = frappe.get_doc("Newsletter", newsletter_name)
 			newsletter.queue_all()
 
+=======
+	frappe.flags.is_scheduler_running = True
+
+	scheduled_newsletter = frappe.get_all(
+		"Newsletter",
+		filters={
+			"schedule_send": ("<=", frappe.utils.now_datetime()),
+			"email_sent": False,
+			"schedule_sending": True,
+		},
+		ignore_ifnull=True,
+		pluck="name",
+	)
+
+	for newsletter_name in scheduled_newsletter:
+		try:
+			newsletter = frappe.get_doc("Newsletter", newsletter_name)
+			newsletter.queue_all()
+
+>>>>>>> version-15
 		except Exception:
 			frappe.db.rollback()
 
@@ -422,6 +449,11 @@ def send_scheduled_email():
 		if not frappe.flags.in_test:
 			frappe.db.commit()
 
+<<<<<<< HEAD
+=======
+	frappe.flags.is_scheduler_running = False
+
+>>>>>>> version-15
 
 @frappe.whitelist(allow_guest=True)
 def newsletter_email_read(recipient_email=None, reference_doctype=None, reference_name=None):

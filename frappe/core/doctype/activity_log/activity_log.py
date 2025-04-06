@@ -6,7 +6,11 @@ from frappe.core.utils import set_timeline_doc
 from frappe.model.document import Document
 from frappe.query_builder import DocType, Interval
 from frappe.query_builder.functions import Now
+<<<<<<< HEAD
 from frappe.utils import get_fullname, now
+=======
+from frappe.utils import get_fullname, now, strip_html
+>>>>>>> version-15
 
 
 class ActivityLog(Document):
@@ -36,7 +40,7 @@ class ActivityLog(Document):
 
 	# end: auto-generated types
 	def before_insert(self):
-		self.full_name = get_fullname(self.user)
+		self.full_name = strip_html(get_fullname(self.user))
 		self.date = now()
 
 	def validate(self):

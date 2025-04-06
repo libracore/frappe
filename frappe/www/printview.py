@@ -49,10 +49,13 @@ def get_context(context):
 
 	print_format = get_print_format_doc(None, meta=meta)
 
+<<<<<<< HEAD
 	make_access_log(
 		doctype=frappe.form_dict.doctype, document=frappe.form_dict.name, file_type="PDF", method="Print"
 	)
 
+=======
+>>>>>>> version-15
 	body = get_rendered_template(
 		doc,
 		print_format=print_format,
@@ -62,11 +65,22 @@ def get_context(context):
 		letterhead=letterhead,
 		settings=settings,
 	)
+<<<<<<< HEAD
 	print_style = get_print_style(frappe.form_dict.style, print_format)
 
 	return {
 		"body": body,
 		"print_style": print_style,
+=======
+
+	make_access_log(
+		doctype=frappe.form_dict.doctype, document=frappe.form_dict.name, file_type="PDF", method="Print"
+	)
+
+	return {
+		"body": body,
+		"print_style": get_print_style(frappe.form_dict.style, print_format),
+>>>>>>> version-15
 		"comment": frappe.session.user,
 		"title": frappe.utils.strip_html(cstr(doc.get_title() or doc.name)),
 		"lang": frappe.local.lang,
@@ -74,6 +88,13 @@ def get_context(context):
 		"doctype": frappe.form_dict.doctype,
 		"name": frappe.form_dict.name,
 		"key": frappe.form_dict.get("key"),
+<<<<<<< HEAD
+=======
+		"print_format": getattr(print_format, "name", None),
+		"letterhead": letterhead,
+		"no_letterhead": frappe.form_dict.no_letterhead,
+		"pdf_generator": frappe.form_dict.get("pdf_generator", "wkhtmltopdf"),
+>>>>>>> version-15
 	}
 
 
@@ -99,11 +120,22 @@ def get_rendered_template(
 	no_letterhead: bool | None = None,
 	letterhead: str | None = None,
 	trigger_print: bool = False,
+<<<<<<< HEAD
 	settings=None,
 ):
 	print_settings = frappe.get_single("Print Settings").as_dict()
 	print_settings.update(settings or {})
 
+=======
+	settings: dict | None = None,
+) -> str:
+	if not frappe.flags.ignore_print_permissions:
+		validate_print_permission(doc)
+
+	print_settings = frappe.get_single("Print Settings").as_dict()
+	print_settings.update(settings or {})
+
+>>>>>>> version-15
 	if isinstance(no_letterhead, str):
 		no_letterhead = cint(no_letterhead)
 
@@ -112,9 +144,12 @@ def get_rendered_template(
 
 	doc.flags.in_print = True
 	doc.flags.print_settings = print_settings
+<<<<<<< HEAD
 
 	if not frappe.flags.ignore_print_permissions:
 		validate_print_permission(doc)
+=======
+>>>>>>> version-15
 
 	if doc.meta.is_submittable:
 		if doc.docstatus.is_draft() and not cint(print_settings.allow_print_for_draft):
@@ -148,7 +183,11 @@ def get_rendered_template(
 
 		template = None
 		if hook_func := frappe.get_hooks("get_print_format_template"):
+<<<<<<< HEAD
 			template = frappe.get_attr(hook_func[-1])(jenv=jenv, print_format=print_format)
+=======
+			template = frappe.call(hook_func[-1], jenv=jenv, print_format=print_format)
+>>>>>>> version-15
 
 		if template:
 			pass
@@ -348,6 +387,7 @@ def get_rendered_raw_commands(doc: str, name: str | None = None, print_format: s
 
 def validate_print_permission(doc):
 	for ptype in ("read", "print"):
+<<<<<<< HEAD
 		if frappe.has_permission(doc.doctype, ptype, doc) or frappe.has_website_permission(doc):
 			return
 
@@ -357,6 +397,19 @@ def validate_print_permission(doc):
 	else:
 		raise frappe.PermissionError(_("You do not have permission to view this document"))
 
+=======
+		if frappe.has_permission(doc.doctype, ptype, doc):
+			return
+
+	if frappe.has_website_permission(doc):
+		return
+
+	if (key := frappe.form_dict.key) and isinstance(key, str) and validate_key(key, doc) is not False:
+		return
+
+	doc._handle_permission_failure("print")
+
+>>>>>>> version-15
 
 def validate_key(key, doc):
 	document_key_expiry = frappe.get_cached_value(
@@ -374,7 +427,11 @@ def validate_key(key, doc):
 	if frappe.get_system_settings("allow_older_web_view_links") and key == doc.get_signature():
 		return
 
+<<<<<<< HEAD
 	raise frappe.exceptions.InvalidKeyError
+=======
+	return False
+>>>>>>> version-15
 
 
 def get_letter_head(doc: "Document", no_letterhead: bool, letterhead: str | None = None):
@@ -407,6 +464,7 @@ def get_print_format(doctype, print_format):
 
 	# server, find template
 	module = print_format.module or frappe.db.get_value("DocType", doctype, "module")
+<<<<<<< HEAD
 	path = os.path.join(
 		get_module_path(module, "Print Format", print_format.name),
 		frappe.scrub(print_format.name) + ".html",
@@ -423,6 +481,27 @@ def get_print_format(doctype, print_format):
 
 		frappe.throw(_("No template found at path: {0}").format(path), frappe.TemplateNotFoundError)
 
+=======
+
+	is_custom_module = frappe.get_cached_value("Module Def", module, "custom")
+
+	if not is_custom_module:
+		path = os.path.join(
+			get_module_path(module, "Print Format", print_format.name),
+			frappe.scrub(print_format.name) + ".html",
+		)
+		if os.path.exists(path):
+			with open(path) as pffile:
+				return pffile.read()
+
+	if print_format.raw_printing:
+		return print_format.raw_commands
+	if print_format.html:
+		return print_format.html
+
+	frappe.throw(_("No template found at path: {0}").format(path), frappe.TemplateNotFoundError)
+
+>>>>>>> version-15
 
 def make_layout(doc, meta, format_data=None):
 	"""Builds a hierarchical layout object from the fields list to be rendered

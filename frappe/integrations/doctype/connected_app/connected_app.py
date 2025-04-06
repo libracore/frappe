@@ -4,6 +4,10 @@
 import os
 from urllib.parse import urlencode, urljoin
 
+<<<<<<< HEAD
+=======
+from oauthlib.oauth2 import BackendApplicationClient
+>>>>>>> version-15
 from requests_oauthlib import OAuth2Session
 
 import frappe
@@ -146,6 +150,36 @@ class ConnectedApp(Document):
 
 		return token_cache
 
+<<<<<<< HEAD
+=======
+	def get_backend_app_token(self, include_client_id=None):
+		"""Get an Access Token for the Cloud-Registered Service Principal"""
+		# There is no User assigned to the app, so we give it an empty string,
+		# otherwise it will assign the logged in user.
+		token_cache = self.get_token_cache("")
+		if token_cache is None:
+			token_cache = frappe.new_doc("Token Cache")
+			token_cache.connected_app = self.name
+		elif not token_cache.is_expired():
+			return token_cache
+
+		# Get a new Access token for the App
+		client = BackendApplicationClient(client_id=self.client_id, scope=self.get_scopes())
+		oauth_session = OAuth2Session(client=client)
+
+		token = oauth_session.fetch_token(
+			self.token_uri,
+			client_secret=self.get_password("client_secret"),
+			include_client_id=include_client_id,
+		)
+
+		token_cache.update_data(token)
+		token_cache.save(ignore_permissions=True)
+		frappe.db.commit()
+
+		return token_cache
+
+>>>>>>> version-15
 
 @frappe.whitelist(methods=["GET"], allow_guest=True)
 def callback(code=None, state=None):

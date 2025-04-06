@@ -66,6 +66,10 @@ class EmailDomain(Document):
 		domain_name: DF.Data
 		email_server: DF.Data
 		incoming_port: DF.Data | None
+<<<<<<< HEAD
+=======
+		sent_folder_name: DF.Data | None
+>>>>>>> version-15
 		smtp_port: DF.Data | None
 		smtp_server: DF.Data
 		use_imap: DF.Check

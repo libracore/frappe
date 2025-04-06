@@ -105,6 +105,7 @@ def create_request_log(
 
 	return integration_request
 
+<<<<<<< HEAD
 
 def get_json(obj):
 	return obj if isinstance(obj, str) else frappe.as_json(obj, indent=1)
@@ -128,8 +129,13 @@ def get_payment_gateway_controller(payment_gateway):
 			return frappe.get_doc(gateway.gateway_settings, gateway.gateway_controller)
 		except Exception:
 			frappe.throw(_("{0} Settings not found").format(payment_gateway))
+=======
+>>>>>>> version-15
 
+def get_json(obj):
+	return obj if isinstance(obj, str) else frappe.as_json(obj, indent=1)
 
+<<<<<<< HEAD
 @frappe.whitelist(allow_guest=True, xss_safe=True)
 def get_checkout_url(**kwargs):
 	try:
@@ -161,3 +167,9 @@ def create_payment_gateway(gateway, settings=None, controller=None):
 			}
 		)
 		payment_gateway.insert(ignore_permissions=True)
+=======
+
+def json_handler(obj):
+	if isinstance(obj, datetime.date | datetime.timedelta | datetime.datetime):
+		return str(obj)
+>>>>>>> version-15

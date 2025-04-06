@@ -171,6 +171,7 @@ Object.assign(frappe.utils, {
 	is_html: function (txt) {
 		if (!txt) return false;
 
+<<<<<<< HEAD
 		if (
 			txt.indexOf("<br>") == -1 &&
 			txt.indexOf("<p") == -1 &&
@@ -181,6 +182,14 @@ Object.assign(frappe.utils, {
 			return false;
 		}
 		return true;
+=======
+		const doc = new DOMParser().parseFromString(txt, "text/html");
+		const nodes = doc.body.childNodes || [];
+
+		// check if any of the nodes are element nodes
+		// Ref: https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+		return [...nodes].some((node) => node.nodeType === 1);
+>>>>>>> version-15
 	},
 	is_mac: function () {
 		return window.navigator.platform === "MacIntel";
@@ -1251,7 +1260,11 @@ Object.assign(frappe.utils, {
 				chart_args[key] = custom_options[key];
 			}
 		}
+<<<<<<< HEAD
 
+=======
+		frappe.utils.set_space_label_ratio(chart_args);
+>>>>>>> version-15
 		return new frappe.Chart(wrapper, chart_args);
 	},
 
@@ -1259,7 +1272,15 @@ Object.assign(frappe.utils, {
 		const default_country = frappe.sys_defaults.country;
 		return frappe.utils.shorten_number(label, country || default_country, 3);
 	},
+<<<<<<< HEAD
 
+=======
+	set_space_label_ratio(chart_args) {
+		if (chart_args.data.labels.length > 10) {
+			chart_args["axisOptions"]["seriesLabelSpaceRatio"] = 0.9;
+		}
+	},
+>>>>>>> version-15
 	generate_route(item) {
 		const type = item.type.toLowerCase();
 		if (type === "doctype") {
@@ -1314,7 +1335,11 @@ Object.assign(frappe.utils, {
 					route =
 						frappe.router.slug(item.report_ref_doctype) + "/view/report/" + item.name;
 				} else {
+<<<<<<< HEAD
 					route = "/report/" + item.name;
+=======
+					route = "report/" + item.name;
+>>>>>>> version-15
 				}
 			} else if (type === "page") {
 				route = item.name;

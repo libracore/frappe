@@ -15,6 +15,10 @@ class NavbarItem(Document):
 		from frappe.types import DF
 
 		action: DF.Data | None
+<<<<<<< HEAD
+=======
+		condition: DF.Code | None
+>>>>>>> version-15
 		hidden: DF.Check
 		is_standard: DF.Check
 		item_label: DF.Data | None

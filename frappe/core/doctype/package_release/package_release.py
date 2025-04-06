@@ -3,6 +3,10 @@
 
 import os
 import subprocess
+<<<<<<< HEAD
+=======
+from pathlib import Path
+>>>>>>> version-15
 
 import frappe
 from frappe.model.document import Document
@@ -65,12 +69,25 @@ class PackageRelease(Document):
 		)
 
 	def validate(self):
+<<<<<<< HEAD
 		if self.publish:
 			self.export_files()
 
 	def export_files(self):
 		"""Export all the documents in this package to site/packages folder"""
 		package = frappe.get_doc("Package", self.package)
+=======
+		package = frappe.get_doc("Package", self.package)
+		package_path = Path(frappe.get_site_path("packages", package.package_name))
+		if not package_path.resolve().is_relative_to(Path(frappe.get_site_path()).resolve()):
+			frappe.throw("Invalid package path: " + package_path.as_posix())
+
+		if self.publish:
+			self.export_files(package)
+
+	def export_files(self, package):
+		"""Export all the documents in this package to site/packages folder"""
+>>>>>>> version-15
 
 		self.export_modules()
 		self.export_package_files(package)

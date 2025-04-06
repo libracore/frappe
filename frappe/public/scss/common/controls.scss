@@ -190,7 +190,11 @@ select.form-control {
 
 	.link-btn {
 		@extend .action-btn;
+<<<<<<< HEAD
 		background-color: none;
+=======
+		background-color: var(--control-bg);
+>>>>>>> version-15
 		display: none;
 	}
 }

@@ -49,6 +49,10 @@ def get_latest_backup_file(with_files=False):
 		frappe.conf.db_name,
 		frappe.conf.db_name,
 		frappe.conf.db_password,
+<<<<<<< HEAD
+=======
+		db_socket=frappe.conf.db_socket,
+>>>>>>> version-15
 		db_host=frappe.conf.db_host,
 		db_port=frappe.conf.db_port,
 		db_type=frappe.conf.db_type,
@@ -107,6 +111,10 @@ def generate_files_backup():
 		frappe.conf.db_name,
 		frappe.conf.db_name,
 		frappe.conf.db_password,
+<<<<<<< HEAD
+=======
+		db_socket=frappe.conf.db_socket,
+>>>>>>> version-15
 		db_host=frappe.conf.db_host,
 		db_port=frappe.conf.db_port,
 		db_type=frappe.conf.db_type,

@@ -11,6 +11,10 @@
   "disable_sidebar_stats",
   "disable_auto_refresh",
   "allow_edit",
+<<<<<<< HEAD
+=======
+  "disable_automatic_recency_filters",
+>>>>>>> version-15
   "total_fields",
   "fields_html",
   "fields"
@@ -64,10 +68,24 @@
    "fieldname": "allow_edit",
    "fieldtype": "Check",
    "label": "Allow Bulk Editing"
+<<<<<<< HEAD
   }
  ],
  "links": [],
  "modified": "2024-08-21 18:17:24.889783",
+=======
+  },
+  {
+   "default": "0",
+   "fieldname": "disable_automatic_recency_filters",
+   "fieldtype": "Check",
+   "label": "Disable Automatic Recency Filters"
+  }
+ ],
+ "grid_page_length": 50,
+ "links": [],
+ "modified": "2025-03-12 16:28:46.073808",
+>>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "List View Settings",
@@ -90,4 +108,8 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> version-15

@@ -130,6 +130,7 @@ def add_indexes(indexes):
 def _add_index(table, column):
 	doctype = get_doctype_name(table)
 	frappe.db.add_index(doctype, [column])
+<<<<<<< HEAD
 	make_property_setter(
 		doctype,
 		column,
@@ -138,6 +139,8 @@ def _add_index(table, column):
 		property_type="Check",
 		for_doctype=False,  # Applied on docfield
 	)
+=======
+>>>>>>> version-15
 	frappe.msgprint(
 		_("Index created successfully on column {0} of doctype {1}").format(column, doctype),
 		alert=True,

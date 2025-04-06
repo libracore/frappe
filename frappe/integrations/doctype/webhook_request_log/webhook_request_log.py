@@ -19,7 +19,11 @@ class WebhookRequestLog(Document):
 		headers: DF.Code | None
 		reference_document: DF.Data | None
 		response: DF.Code | None
+<<<<<<< HEAD
 		url: DF.Data | None
+=======
+		url: DF.Text | None
+>>>>>>> version-15
 		user: DF.Link | None
 		webhook: DF.Link | None
 

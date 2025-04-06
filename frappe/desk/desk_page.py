@@ -2,9 +2,12 @@
 # License: MIT. See LICENSE
 
 import frappe
+<<<<<<< HEAD
+
+=======
+>>>>>>> version-15
 
 
-@frappe.whitelist()
 def get(name):
 	"""
 	Return the :term:`doclist` of the `Page` specified by `name`
@@ -23,11 +26,16 @@ def get(name):
 
 
 @frappe.whitelist(allow_guest=True)
-def getpage():
+def getpage(name: str):
 	"""
 	Load the page from `frappe.form` and send it via `frappe.response`
 	"""
+<<<<<<< HEAD
 	page = frappe.form_dict.get("name")
 	doc = get(page)
 
+=======
+
+	doc = get(name)
+>>>>>>> version-15
 	frappe.response.docs.append(doc)

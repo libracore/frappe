@@ -74,6 +74,10 @@ def get_root_connection(root_login=None, root_password=None):
 			root_password = getpass("Postgres super user password: ")
 
 		frappe.local.flags.root_connection = frappe.database.get_db(
+<<<<<<< HEAD
+=======
+			socket=frappe.conf.db_socket,
+>>>>>>> version-15
 			host=frappe.conf.db_host,
 			port=frappe.conf.db_port,
 			user=root_login,

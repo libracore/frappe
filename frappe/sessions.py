@@ -7,6 +7,10 @@ Session bootstraps info needed by common client side activities including
 permission, homepage, default variables, system defaults etc
 """
 import json
+<<<<<<< HEAD
+=======
+from datetime import datetime, timezone
+>>>>>>> version-15
 from urllib.parse import unquote
 
 import redis
@@ -169,10 +173,18 @@ def get():
 	bootinfo["disable_async"] = frappe.conf.disable_async
 
 	bootinfo["setup_complete"] = cint(frappe.get_system_settings("setup_complete"))
+<<<<<<< HEAD
 	bootinfo["apps_data"] = {
 		"apps": get_apps() or [],
 		"is_desk_apps": 1 if bool(is_desk_apps(get_apps())) else 0,
 		"default_path": get_default_path() or "",
+=======
+	apps = get_apps() or []
+	bootinfo["apps_data"] = {
+		"apps": apps,
+		"is_desk_apps": 1 if bool(is_desk_apps(apps)) else 0,
+		"default_path": get_default_path(apps) or "",
+>>>>>>> version-15
 	}
 
 	bootinfo["desk_theme"] = frappe.db.get_value("User", frappe.session.user, "desk_theme") or "Light"
@@ -204,7 +216,19 @@ def generate_csrf_token():
 class Session:
 	__slots__ = ("user", "user_type", "full_name", "data", "time_diff", "sid", "_update_in_cache")
 
+<<<<<<< HEAD
 	def __init__(self, user, resume=False, full_name=None, user_type=None):
+=======
+	def __init__(
+		self,
+		user: str,
+		resume: bool = False,
+		full_name: str | None = None,
+		user_type: str | None = None,
+		session_end: str | None = None,
+		audit_user: str | None = None,
+	):
+>>>>>>> version-15
 		self.sid = cstr(frappe.form_dict.get("sid") or unquote(frappe.request.cookies.get("sid", "Guest")))
 		self.user = user
 		self.user_type = user_type
@@ -222,7 +246,11 @@ class Session:
 		else:
 			if self.user:
 				self.validate_user()
+<<<<<<< HEAD
 				self.start()
+=======
+				self.start(session_end, audit_user)
+>>>>>>> version-15
 
 	def validate_user(self):
 		if not frappe.get_cached_value("User", self.user, "enabled"):
@@ -231,7 +259,11 @@ class Session:
 				frappe.ValidationError,
 			)
 
+<<<<<<< HEAD
 	def start(self):
+=======
+	def start(self, session_end: str | None = None, audit_user: str | None = None):
+>>>>>>> version-15
 		"""start a new session"""
 		# generate sid
 		if self.user == "Guest":
@@ -243,6 +275,13 @@ class Session:
 		self.sid = self.data.sid = sid
 		self.data.data.user = self.user
 		self.data.data.session_ip = frappe.local.request_ip
+
+		if session_end:
+			self.data.data.session_end = session_end
+
+		if audit_user:
+			self.data.data.audit_user = audit_user
+
 		if self.user != "Guest":
 			self.data.data.update(
 				{
@@ -338,7 +377,14 @@ class Session:
 			)
 			expiry = get_expiry_in_seconds(session_data.get("session_expiry"))
 
+<<<<<<< HEAD
 			if self.time_diff > expiry:
+=======
+			if self.time_diff > expiry or (
+				(session_end := session_data.get("session_end"))
+				and datetime.now(tz=timezone.utc) > datetime.fromisoformat(session_end)
+			):
+>>>>>>> version-15
 				self._delete_session()
 				data = None
 
@@ -408,7 +454,11 @@ class Session:
 
 		return updated_in_db
 
+<<<<<<< HEAD
 	def set_impersonsated(self, original_user):
+=======
+	def set_impersonated(self, original_user):
+>>>>>>> version-15
 		self.data.data.impersonated_by = original_user
 		# Forcefully flush session
 		self.update(force=True)

@@ -17,6 +17,7 @@ class TestTranslation(FrappeTestCase):
 
 	def test_doctype(self):
 		translation_data = get_translation_data()
+<<<<<<< HEAD
 		for key, val in translation_data.items():
 			frappe.local.lang = key
 
@@ -32,23 +33,63 @@ class TestTranslation(FrappeTestCase):
 			["es", ["Test Spanish", "prueba de español"]],
 			["es-MX", ["Test Data", "pruebas de datos"]],
 		]
+=======
+		for lang, (source_string, new_translation) in translation_data.items():
+			frappe.local.lang = lang
+			original_translation = _(source_string)
 
-		for key, val in data:
-			create_translation(key, val)
+			docname = create_translation(lang, source_string, new_translation)
+			self.assertEqual(_(source_string), new_translation)
+
+			frappe.delete_doc("Translation", docname)
+			self.assertEqual(_(source_string), original_translation)
+
+	def test_parent_language(self):
+		data = {
+			"Test Data": {
+				"es": "datos de prueba",
+				"es-MX": "pruebas de datos",
+			},
+			"Test Spanish": {
+				"es": "prueba de español",
+			},
+		}
+>>>>>>> version-15
+
+		for source_string, translations in data.items():
+			for lang, translation in translations.items():
+				create_translation(lang, source_string, translation)
 
 		frappe.local.lang = "es"
 
+<<<<<<< HEAD
 		self.assertTrue(_(data[0][0]), data[0][1])
 
 		self.assertTrue(_(data[1][0]), data[1][1])
+=======
+		self.assertEqual(_("Test Data"), data["Test Data"]["es"])
+
+		self.assertEqual(_("Test Spanish"), data["Test Spanish"]["es"])
+>>>>>>> version-15
 
 		frappe.local.lang = "es-MX"
 
 		# different translation for es-MX
+<<<<<<< HEAD
 		self.assertTrue(_(data[2][0]), data[2][1])
 
 		# from spanish (general)
 		self.assertTrue(_(data[1][0]), data[1][1])
+=======
+		self.assertEqual(_("Test Data"), data["Test Data"]["es-MX"])
+
+		# from spanish (general)
+		self.assertEqual(_("Test Spanish"), data["Test Spanish"]["es"])
+
+	def test_multi_language_translations(self):
+		source = "User"
+		self.assertNotEqual(_(source, lang="de"), _(source, lang="es"))
+>>>>>>> version-15
 
 	def test_multi_language_translations(self):
 		source = "User"
@@ -72,7 +113,11 @@ class TestTranslation(FrappeTestCase):
 			los procesadores Intel Core i5 e i7 de quinta generación con Intel HD Graphics 6000 son capaces de hacerlo.
 		"""
 
+<<<<<<< HEAD
 		create_translation("es", [source, target])
+=======
+		create_translation("es", source, target)
+>>>>>>> version-15
 
 		source = """
 			<span style="font-family: &quot;Amazon Ember&quot;, Arial, sans-serif; font-size:
@@ -100,6 +145,7 @@ def get_translation_data():
 		"en": ["Quotation", "Tax Invoice"],
 		"fi": [html_source_data, html_translated_data],
 	}
+<<<<<<< HEAD
 
 
 def create_translation(key, val):
@@ -109,3 +155,15 @@ def create_translation(key, val):
 	translation.translated_text = val[1]
 	translation.save()
 	return translation
+=======
+
+
+def create_translation(lang, source_string, new_translation) -> str:
+	doc = frappe.new_doc("Translation")
+	doc.language = lang
+	doc.source_text = source_string
+	doc.translated_text = new_translation
+	doc.save()
+
+	return doc.name
+>>>>>>> version-15

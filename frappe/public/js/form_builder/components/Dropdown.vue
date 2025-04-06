@@ -12,7 +12,11 @@
 				<div v-show="show" class="dropdown-options">
 					<div v-for="group in groups" :key="group.key" class="groups">
 						<div v-if="group.group" class="group-title">
+<<<<<<< HEAD
 							{{ group.group }}
+=======
+							{{ __(group.group) }}
+>>>>>>> version-15
 						</div>
 						<div
 							class="dropdown-option"
@@ -21,7 +25,11 @@
 							:title="item.tooltip"
 						>
 							<button class="dropdown-item" @click.stop="action(item.onClick)">
+<<<<<<< HEAD
 								{{ item.label }}
+=======
+								{{ __(item.label) }}
+>>>>>>> version-15
 							</button>
 						</div>
 					</div>

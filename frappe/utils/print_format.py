@@ -3,6 +3,10 @@ import json
 import os
 import uuid
 from io import BytesIO
+<<<<<<< HEAD
+=======
+from typing import Literal
+>>>>>>> version-15
 
 from pypdf import PdfWriter
 
@@ -226,13 +230,37 @@ def read_multi_pdf(output: PdfWriter) -> bytes:
 
 
 @frappe.whitelist(allow_guest=True)
+<<<<<<< HEAD
 def download_pdf(doctype, name, format=None, doc=None, no_letterhead=0, language=None, letterhead=None):
+=======
+def download_pdf(
+	doctype: str,
+	name: str,
+	format=None,
+	doc=None,
+	no_letterhead=0,
+	language=None,
+	letterhead=None,
+	pdf_generator: Literal["wkhtmltopdf", "chrome"] | None = None,
+):
+>>>>>>> version-15
 	doc = doc or frappe.get_doc(doctype, name)
 	validate_print_permission(doc)
 
 	with print_language(language):
 		pdf_file = frappe.get_print(
+<<<<<<< HEAD
 			doctype, name, format, doc=doc, as_pdf=True, letterhead=letterhead, no_letterhead=no_letterhead
+=======
+			doctype,
+			name,
+			format,
+			doc=doc,
+			as_pdf=True,
+			letterhead=letterhead,
+			no_letterhead=no_letterhead,
+			pdf_generator=pdf_generator,
+>>>>>>> version-15
 		)
 
 	frappe.local.response.filename = "{name}.pdf".format(name=name.replace(" ", "-").replace("/", "-"))

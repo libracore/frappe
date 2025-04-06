@@ -13,6 +13,10 @@ import frappe.utils.user
 from frappe import _
 from frappe.apps import get_default_path
 from frappe.core.doctype.activity_log.activity_log import add_authentication_log
+<<<<<<< HEAD
+=======
+from frappe.desk.utils import slug
+>>>>>>> version-15
 from frappe.sessions import Session, clear_sessions, delete_session, get_expiry_in_seconds
 from frappe.translate import get_language
 from frappe.twofactor import (
@@ -110,9 +114,12 @@ class LoginManager:
 			if self.login() is False:
 				return
 			self.resume = False
+<<<<<<< HEAD
 
 			# run login triggers
 			self.run_trigger("on_session_creation")
+=======
+>>>>>>> version-15
 		else:
 			try:
 				self.resume = True
@@ -146,18 +153,33 @@ class LoginManager:
 		frappe.form_dict.pop("pwd", None)
 		self.post_login()
 
+<<<<<<< HEAD
 	def post_login(self):
+=======
+	def post_login(self, session_end: str | None = None, audit_user: str | None = None):
+>>>>>>> version-15
 		self.run_trigger("on_login")
 		validate_ip_address(self.user)
 		self.validate_hour()
 		self.get_user_info()
+<<<<<<< HEAD
 		self.make_session()
+=======
+		self.make_session(session_end=session_end, audit_user=audit_user)
+>>>>>>> version-15
 		self.setup_boot_cache()
 		self.set_user_info()
 
 	def get_user_info(self):
 		self.info = frappe.get_cached_value(
+<<<<<<< HEAD
 			"User", self.user, ["user_type", "first_name", "last_name", "user_image"], as_dict=1
+=======
+			"User",
+			self.user,
+			["user_type", "first_name", "last_name", "user_image", "default_workspace"],
+			as_dict=1,
+>>>>>>> version-15
 		)
 
 		self.user_type = self.info.user_type
@@ -182,14 +204,26 @@ class LoginManager:
 			frappe.local.cookie_manager.set_cookie("system_user", "yes")
 			if not resume:
 				frappe.local.response["message"] = "Logged In"
+<<<<<<< HEAD
 				frappe.local.response["home_page"] = get_default_path() or "/app"
+=======
+				default_workspace = self.info.default_workspace
+				if default_workspace:
+					frappe.local.response["home_page"] = "/app/" + slug(default_workspace)
+				else:
+					frappe.local.response["home_page"] = get_default_path() or "/app"
+>>>>>>> version-15
 
 		if not resume:
 			frappe.response["full_name"] = self.full_name
 
 		# redirect information
+<<<<<<< HEAD
 		redirect_to = frappe.cache.hget("redirect_after_login", self.user)
 		if redirect_to:
+=======
+		if not resume and (redirect_to := frappe.cache.hget("redirect_after_login", self.user)):
+>>>>>>> version-15
 			frappe.local.response["redirect_to"] = redirect_to
 			frappe.cache.hdel("redirect_after_login", self.user)
 
@@ -200,16 +234,32 @@ class LoginManager:
 	def clear_preferred_language(self):
 		frappe.local.cookie_manager.delete_cookie("preferred_language")
 
+<<<<<<< HEAD
 	def make_session(self, resume=False):
 		# start session
 		frappe.local.session_obj = Session(
 			user=self.user, resume=resume, full_name=self.full_name, user_type=self.user_type
+=======
+	def make_session(
+		self, resume: bool = False, session_end: str | None = None, audit_user: str | None = None
+	):
+		# start session
+		frappe.local.session_obj = Session(
+			user=self.user,
+			resume=resume,
+			full_name=self.full_name,
+			user_type=self.user_type,
+			session_end=session_end,
+			audit_user=audit_user,
+>>>>>>> version-15
 		)
 
 		# reset user if changed to Guest
 		self.user = frappe.local.session_obj.user
 		frappe.local.session = frappe.local.session_obj.data
 		self.clear_active_sessions()
+		if not resume:
+			self.run_trigger("on_session_creation")
 
 	def clear_active_sessions(self):
 		"""Clear other sessions of the current user if `deny_multiple_sessions` is not set"""
@@ -325,15 +375,22 @@ class LoginManager:
 		"""login as guest"""
 		self.login_as("Guest")
 
-	def login_as(self, user):
+	def login_as(self, user: str, session_end: str | None = None, audit_user: str | None = None):
 		self.user = user
-		self.post_login()
+		self.post_login(session_end, audit_user)
 
 	def impersonate(self, user):
 		current_user = frappe.session.user
+<<<<<<< HEAD
 		self.login_as(user)
 		# Flag this session as impersonated session, so other code can log this.
 		frappe.local.session_obj.set_impersonsated(current_user)
+=======
+		session_data = frappe.local.session_obj.data.data
+		self.login_as(user, session_end=session_data.session_end, audit_user=session_data.audit_user)
+		# Flag this session as impersonated session, so other code can log this.
+		frappe.local.session_obj.set_impersonated(current_user)
+>>>>>>> version-15
 
 	def logout(self, arg="", user=None):
 		if not user:
@@ -613,7 +670,11 @@ def validate_oauth(authorization_header):
 	Authenticate request using OAuth and set session user
 
 	Args:
+<<<<<<< HEAD
 	        authorization_header (list of str): The 'Authorization' header containing the prefix and token
+=======
+	                authorization_header (list of str): The 'Authorization' header containing the prefix and token
+>>>>>>> version-15
 	"""
 
 	from frappe.integrations.oauth2 import get_oauth_server
@@ -653,7 +714,11 @@ def validate_auth_via_api_keys(authorization_header):
 	Authenticate request using API keys and set session user
 
 	Args:
+<<<<<<< HEAD
 	        authorization_header (list of str): The 'Authorization' header containing the prefix and token
+=======
+	                authorization_header (list of str): The 'Authorization' header containing the prefix and token
+>>>>>>> version-15
 	"""
 
 	try:

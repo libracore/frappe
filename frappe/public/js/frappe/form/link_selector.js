@@ -97,7 +97,11 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 						var row = $(
 							repl(
 								'<div class="row link-select-row">\
+<<<<<<< HEAD
 						<div class="col-xs-4">\
+=======
+						<div class="col-xs-4 ellipsis">\
+>>>>>>> version-15
 							<b><a href="#">%(name)s</a></b></div>\
 						<div class="col-xs-8">\
 							<span class="text-muted">%(values)s</span></div>\

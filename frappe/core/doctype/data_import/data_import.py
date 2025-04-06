@@ -9,13 +9,21 @@ import frappe
 from frappe import _
 from frappe.core.doctype.data_import.exporter import Exporter
 from frappe.core.doctype.data_import.importer import Importer
+<<<<<<< HEAD
 from frappe.model import core_doctypes_list
+=======
+from frappe.model import CORE_DOCTYPES
+>>>>>>> version-15
 from frappe.model.document import Document
 from frappe.modules.import_file import import_file_by_path
 from frappe.utils.background_jobs import enqueue, is_job_enqueued
 from frappe.utils.csvutils import validate_google_sheets_url
 
+<<<<<<< HEAD
 BLOCKED_DOCTYPES = set(core_doctypes_list) - {"User", "Role"}
+=======
+BLOCKED_DOCTYPES = CORE_DOCTYPES - {"User", "Role", "Print Format"}
+>>>>>>> version-15
 
 
 class DataImport(Document):
@@ -120,6 +128,7 @@ class DataImport(Document):
 
 	def get_importer(self):
 		return Importer(self.reference_doctype, data_import=self)
+<<<<<<< HEAD
 
 
 @frappe.whitelist()
@@ -127,11 +136,31 @@ def get_preview_from_template(data_import, import_file=None, google_sheets_url=N
 	return frappe.get_doc("Data Import", data_import).get_preview_from_template(
 		import_file, google_sheets_url
 	)
+=======
+
+	def on_trash(self):
+		frappe.db.delete("Data Import Log", {"data_import": self.name})
+
+
+@frappe.whitelist()
+def get_preview_from_template(
+	data_import: str, import_file: str | None = None, google_sheets_url: str | None = None
+):
+	di: DataImport = frappe.get_doc("Data Import", data_import)
+	di.check_permission("read")
+	return di.get_preview_from_template(import_file, google_sheets_url)
+>>>>>>> version-15
 
 
 @frappe.whitelist()
 def form_start_import(data_import: str):
+<<<<<<< HEAD
 	return frappe.get_doc("Data Import", data_import).start_import()
+=======
+	di: DataImport = frappe.get_doc("Data Import", data_import)
+	di.check_permission("write")
+	return di.start_import()
+>>>>>>> version-15
 
 
 def start_import(data_import):
@@ -163,6 +192,10 @@ def download_template(doctype, export_fields=None, export_records=None, export_f
 	        :param export_filters: Filter dict
 	        :param file_type: File type to export into
 	"""
+<<<<<<< HEAD
+=======
+	frappe.has_permission(doctype, "read", throw=True)
+>>>>>>> version-15
 
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = frappe.parse_json(export_filters)
@@ -180,24 +213,44 @@ def download_template(doctype, export_fields=None, export_records=None, export_f
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def download_errored_template(data_import_name):
 	data_import = frappe.get_doc("Data Import", data_import_name)
+=======
+def download_errored_template(data_import_name: str):
+	data_import: DataImport = frappe.get_doc("Data Import", data_import_name)
+	data_import.check_permission("read")
+>>>>>>> version-15
 	data_import.export_errored_rows()
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def download_import_log(data_import_name):
 	data_import = frappe.get_doc("Data Import", data_import_name)
+=======
+def download_import_log(data_import_name: str):
+	data_import: DataImport = frappe.get_doc("Data Import", data_import_name)
+	data_import.check_permission("read")
+>>>>>>> version-15
 	data_import.download_import_log()
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def get_import_status(data_import_name):
 	import_status = {}
 
 	data_import = frappe.get_doc("Data Import", data_import_name)
 	import_status["status"] = data_import.status
 
+=======
+def get_import_status(data_import_name: str):
+	data_import: DataImport = frappe.get_doc("Data Import", data_import_name)
+	data_import.check_permission("read")
+
+	import_status = {"status": data_import.status}
+>>>>>>> version-15
 	logs = frappe.get_all(
 		"Data Import Log",
 		fields=["count(*) as count", "success"],
@@ -205,7 +258,11 @@ def get_import_status(data_import_name):
 		group_by="success",
 	)
 
+<<<<<<< HEAD
 	total_payload_count = frappe.db.get_value("Data Import", data_import_name, "payload_count")
+=======
+	total_payload_count = data_import.payload_count
+>>>>>>> version-15
 
 	for log in logs:
 		if log.get("success"):

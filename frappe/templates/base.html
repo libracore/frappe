@@ -91,7 +91,11 @@
 	{% block base_scripts %}
 	<!-- js should be loaded in body! -->
 	<script>
+<<<<<<< HEAD
 		frappe.boot = {{ boot }}
+=======
+		frappe.boot = {{ boot | json }}
+>>>>>>> version-15
 		// for backward compatibility of some libs
 		frappe.sys_defaults = frappe.boot.sysdefaults;
 	</script>

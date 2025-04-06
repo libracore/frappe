@@ -20,6 +20,10 @@ from frappe.utils import (
 	date_diff,
 	format_datetime,
 	get_datetime_str,
+<<<<<<< HEAD
+=======
+	get_fullname,
+>>>>>>> version-15
 	getdate,
 	now_datetime,
 	nowdate,
@@ -36,6 +40,14 @@ communication_mapping = {
 	"Other": "Other",
 }
 
+<<<<<<< HEAD
+=======
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from frappe.core.doctype.communication.communication import Communication
+
+>>>>>>> version-15
 
 class Event(Document):
 	# begin: auto-generated types
@@ -105,20 +117,34 @@ class Event(Document):
 
 	def on_trash(self):
 		communications = frappe.get_all(
+<<<<<<< HEAD
 			"Communication", dict(reference_doctype=self.doctype, reference_name=self.name)
 		)
 		if communications:
 			for communication in communications:
 				frappe.delete_doc_if_exists("Communication", communication.name)
+=======
+			"Communication",
+			filters={"reference_doctype": self.doctype, "reference_name": self.name},
+			pluck="name",
+		)
+		for communication in communications:
+			frappe.delete_doc("Communication", communication, force=True)
+>>>>>>> version-15
 
 	def sync_communication(self):
-		if self.event_participants:
-			for participant in self.event_participants:
-				filters = [
+		if not self.event_participants:
+			return
+
+		for participant in self.event_participants:
+			if communications := frappe.get_all(
+				"Communication",
+				filters=[
 					["Communication", "reference_doctype", "=", self.doctype],
 					["Communication", "reference_name", "=", self.name],
 					["Communication Link", "link_doctype", "=", participant.reference_doctype],
 					["Communication Link", "link_name", "=", participant.reference_docname],
+<<<<<<< HEAD
 				]
 				if comms := frappe.get_all("Communication", filters=filters, fields=["name"], distinct=True):
 					for comm in comms:
@@ -130,17 +156,36 @@ class Event(Document):
 						self.create_communication(participant)
 
 	def create_communication(self, participant):
+=======
+				],
+				pluck="name",
+				distinct=True,
+			):
+				for comm in communications:
+					communication = frappe.get_doc("Communication", comm)
+					self.update_communication(participant, communication)
+			else:
+				meta = frappe.get_meta(participant.reference_doctype)
+				if hasattr(meta, "allow_events_in_timeline") and meta.allow_events_in_timeline == 1:
+					self.create_communication(participant)
+
+	def create_communication(self, participant: "EventParticipants"):
+>>>>>>> version-15
 		communication = frappe.new_doc("Communication")
 		self.update_communication(participant, communication)
 		self.communication = communication.name
 
-	def update_communication(self, participant, communication):
+	def update_communication(self, participant: "EventParticipants", communication: "Communication"):
 		communication.communication_medium = "Event"
 		communication.subject = self.subject
 		communication.content = self.description if self.description else self.subject
 		communication.communication_date = self.starts_on
 		communication.sender = self.owner
+<<<<<<< HEAD
 		communication.sender_full_name = frappe.utils.get_fullname(self.owner)
+=======
+		communication.sender_full_name = get_fullname(self.owner)
+>>>>>>> version-15
 		communication.reference_doctype = self.doctype
 		communication.reference_name = self.name
 		communication.communication_medium = (
@@ -193,6 +238,7 @@ class Event(Document):
 
 @frappe.whitelist()
 def delete_communication(event, reference_doctype, reference_docname):
+<<<<<<< HEAD
 	deleted_participant = frappe.get_doc(reference_doctype, reference_docname)
 	if isinstance(event, str):
 		event = json.loads(event)
@@ -203,18 +249,26 @@ def delete_communication(event, reference_doctype, reference_docname):
 		["Communication Link", "link_doctype", "=", deleted_participant.reference_doctype],
 		["Communication Link", "link_name", "=", deleted_participant.reference_docname],
 	]
+=======
+	if isinstance(event, str):
+		event = json.loads(event)
 
-	comms = frappe.get_list("Communication", filters=filters, fields=["name"])
+	deleted_participant = frappe.get_doc(reference_doctype, reference_docname)
+>>>>>>> version-15
 
-	if comms:
-		deletion = []
-		for comm in comms:
-			delete = frappe.get_doc("Communication", comm.name).delete()
-			deletion.append(delete)
+	comms = frappe.get_list(
+		"Communication",
+		filters=[
+			["Communication", "reference_doctype", "=", event.get("doctype")],
+			["Communication", "reference_name", "=", event.get("name")],
+			["Communication Link", "link_doctype", "=", deleted_participant.reference_doctype],
+			["Communication Link", "link_name", "=", deleted_participant.reference_docname],
+		],
+		pluck="name",
+	)
 
-		return deletion
-
-	return {}
+	for comm in comms:
+		frappe.delete_doc("Communication", comm)
 
 
 def get_permission_query_conditions(user):

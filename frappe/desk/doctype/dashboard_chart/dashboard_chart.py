@@ -339,6 +339,10 @@ class DashboardChart(Document):
 		chart_name: DF.Data
 		chart_type: DF.Literal["Count", "Sum", "Average", "Group By", "Custom", "Report"]
 		color: DF.Color | None
+<<<<<<< HEAD
+=======
+		currency: DF.Link | None
+>>>>>>> version-15
 		custom_options: DF.Code | None
 		document_type: DF.Link | None
 		dynamic_filters_json: DF.Code | None

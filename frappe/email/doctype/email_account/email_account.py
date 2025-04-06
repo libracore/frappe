@@ -59,6 +59,10 @@ class EmailAccount(Document):
 		from frappe.types import DF
 
 		add_signature: DF.Check
+<<<<<<< HEAD
+=======
+		always_bcc: DF.Data | None
+>>>>>>> version-15
 		always_use_account_email_id_as_sender: DF.Check
 		always_use_account_name_as_sender_name: DF.Check
 		append_emails_to_sent_folder: DF.Check
@@ -68,6 +72,10 @@ class EmailAccount(Document):
 		auth_method: DF.Literal["Basic", "OAuth"]
 		auto_reply_message: DF.TextEditor | None
 		awaiting_password: DF.Check
+<<<<<<< HEAD
+=======
+		backend_app_flow: DF.Check
+>>>>>>> version-15
 		brand_logo: DF.AttachImage | None
 		connected_app: DF.Link | None
 		connected_user: DF.Link | None
@@ -95,6 +103,7 @@ class EmailAccount(Document):
 		password: DF.Password | None
 		send_notification_to: DF.SmallText | None
 		send_unsubscribe_message: DF.Check
+<<<<<<< HEAD
 		service: DF.Literal[
 			"",
 			"GMail",
@@ -104,6 +113,10 @@ class EmailAccount(Document):
 			"Outlook.com",
 			"Yandex.Mail",
 		]
+=======
+		sent_folder_name: DF.Data | None
+		service: DF.Literal["", "GMail", "Sendgrid", "SparkPost", "Yahoo Mail", "Outlook.com", "Yandex.Mail"]
+>>>>>>> version-15
 		signature: DF.TextEditor | None
 		smtp_port: DF.Data | None
 		smtp_server: DF.Data | None
@@ -140,6 +153,12 @@ class EmailAccount(Document):
 		else:
 			self.login_id = None
 
+<<<<<<< HEAD
+=======
+		if self.service == "Sendgrid":
+			self.login_id = "apikey"
+
+>>>>>>> version-15
 		# validate the imap settings
 		if self.enable_incoming and self.use_imap and len(self.imap_folder) <= 0:
 			frappe.throw(_("You need to set one IMAP folder for {0}").format(frappe.bold(self.email_id)))
@@ -402,7 +421,11 @@ class EmailAccount(Document):
 
 		if _raise_error:
 			frappe.throw(
+<<<<<<< HEAD
 				_("Please setup default Email Account from Settings > Email Account"),
+=======
+				_("Please setup default outgoing Email Account from Tools > Email Account"),
+>>>>>>> version-15
 				frappe.OutgoingEmailError,
 			)
 
@@ -725,14 +748,30 @@ class EmailAccount(Document):
 		try:
 			email_server = self.get_incoming_server(in_receive=True)
 			message = safe_encode(message)
+<<<<<<< HEAD
 			email_server.imap.append("Sent", "\\Seen", imaplib.Time2Internaldate(time.time()), message)
+=======
+			sent_folder_name = self.sent_folder_name or "Sent"
+			email_server.imap.append(
+				sent_folder_name, "\\Seen", imaplib.Time2Internaldate(time.time()), message
+			)
+>>>>>>> version-15
 		except Exception:
 			self.log_error("Unable to add to Sent folder")
 
 	def get_oauth_token(self):
 		if self.auth_method == "OAuth":
 			connected_app = frappe.get_doc("Connected App", self.connected_app)
+<<<<<<< HEAD
 			return connected_app.get_active_token(self.connected_user)
+=======
+			if self.backend_app_flow:
+				token = connected_app.get_backend_app_token()
+			else:
+				token = connected_app.get_active_token(self.connected_user)
+
+			return token
+>>>>>>> version-15
 
 
 @frappe.whitelist()
@@ -822,6 +861,10 @@ def pull(now=False):
 		.select(
 			doctype.name,
 			doctype.auth_method,
+<<<<<<< HEAD
+=======
+			doctype.backend_app_flow,
+>>>>>>> version-15
 			doctype.connected_app,
 			doctype.connected_user,
 		)
@@ -831,8 +874,15 @@ def pull(now=False):
 	)
 
 	for email_account in email_accounts:
+<<<<<<< HEAD
 		if email_account.auth_method == "OAuth" and not has_token(
 			email_account.connected_app, email_account.connected_user
+=======
+		if (
+			email_account.auth_method == "OAuth"
+			and not email_account.backend_app_flow
+			and not has_token(email_account.connected_app, email_account.connected_user)
+>>>>>>> version-15
 		):
 			# don't try to pull from accounts which dont have access token (for Oauth)
 			continue

@@ -3,6 +3,10 @@
 
 import os
 import shutil
+<<<<<<< HEAD
+=======
+from pathlib import Path
+>>>>>>> version-15
 
 import frappe
 import frappe.model
@@ -34,6 +38,7 @@ def export_to_files(record_list=None, record_module=None, verbose=0, create_init
 def write_document_file(doc, record_module=None, create_init=True, folder_name=None):
 	doc_export = doc.as_dict(no_nulls=True)
 	doc.run_method("before_export", doc_export)
+<<<<<<< HEAD
 
 	doc_export = strip_default_fields(doc, doc_export)
 	module = record_module or get_module_name(doc)
@@ -68,12 +73,58 @@ def strip_default_fields(doc, doc_export):
 	return doc_export
 
 
+=======
+
+	doc_export = strip_default_fields(doc, doc_export)
+	module = record_module or get_module_name(doc)
+	is_custom_module = frappe.db.get_value("Module Def", module, "custom")
+
+	# create folder
+	if folder_name:
+		folder = create_folder(module, folder_name, doc.name, create_init, is_custom_module)
+	else:
+		folder = create_folder(module, doc.doctype, doc.name, create_init, is_custom_module)
+
+	fname = scrub(doc.name)
+	write_code_files(folder, fname, doc, doc_export)
+
+	# write the data file
+	path = os.path.join(folder, f"{fname}.json")
+	if is_custom_module and not Path(path).resolve().is_relative_to(Path(frappe.get_site_path()).resolve()):
+		frappe.throw("Invalid export path: " + Path(path).as_posix())
+	with open(path, "w+") as txtfile:
+		txtfile.write(frappe.as_json(doc_export))
+	print(f"Wrote document file for {doc.doctype} {doc.name} at {path}")
+
+
+def strip_default_fields(doc, doc_export):
+	# strip out default fields from children
+	if doc.doctype == "DocType" and doc.migration_hash:
+		del doc_export["migration_hash"]
+
+	for df in doc.meta.get_table_fields():
+		for d in doc_export.get(df.fieldname):
+			for fieldname in frappe.model.default_fields + frappe.model.child_table_fields:
+				if fieldname in d:
+					del d[fieldname]
+
+	return doc_export
+
+
+>>>>>>> version-15
 def write_code_files(folder, fname, doc, doc_export):
 	"""Export code files and strip from values"""
 	if hasattr(doc, "get_code_fields"):
 		for key, extn in doc.get_code_fields().items():
 			if doc.get(key):
+<<<<<<< HEAD
 				with open(os.path.join(folder, fname + "." + extn), "w+") as txtfile:
+=======
+				path = os.path.join(folder, fname + "." + extn)
+				if not Path(path).resolve().is_relative_to(Path(frappe.get_site_path()).resolve()):
+					frappe.throw("Invalid export path: " + Path(path).as_posix())
+				with open(path, "w+") as txtfile:
+>>>>>>> version-15
 					txtfile.write(doc.get(key))
 
 				# remove from exporting
@@ -108,8 +159,13 @@ def delete_folder(module, dt, dn):
 		shutil.rmtree(folder)
 
 
+<<<<<<< HEAD
 def create_folder(module, dt, dn, create_init):
 	if frappe.db.get_value("Module Def", module, "custom"):
+=======
+def create_folder(module, dt, dn, create_init, is_custom_module):
+	if is_custom_module:
+>>>>>>> version-15
 		module_path = get_custom_module_path(module)
 	else:
 		module_path = get_module_path(module)
@@ -134,6 +190,12 @@ def get_custom_module_path(module):
 		frappe.throw(f"Package must be set for custom Module <b>{module}</b>")
 
 	path = os.path.join(get_package_path(package), scrub(module))
+<<<<<<< HEAD
+=======
+	if not Path(path).resolve().is_relative_to(Path(frappe.get_site_path()).resolve()):
+		frappe.throw("Invalid module path: " + Path(path).as_posix())
+
+>>>>>>> version-15
 	if not os.path.exists(path):
 		os.makedirs(path)
 

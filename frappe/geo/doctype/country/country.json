@@ -1,7 +1,6 @@
 {
  "actions": [],
  "allow_import": 1,
- "allow_rename": 1,
  "autoname": "field:country_name",
  "creation": "2013-01-19 10:23:30",
  "doctype": "DocType",
@@ -54,7 +53,11 @@
  "icon": "fa fa-globe",
  "idx": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2022-08-05 18:33:27.880783",
+=======
+ "modified": "2024-11-27 16:56:04.850422",
+>>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Geo",
  "name": "Country",
@@ -86,4 +89,8 @@
  "states": [],
  "track_changes": 1,
  "translated_doctype": 1
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> version-15

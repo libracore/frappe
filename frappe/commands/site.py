@@ -32,10 +32,31 @@ from frappe.utils import CallbackManager
 )
 @click.option("--db-root-password", "--mariadb-root-password", help="Root password for MariaDB or PostgreSQL")
 @click.option(
+<<<<<<< HEAD
 	"--no-mariadb-socket",
 	is_flag=True,
 	default=False,
 	help="Set MariaDB host to % and use TCP/IP Socket instead of using the UNIX Socket",
+=======
+	"--db-socket",
+	"--mariadb-db-socket",
+	envvar="MYSQL_UNIX_PORT",
+	help="Database socket for MariaDB or folder containing database socket for PostgreSQL",
+)
+@click.option(
+	"--no-mariadb-socket",
+	is_flag=True,
+	default=False,
+	help="DEPRECATED: Set MariaDB host to % and use TCP/IP Socket instead of using the UNIX Socket",
+)
+@click.option(
+	"--mariadb-user-host-login-scope",
+	help=(
+		"Set the mariadb host for the user login scope if you don't want to use the current host as login "
+		"scope which typically is ''@'localhost' - may be used when initializing a user on a remote host. "
+		"See the mariadb docs on account names for more info."
+	),
+>>>>>>> version-15
 )
 @click.option("--admin-password", help="Administrator password for new site", default=None)
 @click.option("--verbose", is_flag=True, default=False, help="Verbose")
@@ -57,10 +78,18 @@ def new_site(
 	source_sql=None,
 	force=None,
 	no_mariadb_socket=False,
+<<<<<<< HEAD
+=======
+	mariadb_user_host_login_scope=False,
+>>>>>>> version-15
 	install_app=None,
 	db_name=None,
 	db_password=None,
 	db_type=None,
+<<<<<<< HEAD
+=======
+	db_socket=None,
+>>>>>>> version-15
 	db_host=None,
 	db_port=None,
 	set_default=False,
@@ -71,6 +100,24 @@ def new_site(
 
 	frappe.init(site=site, new_site=True)
 
+<<<<<<< HEAD
+=======
+	if site in frappe.get_all_apps():
+		click.secho(
+			f"Your bench has an app called {site}, please choose another name for the site.", fg="red"
+		)
+		sys.exit(1)
+
+	if no_mariadb_socket:
+		click.secho(
+			"--no-mariadb-socket is DEPRECATED; "
+			"use --mariadb-user-host-login-scope='%' (wildcard) or --mariadb-user-host-login-scope=<myhostscope>, instead. "
+			"The name of this option was misleading: it had nothing to do with sockets.",
+			fg="yellow",
+		)
+		mariadb_user_host_login_scope = "%"
+
+>>>>>>> version-15
 	_new_site(
 		db_name,
 		site,
@@ -81,12 +128,22 @@ def new_site(
 		install_apps=install_app,
 		source_sql=source_sql,
 		force=force,
+<<<<<<< HEAD
 		no_mariadb_socket=no_mariadb_socket,
 		db_password=db_password,
 		db_type=db_type,
 		db_host=db_host,
 		db_port=db_port,
 		setup_db=setup_db,
+=======
+		db_password=db_password,
+		db_type=db_type,
+		db_socket=db_socket,
+		db_host=db_host,
+		db_port=db_port,
+		setup_db=setup_db,
+		mariadb_user_host_login_scope=mariadb_user_host_login_scope,
+>>>>>>> version-15
 	)
 
 	if set_default:
@@ -518,14 +575,18 @@ def list_apps(context, format):
 @pass_context
 def add_db_index(context, doctype, column):
 	"Adds a new DB index and creates a property setter to persist it."
+<<<<<<< HEAD
 	from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 
+=======
+>>>>>>> version-15
 	columns = column  # correct naming
 	for site in context.sites:
 		frappe.init(site=site)
 		frappe.connect()
 		try:
 			frappe.db.add_index(doctype, columns)
+<<<<<<< HEAD
 			if len(columns) == 1:
 				make_property_setter(
 					doctype,
@@ -535,6 +596,8 @@ def add_db_index(context, doctype, column):
 					property_type="Check",
 					for_doctype=False,  # Applied on docfield
 				)
+=======
+>>>>>>> version-15
 			frappe.db.commit()
 		finally:
 			frappe.destroy()
@@ -1122,8 +1185,21 @@ def publish_realtime(context, event, message, room, user, doctype, docname, afte
 @click.command("browse")
 @click.argument("site", required=False)
 @click.option("--user", required=False, help="Login as user")
+<<<<<<< HEAD
 @pass_context
 def browse(context, site, user=None):
+=======
+@click.option(
+	"--session-end",
+	required=False,
+	help="Session end (in ISO8601 format and timezone-aware - 2025-01-24T12:26:29.200853+00:00)",
+)
+@click.option("--user-for-audit", required=False, help="The user to mention in audit trail")
+@pass_context
+def browse(
+	context, site, user: str | None = None, session_end: str | None = None, user_for_audit: str | None = None
+):
+>>>>>>> version-15
 	"""Opens the site on web browser"""
 	from frappe.auth import CookieManager, LoginManager
 
@@ -1149,7 +1225,11 @@ def browse(context, site, user=None):
 			frappe.utils.set_request(path="/")
 			frappe.local.cookie_manager = CookieManager()
 			frappe.local.login_manager = LoginManager()
+<<<<<<< HEAD
 			frappe.local.login_manager.login_as(user)
+=======
+			frappe.local.login_manager.login_as(user, session_end, user_for_audit)
+>>>>>>> version-15
 			sid = f"/app?sid={frappe.session.sid}"
 		else:
 			click.echo("Please enable developer mode to login as a user")

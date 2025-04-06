@@ -1,7 +1,11 @@
 # Copyright (c) 2020, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 import datetime
+=======
+import time
+>>>>>>> version-15
 from collections.abc import Callable
 from functools import wraps
 
@@ -31,16 +35,47 @@ def respond():
 
 
 class RateLimiter:
+<<<<<<< HEAD
+=======
+	__slots__ = (
+		"counter",
+		"duration",
+		"end",
+		"key",
+		"limit",
+		"rejected",
+		"remaining",
+		"reset",
+		"spent",
+		"start",
+		"window",
+		"window_number",
+	)
+
+>>>>>>> version-15
 	def __init__(self, limit, window):
 		self.limit = int(limit * 1000000)
 		self.window = window
 
+<<<<<<< HEAD
 		self.start = datetime.datetime.now(pytz.UTC)
 		timestamp = int(frappe.utils.now_datetime().timestamp())
 
 		self.window_number, self.spent = divmod(timestamp, self.window)
 		self.key = frappe.cache.make_key(f"rate-limit-counter-{self.window_number}")
 		self.counter = cint(frappe.cache.get(self.key))
+=======
+		self.start = time.time()
+
+		self.window_number, self.spent = divmod(int(self.start), self.window)
+		self.key = frappe.cache.make_key(f"rate-limit-counter-{self.window_number}")
+		self.counter = cint(frappe.cache.get(self.key))
+		if not self.counter:
+			# This is the first request in this window
+			frappe.cache.incrby(self.key, 0)
+			frappe.cache.expire(self.key, self.window)
+
+>>>>>>> version-15
 		self.remaining = max(self.limit - self.counter, 0)
 		self.reset = self.window - self.spent
 
@@ -58,30 +93,46 @@ class RateLimiter:
 
 	def update(self):
 		self.record_request_end()
+<<<<<<< HEAD
 		pipeline = frappe.cache.pipeline()
 		pipeline.incrby(self.key, self.duration)
 		pipeline.expire(self.key, self.window)
 		pipeline.execute()
+=======
+		frappe.cache.incrby(self.key, self.duration)
+>>>>>>> version-15
 
 	def headers(self):
 		self.record_request_end()
 		headers = {
 			"X-RateLimit-Reset": self.reset,
 			"X-RateLimit-Limit": self.limit,
+<<<<<<< HEAD
 			"X-RateLimit-Remaining": self.remaining,
 		}
 		if self.rejected:
 			headers["Retry-After"] = self.reset
 		else:
 			headers["X-RateLimit-Used"] = self.duration
+=======
+			"X-RateLimit-Remaining": round(self.remaining, -6),
+		}
+		if self.rejected:
+			headers["Retry-After"] = self.reset
+>>>>>>> version-15
 
 		return headers
 
 	def record_request_end(self):
 		if self.end is not None:
 			return
+<<<<<<< HEAD
 		self.end = datetime.datetime.now(pytz.UTC)
 		self.duration = int((self.end - self.start).total_seconds() * 1000000)
+=======
+		self.end = time.time()
+		self.duration = int((self.end - self.start) * 1000000)
+>>>>>>> version-15
 
 	def respond(self):
 		if self.rejected:

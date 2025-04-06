@@ -1,9 +1,17 @@
 {%- if title -%}
+<<<<<<< HEAD
 <h2 class="section-title">{{ title }}</h2>
 {%- endif -%}
 
 {%- if subtitle -%}
 <p class="section-description">{{ subtitle }}</p>
+=======
+<h2 class="section-title">{{ _(title) }}</h2>
+{%- endif -%}
+
+{%- if subtitle -%}
+<p class="section-description">{{ _(subtitle) }}</p>
+>>>>>>> version-15
 {%- endif -%}
 
 <div class="mt-12">
@@ -33,7 +41,11 @@
 			<a class="nav-link {{ 'active' if first_tab else '' }}" id="{{ tab.buttonid }}" data-toggle="tab"
 				href="#{{ tab.panelid }}"
 				role="tab" aria-controls="{{ tab.panelid }}" aria-selected="{{ 'true' if first_tab else 'false' }}">
+<<<<<<< HEAD
 				{{ tab.title }}
+=======
+				{{ _(tab.title) }}
+>>>>>>> version-15
 			</a>
 		</li>
 		{%- endfor -%}

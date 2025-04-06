@@ -1,10 +1,19 @@
 # Copyright (c) 2018, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 
 import time
 
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_full_jitter
 
+=======
+
+import time
+import unittest
+
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_full_jitter
+
+>>>>>>> version-15
 import frappe
 from frappe.core.doctype.doctype.test_doctype import new_doctype
 from frappe.model.naming import (

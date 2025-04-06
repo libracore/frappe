@@ -31,7 +31,16 @@ from frappe.model.document import Document
 from frappe.utils.background_jobs import get_queue, get_queue_list, get_redis_conn
 from frappe.utils.caching import redis_cache
 from frappe.utils.data import add_to_date
+<<<<<<< HEAD
 from frappe.utils.scheduler import get_scheduler_status, get_scheduler_tick
+=======
+from frappe.utils.scheduler import (
+	get_scheduler_status,
+	get_scheduler_tick,
+	is_dormant,
+	is_schduler_process_running,
+)
+>>>>>>> version-15
 
 
 @contextmanager
@@ -56,6 +65,11 @@ def health_check(step: str):
 			try:
 				return func(*args, **kwargs)
 			except Exception as e:
+<<<<<<< HEAD
+=======
+				if frappe.flags.in_test:
+					raise
+>>>>>>> version-15
 				frappe.log(frappe.get_traceback())
 				# nosemgrep
 				frappe.msgprint(
@@ -155,7 +169,10 @@ class SystemHealthReport(Document):
 		# This just checks connection life
 		self.test_job_id = frappe.enqueue("frappe.ping", at_front=True).id
 		self.background_jobs_check = "queued"
+<<<<<<< HEAD
 		self.scheduler_status = get_scheduler_status().get("status")
+=======
+>>>>>>> version-15
 		workers = frappe.get_all("RQ Worker")
 		self.total_background_workers = len(workers)
 		queue_summary = defaultdict(list)
@@ -186,10 +203,27 @@ class SystemHealthReport(Document):
 
 	@health_check("Scheduler")
 	def fetch_scheduler(self):
+<<<<<<< HEAD
 		lower_threshold = add_to_date(None, days=-7, as_datetime=True)
 		# Exclude "maybe" curently executing job
 		upper_threshold = add_to_date(None, minutes=-30, as_datetime=True)
 		self.scheduler_status = get_scheduler_status().get("status")
+=======
+		scheduler_enabled = get_scheduler_status().get("status") == "active"
+
+		if not is_schduler_process_running():
+			self.scheduler_status = "Process Not Found"
+		elif is_dormant():
+			self.scheduler_status = "Dormant"
+		elif scheduler_enabled:
+			self.scheduler_status = "Active"
+		else:
+			self.scheduler_status = "Inactive"
+
+		lower_threshold = add_to_date(None, days=-7, as_datetime=True)
+		# Exclude "maybe" curently executing job
+		upper_threshold = add_to_date(None, minutes=-30, as_datetime=True)
+>>>>>>> version-15
 		failing_jobs = frappe.db.sql(
 			"""
 			select scheduled_job_type,
@@ -283,7 +317,11 @@ class SystemHealthReport(Document):
 		self.backups_size = get_directory_size("private", "backups") / (1024 * 1024)
 		self.private_files_size = get_directory_size("private", "files") / (1024 * 1024)
 		self.public_files_size = get_directory_size("public", "files") / (1024 * 1024)
+<<<<<<< HEAD
 		self.onsite_backups = len(get_context({}).get("files", []))
+=======
+		self.onsite_backups = len(get_context(frappe._dict()).get("files", []))
+>>>>>>> version-15
 
 	@health_check("Users")
 	def fetch_user_stats(self):

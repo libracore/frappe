@@ -515,6 +515,10 @@ def _enter_console(extra_args=None):
 		os.environ["PSQL_HISTORY"] = os.path.abspath(get_site_path("logs", "postgresql_console.log"))
 
 	bin, args, bin_name = get_command(
+<<<<<<< HEAD
+=======
+		socket=frappe.conf.db_socket,
+>>>>>>> version-15
 		host=frappe.conf.db_host,
 		port=frappe.conf.db_port,
 		user=frappe.conf.db_name,
@@ -916,6 +920,7 @@ def run_ui_tests(
 	# run for headless mode
 	run_or_open = f"run --browser {browser}" if headless else "open"
 	formatted_command = f"{site_env} {password_env} {coverage_env} {cypress_path} {run_or_open}"
+<<<<<<< HEAD
 
 	if os.environ.get("CYPRESS_RECORD_KEY"):
 		formatted_command += " --record"
@@ -932,6 +937,28 @@ def run_ui_tests(
 	click.secho("Running Cypress...", fg="yellow")
 	frappe.commands.popen(formatted_command, cwd=app_base_path, raise_err=True)
 
+=======
+
+	if os.environ.get("CYPRESS_RECORD_KEY"):
+		formatted_command += " --record"
+
+	if parallel:
+		formatted_command += " --parallel"
+
+	if ci_build_id:
+		formatted_command += f" --ci-build-id {ci_build_id}"
+
+	if cypressargs:
+		formatted_command += " " + " ".join(cypressargs)
+
+	click.secho("Running Cypress...", fg="yellow")
+	try:
+		frappe.commands.popen(formatted_command, cwd=app_base_path, raise_err=True)
+	except subprocess.CalledProcessError as e:
+		click.secho("Cypress tests failed", fg="red")
+		raise click.exceptions.Exit(1) from e
+
+>>>>>>> version-15
 
 @click.command("serve")
 @click.option("--port", default=8000)
@@ -1024,8 +1051,21 @@ def request(context, args=None, path=None):
 @click.option("--no-git", is_flag=True, default=False, help="Do not initialize git repository for the app")
 def make_app(destination, app_name, no_git=False):
 	"Creates a boilerplate app"
+<<<<<<< HEAD
 	from frappe.utils.boilerplate import make_boilerplate
 
+=======
+	from frappe.utils import get_sites
+
+	if app_name in get_sites():
+		click.secho(
+			f"Your bench has a site called {app_name}, please choose another name for the app.", fg="red"
+		)
+		sys.exit(1)
+
+	from frappe.utils.boilerplate import make_boilerplate
+
+>>>>>>> version-15
 	make_boilerplate(destination, app_name, no_git=no_git)
 
 

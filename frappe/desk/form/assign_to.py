@@ -15,7 +15,11 @@ from frappe.desk.doctype.notification_log.notification_log import (
 	get_title_html,
 )
 from frappe.desk.form.document_follow import follow_document
+<<<<<<< HEAD
 from frappe.utils import escape_html
+=======
+from frappe.utils.data import strip_html
+>>>>>>> version-15
 
 
 class DuplicateToDoError(frappe.ValidationError):
@@ -57,10 +61,13 @@ def add(args=None, *, ignore_permissions=False):
 	users_with_duplicate_todo = []
 	shared_with_users = []
 
+<<<<<<< HEAD
 	description = escape_html(
 		args.get("description", _("Assignment for {0} {1}").format(args["doctype"], args["name"]))
 	)
 
+=======
+>>>>>>> version-15
 	for assign_to in frappe.parse_json(args.get("assign_to")):
 		filters = {
 			"reference_type": args["doctype"],
@@ -76,6 +83,7 @@ def add(args=None, *, ignore_permissions=False):
 		else:
 			from frappe.utils import nowdate
 
+<<<<<<< HEAD
 			d = frappe.get_doc(
 				{
 					"doctype": "ToDo",
@@ -97,6 +105,34 @@ def add(args=None, *, ignore_permissions=False):
 
 			doc = frappe.get_doc(args["doctype"], args["name"])
 
+=======
+			description = str(args.get("description", ""))
+			has_content = strip_html(description) or "<img" in description
+			if not has_content:
+				args["description"] = _("Assignment for {0} {1}").format(args["doctype"], args["name"])
+
+			d = frappe.get_doc(
+				{
+					"doctype": "ToDo",
+					"allocated_to": assign_to,
+					"reference_type": args["doctype"],
+					"reference_name": args["name"],
+					"description": args.get("description"),
+					"priority": args.get("priority", "Medium"),
+					"status": "Open",
+					"date": args.get("date", nowdate()),
+					"assigned_by": args.get("assigned_by", frappe.session.user),
+					"assignment_rule": args.get("assignment_rule"),
+				}
+			).insert(ignore_permissions=True)
+
+			# set assigned_to if field exists
+			if frappe.get_meta(args["doctype"]).get_field("assigned_to"):
+				frappe.db.set_value(args["doctype"], args["name"], "assigned_to", assign_to)
+
+			doc = frappe.get_doc(args["doctype"], args["name"])
+
+>>>>>>> version-15
 			# if assignee does not have permissions, share or inform
 			if not frappe.has_permission(doc=doc, user=assign_to):
 				if frappe.get_system_settings("disable_document_sharing"):
@@ -122,7 +158,11 @@ def add(args=None, *, ignore_permissions=False):
 				d.reference_type,
 				d.reference_name,
 				action="ASSIGN",
+<<<<<<< HEAD
 				description=description,
+=======
+				description=args.get("description"),
+>>>>>>> version-15
 			)
 
 	if shared_with_users:

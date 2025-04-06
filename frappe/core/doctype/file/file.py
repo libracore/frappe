@@ -380,8 +380,15 @@ class File(Document):
 			filters = {
 				"content_hash": self.content_hash,
 				"is_private": self.is_private,
+<<<<<<< HEAD
 				"name": ("!=", self.name),
+=======
+>>>>>>> version-15
 			}
+
+			if self.name:
+				filters.update({"name": ("!=", self.name)})
+
 			if self.attached_to_doctype and self.attached_to_name:
 				filters.update(
 					{
@@ -650,7 +657,15 @@ class File(Document):
 		if duplicate_file:
 			file_doc: "File" = frappe.get_cached_doc("File", duplicate_file.name)
 			if file_doc.exists_on_disk():
+<<<<<<< HEAD
 				self.file_url = duplicate_file.file_url
+=======
+				if self.exists_on_disk():
+					if not self.file_url:
+						self.file_url = duplicate_file.file_url
+				else:
+					self.file_url = duplicate_file.file_url
+>>>>>>> version-15
 				file_exists = True
 
 		if not file_exists:
@@ -667,10 +682,18 @@ class File(Document):
 			return self.save_file_on_filesystem()
 
 	def save_file_on_filesystem(self):
+<<<<<<< HEAD
 		if self.is_private:
 			self.file_url = f"/private/files/{self.file_name}"
 		else:
 			self.file_url = f"/files/{self.file_name}"
+=======
+		safe_file_name = re.sub(r"[/\\%?#]", "_", self.file_name)
+		if self.is_private:
+			self.file_url = f"/private/files/{safe_file_name}"
+		else:
+			self.file_url = f"/files/{safe_file_name}"
+>>>>>>> version-15
 
 		fpath = self.write_file()
 
@@ -788,6 +811,10 @@ class File(Document):
 
 def on_doctype_update():
 	frappe.db.add_index("File", ["attached_to_doctype", "attached_to_name"])
+<<<<<<< HEAD
+=======
+	frappe.db.add_index("File", ["file_url(100)"])
+>>>>>>> version-15
 
 
 def has_permission(doc, ptype=None, user=None, debug=False):
@@ -811,6 +838,11 @@ def has_permission(doc, ptype=None, user=None, debug=False):
 
 		try:
 			ref_doc = frappe.get_doc(attached_to_doctype, attached_to_name)
+<<<<<<< HEAD
+=======
+		except ModuleNotFoundError:
+			return False
+>>>>>>> version-15
 		except frappe.DoesNotExistError:
 			frappe.clear_last_message()
 			return False

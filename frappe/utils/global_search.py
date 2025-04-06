@@ -197,7 +197,11 @@ def get_children_data(doctype, meta):
 			child_records = frappe.get_all(
 				child.options,
 				fields=child_fieldnames,
+<<<<<<< HEAD
 				filters={"docstatus": ["!=", 1], "parenttype": doctype},
+=======
+				filters={"docstatus": ["!=", 2], "parenttype": doctype},
+>>>>>>> version-15
 			)
 
 			for record in child_records:

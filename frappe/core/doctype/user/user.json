@@ -556,7 +556,8 @@
    "fieldtype": "Datetime",
    "label": "Last Active",
    "no_copy": 1,
-   "read_only": 1
+   "read_only": 1,
+   "search_index": 1
   },
   {
    "description": "Stores the JSON of last known versions of various installed apps. It is used to show release notes.",
@@ -591,6 +592,10 @@
    "fieldname": "api_key",
    "fieldtype": "Data",
    "label": "API Key",
+<<<<<<< HEAD
+=======
+   "no_copy": 1,
+>>>>>>> version-15
    "permlevel": 1,
    "read_only": 1,
    "unique": 1
@@ -871,7 +876,12 @@
    "link_fieldname": "user"
   }
  ],
+<<<<<<< HEAD
  "modified": "2024-09-27 11:41:13.336662",
+=======
+ "make_attachments_public": 1,
+ "modified": "2025-03-17 11:29:39.254304",
+>>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",
@@ -903,6 +913,10 @@
  ],
  "quick_entry": 1,
  "route": "user",
+<<<<<<< HEAD
+=======
+ "row_format": "Dynamic",
+>>>>>>> version-15
  "search_fields": "full_name",
  "show_name_in_global_search": 1,
  "sort_field": "modified",

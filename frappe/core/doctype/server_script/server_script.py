@@ -2,7 +2,11 @@
 # License: MIT. See LICENSE
 
 from functools import partial
+<<<<<<< HEAD
 from types import FunctionType, MethodType, ModuleType
+=======
+from itertools import chain
+>>>>>>> version-15
 
 import frappe
 from frappe import _
@@ -10,7 +14,11 @@ from frappe.model.document import Document
 from frappe.rate_limiter import rate_limit
 from frappe.utils.safe_exec import (
 	FrappeTransformer,
+<<<<<<< HEAD
 	NamespaceDict,
+=======
+	get_keys_for_autocomplete,
+>>>>>>> version-15
 	get_safe_globals,
 	is_safe_exec_enabled,
 	safe_exec,
@@ -208,6 +216,7 @@ class ServerScript(Document):
 		        For e.g., ["frappe.utils.cint", "frappe.get_all", ...]
 		"""
 
+<<<<<<< HEAD
 		def get_keys(obj):
 			out = []
 			for key in obj:
@@ -243,6 +252,17 @@ class ServerScript(Document):
 			items = [{"value": d[0], "score": d[1]} for d in items]
 			frappe.cache.set_value("server_script_autocompletion_items", items)
 		return items
+=======
+		return frappe.cache.get_value(
+			"server_script_autocompletion_items",
+			generator=lambda: list(
+				chain.from_iterable(
+					get_keys_for_autocomplete(key, value, meta="utils")
+					for key, value in get_safe_globals().items()
+				),
+			),
+		)
+>>>>>>> version-15
 
 
 def setup_scheduler_events(script_name: str, frequency: str, cron_format: str | None = None):

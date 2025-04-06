@@ -62,7 +62,11 @@ frappe.ui.form.on("DocType", {
 			}
 		}
 
+<<<<<<< HEAD
 		const customize_form_link = "<a href='/app/customize-form'>Customize Form</a>";
+=======
+		const customize_form_link = `<a href="/app/customize-form">${__("Customize Form")}</a>`;
+>>>>>>> version-15
 		if (!frappe.boot.developer_mode && !frm.doc.custom) {
 			// make the document read-only
 			frm.set_read_only();

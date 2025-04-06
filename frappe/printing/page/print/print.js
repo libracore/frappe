@@ -58,7 +58,11 @@ frappe.ui.form.PrintView = class {
 	}
 
 	set_title() {
+<<<<<<< HEAD
 		this.page.set_title(this.frm.docname);
+=======
+		this.page.set_title(__(this.frm.docname));
+>>>>>>> version-15
 	}
 
 	setup_toolbar() {
@@ -751,13 +755,21 @@ frappe.ui.form.PrintView = class {
 		if (
 			frappe.meta
 				.get_print_formats(this.frm.doctype)
+<<<<<<< HEAD
 				.includes(this.print_format_selector.val()) ||
 			!this.frm.meta.default_print_format
+=======
+				.includes(this.print_format_selector.val())
+>>>>>>> version-15
 		)
 			return;
 
 		this.print_format_selector.empty();
+<<<<<<< HEAD
 		this.print_format_selector.val(this.frm.meta.default_print_format);
+=======
+		this.print_format_selector.val(this.frm.meta.default_print_format || "");
+>>>>>>> version-15
 	}
 
 	selected_format() {

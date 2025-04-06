@@ -38,6 +38,13 @@ class PermissionError(Exception):
 class DoesNotExistError(ValidationError):
 	http_status_code = 404
 
+<<<<<<< HEAD
+=======
+	def __init__(self, *args, doctype=None):
+		super().__init__(*args)
+		self.doctype = doctype
+
+>>>>>>> version-15
 
 class PageDoesNotExistError(ValidationError):
 	http_status_code = 404
@@ -296,12 +303,15 @@ class LinkExpired(ValidationError):
 	message = "The link has expired"
 
 
+<<<<<<< HEAD
 class InvalidKeyError(ValidationError):
 	http_status_code = 401
 	title = "Invalid Key"
 	message = "The document key is invalid"
 
 
+=======
+>>>>>>> version-15
 class CommandFailedError(Exception):
 	def __init__(self, message: str, out: str, err: str):
 		super().__init__(message)

@@ -264,8 +264,9 @@ def get_company_address(company):
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
 def address_query(doctype, txt, searchfield, start, page_len, filters):
-	from frappe.desk.reportview import get_match_cond
+	from frappe.desk.search import search_widget
 
+<<<<<<< HEAD
 	doctype = "Address"
 	link_doctype = filters.pop("link_doctype")
 	link_name = filters.pop("link_name")
@@ -337,6 +338,21 @@ def address_query(doctype, txt, searchfield, start, page_len, filters):
 		},
 	)
 
+=======
+	_filters = []
+	if link_doctype := filters.pop("link_doctype", None):
+		_filters.append(["Dynamic Link", "link_doctype", "=", link_doctype])
+
+	if link_name := filters.pop("link_name", None):
+		_filters.append(["Dynamic Link", "link_name", "=", link_name])
+
+	_filters.extend([key, "=", value] for key, value in filters.items())
+
+	return search_widget(
+		"Address", txt, filters=_filters, searchfield=searchfield, start=start, page_length=page_len
+	)
+
+>>>>>>> version-15
 
 def get_condensed_address(doc):
 	fields = ["address_title", "address_line1", "address_line2", "city", "county", "state", "country"]

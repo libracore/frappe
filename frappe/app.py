@@ -24,6 +24,10 @@ import frappe.utils.response
 from frappe import _
 from frappe.auth import SAFE_HTTP_METHODS, UNSAFE_HTTP_METHODS, HTTPRequest, validate_auth
 from frappe.middlewares import StaticDataMiddleware
+<<<<<<< HEAD
+=======
+from frappe.permissions import handle_does_not_exist_error
+>>>>>>> version-15
 from frappe.utils import CallbackManager, cint, get_site_name
 from frappe.utils.data import escape_html
 from frappe.utils.deprecations import deprecation_warning
@@ -307,8 +311,13 @@ def make_form_dict(request: Request):
 		frappe.local.form_dict["data"] = args
 	else:
 		frappe.throw(_("Invalid request arguments"))
+<<<<<<< HEAD
+
+=======
+>>>>>>> version-15
 
 
+@handle_does_not_exist_error
 def handle_exception(e):
 	response = None
 	http_status_code = getattr(e, "http_status_code", 500)
@@ -449,6 +458,12 @@ if sentry_dsn := os.getenv("FRAPPE_SENTRY_DSN"):
 		kwargs["traces_sample_rate"] = float(tracing_sample_rate)
 		application = SentryWsgiMiddleware(application)
 
+<<<<<<< HEAD
+=======
+	if profiling_sample_rate := os.getenv("SENTRY_PROFILING_SAMPLE_RATE"):
+		kwargs["profiles_sample_rate"] = float(profiling_sample_rate)
+
+>>>>>>> version-15
 	sentry_sdk.init(
 		dsn=sentry_dsn,
 		before_send=before_send,

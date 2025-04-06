@@ -26,6 +26,10 @@ app_include_js = [
 	"controls.bundle.js",
 	"report.bundle.js",
 	"telemetry.bundle.js",
+<<<<<<< HEAD
+=======
+	"billing.bundle.js",
+>>>>>>> version-15
 ]
 
 app_include_css = [
@@ -202,6 +206,10 @@ scheduler_events = {
 			"frappe.email.doctype.email_account.email_account.notify_unreplied",
 			"frappe.utils.global_search.sync_global_search",
 			"frappe.deferred_insert.save_to_db",
+<<<<<<< HEAD
+=======
+			"frappe.automation.doctype.reminder.reminder.send_reminders",
+>>>>>>> version-15
 		],
 		# 10 minutes
 		"0/10 * * * *": [
@@ -219,14 +227,21 @@ scheduler_events = {
 	"all": [
 		"frappe.email.queue.flush",
 		"frappe.monitor.flush",
+<<<<<<< HEAD
 		"frappe.automation.doctype.reminder.reminder.send_reminders",
+=======
+		"frappe.integrations.doctype.google_calendar.google_calendar.sync",
+>>>>>>> version-15
 	],
 	"hourly": [
 		"frappe.model.utils.link_count.update_link_count",
 		"frappe.model.utils.user_settings.sync_user_settings",
 		"frappe.desk.page.backups.backups.delete_downloadable_backups",
 		"frappe.desk.form.document_follow.send_hourly_updates",
+<<<<<<< HEAD
 		"frappe.integrations.doctype.google_calendar.google_calendar.sync",
+=======
+>>>>>>> version-15
 		"frappe.email.doctype.newsletter.newsletter.send_scheduled_email",
 		"frappe.website.doctype.personal_data_deletion_request.personal_data_deletion_request.process_data_deletion_request",
 	],
@@ -240,7 +255,10 @@ scheduler_events = {
 		"frappe.social.doctype.energy_point_settings.energy_point_settings.allocate_review_points",
 		"frappe.integrations.doctype.google_contacts.google_contacts.sync",
 		"frappe.automation.doctype.auto_repeat.auto_repeat.make_auto_repeat_entry",
+<<<<<<< HEAD
 		"frappe.automation.doctype.auto_repeat.auto_repeat.set_auto_repeat_as_completed",
+=======
+>>>>>>> version-15
 	],
 	"daily_long": [
 		"frappe.integrations.doctype.dropbox_settings.dropbox_settings.take_backups_daily",
@@ -434,7 +452,13 @@ before_job = [
 ]
 
 if os.getenv("FRAPPE_SENTRY_DSN") and (
+<<<<<<< HEAD
 	os.getenv("ENABLE_SENTRY_DB_MONITORING") or os.getenv("SENTRY_TRACING_SAMPLE_RATE")
+=======
+	os.getenv("ENABLE_SENTRY_DB_MONITORING")
+	or os.getenv("SENTRY_TRACING_SAMPLE_RATE")
+	or os.getenv("SENTRY_PROFILING_SAMPLE_RATE")
+>>>>>>> version-15
 ):
 	before_request.append("frappe.utils.sentry.set_sentry_context")
 	before_job.append("frappe.utils.sentry.set_sentry_context")
@@ -443,7 +467,10 @@ after_job = [
 	"frappe.recorder.dump",
 	"frappe.monitor.stop",
 	"frappe.utils.file_lock.release_document_locks",
+<<<<<<< HEAD
 	"frappe.utils.background_jobs.flush_telemetry",
+=======
+>>>>>>> version-15
 ]
 
 extend_bootinfo = [
@@ -559,4 +586,10 @@ persistent_cache_keys = [
 	"insert_queue_for_*",  # Deferred Insert
 	"recorder-*",  # Recorder
 	"global_search_queue",
+<<<<<<< HEAD
+=======
+	"monitor-transactions",
+	"rate-limit-counter-*",
+	"rl:*",
+>>>>>>> version-15
 ]

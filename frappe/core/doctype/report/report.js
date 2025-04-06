@@ -52,6 +52,15 @@ frappe.ui.form.on("Report", {
 				},
 			};
 		});
+<<<<<<< HEAD
+=======
+
+		if (["en", "en-GB", "en-US"].includes(frappe.boot.lang)) {
+			frm.set_df_property("add_translate_data", "hidden", 1);
+		} else {
+			frm.set_df_property("add_translate_data", "hidden", 0);
+		}
+>>>>>>> version-15
 	},
 
 	ref_doctype: function (frm) {

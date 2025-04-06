@@ -12,7 +12,11 @@ import frappe.utils
 from frappe import _, _dict
 from frappe.desk.form.document_follow import is_document_followed
 from frappe.model.utils.user_settings import get_user_settings
+<<<<<<< HEAD
 from frappe.permissions import get_doc_permissions
+=======
+from frappe.permissions import check_doctype_permission, get_doc_permissions
+>>>>>>> version-15
 from frappe.utils.data import cstr
 
 if typing.TYPE_CHECKING:
@@ -20,7 +24,7 @@ if typing.TYPE_CHECKING:
 
 
 @frappe.whitelist()
-def getdoc(doctype, name, user=None):
+def getdoc(doctype, name):
 	"""
 	Loads a doclist for a given document. This method is called directly from the client.
 	Requries "doctype", "name" as form variables.
@@ -33,10 +37,15 @@ def getdoc(doctype, name, user=None):
 	try:
 		doc = frappe.get_doc(doctype, name)
 	except frappe.DoesNotExistError:
+<<<<<<< HEAD
+=======
+		check_doctype_permission(doctype)
+>>>>>>> version-15
 		frappe.clear_last_message()
 		return []
 
 	if not doc.has_permission("read"):
+<<<<<<< HEAD
 		frappe.flags.error_message = _("Insufficient Permission for {0}").format(
 			frappe.bold(doctype + " " + name)
 		)
@@ -45,6 +54,22 @@ def getdoc(doctype, name, user=None):
 	run_onload(doc)
 	doc.apply_fieldlevel_read_permissions()
 
+=======
+		check_doctype_permission(doctype)
+		frappe.flags.error_message = _("Insufficient Permission for {0}").format(
+			frappe.bold(_(doctype) + " " + name)
+		)
+		raise frappe.PermissionError(("read", doctype, name))
+
+	# Replace cache if stale one exists
+	# PERF: This should be eventually removed completely when we are sure about caching correctness
+	if (key := frappe.can_cache_doc((doctype, name))) and frappe.cache.exists(key):
+		frappe._set_document_in_cache(key, doc)
+
+	run_onload(doc)
+	doc.apply_fieldlevel_read_permissions()
+
+>>>>>>> version-15
 	# add file list
 	doc.add_viewed()
 	get_docinfo(doc)
@@ -194,7 +219,11 @@ def get_versions(doc: "Document") -> list[dict]:
 		return []
 	return frappe.get_all(
 		"Version",
+<<<<<<< HEAD
 		filters=dict(ref_doctype=doc.doctype, docname=doc.name),
+=======
+		filters=dict(ref_doctype=doc.doctype, docname=str(doc.name)),
+>>>>>>> version-15
 		fields=["name", "owner", "creation", "data"],
 		limit=10,
 		order_by="creation desc",

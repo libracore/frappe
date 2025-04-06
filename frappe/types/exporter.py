@@ -91,6 +91,11 @@ class TypeExporter:
 		for field in self.doc.fields:
 			if iskeyword(field.fieldname):
 				continue
+<<<<<<< HEAD
+=======
+			if field.is_virtual and not field.options:
+				continue
+>>>>>>> version-15
 			if python_type := self._map_fieldtype(field):
 				self.field_types[field.fieldname] = python_type
 

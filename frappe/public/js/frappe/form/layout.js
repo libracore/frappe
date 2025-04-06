@@ -23,7 +23,13 @@ frappe.ui.form.Layout = class Layout {
 			this.parent = this.body;
 		}
 		this.wrapper = $('<div class="form-layout">').appendTo(this.parent);
+<<<<<<< HEAD
 		this.message = $('<div class="form-message hidden"></div>').appendTo(this.wrapper);
+=======
+		this.message = $('<div class="form-message-container hidden"></div>').appendTo(
+			this.wrapper
+		);
+>>>>>>> version-15
 		this.page = $('<div class="form-page"></div>').appendTo(this.wrapper);
 
 		if (!this.fields) {
@@ -56,6 +62,7 @@ frappe.ui.form.Layout = class Layout {
 		let fields = [this.get_new_name_field()];
 		if (this.doctype_layout) {
 			fields = fields.concat(this.get_fields_from_layout());
+<<<<<<< HEAD
 		} else {
 			fields = fields.concat(
 				frappe.meta.sort_docfields(frappe.meta.docfield_map[this.doctype])
@@ -117,6 +124,85 @@ frappe.ui.form.Layout = class Layout {
 		} else {
 			this.message.empty().addClass("hidden");
 		}
+=======
+		} else {
+			fields = fields.concat(
+				frappe.meta.sort_docfields(frappe.meta.docfield_map[this.doctype])
+			);
+		}
+
+		return fields;
+	}
+
+	get_new_name_field() {
+		return {
+			parent: this.frm.doctype,
+			fieldtype: "Data",
+			fieldname: "__newname",
+			reqd: 1,
+			hidden: 1,
+			label: __("Name"),
+			get_status: function (field) {
+				if (
+					field.frm &&
+					field.frm.is_new() &&
+					field.frm.meta.autoname &&
+					["prompt", "name"].includes(field.frm.meta.autoname.toLowerCase())
+				) {
+					return "Write";
+				}
+				return "None";
+			},
+		};
+	}
+
+	get_fields_from_layout() {
+		const fields = [];
+		for (let f of this.doctype_layout.fields) {
+			const docfield = copy_dict(frappe.meta.docfield_map[this.doctype][f.fieldname]);
+			docfield.label = f.label;
+			fields.push(docfield);
+		}
+		return fields;
+	}
+
+	/**Render a message block with its own color and close button
+	 * @param {String} html - message or HTML to be displayed
+	 * @param {String} color - color of the block. One of "yellow", "blue", "red", "green" or "orange". Defaults to "blue".
+	 * @param {Boolean} permanent - if true, the block will not have a close button
+	 */
+	show_message(html, color, permanent = false) {
+		if (!html) {
+			this.message.empty().addClass("hidden");
+			return;
+		}
+
+		// Prepare Block
+		let $html;
+		if (!frappe.utils.is_html(html)) {
+			// wrap in a block if `html` does not contain html tags
+			$html = $("<div class='form-message'></div>").text(html);
+		} else {
+			// Wrap in a block just in case the string does not begin with a tag
+			// as Jquery assumes it to be a CSS selector and breaks.
+			$html = $("<div class='form-message'>").html(html);
+		}
+
+		// Add close button to block if not permanent
+		const close_message = $(`<div class="close-message">${frappe.utils.icon("close")}</div>`);
+		if (!permanent) {
+			close_message.appendTo($html);
+			close_message.on("click", () => $html.remove());
+		}
+
+		// Add block color and append to parent container `form-message-container`
+		const block_color =
+			color && ["yellow", "blue", "red", "green", "orange"].includes(color) ? color : "blue";
+		$html.addClass(block_color).appendTo(this.message);
+
+		// Show parent container if hidden
+		this.message.removeClass("hidden");
+>>>>>>> version-15
 	}
 
 	render(new_fields) {

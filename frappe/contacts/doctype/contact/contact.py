@@ -3,6 +3,10 @@
 import frappe
 from frappe import _
 from frappe.contacts.address_and_contact import set_link_title
+<<<<<<< HEAD
+=======
+from frappe.core.doctype.access_log.access_log import make_access_log
+>>>>>>> version-15
 from frappe.core.doctype.dynamic_link.dynamic_link import deduplicate_dynamic_links
 from frappe.model.document import Document
 from frappe.model.naming import append_number_if_name_exists
@@ -127,7 +131,7 @@ class Contact(Document):
 			return
 
 		if len([email.email_id for email in self.email_ids if email.is_primary]) > 1:
-			frappe.throw(_("Only one {0} can be set as primary.").format(frappe.bold("Email ID")))
+			frappe.throw(_("Only one {0} can be set as primary.").format(frappe.bold(_("Email ID"))))
 
 		if len(self.email_ids) == 1:
 			self.email_ids[0].is_primary = 1
@@ -170,6 +174,101 @@ class Contact(Document):
 	def _get_full_name(self) -> str:
 		return get_full_name(self.first_name, self.middle_name, self.last_name, self.company_name)
 
+<<<<<<< HEAD
+=======
+	def get_vcard(self):
+		from vobject import vCard
+		from vobject.vcard import Name
+
+		vcard = vCard()
+		vcard.add("fn").value = self.full_name
+
+		name = Name()
+		if self.first_name:
+			name.given = self.first_name
+
+		if self.last_name:
+			name.family = self.last_name
+
+		if self.middle_name:
+			name.additional = self.middle_name
+
+		vcard.add("n").value = name
+
+		if self.designation:
+			vcard.add("title").value = self.designation
+
+		org_list = []
+		if self.company_name:
+			org_list.append(self.company_name)
+
+		if self.department:
+			org_list.append(self.department)
+
+		if org_list:
+			vcard.add("org").value = org_list
+
+		for row in self.email_ids:
+			email = vcard.add("email")
+			email.value = row.email_id
+			if row.is_primary:
+				email.type_param = "pref"
+
+		for row in self.phone_nos:
+			tel = vcard.add("tel")
+			tel.value = row.phone
+			if row.is_primary_phone:
+				tel.type_param = "home"
+
+			if row.is_primary_mobile_no:
+				tel.type_param = "cell"
+
+		return vcard
+
+
+@frappe.whitelist()
+def download_vcard(contact: str):
+	"""Download vCard for the contact"""
+	contact = frappe.get_doc("Contact", contact)
+	contact.check_permission()
+
+	vcard = contact.get_vcard()
+	make_access_log(doctype="Contact", document=contact.name, file_type="vcf")
+
+	frappe.response["filename"] = f"{contact.name}.vcf"
+	frappe.response["filecontent"] = vcard.serialize().encode("utf-8")
+	frappe.response["type"] = "binary"
+
+
+@frappe.whitelist()
+def download_vcards(contacts: str):
+	"""Download vCard for the contact"""
+	import json
+
+	from frappe.utils.data import now
+
+	contact_ids = frappe.parse_json(contacts)
+
+	vcards = []
+	for contact_id in contact_ids:
+		contact = frappe.get_doc("Contact", contact_id)
+		contact.check_permission()
+		vcard = contact.get_vcard()
+		vcards.append(vcard.serialize())
+
+	make_access_log(
+		doctype="Contact",
+		filters=json.dumps([["name", "in", contact_ids]], ensure_ascii=False, indent="\t"),
+		file_type="vcf",
+	)
+
+	timestamp = now()[:19]  # remove milliseconds
+
+	frappe.response["filename"] = f"{timestamp} Contacts.vcf"
+	frappe.response["filecontent"] = "\n".join(vcards).encode("utf-8")
+	frappe.response["type"] = "binary"
+
+>>>>>>> version-15
 
 def get_default_contact(doctype, name):
 	"""Returns default contact for the given doctype, name"""

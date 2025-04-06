@@ -4,6 +4,10 @@ import os
 import re
 import shutil
 import subprocess
+<<<<<<< HEAD
+=======
+from contextlib import suppress
+>>>>>>> version-15
 from subprocess import getoutput
 from tempfile import mkdtemp
 from urllib.parse import urlparse
@@ -197,7 +201,11 @@ def symlink(target, link_name, overwrite=False):
 		if os.path.isdir(link_name):
 			raise IsADirectoryError(f"Cannot symlink over existing directory: '{link_name}'")
 		try:
+<<<<<<< HEAD
 			os.replace(temp_link_name, link_name)
+=======
+			shutil.move(temp_link_name, link_name)
+>>>>>>> version-15
 		except AttributeError:
 			os.renames(temp_link_name, link_name)
 	except Exception:
@@ -253,6 +261,12 @@ def bundle(
 	frappe_app_path = frappe.get_app_source_path("frappe")
 	frappe.commands.popen(command, cwd=frappe_app_path, env=get_node_env(), raise_err=True)
 
+<<<<<<< HEAD
+=======
+	with suppress(Exception):
+		frappe.cache.flushall()
+
+>>>>>>> version-15
 
 def watch(apps=None):
 	"""watch and rebuild if necessary"""
@@ -379,8 +393,14 @@ def make_asset_dirs(hard_link=False):
 		try:
 			print(start_message, end="\r")
 			link_assets_dir(source, target, hard_link=hard_link)
+<<<<<<< HEAD
 		except Exception:
 			print(fail_message, end="\r")
+=======
+		except Exception as e:
+			print(e)
+			print(fail_message)
+>>>>>>> version-15
 
 	click.echo(unstrip(click.style("✔", fg="green") + " Application Assets Linked") + "\n")
 

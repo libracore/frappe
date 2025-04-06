@@ -1,7 +1,11 @@
 # Copyright (c) 2019, Frappe Technologies and contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 # import frappe
+=======
+import frappe
+>>>>>>> version-15
 from frappe.model.document import Document
 
 
@@ -18,5 +22,15 @@ class TagLink(Document):
 		document_type: DF.Link | None
 		tag: DF.Link | None
 		title: DF.Data | None
+<<<<<<< HEAD
 	# end: auto-generated types
 	pass
+=======
+
+	# end: auto-generated types
+	pass
+
+
+def on_doctype_update():
+	frappe.db.add_index("Tag Link", ["document_type", "document_name"])
+>>>>>>> version-15

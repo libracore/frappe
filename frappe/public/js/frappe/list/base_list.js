@@ -171,7 +171,10 @@ frappe.views.BaseList = class BaseList {
 		!this.hide_card_layout && this.page.main.addClass("frappe-card");
 		this.page.page_form.removeClass("row").addClass("flex");
 		this.hide_page_form && this.page.page_form.hide();
+<<<<<<< HEAD
 		this.hide_sidebar && this.$page.addClass("no-list-sidebar");
+=======
+>>>>>>> version-15
 		this.setup_page_head();
 	}
 
@@ -276,7 +279,14 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	setup_side_bar() {
+<<<<<<< HEAD
 		if (this.hide_sidebar || !frappe.boot.desk_settings.list_sidebar) return;
+=======
+		if (this.page.disable_sidebar_toggle) {
+			return;
+		}
+
+>>>>>>> version-15
 		this.list_sidebar = new frappe.views.ListSidebar({
 			doctype: this.doctype,
 			stats: this.stats,

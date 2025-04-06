@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 """ Basic telemetry for improving apps.
+=======
+"""Basic telemetry for improving apps.
+>>>>>>> version-15
 
 WARNING: Everything in this file should be treated "internal" and is subjected to change or get
 removed without any warning.
 """
+<<<<<<< HEAD
 from contextlib import suppress
+=======
+
+from contextlib import suppress
+from functools import lru_cache
+>>>>>>> version-15
 
 import frappe
 from frappe.utils import getdate
@@ -50,7 +60,26 @@ def init_telemetry():
 		return
 
 	with suppress(Exception):
+<<<<<<< HEAD
 		frappe.local.posthog = Posthog(posthog_project_id, host=posthog_host)
+=======
+		frappe.local.posthog = _get_posthog_instance(posthog_project_id, posthog_host)
+
+	# Background jobs might exit before flushing telemetry, so explicitly flush queue
+	if frappe.job:
+		frappe.job.after_job.add(flush_telemetry)
+
+
+@lru_cache
+def _get_posthog_instance(project_id, host):
+	return Posthog(project_id, host=host, timeout=5, max_retries=3)
+
+
+def flush_telemetry():
+	ph: Posthog = getattr(frappe.local, "posthog", None)
+	with suppress(Exception):
+		ph and ph.flush()
+>>>>>>> version-15
 
 
 def capture(event, app, **kwargs):

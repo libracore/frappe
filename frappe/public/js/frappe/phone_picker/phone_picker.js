@@ -63,24 +63,48 @@ class PhonePicker {
 			});
 			this.search_input.keyup((e) => {
 				e.preventDefault();
+<<<<<<< HEAD
 				this.filter_icons();
 			});
 
 			this.search_input.on("search", () => {
 				this.filter_icons();
+=======
+				this.filter_icons(country, info.isd);
+			});
+
+			this.search_input.on("search", () => {
+				this.filter_icons(country, info.isd);
+>>>>>>> version-15
 			});
 		});
 	}
 
+<<<<<<< HEAD
 	filter_icons() {
+=======
+	filter_icons(country, isd) {
+>>>>>>> version-15
 		let value = this.search_input.val();
 		if (!value) {
 			this.phone_wrapper.find(".phone-wrapper").removeClass("hidden");
 		} else {
+<<<<<<< HEAD
 			this.phone_wrapper.find(".phone-wrapper").addClass("hidden");
 			this.phone_wrapper
 				.find(`.phone-wrapper[id*='${value.toLowerCase()}']`)
 				.removeClass("hidden");
+=======
+			if (!isd.includes(value) && !country.toLowerCase().includes(value.toLowerCase())) {
+				this.phone_wrapper
+					.find(`.phone-wrapper[id='${country.toLowerCase()}']`)
+					.addClass("hidden");
+			} else {
+				this.phone_wrapper
+					.find(`.phone-wrapper[id='${country.toLowerCase()}']`)
+					.removeClass("hidden");
+			}
+>>>>>>> version-15
 		}
 	}
 

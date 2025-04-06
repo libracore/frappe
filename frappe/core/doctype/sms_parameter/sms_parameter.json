@@ -25,6 +25,10 @@
    "in_list_view": 1,
    "label": "Value",
    "print_width": "150px",
+<<<<<<< HEAD
+=======
+   "length": 255,
+>>>>>>> version-15
    "reqd": 1,
    "width": "150px"
   },
@@ -39,7 +43,11 @@
  "idx": 1,
  "istable": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2022-08-03 12:20:53.129765",
+=======
+ "modified": "2025-03-12 19:40:34.519601",
+>>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Core",
  "name": "SMS Parameter",
@@ -48,4 +56,8 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> version-15

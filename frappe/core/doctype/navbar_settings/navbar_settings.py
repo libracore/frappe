@@ -44,7 +44,14 @@ class NavbarSettings(Document):
 
 
 def get_app_logo():
+<<<<<<< HEAD
 	app_logo = frappe.db.get_single_value("Navbar Settings", "app_logo", cache=True)
+=======
+	app_logo = frappe.get_website_settings("app_logo") or frappe.db.get_single_value(
+		"Navbar Settings", "app_logo", cache=True
+	)
+
+>>>>>>> version-15
 	if not app_logo:
 		logos = frappe.get_hooks("app_logo_url")
 		app_logo = logos[0]
