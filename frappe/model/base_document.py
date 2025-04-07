@@ -169,10 +169,10 @@ class BaseDocument:
 		"""Update multiple fields of a doctype using a dictionary of key-value pairs.
 
 		Example:
-		        doc.update({
-		                "user": "admin",
-		                "balance": 42000
-		        })
+				doc.update({
+						"user": "admin",
+						"balance": 42000
+				})
 		"""
 
 		# set name first, as it is used a reference in child document
@@ -247,11 +247,11 @@ class BaseDocument:
 		"""Append an item to a child table.
 
 		Example:
-		        doc.append("childtable", {
-		                "child_table_field": "value",
-		                "child_table_int_field": 0,
-		                ...
-		        })
+				doc.append("childtable", {
+						"child_table_field": "value",
+						"child_table_int_field": 0,
+						...
+				})
 		"""
 		if value is None:
 			value = {}
@@ -524,9 +524,9 @@ class BaseDocument:
 		"""INSERT the document (with valid columns) in the database.
 
 		args:
-		        ignore_if_duplicate: ignore primary key collision
-		                                        at database level (postgres)
-		                                        in python (mariadb)
+				ignore_if_duplicate: ignore primary key collision
+												at database level (postgres)
+												in python (mariadb)
 		"""
 		if not self.name:
 			# name will be set by document class in most cases
@@ -651,13 +651,13 @@ class BaseDocument:
 		This function returns the `column_name` associated with the `key_name` passed
 
 		Args:
-		        key_name (str): The name of the database index.
+				key_name (str): The name of the database index.
 
 		Raises:
-		        IndexError: If the key is not found in the table.
+				IndexError: If the key is not found in the table.
 
 		Returns:
-		        str: The column name associated with the key.
+				str: The column name associated with the key.
 		"""
 		return frappe.db.sql(
 			f"""
@@ -678,10 +678,10 @@ class BaseDocument:
 		"""Returns the associated label for fieldname
 
 		Args:
-		        fieldname (str): The fieldname in the DocType to use to pull the label.
+				fieldname (str): The fieldname in the DocType to use to pull the label.
 
 		Returns:
-		        str: The label associated with the fieldname, if found, otherwise `None`.
+				str: The label associated with the fieldname, if found, otherwise `None`.
 		"""
 		df = self.meta.get_field(fieldname)
 		if df:
@@ -1198,9 +1198,9 @@ class BaseDocument:
 		Print Hide can be set via the Print Format Builder or in the controller as a list
 		of hidden fields. Example
 
-		        class MyDoc(Document):
-		                def __setup__(self):
-		                        self.print_hide = ["field1", "field2"]
+				class MyDoc(Document):
+						def __setup__(self):
+								self.print_hide = ["field1", "field2"]
 
 		:param fieldname: Fieldname to be checked if hidden.
 		"""

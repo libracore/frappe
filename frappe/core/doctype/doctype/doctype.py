@@ -625,7 +625,6 @@ class DocType(Document):
 
 	def run_module_method(self, method):
 		from frappe.modules import load_doctype_module
-
 		module = load_doctype_module(self.name, self.module)
 		if hasattr(module, method):
 			getattr(module, method)()

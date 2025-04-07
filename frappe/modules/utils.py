@@ -244,11 +244,14 @@ def load_doctype_module(doctype, module=None, prefix="", suffix=""):
 	Note: This will return the standard defined module object for the doctype irrespective
 	of the `override_doctype_class` hook.
 	"""
+	# ~ if doctype == 'Form Tour Step':
+		# ~ module = 'Desk'
 	module = module or get_doctype_module(doctype)
 	app = get_module_app(module)
 	key = (app, doctype, prefix, suffix)
 	module_name = get_module_name(doctype, module, prefix, suffix)
-
+	# ~ if doctype == 'Form Tour Step':
+		# ~ frappe.throw(module_name)
 	if key not in doctype_python_modules:
 		try:
 			doctype_python_modules[key] = frappe.get_module(module_name)

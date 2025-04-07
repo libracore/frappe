@@ -635,6 +635,7 @@ class Meta(Document):
 		implemented in other Frappe applications via hooks.
 		"""
 		data = frappe._dict()
+		print("Hallo")
 		if not self.custom:
 			try:
 				module = load_doctype_module(self.name, suffix="_dashboard")
