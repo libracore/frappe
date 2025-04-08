@@ -105,11 +105,7 @@ context("Control Link", () => {
 			});
 	});
 
-<<<<<<< HEAD
-	it("should route to form on arrow click", () => {
-=======
 	it("should show open link button", () => {
->>>>>>> version-15
 		get_dialog_with_link().as("dialog");
 
 		cy.intercept("POST", "/api/method/frappe.client.validate_link").as("validate_link");
@@ -121,17 +117,10 @@ context("Control Link", () => {
 			cy.wait("@search_link");
 			cy.get("@input").type(todos[0]).blur();
 			cy.wait("@validate_link");
-<<<<<<< HEAD
-			cy.get("@input").focus();
-			cy.wait(500); // wait for arrow to show
-			cy.get(".frappe-control[data-fieldname=link] .btn-open").should("be.visible").click();
-			cy.location("pathname").should("eq", `/app/todo/${todos[0]}`);
-=======
 			cy.get("@input").trigger("mouseover");
 			cy.get(".frappe-control[data-fieldname=link] .btn-open")
 				.should("be.visible")
 				.should("have.attr", "href", `/app/todo/${todos[0]}`);
->>>>>>> version-15
 		});
 	});
 
@@ -301,11 +290,7 @@ context("Control Link", () => {
 			});
 
 		cy.clear_cache();
-<<<<<<< HEAD
-		cy.wait(1000);
-=======
 		cy.wait(500);
->>>>>>> version-15
 
 		get_dialog_with_gender_link().as("dialog");
 		cy.intercept("POST", "/api/method/frappe.desk.search.search_link").as("search_link");
