@@ -15,10 +15,7 @@
   "service",
   "authentication_column",
   "auth_method",
-<<<<<<< HEAD
-=======
   "backend_app_flow",
->>>>>>> version-15
   "authorize_api_access",
   "password",
   "awaiting_password",
@@ -44,10 +41,7 @@
   "imap_folder",
   "section_break_12",
   "append_emails_to_sent_folder",
-<<<<<<< HEAD
-=======
   "sent_folder_name",
->>>>>>> version-15
   "append_to",
   "create_contact",
   "enable_automatic_linking",
@@ -586,11 +580,7 @@
    "label": "IMAP Details"
   },
   {
-<<<<<<< HEAD
-   "depends_on": "eval: doc.auth_method === \"OAuth\" && !doc.__islocal && !doc.__unsaved",
-=======
    "depends_on": "eval: doc.auth_method === \"OAuth\" && !doc.__islocal && !doc.__unsaved && !doc.backend_app_flow",
->>>>>>> version-15
    "fieldname": "authorize_api_access",
    "fieldtype": "Button",
    "label": "Authorize API Access"
@@ -619,14 +609,6 @@
    "options": "Connected App"
   },
   {
-<<<<<<< HEAD
-   "depends_on": "eval: doc.auth_method === \"OAuth\"",
-   "fieldname": "connected_user",
-   "fieldtype": "Link",
-   "label": "Connected User",
-   "mandatory_depends_on": "eval: doc.auth_method === \"OAuth\"",
-   "options": "User"
-=======
    "depends_on": "eval: doc.auth_method === \"OAuth\" && !doc.backend_app_flow",
    "fieldname": "connected_user",
    "fieldtype": "Link",
@@ -654,18 +636,13 @@
    "fieldtype": "Data",
    "label": "Always BCC Address",
    "options": "Email"
->>>>>>> version-15
   }
  ],
  "icon": "fa fa-inbox",
  "index_web_pages_for_search": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2023-06-05 15:03:08.538819",
-=======
  "make_attachments_public": 1,
  "modified": "2025-03-27 13:42:11.021118",
->>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Email Account",

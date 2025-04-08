@@ -128,10 +128,7 @@ export default class Grid {
 		this.setup_add_row();
 
 		this.setup_grid_pagination();
-<<<<<<< HEAD
-=======
 		this.update_idx_and_name();
->>>>>>> version-15
 
 		this.custom_buttons = {};
 		this.grid_buttons = this.wrapper.find(".grid-buttons");
@@ -154,34 +151,6 @@ export default class Grid {
 		}
 	}
 
-<<<<<<< HEAD
-	set_doc_url() {
-		let unsupported_fieldtypes = frappe.model.no_value_type.filter(
-			(x) => frappe.model.table_fields.indexOf(x) === -1
-		);
-
-		if (
-			!this.df.label ||
-			!this.df?.documentation_url ||
-			unsupported_fieldtypes.includes(this.df.fieldtype)
-		)
-			return;
-
-		let $help = $(this.parent).find("span.help");
-		$help.empty();
-		$(`<a href="${this.df.documentation_url}" target="_blank">
-			${frappe.utils.icon("help", "sm")}
-		</a>`).appendTo($help);
-	}
-
-	setup_grid_pagination() {
-		this.grid_pagination = new GridPagination({
-			grid: this,
-			wrapper: this.wrapper,
-		});
-	}
-
-=======
 	update_idx_and_name() {
 		this.data.forEach((d, ri) => {
 			if (d.idx === undefined) {
@@ -219,7 +188,6 @@ export default class Grid {
 		});
 	}
 
->>>>>>> version-15
 	setup_check() {
 		this.wrapper.on("click", ".grid-row-check", (e) => {
 			const $check = $(e.currentTarget);
@@ -925,22 +893,6 @@ export default class Grid {
 	}
 
 	duplicate_row(d, copy_doc) {
-<<<<<<< HEAD
-		$.each(copy_doc, function (key, value) {
-			if (
-				![
-					"creation",
-					"modified",
-					"modified_by",
-					"idx",
-					"owner",
-					"parent",
-					"doctype",
-					"name",
-					"parentfield",
-				].includes(key)
-			) {
-=======
 		const noCopyFields = new Set([
 			"creation",
 			"modified",
@@ -960,7 +912,6 @@ export default class Grid {
 
 		$.each(copy_doc, function (key, value) {
 			if (!noCopyFields.has(key)) {
->>>>>>> version-15
 				d[key] = value;
 			}
 		});

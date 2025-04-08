@@ -8,6 +8,10 @@ export default class GridRow {
 		this.set_docfields();
 		this.columns = {};
 		this.columns_list = [];
+		this.depandant_fields = {
+			mandatory: [],
+			read_only: [],
+		};
 		this.row_check_html = '<input type="checkbox" class="grid-row-check">';
 		this.make();
 	}
@@ -429,15 +433,6 @@ export default class GridRow {
 
 		$(`
 			<div class='form-group'>
-<<<<<<< HEAD
-				<div class='row' style='margin:0px; margin-bottom:10px;'>
-					<div class='col-6 col-md-8'>
-						${__("Fieldname").bold()}
-					</div>
-					<div class='col-6 col-md-4' style='padding-left:5px;'>
-						${__("Column Width").bold()}
-					</div>
-=======
 				<div class='row' style='margin-bottom:10px;'>
 					<div class='col-1'></div>
 					<div class='col-6' style='padding-left:20px;'>
@@ -447,7 +442,6 @@ export default class GridRow {
 						${__("Column Width").bold()}
 					</div>
 					<div class='col-1'></div>
->>>>>>> version-15
 				</div>
 				<div class='control-input-wrapper selected-fields'>
 				</div>
@@ -477,11 +471,8 @@ export default class GridRow {
 					sort_options: false,
 				},
 			],
-<<<<<<< HEAD
-=======
 			secondary_action_label: __("Select All"),
 			secondary_action: () => this.select_all_columns(docfields),
->>>>>>> version-15
 		});
 
 		d.set_primary_action(__("Add"), () => {
@@ -506,8 +497,6 @@ export default class GridRow {
 		d.show();
 	}
 
-<<<<<<< HEAD
-=======
 	select_all_columns(docfields) {
 		docfields.forEach((docfield) => {
 			if (docfield.checked) {
@@ -519,7 +508,6 @@ export default class GridRow {
 		});
 	}
 
->>>>>>> version-15
 	prepare_columns_for_dialog(selected_fields) {
 		let fields = [];
 
@@ -577,19 +565,10 @@ export default class GridRow {
 							<div class='col-1' style='padding-top: 4px;'>
 								<a style='cursor: grabbing;'>${frappe.utils.icon("drag", "xs")}</a>
 							</div>
-<<<<<<< HEAD
-							<div class='col-6 col-md-8' style='padding-right:0px; padding-top: 5px;'>
-								${__(docfield.label, null, docfield.parent)}
-							</div>
-							<div class='col-3 col-md-2' style='padding-left:0px; padding-top: 2px; margin-top:-2px;' title='${__(
-								"Columns"
-							)}'>
-=======
 							<div class='col-6' style='padding-top: 5px;'>
 								${__(docfield.label, null, docfield.parent)}
 							</div>
 							<div class='col-4' style='padding-top: 2px; margin-top:-2px;' title='${__("Columns")}'>
->>>>>>> version-15
 								<input class='form-control column-width my-1 input-xs text-right'
 								style='height: 24px; max-width: 80px; background: var(--bg-color);'
 									value='${docfield.columns || cint(d.columns)}'
@@ -774,6 +753,7 @@ export default class GridRow {
 			this.evaluate_depends_on_value(df.mandatory_depends_on)
 		) {
 			df.reqd = 1;
+			this.depandant_fields["mandatory"].push(df);
 		}
 
 		if (
@@ -782,7 +762,20 @@ export default class GridRow {
 			this.evaluate_depends_on_value(df.read_only_depends_on)
 		) {
 			df.read_only = 1;
+			this.depandant_fields["read_only"].push(df);
 		}
+	}
+
+	refresh_depedency() {
+		this.depandant_fields["read_only"].forEach((df) => {
+			df.read_only = 0;
+			this.set_dependant_property(df);
+		});
+		this.depandant_fields["mandatory"].forEach((df) => {
+			df.reqd = 0;
+			this.set_dependant_property(df);
+		});
+		this.refresh();
 	}
 
 	evaluate_depends_on_value(expression) {
@@ -1139,7 +1132,6 @@ export default class GridRow {
 		var me = this,
 			parent = column.field_area,
 			df = column.df;
-
 		var field = frappe.ui.form.make_control({
 			df: df,
 			parent: parent,
@@ -1157,25 +1149,14 @@ export default class GridRow {
 		// sync get_query
 		field.get_query = this.grid.get_field(df.fieldname).get_query;
 
-<<<<<<< HEAD
-		if (!field.df.onchange_modified) {
-			var field_on_change_function = field.df.onchange;
-			field.df.onchange = (e) => {
-				field_on_change_function && field_on_change_function.bind(field)(e);
-				this.refresh_field(field.df.fieldname);
-			};
-
-			field.df.onchange_modified = true;
-		}
-=======
 		// df.onchange is common for all rows in grid
 		let field_on_change_function = df.onchange;
 		field.df.change = (e) => {
+			this.refresh_depedency();
 			// trigger onchange with current grid row field as "this"
 			field_on_change_function && field_on_change_function.apply(field, [e]);
 			me.refresh_field(field.df.fieldname);
 		};
->>>>>>> version-15
 
 		field.refresh();
 		if (field.$input) {

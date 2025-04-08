@@ -10,11 +10,7 @@ be used to build database driven apps.
 
 Read the documentation: https://frappeframework.com/docs
 """
-<<<<<<< HEAD
-import copy
-=======
-
->>>>>>> version-15
+#import copy
 import faulthandler
 import functools
 import gc
@@ -59,11 +55,15 @@ from .utils.jinja import (
 from .utils.lazy_loader import lazy_import
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 __version__ = "15.45.0"
 __title__ = "Frappe Framework"
 
 =======
 __version__ = "15.63.0"
+=======
+__version__ = "15.63.1"
+>>>>>>> version-15
 __title__ = "Frappe Framework"
 
 # This if block is never executed when running the code. It is only used for
@@ -2521,11 +2521,15 @@ def logger(module=None, with_more_info=False, allow_site=True, filter=None, max_
 	)
 
 
-def get_desk_link(doctype, name):
+def get_desk_link(doctype, name, show_title_with_name=False):
 	meta = get_meta(doctype)
 	title = get_value(doctype, name, meta.get_title_field())
 
-	html = '<a href="/app/Form/{doctype}/{name}" style="font-weight: bold;">{doctype_local} {title_local}</a>'
+	if show_title_with_name and name != title:
+		html = '<a href="/app/Form/{doctype}/{name}" style="font-weight: bold;">{doctype_local} {name}: {title_local}</a>'
+	else:
+		html = '<a href="/app/Form/{doctype}/{name}" style="font-weight: bold;">{doctype_local} {title_local}</a>'
+
 	return html.format(doctype=doctype, name=name, doctype_local=_(doctype), title_local=_(title))
 
 
