@@ -359,9 +359,13 @@ export default class Grid {
 				let idx = $(event.item).closest('.grid-row').attr('data-idx');
 				let doc = this.get_data()[idx - 1];
 				this.renumber_based_on_dom();
-				this.frm.script_manager.trigger(this.df.fieldnathis + "_move", this.df.options, doc.nathis);
+				this.frm &&	this.frm.script_manager.trigger(
+					this.df.fieldname + "_move",
+					this.df.options,
+					doc.name
+				);
 				this.refresh();
-				this.frm.dirty();
+				this.frm && this.frm.dirty();
 			}
 		});
 
@@ -375,7 +379,7 @@ export default class Grid {
 		return data;
 	}
 	get_modal_data() {
-		return this.df.get_data() ? this.df.get_data().filter(data => {
+		return this.df.get_data ? this.df.get_data().filter(data => {
 			if (!this.deleted_docs || !in_list(this.deleted_docs, data.name)) {
 				return data;
 			}
