@@ -5,18 +5,11 @@ import re
 
 import frappe
 from frappe import _
-<<<<<<< HEAD
-=======
 from frappe.desk.utils import slug
->>>>>>> version-15
 
 
 @frappe.whitelist()
 def get_apps():
-<<<<<<< HEAD
-	apps = frappe.get_installed_apps()
-	app_list = []
-=======
 	from frappe.desk.desktop import get_workspace_sidebar_items
 
 	allowed_workspaces = get_workspace_sidebar_items().get("pages")
@@ -24,7 +17,6 @@ def get_apps():
 	apps = frappe.get_installed_apps()
 	app_list = []
 
->>>>>>> version-15
 	for app in apps:
 		if app == "frappe":
 			continue
@@ -32,30 +24,23 @@ def get_apps():
 		if not len(app_details):
 			continue
 		for app_detail in app_details:
-			has_permission_path = app_detail.get("has_permission")
-			if has_permission_path and not frappe.get_attr(has_permission_path)():
-				continue
-			app_list.append(
-				{
-					"name": app,
-					"logo": app_detail.get("logo"),
-					"title": _(app_detail.get("title")),
-<<<<<<< HEAD
-					"route": app_detail.get("route"),
-=======
-					"route": get_route(app_detail, allowed_workspaces),
->>>>>>> version-15
-				}
-			)
+			if has_permission_path := app_detail.get("has_permission"):
+				try:
+					if not frappe.get_attr(has_permission_path)():
+						continue
+					app_list.append(
+						{
+							"name": app,
+							"logo": app_detail.get("logo"),
+							"title": _(app_detail.get("title")),
+							"route": get_route(app_detail, allowed_workspaces),
+						}
+					)
+				except Exception:
+					frappe.log_error(f"Failed to call has_permission hook ({has_permission_path}) for {app}")
 	return app_list
 
 
-<<<<<<< HEAD
-def get_route(app_name):
-	apps = frappe.get_hooks("add_to_apps_screen", app_name=app_name)
-	app = next((app for app in apps if app.get("name") == app_name), None)
-	return app.get("route") if app and app.get("route") else "/apps"
-=======
 def get_route(app, allowed_workspaces=None):
 	if not allowed_workspaces:
 		return "/app"
@@ -78,7 +63,6 @@ def get_route(app, allowed_workspaces=None):
 		return f"/app/{slug(allowed_workspaces[0].get('name').lower())}"
 	else:
 		return route
->>>>>>> version-15
 
 
 def is_desk_apps(apps):
@@ -91,14 +75,9 @@ def is_desk_apps(apps):
 	return True
 
 
-<<<<<<< HEAD
-def get_default_path():
-	apps = get_apps()
-=======
 def get_default_path(apps=None):
 	if not apps:
 		apps = get_apps()
->>>>>>> version-15
 	_apps = [app for app in apps if app.get("name") != "frappe"]
 
 	if len(_apps) == 0:
@@ -106,12 +85,6 @@ def get_default_path(apps=None):
 
 	system_default_app = frappe.get_system_settings("default_app")
 	user_default_app = frappe.db.get_value("User", frappe.session.user, "default_app")
-<<<<<<< HEAD
-	if system_default_app and not user_default_app:
-		return get_route(system_default_app)
-	elif user_default_app:
-		return get_route(user_default_app)
-=======
 
 	if system_default_app and not user_default_app:
 		app = next((app for app in apps if app.get("name") == system_default_app), None)
@@ -119,7 +92,6 @@ def get_default_path(apps=None):
 	elif user_default_app:
 		app = next((app for app in apps if app.get("name") == user_default_app), None)
 		return app.get("route") if app else None
->>>>>>> version-15
 
 	if len(_apps) == 1:
 		return _apps[0].get("route") or "/apps"

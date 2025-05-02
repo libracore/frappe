@@ -3,10 +3,7 @@
 import frappe
 from frappe import _
 from frappe.contacts.address_and_contact import set_link_title
-<<<<<<< HEAD
-=======
 from frappe.core.doctype.access_log.access_log import make_access_log
->>>>>>> version-15
 from frappe.core.doctype.dynamic_link.dynamic_link import deduplicate_dynamic_links
 from frappe.model.document import Document
 from frappe.model.naming import append_number_if_name_exists
@@ -174,8 +171,6 @@ class Contact(Document):
 	def _get_full_name(self) -> str:
 		return get_full_name(self.first_name, self.middle_name, self.last_name, self.company_name)
 
-<<<<<<< HEAD
-=======
 	def get_vcard(self):
 		from vobject import vCard
 		from vobject.vcard import Name
@@ -268,7 +263,6 @@ def download_vcards(contacts: str):
 	frappe.response["filecontent"] = "\n".join(vcards).encode("utf-8")
 	frappe.response["type"] = "binary"
 
->>>>>>> version-15
 
 def get_default_contact(doctype, name):
 	"""Returns default contact for the given doctype, name"""

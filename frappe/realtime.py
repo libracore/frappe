@@ -115,15 +115,7 @@ def emit_via_redis(event, message, room):
 
 @frappe.whitelist(allow_guest=True)
 def can_subscribe_doc(doctype: str, docname: str) -> bool:
-<<<<<<< HEAD
-	from frappe.exceptions import PermissionError
-
-	if not frappe.has_permission(doctype=doctype, doc=docname, ptype="read"):
-		raise PermissionError()
-
-=======
 	frappe.has_permission(doctype, doc=docname, throw=True)
->>>>>>> version-15
 	return True
 
 
@@ -139,11 +131,6 @@ def can_subscribe_doctype(doctype: str) -> bool:
 
 @frappe.whitelist(allow_guest=True)
 def get_user_info():
-<<<<<<< HEAD
-	return {
-		"user": frappe.session.user,
-		"user_type": frappe.session.data.user_type,
-=======
 	user_type = frappe.session.data.user_type
 	# For requests with Bearer tokens, user_type is not set in the session data
 	if not user_type:
@@ -151,7 +138,6 @@ def get_user_info():
 	return {
 		"user": frappe.session.user,
 		"user_type": user_type,
->>>>>>> version-15
 	}
 
 

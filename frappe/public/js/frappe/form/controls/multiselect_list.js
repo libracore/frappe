@@ -32,12 +32,9 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 		this.$list_wrapper.on("click", ".dropdown-menu", (e) => {
 			e.stopPropagation();
 		});
-<<<<<<< HEAD
-=======
 		this.$list_wrapper.on("click", ".clear-selections", (e) => {
 			this.clear_all_selections();
 		});
->>>>>>> version-15
 		this.$list_wrapper.on("click", ".selectable-item", (e) => {
 			let $target = $(e.currentTarget);
 			this.toggle_select_item($target);
@@ -119,8 +116,6 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 			this.$list_wrapper.addClass(this.df.input_class);
 		}
 	}
-<<<<<<< HEAD
-=======
 
 	clear_all_selections() {
 		this.values = [];
@@ -129,7 +124,6 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 		this.set_selectable_items(this._options);
 		this.parse_validate_and_set_in_model("");
 	}
->>>>>>> version-15
 
 	toggle_select_item($selectable_item) {
 		$selectable_item.toggleClass("selected");

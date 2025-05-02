@@ -16,11 +16,7 @@
 			</div>
 		</div>
 		<div v-if="column.df.description" class="column-description">
-<<<<<<< HEAD
-			{{ column.df.description }}
-=======
 			{{ __(column.df.description) }}
->>>>>>> version-15
 		</div>
 		<draggable
 			class="column-container"

@@ -13,10 +13,7 @@ import frappe.utils
 from frappe import _, is_whitelisted, ping
 from frappe.core.doctype.server_script.server_script_utils import get_server_script_map
 from frappe.monitor import add_data_to_monitor
-<<<<<<< HEAD
-=======
 from frappe.permissions import check_doctype_permission
->>>>>>> version-15
 from frappe.utils import cint
 from frappe.utils.csvutils import build_csv_response
 from frappe.utils.deprecations import deprecation_warning
@@ -40,10 +37,7 @@ ALLOWED_MIMETYPES = (
 	"text/plain",
 	"video/quicktime",
 	"video/mp4",
-<<<<<<< HEAD
-=======
 	"text/csv",
->>>>>>> version-15
 )
 
 
@@ -68,19 +62,7 @@ def handle():
 
 def execute_cmd(cmd, from_async=False):
 	"""execute a request as python module"""
-<<<<<<< HEAD
-	for hook in reversed(frappe.get_hooks("override_whitelisted_methods", {}).get(cmd, [])):
-		# override using the last hook
-		cmd = hook
-		break
-=======
 	cmd = frappe.override_whitelisted_method(cmd)
-
-	# via server script
-	server_script = get_server_script_map().get("_api", {}).get(cmd)
-	if server_script:
-		return run_server_script(server_script)
->>>>>>> version-15
 
 	# via server script
 	server_script = get_server_script_map().get("_api", {}).get(cmd)
@@ -236,21 +218,14 @@ def upload_file():
 				args["max_height"] = int(frappe.form_dict.max_height)
 			content = optimize_image(**args)
 
-<<<<<<< HEAD
-=======
 	frappe.local.uploaded_file_url = file_url
->>>>>>> version-15
 	frappe.local.uploaded_file = content
 	frappe.local.uploaded_filename = filename
 
 	if content is not None and (frappe.session.user == "Guest" or (user and not user.has_desk_access())):
 		filetype = guess_type(filename)[0]
 		if filetype not in ALLOWED_MIMETYPES:
-<<<<<<< HEAD
-			frappe.throw(_("You can only upload JPG, PNG, PDF, TXT or Microsoft documents."))
-=======
 			frappe.throw(_("You can only upload JPG, PNG, PDF, TXT, CSV or Microsoft documents."))
->>>>>>> version-15
 
 	if method:
 		method = frappe.get_attr(method)
@@ -273,20 +248,6 @@ def upload_file():
 
 
 def check_write_permission(doctype: str | None = None, name: str | None = None):
-<<<<<<< HEAD
-	check_doctype = doctype and not name
-	if doctype and name:
-		try:
-			doc = frappe.get_doc(doctype, name)
-			doc.has_permission("write")
-		except frappe.DoesNotExistError:
-			# doc has not been inserted yet, name is set to "new-some-doctype"
-			# If doc inserts fine then only this attachment will be linked see file/utils.py:relink_mismatched_files
-			return
-
-	if check_doctype:
-		frappe.has_permission(doctype, "write", throw=True)
-=======
 	if not doctype:
 		return
 
@@ -303,7 +264,6 @@ def check_write_permission(doctype: str | None = None, name: str | None = None):
 		return
 
 	doc.check_permission("write")
->>>>>>> version-15
 
 
 @frappe.whitelist(allow_guest=True)

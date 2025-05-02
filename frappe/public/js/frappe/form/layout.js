@@ -23,13 +23,9 @@ frappe.ui.form.Layout = class Layout {
 			this.parent = this.body;
 		}
 		this.wrapper = $('<div class="form-layout">').appendTo(this.parent);
-<<<<<<< HEAD
-		this.message = $('<div class="form-message hidden"></div>').appendTo(this.wrapper);
-=======
 		this.message = $('<div class="form-message-container hidden"></div>').appendTo(
 			this.wrapper
 		);
->>>>>>> version-15
 		this.page = $('<div class="form-page"></div>').appendTo(this.wrapper);
 
 		if (!this.fields) {
@@ -62,69 +58,6 @@ frappe.ui.form.Layout = class Layout {
 		let fields = [this.get_new_name_field()];
 		if (this.doctype_layout) {
 			fields = fields.concat(this.get_fields_from_layout());
-<<<<<<< HEAD
-		} else {
-			fields = fields.concat(
-				frappe.meta.sort_docfields(frappe.meta.docfield_map[this.doctype])
-			);
-		}
-
-		return fields;
-	}
-
-	get_new_name_field() {
-		return {
-			parent: this.frm.doctype,
-			fieldtype: "Data",
-			fieldname: "__newname",
-			reqd: 1,
-			hidden: 1,
-			label: __("Name"),
-			get_status: function (field) {
-				if (
-					field.frm &&
-					field.frm.is_new() &&
-					field.frm.meta.autoname &&
-					["prompt", "name"].includes(field.frm.meta.autoname.toLowerCase())
-				) {
-					return "Write";
-				}
-				return "None";
-			},
-		};
-	}
-
-	get_fields_from_layout() {
-		const fields = [];
-		for (let f of this.doctype_layout.fields) {
-			const docfield = copy_dict(frappe.meta.docfield_map[this.doctype][f.fieldname]);
-			docfield.label = f.label;
-			fields.push(docfield);
-		}
-		return fields;
-	}
-
-	show_message(html, color) {
-		if (this.message_color) {
-			// remove previous color
-			this.message.removeClass(this.message_color);
-		}
-		let close_message = $(`<div class="close-message">${frappe.utils.icon("close")}</div>`);
-		this.message_color =
-			color && ["yellow", "blue", "red", "green", "orange"].includes(color) ? color : "blue";
-		if (html) {
-			if (html.substr(0, 1) !== "<") {
-				// wrap in a block
-				html = "<div>" + html + "</div>";
-			}
-			this.message.removeClass("hidden").addClass(this.message_color);
-			$(html).appendTo(this.message);
-			close_message.appendTo(this.message);
-			close_message.on("click", () => this.message.empty().addClass("hidden"));
-		} else {
-			this.message.empty().addClass("hidden");
-		}
-=======
 		} else {
 			fields = fields.concat(
 				frappe.meta.sort_docfields(frappe.meta.docfield_map[this.doctype])
@@ -202,7 +135,6 @@ frappe.ui.form.Layout = class Layout {
 
 		// Show parent container if hidden
 		this.message.removeClass("hidden");
->>>>>>> version-15
 	}
 
 	render(new_fields) {

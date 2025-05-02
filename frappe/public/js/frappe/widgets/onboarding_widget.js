@@ -129,15 +129,9 @@ export default class OnboardingWidget extends Widget {
 					.on("click", toggle_video);
 			} else {
 				$(
-<<<<<<< HEAD
-					`<button class="btn btn-default btn-sm">${__(
-						step.action_label || step.action
-					)}</button>`
-=======
 					`<button class="btn btn-default btn-sm">${
 						__(step.action_label) || __(step.action)
 					}</button>`
->>>>>>> version-15
 				)
 					.appendTo(this.step_footer)
 					.on("click", () => actions[step.action](step));
@@ -145,13 +139,8 @@ export default class OnboardingWidget extends Widget {
 		};
 
 		const set_description = () => {
-<<<<<<< HEAD
-			let content = step.description
-				? frappe.markdown(step.description)
-=======
 			let content = __(step.description)
 				? frappe.markdown(__(step.description))
->>>>>>> version-15
 				: `<h1>${__(step.title)}</h1>`;
 
 			if (step.action === "Create Entry") {
@@ -179,15 +168,9 @@ export default class OnboardingWidget extends Widget {
 			});
 
 			$(
-<<<<<<< HEAD
-				`<button class="btn btn-primary btn-sm">${__(
-					step.action_label || step.action
-				)}</button>`
-=======
 				`<button class="btn btn-primary btn-sm">${
 					__(step.action_label) || __(step.action)
 				}</button>`
->>>>>>> version-15
 			)
 				.appendTo(this.step_footer)
 				.on("click", () => {

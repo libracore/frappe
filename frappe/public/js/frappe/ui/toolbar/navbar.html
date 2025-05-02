@@ -118,12 +118,8 @@
 						</button>
 						<div class="dropdown-menu dropdown-menu-right" id="toolbar-user" role="menu">
 							{% for item in navbar_settings.settings_dropdown %}
-<<<<<<< HEAD
-								{% if (!item.hidden) { %}
-=======
 								{% var condition = item.condition ? eval(item.condition) : true %}
 								{% if (condition && !item.hidden) { %}
->>>>>>> version-15
 									{% if (item.route) { %}
 										<a class="dropdown-item" href="{{ item.route }}">
 											{%= __(item.item_label) %}

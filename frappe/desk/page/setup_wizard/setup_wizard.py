@@ -32,13 +32,8 @@ def get_setup_stages(args):  # nosemgrep
 	stages.append(
 		{
 			# post executing hooks
-<<<<<<< HEAD
-			"status": "Wrapping up",
-			"fail_msg": "Failed to complete setup",
-=======
 			"status": _("Wrapping up"),
 			"fail_msg": _("Failed to complete setup"),
->>>>>>> version-15
 			"tasks": [{"fn": run_post_setup_complete, "args": args, "fail_msg": "Failed to complete setup"}],
 		}
 	)
@@ -55,11 +50,7 @@ def setup_complete(args):
 	if cint(frappe.db.get_single_value("System Settings", "setup_complete")):
 		return {"status": "ok"}
 
-<<<<<<< HEAD
-	args = parse_args(args)
-=======
 	args = parse_args(sanitize_input(args))
->>>>>>> version-15
 	stages = get_setup_stages(args)
 	is_background_task = frappe.conf.get("trigger_site_setup_in_background")
 
@@ -68,6 +59,28 @@ def setup_complete(args):
 		return {"status": "registered"}
 	else:
 		return process_setup_stages(stages, args)
+
+
+@frappe.whitelist()
+def initialize_system_settings_and_user(system_settings_data, user_data):
+	system_settings = frappe.get_single("System Settings")
+
+	if cint(system_settings.setup_complete):
+		return
+
+	system_settings_data = parse_args(sanitize_input(system_settings_data))
+	system_settings.update(
+		{
+			"language": system_settings_data.get("language"),
+			"country": system_settings_data.get("country"),
+			"currency": system_settings_data.get("currency"),
+			"time_zone": system_settings_data.get("time_zone"),
+		}
+	)
+	system_settings.save()
+
+	user_data = parse_args(sanitize_input(user_data))
+	create_or_update_user(user_data)
 
 
 @frappe.task()
@@ -185,10 +198,7 @@ def update_system_settings(args):  # nosemgrep
 			"country": args.get("country"),
 			"language": get_language_code(args.get("language")) or "en",
 			"time_zone": args.get("timezone"),
-<<<<<<< HEAD
-=======
 			"currency": args.get("currency"),
->>>>>>> version-15
 			"float_precision": 3,
 			"rounding_method": "Banker's Rounding",
 			"date_format": frappe.db.get_value("Country", args.get("country"), "date_format"),
@@ -233,10 +243,7 @@ def create_or_update_user(args):  # nosemgrep
 			}
 		)
 		user.append_roles(*_get_default_roles())
-<<<<<<< HEAD
-=======
 		user.append_roles("System Manager")
->>>>>>> version-15
 		user.flags.no_welcome_mail = True
 		user.insert()
 
@@ -268,8 +275,6 @@ def parse_args(args):  # nosemgrep
 	return args
 
 
-<<<<<<< HEAD
-=======
 def sanitize_input(args):
 	from frappe.utils import is_html, strip_html_tags
 
@@ -283,7 +288,6 @@ def sanitize_input(args):
 	return args
 
 
->>>>>>> version-15
 def add_all_roles_to(name):
 	user = frappe.get_doc("User", name)
 	user.append_roles(*_get_default_roles())

@@ -37,10 +37,7 @@ export default class ShortcutWidget extends Widget {
 				doctype: this.ref_doctype,
 				doc_view: this.doc_view,
 				kanban_board: this.kanban_board,
-<<<<<<< HEAD
-=======
 				report_ref_doctype: this.report_ref_doctype,
->>>>>>> version-15
 			});
 
 			let filters = frappe.utils.get_filter_from_json(this.stats_filter);
@@ -68,18 +65,11 @@ export default class ShortcutWidget extends Widget {
 
 	set_actions() {
 		if (this.in_customize_mode) return;
-<<<<<<< HEAD
-
-		$(frappe.utils.icon("es-line-arrow-up-right", "xs", "", "", "ml-2")).appendTo(
-			this.action_area
-		);
-=======
 		let icon_to_append = frappe.utils.icon("es-line-arrow-up-right", "xs", "", "", "ml-2");
 		if (frappe.utils.is_rtl(frappe.boot.lang)) {
 			icon_to_append = frappe.utils.icon("es-line-arrow-up-left", "xs", "", "", "ml-2");
 		}
 		$(icon_to_append).appendTo(this.action_area);
->>>>>>> version-15
 
 		this.widget.addClass("shortcut-widget-box");
 
@@ -113,11 +103,7 @@ export default class ShortcutWidget extends Widget {
 		const label = get_label();
 		let color = this.color && count ? this.color.toLowerCase() : "gray";
 		$(
-<<<<<<< HEAD
-			`<div class="indicator-pill no-indicator-dot ellipsis ${color}">${label}</div>`
-=======
 			`<div class="indicator-pill no-indicator-dot ellipsis ${color}">${__(label)}</div>`
->>>>>>> version-15
 		).appendTo(this.action_area);
 
 		$(frappe.utils.icon("es-line-arrow-up-right", "xs", "", "", "ml-2")).appendTo(

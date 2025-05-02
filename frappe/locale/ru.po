@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-03-20 13:58+0000\n"
-"PO-Revision-Date: 2025-03-26 16:27\n"
+"PO-Revision-Date: 2025-04-11 16:17\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -6679,7 +6679,7 @@ msgstr ""
 #. Description of the 'Currency' (Link) field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Default display currency"
-msgstr ""
+msgstr "Валюта отображения по умолчанию"
 
 #: frappe/core/doctype/doctype/doctype.py:1339
 msgid "Default for 'Check' type of field {0} must be either '0' or '1'"

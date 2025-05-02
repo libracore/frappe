@@ -5,10 +5,7 @@ import frappe
 from frappe import _
 from frappe.desk.form.utils import get_pdf_link
 from frappe.desk.notifications import clear_doctype_notifications
-<<<<<<< HEAD
-=======
 from frappe.email.doctype.email_template.email_template import get_email_template
->>>>>>> version-15
 from frappe.model.document import Document
 from frappe.model.workflow import (
 	apply_workflow,
@@ -344,12 +341,8 @@ def get_users_next_action_data(transitions, doc):
 		filtered_users = [
 			user for user in users if has_approval_access(user, doc, transition) and user_has_permission(user)
 		]
-<<<<<<< HEAD
-
-=======
 		if doc.get("owner") in filtered_users and not transition.get("send_email_to_creator"):
 			filtered_users.remove(doc.get("owner"))
->>>>>>> version-15
 		for user in filtered_users:
 			if not user_data_map.get(user):
 				user_data_map[user] = frappe._dict(
@@ -512,19 +505,10 @@ def get_common_email_args(doc):
 		"subject": subject,
 		"message": response,
 	}
-<<<<<<< HEAD
-
-
-def get_email_template(doc):
-	"""Returns next_action_email_template
-	for workflow state (if available) based on doc current workflow state
-	"""
-=======
 
 
 def get_email_template_from_workflow(doc):
 	"""Return next_action_email_template for workflow state (if available) based on doc current workflow state."""
->>>>>>> version-15
 	workflow_name = get_workflow_name(doc.get("doctype"))
 	doc_state = get_doc_workflow_state(doc)
 	template_name = frappe.db.get_value(
@@ -535,14 +519,10 @@ def get_email_template_from_workflow(doc):
 
 	if not template_name:
 		return
-<<<<<<< HEAD
-	return frappe.get_doc("Email Template", template_name)
-=======
 
 	if isinstance(doc, Document):
 		doc = doc.as_dict()
 	return get_email_template(template_name, doc)
->>>>>>> version-15
 
 
 def get_state_optional_field_value(workflow_name, state):

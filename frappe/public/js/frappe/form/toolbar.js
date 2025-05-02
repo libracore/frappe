@@ -73,8 +73,6 @@ frappe.ui.form.Toolbar = class Toolbar {
 		let doc_field = this.frm.get_docfield(title_field);
 
 		if (
-<<<<<<< HEAD
-=======
 			this.frm.meta.naming_rule === "By fieldname" &&
 			this.frm.meta.autoname === "field:" + title_field &&
 			!this.frm.meta.allow_rename
@@ -83,7 +81,6 @@ frappe.ui.form.Toolbar = class Toolbar {
 		}
 
 		if (
->>>>>>> version-15
 			title_field &&
 			this.frm.perm[0].write &&
 			!this.frm.doc.__islocal &&
@@ -213,19 +210,14 @@ frappe.ui.form.Toolbar = class Toolbar {
 				});
 			}
 
-<<<<<<< HEAD
-=======
 			let is_title_field_same_as_autoname = false;
 
->>>>>>> version-15
 			// check if docname is updatable
 			if (me.can_rename()) {
 				let label = __("New Name");
 				if (me.frm.meta.autoname && me.frm.meta.autoname.startsWith("field:")) {
 					let fieldname = me.frm.meta.autoname.split(":")[1];
 					label = __("New {0}", [me.frm.get_docfield(fieldname).label]);
-<<<<<<< HEAD
-=======
 					is_title_field_same_as_autoname = fieldname === title_field;
 				}
 
@@ -241,22 +233,11 @@ frappe.ui.form.Toolbar = class Toolbar {
 							},
 						]
 					);
->>>>>>> version-15
 				}
 
 				fields.push(
 					...[
 						{
-<<<<<<< HEAD
-							label: label,
-							fieldname: "name",
-							fieldtype: "Data",
-							reqd: 1,
-							default: docname,
-						},
-						{
-=======
->>>>>>> version-15
 							label: __("Merge with existing"),
 							fieldname: "merge",
 							fieldtype: "Check",
@@ -276,14 +257,11 @@ frappe.ui.form.Toolbar = class Toolbar {
 				d.set_primary_action(__("Rename"), (values) => {
 					d.disable_primary_action();
 					d.hide();
-<<<<<<< HEAD
-=======
 
 					if (is_title_field_same_as_autoname) {
 						values.name = values.title;
 					}
 
->>>>>>> version-15
 					this.rename_document_title(values.name, values.title, values.merge)
 						.then(() => {
 							d.hide();

@@ -177,8 +177,6 @@ import "air-datepicker/dist/js/i18n/datepicker.zh.js";
 		firstDay: 1,
 	};
 })(jQuery);
-<<<<<<< HEAD
-=======
 
 (function ($) {
 	$.fn.datepicker.language["sv"] = {
@@ -425,4 +423,3 @@ import "air-datepicker/dist/js/i18n/datepicker.zh.js";
 		firstDay: 1,
 	};
 })(jQuery);
->>>>>>> version-15

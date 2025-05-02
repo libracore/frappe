@@ -22,12 +22,8 @@
   "use_ssl_for_outgoing",
   "column_break_18",
   "smtp_port",
-<<<<<<< HEAD
-  "append_emails_to_sent_folder"
-=======
   "append_emails_to_sent_folder",
   "sent_folder_name"
->>>>>>> version-15
  ],
  "fields": [
   {
@@ -130,8 +126,6 @@
   {
    "fieldname": "column_break_18",
    "fieldtype": "Column Break"
-<<<<<<< HEAD
-=======
   },
   {
    "default": "Sent",
@@ -140,7 +134,6 @@
    "fieldname": "sent_folder_name",
    "fieldtype": "Data",
    "label": "Sent Folder Name"
->>>>>>> version-15
   }
  ],
  "icon": "icon-inbox",
@@ -150,11 +143,7 @@
    "link_fieldname": "domain"
   }
  ],
-<<<<<<< HEAD
- "modified": "2023-06-05 12:55:06.434541",
-=======
  "modified": "2024-12-05 12:41:16.753751",
->>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Email Domain",
@@ -174,8 +163,4 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> version-15

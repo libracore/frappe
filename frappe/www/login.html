@@ -31,17 +31,11 @@
 		</div>
 	</div>
 
-<<<<<<< HEAD
-	<p class="forgot-password-message">
-		<a href="#forgot">{{ _("Forgot Password?") }}</a>
-	</p>
-=======
 	{% if not disable_user_pass_login %}
 	<p class="forgot-password-message">
 		<a href="#forgot">{{ _("Forgot Password?") }}</a>
 	</p>
 	{% endif %}
->>>>>>> version-15
 </div>
 {% endif %}
 <div class="page-card-actions">
@@ -50,11 +44,7 @@
 		{{ _("Login") }}</button>
 	{% endif %}
 	{% if ldap_settings and ldap_settings.enabled %}
-<<<<<<< HEAD
-	<button class="btn btn-sm btn-default btn-block btn-login btn-ldap-login">
-=======
 	<button class="btn btn-sm {{ "btn-primary" if disable_user_pass_login else "btn-default" }} btn-block btn-login btn-ldap-login">
->>>>>>> version-15
 		{{ _("Login with LDAP") }}</button>
 	{% endif %}
 </div>
@@ -110,32 +100,6 @@
 							</div>
 							{% endfor %}
 						</div>
-<<<<<<< HEAD
-						{% if login_with_email_link %}
-						<div class="login-with-email-link social-login-buttons">
-							<div class="login-button-wrapper">
-								<a href="#login-with-email-link"
-									class="btn btn-block btn-default btn-sm btn-login-option btn-login-with-email-link">
-									{{ _("Login with Email Link") }}</a>
-							</div>
-						</div>
-						{% endif %}
-					</div>
-				</div>
-				{% else %}
-					{{ email_login_body() }}
-				{%- endif -%}
-			</form>
-		</div>
-		{%- if not disable_signup and not disable_user_pass_login -%}
-		<div class="text-center sign-up-message">
-			{{ _("Don't have an account?") }}
-			<a href="#signup">{{ _("Sign up") }}</a>
-		</div>
-		{%- endif -%}
-	</section>
-
-=======
 
 						{% if login_with_frappe_cloud_url %}
 						<div class="social-login-buttons">
@@ -177,7 +141,6 @@
 		{%- endif -%}
 	</section>
 
->>>>>>> version-15
 	{%- if social_login -%}
 	<section class='for-email-login'>
 		{{ logo_section() }}

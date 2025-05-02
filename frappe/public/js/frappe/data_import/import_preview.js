@@ -119,13 +119,10 @@ frappe.data_import.ImportPreview = class ImportPreview {
 			return row.map((cell) => {
 				if (cell == null) {
 					return "";
-<<<<<<< HEAD
-=======
 				}
 
 				if (typeof cell === "string") {
 					cell = frappe.utils.xss_sanitise(cell);
->>>>>>> version-15
 				}
 				return cell;
 			});

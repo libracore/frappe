@@ -1,7 +1,5 @@
 frappe.listview_settings["Contact"] = {
 	add_fields: ["image"],
-<<<<<<< HEAD
-=======
 	onload: function (listview) {
 		listview.page.add_action_item(__("Download vCards"), function () {
 			const contacts = listview.get_checked_items();
@@ -10,5 +8,4 @@ frappe.listview_settings["Contact"] = {
 			});
 		});
 	},
->>>>>>> version-15
 };

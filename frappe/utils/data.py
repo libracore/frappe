@@ -2,10 +2,7 @@
 # License: MIT. See LICENSE
 
 import base64
-<<<<<<< HEAD
-=======
 import calendar
->>>>>>> version-15
 import datetime
 import hashlib
 import json
@@ -16,10 +13,7 @@ import time
 import typing
 from code import compile_command
 from enum import Enum
-<<<<<<< HEAD
-=======
 from functools import lru_cache
->>>>>>> version-15
 from typing import Any, Literal, Optional, TypeVar, Union
 from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlparse, urlunparse
 
@@ -118,11 +112,7 @@ def get_datetime(
 	if datetime_str is None:
 		return now_datetime()
 
-<<<<<<< HEAD
-	if isinstance(datetime_str, datetime.datetime | datetime.timedelta):
-=======
 	elif isinstance(datetime_str, datetime.datetime | datetime.timedelta):
->>>>>>> version-15
 		return datetime_str
 
 	elif isinstance(datetime_str, list | tuple):
@@ -131,11 +121,7 @@ def get_datetime(
 	elif isinstance(datetime_str, datetime.date):
 		return datetime.datetime.combine(datetime_str, datetime.time())
 
-<<<<<<< HEAD
-	if is_invalid_date_string(datetime_str):
-=======
 	elif is_invalid_date_string(datetime_str):
->>>>>>> version-15
 		return None
 
 	try:
@@ -242,11 +228,7 @@ def add_to_date(
 
 
 def add_to_date(
-<<<<<<< HEAD
-	date: DateTimeLikeObject,
-=======
 	date: DateTimeLikeObject | None = None,
->>>>>>> version-15
 	years=0,
 	months=0,
 	weeks=0,
@@ -270,11 +252,7 @@ def add_to_date(
 		if " " in date:
 			as_datetime = True
 		try:
-<<<<<<< HEAD
-			date = parser.parse(date)
-=======
 			date = get_datetime(date)
->>>>>>> version-15
 		except ParserError:
 			frappe.throw(frappe._("Please select a valid date filter"), title=frappe._("Invalid Date"))
 
@@ -303,9 +281,6 @@ def add_years(date, years):
 	return add_to_date(date, years=years)
 
 
-<<<<<<< HEAD
-def date_diff(string_ed_date, string_st_date):
-=======
 def date_diff(string_ed_date: DateTimeLikeObject, string_st_date: DateTimeLikeObject) -> int:
 	"""Returns the difference between given two dates in days."""
 	return days_diff(string_ed_date, string_st_date)
@@ -313,7 +288,6 @@ def date_diff(string_ed_date: DateTimeLikeObject, string_st_date: DateTimeLikeOb
 
 def days_diff(string_ed_date: DateTimeLikeObject, string_st_date: DateTimeLikeObject) -> int:
 	"""Returns the difference between given two dates in days."""
->>>>>>> version-15
 	return (getdate(string_ed_date) - getdate(string_st_date)).days
 
 
@@ -751,8 +725,6 @@ def get_weekday(datetime: datetime.datetime | None = None) -> str:
 	return weekdays[datetime.weekday()]
 
 
-<<<<<<< HEAD
-=======
 def get_month(datetime: DateTimeLikeObject | None = None) -> str:
 	"""Return the month name (e.g. 'January') for the given datetime like object (datetime.date, datetime.datetime, string).
 	If `datetime` argument is not provided, the current month name is returned.
@@ -766,13 +738,10 @@ def get_month(datetime: DateTimeLikeObject | None = None) -> str:
 	return calendar.month_name[datetime.month]
 
 
->>>>>>> version-15
 def get_timespan_date_range(timespan: str) -> tuple[datetime.datetime, datetime.datetime] | None:
 	today = getdate()
 
 	match timespan:
-<<<<<<< HEAD
-=======
 		case "last 7 days":
 			return (add_to_date(today, days=-7), today)
 		case "last 14 days":
@@ -781,7 +750,6 @@ def get_timespan_date_range(timespan: str) -> tuple[datetime.datetime, datetime.
 			return (add_to_date(today, days=-30), today)
 		case "last 90 days":
 			return (add_to_date(today, days=-90), today)
->>>>>>> version-15
 		case "last week":
 			return (
 				get_first_day_of_week(add_to_date(today, days=-7)),
@@ -822,8 +790,6 @@ def get_timespan_date_range(timespan: str) -> tuple[datetime.datetime, datetime.
 			return (get_quarter_start(today), get_quarter_ending(today))
 		case "this year":
 			return (get_year_start(today), get_year_ending(today))
-<<<<<<< HEAD
-=======
 		case "next 7 days":
 			return (
 				today,
@@ -839,7 +805,6 @@ def get_timespan_date_range(timespan: str) -> tuple[datetime.datetime, datetime.
 				today,
 				add_to_date(today, days=30),
 			)
->>>>>>> version-15
 		case "next week":
 			return (
 				get_first_day_of_week(add_to_date(today, days=7)),
@@ -1118,17 +1083,10 @@ def rounded(num, precision=0, rounding_method=None):
 		rounding_method or frappe.get_system_settings("rounding_method") or "Banker's Rounding (legacy)"
 	)
 
-<<<<<<< HEAD
-	if rounding_method == "Banker's Rounding (legacy)":
-		return _bankers_rounding_legacy(num, precision)
-	elif rounding_method == "Banker's Rounding":
-		return _bankers_rounding(num, precision)
-=======
 	if rounding_method == "Banker's Rounding":
 		return _bankers_rounding(num, precision)
 	elif rounding_method == "Banker's Rounding (legacy)":
 		return _bankers_rounding_legacy(num, precision)
->>>>>>> version-15
 	elif rounding_method == "Commercial Rounding":
 		return _round_away_from_zero(num, precision)
 	else:
@@ -1633,17 +1591,12 @@ def filter_strip_join(some_list: list[str], sep: str) -> list[str]:
 	return (cstr(sep)).join(cstr(a).strip() for a in filter(None, some_list))
 
 
-<<<<<<< HEAD
-def get_url(uri: str | None = None, full_address: bool = False) -> str:
-	"""get app url from request"""
-=======
 def get_url(
 	uri: str | None = None,
 	full_address: bool = False,
 	allow_header_override: bool = True,
 ) -> str:
 	"""Get app url from request."""
->>>>>>> version-15
 	host_name = frappe.local.conf.host_name or frappe.local.conf.hostname
 
 	if uri and (uri.startswith("http://") or uri.startswith("https://")):
@@ -1738,11 +1691,7 @@ def get_link_to_report(
 					for value in v
 				)
 			else:
-<<<<<<< HEAD
-				conditions.append(str(k) + "=" + str(v))
-=======
 				conditions.append(str(k) + "=" + quote(str(v)))
->>>>>>> version-15
 
 		filters = "&".join(conditions)
 
@@ -1811,8 +1760,6 @@ def filter_operator_is(value: str, pattern: str) -> bool:
 	else:
 		frappe.throw(frappe._(f"Invalid argument for operator 'IS': {pattern}"))
 
-<<<<<<< HEAD
-=======
 
 def filter_operator_timespan(value: str, pattern: str) -> bool:
 	if not value:
@@ -1821,7 +1768,6 @@ def filter_operator_timespan(value: str, pattern: str) -> bool:
 	date_range = get_timespan_date_range(pattern)
 	return date_range[0] <= getdate(value) <= date_range[1]
 
->>>>>>> version-15
 
 operator_map = {
 	# startswith
@@ -1841,10 +1787,7 @@ operator_map = {
 	"like": sql_like,
 	"not like": lambda a, b: not sql_like(a, b),
 	"is": filter_operator_is,
-<<<<<<< HEAD
-=======
 	"Timespan": filter_operator_timespan,
->>>>>>> version-15
 }
 
 
@@ -1868,12 +1811,8 @@ def evaluate_filters(doc, filters: dict | list | tuple):
 def compare(val1: Any, condition: str, val2: Any, fieldtype: str | None = None):
 	if fieldtype:
 		val1 = cast(fieldtype, val1)
-<<<<<<< HEAD
-		val2 = cast(fieldtype, val2)
-=======
 		if condition != "Timespan":
 			val2 = cast(fieldtype, val2)
->>>>>>> version-15
 	if condition in operator_map:
 		return operator_map[condition](val1, val2)
 
@@ -1983,26 +1922,18 @@ def make_filter_dict(filters):
 	return _filter
 
 
-<<<<<<< HEAD
-def sanitize_column(column_name: str) -> None:
-=======
 def sanitize_column(column_name: str) -> str:
 	return _sanitize_column(column_name, (frappe.db and frappe.db.db_type) or None)
 
 
 @lru_cache(maxsize=1024)
 def _sanitize_column(column_name: str, db_type: str) -> str:
->>>>>>> version-15
 	import sqlparse
 
 	from frappe import _
 
 	column_name = sqlparse.format(column_name, strip_comments=True, keyword_case="lower")
-<<<<<<< HEAD
-	if frappe.db and frappe.db.db_type == "mariadb":
-=======
 	if db_type == "mariadb":
->>>>>>> version-15
 		# strip mariadb specific comments which are like python single line comments
 		column_name = MARIADB_SPECIFIC_COMMENT.sub("", column_name)
 
@@ -2021,11 +1952,7 @@ def _sanitize_column(column_name: str, db_type: str) -> str:
 	def _raise_exception():
 		frappe.throw(_("Invalid field name {0}").format(column_name), frappe.DataError)
 
-<<<<<<< HEAD
-	regex = re.compile("^.*[,'();].*")
-=======
 	regex = re.compile("^.*[,'();\n].*")
->>>>>>> version-15
 	if "ifnull" in column_name:
 		if regex.match(column_name):
 			# to avoid and, or
@@ -2044,13 +1971,9 @@ def _sanitize_column(column_name: str, db_type: str) -> str:
 	elif regex.match(column_name):
 		_raise_exception()
 
-<<<<<<< HEAD
-
-=======
 	return column_name
 
 
->>>>>>> version-15
 def scrub_urls(html: str) -> str:
 	return expand_relative_urls(html)
 
@@ -2369,11 +2292,8 @@ def get_imaginary_pixel_response():
 
 
 def is_site_link(link: str) -> bool:
-<<<<<<< HEAD
-=======
 	if not link:
 		return False
->>>>>>> version-15
 	if link.startswith("/"):
 		return True
 	return urlparse(link).netloc == urlparse(frappe.utils.get_url()).netloc
@@ -2404,11 +2324,3 @@ def _get_rss_memory_usage():
 
 	rss = psutil.Process().memory_info().rss // (1024 * 1024)
 	return rss
-<<<<<<< HEAD
-
-
-def cmp(a, b):
-    # refernce: https://docs.python.org/3.0/whatsnew/3.0.html#ordering-comparisons
-    return int(a > b) - int(a < b)
-=======
->>>>>>> version-15

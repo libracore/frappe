@@ -173,19 +173,12 @@ class PostgresDatabase(PostgresExceptionUtil, Database):
 		conn_settings = {
 			"user": self.user,
 			"dbname": self.cur_db_name,
-<<<<<<< HEAD
-			"host": self.host,
-			"password": self.password,
-		}
-		if self.port:
-=======
 			# libpg defaults to default socket if not specified
 			"host": self.host or self.socket,
 		}
 		if self.password:
 			conn_settings["password"] = self.password
 		if not self.socket and self.port:
->>>>>>> version-15
 			conn_settings["port"] = self.port
 
 		conn = psycopg2.connect(**conn_settings)
@@ -435,8 +428,6 @@ class PostgresDatabase(PostgresExceptionUtil, Database):
 
 	def get_database_list(self):
 		return self.sql("SELECT datname FROM pg_database", pluck=True)
-<<<<<<< HEAD
-=======
 
 	def estimate_count(self, doctype: str):
 		"""Get estimated count of total rows in a table."""
@@ -445,7 +436,6 @@ class PostgresDatabase(PostgresExceptionUtil, Database):
 		table = get_table_name(doctype)
 		count = self.sql("select reltuples from pg_class where relname = %s", table)
 		return cint(count[0][0]) if count else 0
->>>>>>> version-15
 
 
 def modify_query(query):

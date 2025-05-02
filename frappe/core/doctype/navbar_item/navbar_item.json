@@ -9,13 +9,9 @@
   "route",
   "action",
   "hidden",
-<<<<<<< HEAD
-  "is_standard"
-=======
   "is_standard",
   "column_break_dtwu",
   "condition"
->>>>>>> version-15
  ],
  "fields": [
   {
@@ -78,8 +74,6 @@
    "read_only_depends_on": "eval:doc.is_standard",
    "show_days": 1,
    "show_seconds": 1
-<<<<<<< HEAD
-=======
   },
   {
    "fieldname": "condition",
@@ -90,16 +84,11 @@
   {
    "fieldname": "column_break_dtwu",
    "fieldtype": "Column Break"
->>>>>>> version-15
   }
  ],
  "istable": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2020-11-02 10:57:37.709262",
-=======
  "modified": "2024-11-15 14:12:19.803995",
->>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Navbar Item",

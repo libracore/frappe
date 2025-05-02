@@ -41,11 +41,8 @@ frappe.views.ListSidebar = class ListSidebar {
 
 		if (frappe.user.has_role("System Manager")) {
 			this.add_insights_banner();
-<<<<<<< HEAD
-=======
 			this.add_crm_banner();
 			this.add_helpdesk_banner();
->>>>>>> version-15
 		}
 	}
 
@@ -261,50 +258,16 @@ frappe.views.ListSidebar = class ListSidebar {
 		this.get_stats();
 	}
 
-<<<<<<< HEAD
-	add_insights_banner() {
-		try {
-			if (this.list_view.view != "Report") {
-				return;
-			}
-
-			if (localStorage.getItem("show_insights_banner") == "false") {
-				return;
-			}
-
-			if (this.insights_banner) {
-				this.insights_banner.remove();
-			}
-
-			const message = __("Get more insights with");
-			const link = "https://frappe.io/s/insights";
-			const cta = __("Frappe Insights");
-
-			this.insights_banner = $(`
-				<div style="position: relative;">
-					<div class="pr-3">
-						${message} <a href="${link}" target="_blank" style="color: var(--text-color)">${cta} &rarr; </a>
-					</div>
-					<div style="position: absolute; top: -1px; right: -4px; cursor: pointer;" title="Dismiss"
-						onclick="localStorage.setItem('show_insights_banner', 'false') || this.parentElement.remove()">
-						<svg class="icon  icon-sm" style="">
-							<use class="" href="#icon-close"></use>
-						</svg>
-					</div>
-=======
 	add_banner(message, link, cta) {
 		try {
 			this.banner = $(`
 				<div class="sidebar-section">
 					${message} <a href="${link}" target="_blank" style="color: var(--text-color)">${cta} &rarr; </a>
->>>>>>> version-15
 				</div>
 			`).appendTo(this.sidebar);
 		} catch (error) {
 			console.error(error);
 		}
-<<<<<<< HEAD
-=======
 	}
 
 	add_insights_banner() {
@@ -344,6 +307,5 @@ frappe.views.ListSidebar = class ListSidebar {
 			"https://frappe.io/helpdesk?utm_source=support-sidebar&utm_medium=sidebar&utm_campaign=frappe-ad";
 		const cta = __("Upgrade your support experience with Frappe Helpdesk");
 		this.add_banner(message, link, cta);
->>>>>>> version-15
 	}
 };

@@ -8,11 +8,7 @@
 					type="text"
 					@change="(e) => (query = e.target.value)"
 					:value="query"
-<<<<<<< HEAD
-					:placeholder="props.placeholder"
-=======
 					:placeholder="__(props.placeholder)"
->>>>>>> version-15
 					autocomplete="off"
 					@click.stop
 				/>

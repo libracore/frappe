@@ -1148,7 +1148,6 @@ export default class GridRow {
 
 		// sync get_query
 		field.get_query = this.grid.get_field(df.fieldname).get_query;
-
 		// df.onchange is common for all rows in grid
 		let field_on_change_function = df.onchange;
 		field.df.change = (e) => {

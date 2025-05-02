@@ -266,79 +266,6 @@ def get_company_address(company):
 def address_query(doctype, txt, searchfield, start, page_len, filters):
 	from frappe.desk.search import search_widget
 
-<<<<<<< HEAD
-	doctype = "Address"
-	link_doctype = filters.pop("link_doctype")
-	link_name = filters.pop("link_name")
-
-	condition = ""
-	meta = frappe.get_meta(doctype)
-	for fieldname, value in filters.items():
-		if meta.get_field(fieldname) or fieldname in frappe.db.DEFAULT_COLUMNS:
-			condition += f" and {fieldname}={frappe.db.escape(value)}"
-
-	searchfields = meta.get_search_fields()
-
-	if searchfield and (meta.get_field(searchfield) or searchfield in frappe.db.DEFAULT_COLUMNS):
-		searchfields.append(searchfield)
-
-	search_condition = ""
-	for field in searchfields:
-		if search_condition == "":
-			search_condition += f"`tabAddress`.`{field}` like %(txt)s"
-		else:
-			search_condition += f" or `tabAddress`.`{field}` like %(txt)s"
-
-	# Use custom title field if set
-	if meta.show_title_field_in_link and meta.title_field:
-		title = f"`tabAddress`.{meta.title_field}"
-	else:
-		title = "`tabAddress`.city"
-
-	# Get additional search fields
-	if searchfields:
-		extra_query_fields = ",".join([f"`tabAddress`.{field}" for field in searchfields])
-	else:
-		extra_query_fields = "`tabAddress`.country"
-
-	return frappe.db.sql(
-		"""select
-			`tabAddress`.name, {title}, {extra_query_fields}
-		from
-			`tabAddress`
-		join `tabDynamic Link`
-			on (`tabDynamic Link`.parent = `tabAddress`.name and `tabDynamic Link`.parenttype = 'Address')
-		where
-			`tabDynamic Link`.link_doctype = %(link_doctype)s and
-			`tabDynamic Link`.link_name = %(link_name)s and
-			ifnull(`tabAddress`.disabled, 0) = 0 and
-			({search_condition})
-			{mcond} {condition}
-		order by
-			case
-				when locate(%(_txt)s, `tabAddress`.name) != 0
-				then locate(%(_txt)s, `tabAddress`.name)
-				else 99999
-			end,
-			`tabAddress`.idx desc, `tabAddress`.name
-		limit %(page_len)s offset %(start)s""".format(
-			mcond=get_match_cond(doctype),
-			search_condition=search_condition,
-			condition=condition or "",
-			title=title,
-			extra_query_fields=extra_query_fields,
-		),
-		{
-			"txt": "%" + txt + "%",
-			"_txt": txt.replace("%", ""),
-			"start": start,
-			"page_len": page_len,
-			"link_name": link_name,
-			"link_doctype": link_doctype,
-		},
-	)
-
-=======
 	_filters = []
 	if link_doctype := filters.pop("link_doctype", None):
 		_filters.append(["Dynamic Link", "link_doctype", "=", link_doctype])
@@ -352,7 +279,6 @@ def address_query(doctype, txt, searchfield, start, page_len, filters):
 		"Address", txt, filters=_filters, searchfield=searchfield, start=start, page_length=page_len
 	)
 
->>>>>>> version-15
 
 def get_condensed_address(doc):
 	fields = ["address_title", "address_line1", "address_line2", "city", "county", "state", "country"]

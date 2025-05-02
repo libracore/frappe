@@ -101,10 +101,7 @@ def search_widget(
 				filters,
 				as_dict=as_dict,
 				reference_doctype=reference_doctype,
-<<<<<<< HEAD
-=======
 				ignore_user_permissions=ignore_user_permissions,
->>>>>>> version-15
 			)
 		except (frappe.PermissionError, frappe.AppNotInstalledError, ImportError):
 			if frappe.local.conf.developer_mode:

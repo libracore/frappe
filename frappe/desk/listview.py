@@ -63,20 +63,12 @@ def get_group_by_count(doctype: str, current_filters: str, field: str) -> list[d
 	if not frappe.get_meta(doctype).has_field(field) and not is_default_field(field):
 		raise ValueError("Field does not belong to doctype")
 
-<<<<<<< HEAD
-	return frappe.get_list(
-=======
 	data = frappe.get_list(
->>>>>>> version-15
 		doctype,
 		filters=current_filters,
 		group_by=f"`tab{doctype}`.{field}",
 		fields=["count(*) as count", f"`{field}` as name"],
 		order_by="count desc",
-<<<<<<< HEAD
-		limit=50,
-	)
-=======
 	)
 
 	if field == "owner":
@@ -95,4 +87,3 @@ def get_group_by_count(doctype: str, current_filters: str, field: str) -> list[d
 		data = data[0:50]
 
 	return data
->>>>>>> version-15

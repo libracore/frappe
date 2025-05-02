@@ -6,10 +6,7 @@ from collections import defaultdict
 from collections.abc import Callable
 from contextlib import suppress
 from functools import lru_cache
-<<<<<<< HEAD
-=======
 from threading import Thread
->>>>>>> version-15
 from typing import Any, NoReturn
 from uuid import uuid4
 
@@ -97,11 +94,7 @@ def enqueue(
 			frappe.throw(_("`job_id` paramater is required for deduplication."))
 		job = get_job(job_id)
 		if job and job.get_status() in (JobStatus.QUEUED, JobStatus.STARTED):
-<<<<<<< HEAD
-			frappe.logger().debug(f"Not queueing job {job.id} because it is in queue already")
-=======
 			frappe.logger().error(f"Not queueing job {job.id} because it is in queue already")
->>>>>>> version-15
 			return
 		elif job:
 			# delete job to avoid argument issues related to job args
@@ -261,12 +254,9 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 		return retval
 
 	finally:
-<<<<<<< HEAD
-=======
 		if not hasattr(frappe.local, "site"):
 			frappe.init(site)
 			frappe.connect()
->>>>>>> version-15
 		for after_job_task in frappe.get_hooks("after_job"):
 			frappe.call(after_job_task, method=method_name, kwargs=kwargs, result=retval)
 		frappe.local.job.after_job.run()
@@ -275,8 +265,6 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 			frappe.destroy()
 
 
-<<<<<<< HEAD
-=======
 class FrappeWorker(Worker):
 	def work(self, *args, **kwargs):
 		self.start_frappe_scheduler()
@@ -293,7 +281,6 @@ class FrappeWorker(Worker):
 		Thread(target=start_scheduler, daemon=True).start()
 
 
->>>>>>> version-15
 def start_worker(
 	queue: str | None = None,
 	quiet: bool = False,
@@ -353,14 +340,9 @@ def start_worker_pool(
 	# If gc.freeze is done then importing modules before forking allows us to share the memory
 	import frappe.database.query  # sqlparse and indirect imports
 	import frappe.query_builder  # pypika
-<<<<<<< HEAD
-	import frappe.utils.data  # common utils
-	import frappe.utils.safe_exec
-=======
 	import frappe.utils  # common utils
 	import frappe.utils.safe_exec
 	import frappe.utils.scheduler
->>>>>>> version-15
 	import frappe.utils.typing_validations  # any whitelisted method uses this
 	import frappe.website.path_resolver  # all the page types and resolver
 
@@ -387,10 +369,7 @@ def start_worker_pool(
 		queues=queues,
 		connection=redis_connection,
 		num_workers=num_workers,
-<<<<<<< HEAD
-=======
 		worker_class=FrappeWorker,  # Auto starts scheduler with workerpool
->>>>>>> version-15
 	)
 	pool.start(logging_level=logging_level, burst=burst)
 
@@ -636,19 +615,6 @@ def truncate_failed_registry(job, connection, type, value, traceback):
 				job_obj and fail_registry.remove(job_obj, delete_job=True)
 
 
-<<<<<<< HEAD
-def flush_telemetry():
-	"""Forcefully flush pending events.
-
-	This is required in context of background jobs where process might die before posthog gets time
-	to push events."""
-	ph = getattr(frappe.local, "posthog", None)
-	with suppress(Exception):
-		ph and ph.flush()
-
-
-=======
->>>>>>> version-15
 def _start_sentry():
 	sentry_dsn = os.getenv("FRAPPE_SENTRY_DSN")
 	if not sentry_dsn:
@@ -681,12 +647,9 @@ def _start_sentry():
 	if tracing_sample_rate := os.getenv("SENTRY_TRACING_SAMPLE_RATE"):
 		kwargs["traces_sample_rate"] = float(tracing_sample_rate)
 
-<<<<<<< HEAD
-=======
 	if profiling_sample_rate := os.getenv("SENTRY_PROFILING_SAMPLE_RATE"):
 		kwargs["profiles_sample_rate"] = float(profiling_sample_rate)
 
->>>>>>> version-15
 	sentry_sdk.init(
 		dsn=sentry_dsn,
 		before_send=before_send,

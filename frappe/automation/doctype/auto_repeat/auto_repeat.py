@@ -486,7 +486,6 @@ def make_auto_repeat_entry():
 		frappe.enqueue(enqueued_method, data=data, queue="long")
 
 
-
 def create_repeated_entries(data):
 	for d in data:
 		doc = frappe.get_doc("Auto Repeat", d.name)
@@ -518,14 +517,6 @@ def get_auto_repeat_entries(date=None):
 		& ((auto_repeat.end_date >= auto_repeat.next_schedule_date) | (auto_repeat.end_date.isnull()))
 	)
 	return query.run(as_dict=1)
-
-
-def set_auto_repeat_as_completed(auto_repeat):
-	for entry in auto_repeat:
-		doc = frappe.get_doc("Auto Repeat", entry.name)
-		if doc.is_completed():
-			doc.status = "Completed"
-			doc.save()
 
 
 @frappe.whitelist()

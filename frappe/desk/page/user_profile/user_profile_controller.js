@@ -77,11 +77,7 @@ class UserProfile {
 	render_heatmap() {
 		this.heatmap = new frappe.Chart(".performance-heatmap", {
 			type: "heatmap",
-<<<<<<< HEAD
-			countLabel: "Energy Points",
-=======
 			countLabel: __("Energy Points"),
->>>>>>> version-15
 			data: {},
 			discreteDomains: 1,
 			radius: 3,
@@ -115,11 +111,7 @@ class UserProfile {
 			value_based_on: "points",
 			chart_type: "Sum",
 			document_type: "Energy Point Log",
-<<<<<<< HEAD
-			name: "Energy Points",
-=======
 			name: __("Energy Points"),
->>>>>>> version-15
 			width: "half",
 			based_on: "creation",
 		};

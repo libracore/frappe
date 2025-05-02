@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-03-20 13:58+0000\n"
-"PO-Revision-Date: 2025-03-26 16:27\n"
+"PO-Revision-Date: 2025-04-19 17:55\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -1805,12 +1805,12 @@ msgstr "Automatische Wiederholung zulassen"
 #: frappe/core/doctype/docfield/docfield.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Allow Bulk Edit"
-msgstr "Massenbearbeitung zulassen"
+msgstr "Stapelberarbeitung zulassen"
 
 #. Label of a Check field in DocType 'List View Settings'
 #: frappe/desk/doctype/list_view_settings/list_view_settings.json
 msgid "Allow Bulk Editing"
-msgstr "Massenbearbeitung zulassen"
+msgstr "Stapelberarbeitung zulassen"
 
 #. Label of a Check field in DocType 'Web Form'
 #: frappe/website/doctype/web_form/web_form.json
@@ -2138,7 +2138,7 @@ msgstr "Berichtigte Dokumente"
 #: frappe/core/doctype/transaction_log/transaction_log.json
 #: frappe/website/doctype/personal_data_download_request/personal_data_download_request.json
 msgid "Amended From"
-msgstr "Abgeändert von"
+msgstr "Berichtigung von"
 
 #: frappe/public/js/frappe/form/save.js:12
 msgctxt "Freeze message while amending a document"
@@ -2318,7 +2318,7 @@ msgstr "Anwendbare Dokumenttypen"
 #. Label of a Link field in DocType 'User Permission'
 #: frappe/core/doctype/user_permission/user_permission.json
 msgid "Applicable For"
-msgstr "Anwenden für"
+msgstr "Anwendbar für"
 
 #. Label of a Attach Image field in DocType 'Navbar Settings'
 #. Label of a Section Break field in DocType 'Navbar Settings'
@@ -2625,7 +2625,7 @@ msgstr "Zuweisen..."
 #. Option for the 'Type' (Select) field in DocType 'Notification Log'
 #: frappe/desk/doctype/notification_log/notification_log.json
 msgid "Assignment"
-msgstr "Zuordnung"
+msgstr "Zuweisung"
 
 #. Option for the 'Comment Type' (Select) field in DocType 'Comment'
 #. Option for the 'Comment Type' (Select) field in DocType 'Communication'
@@ -2742,7 +2742,7 @@ msgstr "Ausdruck anhängen"
 
 #: frappe/public/js/frappe/file_uploader/WebLink.vue:10
 msgid "Attach a web link"
-msgstr "Weblink anhängen"
+msgstr "Einen Weblink anhängen"
 
 #: frappe/website/doctype/website_slideshow/website_slideshow.js:8
 msgid "Attach files / urls and add in table."
@@ -2847,7 +2847,7 @@ msgstr "Authentifizierungs-URL-Daten"
 #. Label of a Check field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Authenticate as Service Principal"
-msgstr "Als Service Principal authentifizieren"
+msgstr "Als Service-Prinzipal authentifizieren"
 
 #. Label of a Section Break field in DocType 'Email Account'
 #. Label of a Section Break field in DocType 'Push Notification Settings'
@@ -3256,7 +3256,7 @@ msgstr "Warteschlange für Hintergrundaufträge"
 
 #: frappe/public/js/frappe/list/bulk_operations.js:87
 msgid "Background Print (required for >25 documents)"
-msgstr "Im Hintergrund drucken (erforderlich für >25 Dokumente)"
+msgstr "Im Hintergrund drucken (erforderlich für mehr als 25 Dokumente)"
 
 #. Label of a Section Break field in DocType 'System Settings'
 #. Label of a Table field in DocType 'System Health Report'
@@ -3768,54 +3768,54 @@ msgstr "Basierend auf {0}"
 #. Label of a Check field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Bulk Actions"
-msgstr "Massenbearbeitung"
+msgstr "Stapelverarbeitung"
 
 #: frappe/core/doctype/user_permission/user_permission_list.js:142
 msgid "Bulk Delete"
-msgstr "Massenlöschung"
+msgstr "Stapel löschen"
 
 #: frappe/public/js/frappe/list/bulk_operations.js:321
 msgid "Bulk Edit"
-msgstr "Massenbearbeitung"
+msgstr "Stapel bearbeiten"
 
 #: frappe/public/js/frappe/form/grid.js:1172
 msgid "Bulk Edit {0}"
-msgstr "Massen-Bearbeitung {0}"
+msgstr "Stapel-Bearbeitung {0}"
 
 #: frappe/desk/reportview.py:578
 msgid "Bulk Operation Failed"
-msgstr "Massenvorgang fehlgeschlagen"
+msgstr "Stapelverarbeitung fehlgeschlagen"
 
 #: frappe/desk/reportview.py:582
 msgid "Bulk Operation Successful"
-msgstr "Massenvorgang erfolgreich"
+msgstr "Stapelverarbeitung erfolgreich"
 
 #: frappe/public/js/frappe/list/bulk_operations.js:131
 msgid "Bulk PDF Export"
-msgstr "Massenhafter PDF-Export"
+msgstr "Stapel-PDF-Export"
 
 #. Label of a Link in the Tools Workspace
 #. Name of a DocType
 #: frappe/automation/workspace/tools/tools.json
 #: frappe/desk/doctype/bulk_update/bulk_update.json
 msgid "Bulk Update"
-msgstr "Massen-Update"
+msgstr "Stapeländerung"
 
 #: frappe/model/workflow.py:253
 msgid "Bulk approval only support up to 500 documents."
-msgstr "Massengenehmigung unterstützt nur bis zu 500 Dokumente."
+msgstr "Stapel-Genehmigung unterstützt nur bis zu 500 Dokumente."
 
 #: frappe/desk/doctype/bulk_update/bulk_update.py:58
 msgid "Bulk operation is enqueued in background."
-msgstr "Massenoperationen werden im Hintergrund eingereiht."
+msgstr "Stapelverarbeitung wird im Hintergrund eingereiht."
 
 #: frappe/desk/doctype/bulk_update/bulk_update.py:70
 msgid "Bulk operations only support up to 500 documents."
-msgstr "Massenvorgänge unterstützen nur bis zu 500 Dokumente."
+msgstr "Stapelverarbeitung unterstützt nur bis zu 500 Dokumente."
 
 #: frappe/model/workflow.py:243
 msgid "Bulk {0} is enqueued in background."
-msgstr "Massen- {0} ist im Hintergrund eingereiht."
+msgstr "Stapel-{0} ist im Hintergrund eingereiht."
 
 #. Option for the 'Type' (Select) field in DocType 'DocField'
 #. Option for the 'Field Type' (Select) field in DocType 'Custom Field'
@@ -4147,7 +4147,7 @@ msgstr "Dokumente stornieren"
 
 #: frappe/desk/doctype/bulk_update/bulk_update.py:93
 msgid "Cancelling {0}"
-msgstr "Abbrechen von {0}"
+msgstr "{0} wird storniert"
 
 #: frappe/core/doctype/prepared_report/prepared_report.py:259
 msgid "Cannot Download Report due to insufficient permissions"
@@ -4179,7 +4179,7 @@ msgstr "Stornierung vor Übertragen nicht möglich. Vorgang {0} beachten"
 
 #: frappe/public/js/frappe/list/bulk_operations.js:294
 msgid "Cannot cancel {0}."
-msgstr "{0} kann nicht abgebrochen werden."
+msgstr "{0} kann nicht storniert werden."
 
 #: frappe/model/document.py:891
 msgid "Cannot change docstatus from 0 (Draft) to 2 (Cancelled)"
@@ -4254,7 +4254,7 @@ msgstr "Das vom System generierte Feld <strong>{0}</strong>kann nicht gelöscht 
 
 #: frappe/public/js/frappe/list/bulk_operations.js:215
 msgid "Cannot delete {0}"
-msgstr "Kann {0} nicht löschen"
+msgstr "{0} kann nicht gelöscht werden"
 
 #: frappe/utils/nestedset.py:303
 msgid "Cannot delete {0} as it has child nodes"
@@ -4343,7 +4343,7 @@ msgstr "Kann {0} nicht mit der Berechtigung zum Buchen teilen, da der Doctype {1
 
 #: frappe/public/js/frappe/list/bulk_operations.js:291
 msgid "Cannot submit {0}."
-msgstr "Kann {0} nicht buchen."
+msgstr "{0} kann nicht gebucht werden."
 
 #: frappe/desk/doctype/workspace/workspace.py:358
 msgid "Cannot update private workspace of other users"
@@ -11203,7 +11203,7 @@ msgstr "Gehe zu {0}"
 #: frappe/custom/doctype/doctype_layout/doctype_layout.js:42
 #: frappe/workflow/doctype/workflow/workflow.js:44
 msgid "Go to {0} List"
-msgstr "Gehen Sie zur Liste {0}"
+msgstr "Listenansicht für {0} öffnen"
 
 #: frappe/core/doctype/page/page.js:11
 msgid "Go to {0} Page"
@@ -11258,7 +11258,7 @@ msgstr "Google Kalender - Ereignis konnte nicht aus Google Kalender abgerufen we
 
 #: frappe/integrations/doctype/google_calendar/google_calendar.py:252
 msgid "Google Calendar - Could not find Calendar for {0}, error code {1}."
-msgstr ""
+msgstr "Google Calendar - Der Kalender für {0} konnte nicht gefunden werden, Fehlercode {1}."
 
 #: frappe/integrations/doctype/google_contacts/google_contacts.py:234
 msgid "Google Calendar - Could not insert contact in Google Contacts {0}, error code {1}."
@@ -19045,7 +19045,7 @@ msgstr "Bitte legen Sie das Standard-E-Mail-Konto unter Einstellungen > E-Mail-K
 
 #: frappe/email/doctype/email_account/email_account.py:402
 msgid "Please setup default outgoing Email Account from Tools > Email Account"
-msgstr ""
+msgstr "Bitte richten Sie das Standardkonto für ausgehende E-Mails unter Extras > E-Mail-Konto ein"
 
 #: frappe/public/js/frappe/model/model.js:803
 msgid "Please specify"
@@ -24920,7 +24920,7 @@ msgstr "Zum Desk wechseln"
 
 #: frappe/public/js/frappe/list/list_sidebar.js:296
 msgid "Switch to Frappe CRM for smarter sales"
-msgstr ""
+msgstr "Wechseln Sie zu Frappe CRM für intelligentere Verkäufe"
 
 #: frappe/public/js/frappe/ui/capture.js:273
 msgid "Switching Camera"
@@ -27434,7 +27434,7 @@ msgstr "Plan hochstufen"
 
 #: frappe/public/js/frappe/list/list_sidebar.js:308
 msgid "Upgrade your support experience with Frappe Helpdesk"
-msgstr ""
+msgstr "Verbessern Sie Ihr Support-Erlebnis mit Frappe Helpdesk"
 
 #: frappe/public/js/frappe/file_uploader/file_uploader.bundle.js:121
 #: frappe/public/js/frappe/file_uploader/file_uploader.bundle.js:122
@@ -32043,7 +32043,7 @@ msgstr "{{{0}}} ist kein gültiges Format für Feldnamen. Es sollte sein {{field
 #. Count format of shortcut in the Website Workspace
 #: frappe/website/workspace/website/website.json
 msgid "{} Active"
-msgstr ""
+msgstr "{} Aktiv"
 
 #: frappe/public/js/frappe/form/form.js:505
 msgid "{} Complete"

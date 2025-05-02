@@ -15,11 +15,7 @@ import frappe.share
 from frappe import _
 from frappe.core.doctype.server_script.server_script_utils import get_server_script_map
 from frappe.database.utils import DefaultOrderBy, FallBackDateTimeStr, NestedSetHierarchy
-<<<<<<< HEAD
-from frappe.model import get_permitted_fields, optional_fields
-=======
 from frappe.model import OPTIONAL_FIELDS, get_permitted_fields, optional_fields
->>>>>>> version-15
 from frappe.model.meta import get_table_columns
 from frappe.model.utils import is_virtual_doctype
 from frappe.model.utils.user_settings import get_user_settings, update_user_settings
@@ -40,15 +36,11 @@ LOCATE_CAST_PATTERN = re.compile(r"locate\(([^,]+),\s*([`\"]?name[`\"]?)\s*\)", 
 FUNC_IFNULL_PATTERN = re.compile(r"(strpos|ifnull|coalesce)\(\s*[`\"]?name[`\"]?\s*,", flags=re.IGNORECASE)
 CAST_VARCHAR_PATTERN = re.compile(r"([`\"]?tab[\w`\" -]+\.[`\"]?name[`\"]?)(?!\w)", flags=re.IGNORECASE)
 ORDER_BY_PATTERN = re.compile(r"\ order\ by\ |\ asc|\ ASC|\ desc|\ DESC", flags=re.IGNORECASE)
-SUB_QUERY_PATTERN = re.compile("^.*[,();@].*")
+SUB_QUERY_PATTERN = re.compile("^.*[,();@].*", flags=re.DOTALL)
 IS_QUERY_PATTERN = re.compile(r"^(select|delete|update|drop|create)\s")
 IS_QUERY_PREDICATE_PATTERN = re.compile(r"\s*[0-9a-zA-z]*\s*( from | group by | order by | where | join )")
 FIELD_QUOTE_PATTERN = re.compile(r"[0-9a-zA-Z]+\s*'")
-<<<<<<< HEAD
-FIELD_COMMA_PATTERN = re.compile(r"[0-9a-zA-Z]+\s*,")
-=======
 FIELD_COMMA_PATTERN = re.compile(r"[0-9a-zA-Z_]+\s*,")
->>>>>>> version-15
 STRICT_FIELD_PATTERN = re.compile(r".*/\*.*")
 STRICT_UNION_PATTERN = re.compile(r".*\s(union).*\s")
 ORDER_GROUP_PATTERN = re.compile(r".*[^a-z0-9-_ ,`'\"\.\(\)].*")
@@ -421,9 +413,11 @@ class DatabaseQuery:
 			lower_field = field.lower().strip()
 
 			if SUB_QUERY_PATTERN.match(field):
-				if lower_field[0] == "(":
-					subquery_token = lower_field[1:].lstrip().split(" ", 1)[0]
-					if subquery_token in blacklisted_keywords:
+				# Check for subquery anywhere in the field, not just at the beginning
+				if "(" in lower_field:
+					location = lower_field.index("(")
+					subquery_token = lower_field[location + 1 :].lstrip().split(" ", 1)[0]
+					if any(keyword in subquery_token for keyword in blacklisted_keywords):
 						_raise_exception()
 
 				function = lower_field.split("(", 1)[0].rstrip()
@@ -603,10 +597,6 @@ class DatabaseQuery:
 			filters = [filters]
 
 		for f in filters:
-<<<<<<< HEAD
-			if isinstance(f, str):
-				conditions.append(f)
-=======
 			conditions.append(self.prepare_filter_condition(f))
 
 	def remove_field(self, idx: int):
@@ -695,106 +685,6 @@ class DatabaseQuery:
 				continue
 
 			if column in OPTIONAL_FIELDS or column in permitted_fields:
-				continue
-
-			# field inside function calls / * handles things like count(*)
-			elif "(" in field:
-				if "*" in field:
-					continue
-				else:
-					for column in columns:
-						if column not in permitted_fields:
-							self.remove_field(i)
-							break
-					continue
-			# remove if access not allowed
->>>>>>> version-15
-			else:
-				self.remove_field(i)
-
-		# handle * fields
-		j = 0
-		for i in asterisk_fields:
-			self.fields[i + j : i + j + 1] = permitted_fields
-			j = j + len(permitted_fields) - 1
-
-	def remove_field(self, idx: int):
-		if self.as_list:
-			self.fields[idx] = None
-		else:
-			self.fields.pop(idx)
-
-	def apply_fieldlevel_read_permissions(self):
-		"""Apply fieldlevel read permissions to the query
-
-		Note: Does not apply to `frappe.model.core_doctype_list`
-
-		Remove fields that user is not allowed to read. If `fields=["*"]` is passed, only permitted fields will
-		be returned.
-
-		Example:
-		        - User has read permission only on `title` for DocType `Note`
-		        - Query: fields=["*"]
-		        - Result: fields=["title", ...] // will also include Frappe's meta field like `name`, `owner`, etc.
-		"""
-		from frappe.desk.reportview import extract_fieldnames
-
-		if self.flags.ignore_permissions:
-			return
-
-		asterisk_fields = []
-		permitted_fields = get_permitted_fields(
-			doctype=self.doctype,
-			parenttype=self.parent_doctype,
-			permission_type=self.permission_map.get(self.doctype),
-			ignore_virtual=True,
-		)
-
-		for i, field in enumerate(self.fields):
-			# field: 'count(distinct `tabPhoto`.name) as total_count'
-			# column: 'tabPhoto.name'
-			# field: 'count(`tabPhoto`.name) as total_count'
-			# column: 'tabPhoto.name'
-			columns = extract_fieldnames(field)
-			if not columns:
-				continue
-
-			column = columns[0]
-			if column == "*" and "*" in field:
-				if not in_function("*", field):
-					asterisk_fields.append(i)
-				continue
-
-			# handle pseudo columns
-			elif not column or column.isnumeric():
-				continue
-
-			# labels / pseudo columns or frappe internals
-			elif column[0] in {"'", '"'} or column in optional_fields:
-				continue
-
-			# handle child / joined table fields
-			elif "." in field:
-				table, column = column.split(".", 1)
-				ch_doctype = table
-
-				if ch_doctype in self.linked_table_aliases:
-					ch_doctype = self.linked_table_aliases[ch_doctype]
-
-				ch_doctype = ch_doctype.replace("`", "").replace("tab", "", 1)
-
-				if wrap_grave_quotes(table) in self.query_tables:
-					permitted_child_table_fields = get_permitted_fields(
-						doctype=ch_doctype, parenttype=self.doctype, ignore_virtual=True
-					)
-					if column in permitted_child_table_fields or column in optional_fields:
-						continue
-					else:
-						self.remove_field(i)
-				else:
-					raise frappe.PermissionError(ch_doctype)
-
-			elif column in permitted_fields:
 				continue
 
 			# field inside function calls / * handles things like count(*)
@@ -997,11 +887,7 @@ class DatabaseQuery:
 					value = value.replace("\\", "\\\\").replace("%", "%%")
 
 			elif f.operator == "=" and df and df.fieldtype in ["Link", "Data"]:  # TODO: Refactor if possible
-<<<<<<< HEAD
-				value = f.value or "''"
-=======
 				value = cstr(f.value) or "''"
->>>>>>> version-15
 				fallback = "''"
 
 			elif f.fieldname == "name":
@@ -1250,14 +1136,9 @@ class DatabaseQuery:
 						tbl = tbl[4:-1]
 					frappe.throw(_("Please select atleast 1 column from {0} to sort/group").format(tbl))
 
-<<<<<<< HEAD
-			if function in blacklisted_sql_functions:
-				frappe.throw(_("Cannot use {0} in order/group by").format(field))
-=======
 			# Check if the function is used anywhere in the field
 			if any(func in function for func in blacklisted_sql_functions):
 				frappe.throw(_("Cannot use {0} in order/group by").format(function))
->>>>>>> version-15
 
 	def add_limit(self):
 		if self.limit_page_length:

@@ -6,11 +6,7 @@ from frappe.core.utils import set_timeline_doc
 from frappe.model.document import Document
 from frappe.query_builder import DocType, Interval
 from frappe.query_builder.functions import Now
-<<<<<<< HEAD
-from frappe.utils import get_fullname, now
-=======
 from frappe.utils import get_fullname, now, strip_html
->>>>>>> version-15
 
 
 class ActivityLog(Document):

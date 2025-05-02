@@ -19,11 +19,8 @@ from frappe.model.utils import is_virtual_doctype
 from frappe.utils import add_user_info, cint, format_duration
 from frappe.utils.data import sbool
 
-<<<<<<< HEAD
-=======
 DISALLOWED_PARAMS = ("cmd", "data", "ignore_permissions", "view", "user", "csrf_token", "join")
 
->>>>>>> version-15
 
 @frappe.whitelist()
 @frappe.read_only()
@@ -229,14 +226,9 @@ def update_wildcard_field_param(data):
 
 
 def clean_params(data):
-<<<<<<< HEAD
-	for param in ("cmd", "data", "ignore_permissions", "view", "user", "csrf_token", "join"):
-		data.pop(param, None)
-=======
 	for param in DISALLOWED_PARAMS:
 		if param in data:
 			del data[param]
->>>>>>> version-15
 
 
 def parse_json(data):
@@ -364,24 +356,16 @@ def export_query():
 	form_params["limit_page_length"] = None
 	form_params["as_list"] = True
 	doctype = form_params.pop("doctype")
-<<<<<<< HEAD
-=======
 	if isinstance(form_params["fields"], list):
 		form_params["fields"].append("owner")
 	elif isinstance(form_params["fields"], tuple):
 		form_params["fields"] = form_params["fields"] + ("owner",)
->>>>>>> version-15
 	file_format_type = form_params.pop("file_format_type")
 	title = form_params.pop("title", doctype)
 	csv_params = pop_csv_params(form_params)
 	add_totals_row = 1 if form_params.pop("add_totals_row", None) == "1" else None
 	translate_values = 1 if form_params.pop("translate_values", None) == "1" else None
 
-<<<<<<< HEAD
-	frappe.permissions.can_export(doctype, raise_exception=True)
-
-=======
->>>>>>> version-15
 	if selection := form_params.pop("selected_items", None):
 		form_params["filters"] = {"name": ("in", json.loads(selection))}
 
@@ -424,11 +408,7 @@ def export_query():
 				_(value) if translatable_fields[idx] else value for idx, value in enumerate(row)
 			]
 			processed_data.append(processed_row)
-<<<<<<< HEAD
-			data.extend(processed_data)
-=======
 		data.extend(processed_data)
->>>>>>> version-15
 
 	data = handle_duration_fieldtype_values(doctype, data, db_query.fields)
 

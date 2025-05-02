@@ -51,11 +51,7 @@
 
 			if (!window.frappe) window.frappe = {};
 
-<<<<<<< HEAD
-			frappe.boot = JSON.parse({{ boot }});
-=======
 			frappe.boot = {{ boot | json }};
->>>>>>> version-15
 			frappe._messages = frappe.boot["__messages"];
 			frappe.csrf_token = "{{ csrf_token }}";
 

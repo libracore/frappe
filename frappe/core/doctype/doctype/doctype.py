@@ -121,10 +121,7 @@ class DocType(Document):
 		engine: DF.Literal["InnoDB", "MyISAM"]
 		fields: DF.Table[DocField]
 		force_re_route_to_default_view: DF.Check
-<<<<<<< HEAD
-=======
 		grid_page_length: DF.Int
->>>>>>> version-15
 		has_web_view: DF.Check
 		hide_toolbar: DF.Check
 		icon: DF.Data | None
@@ -157,15 +154,13 @@ class DocType(Document):
 		]
 		nsm_parent_field: DF.Data | None
 		permissions: DF.Table[DocPerm]
+		protect_attached_files: DF.Check
 		queue_in_background: DF.Check
 		quick_entry: DF.Check
 		read_only: DF.Check
 		restrict_to_domain: DF.Link | None
 		route: DF.Data | None
-<<<<<<< HEAD
-=======
 		row_format: DF.Literal["Dynamic", "Compressed"]
->>>>>>> version-15
 		search_fields: DF.Data | None
 		sender_field: DF.Data | None
 		sender_name_field: DF.Data | None
@@ -343,11 +338,7 @@ class DocType(Document):
 		if self.is_virtual and self.custom:
 			frappe.throw(_("Not allowed to create custom Virtual DocType."), CannotCreateStandardDoctypeError)
 
-<<<<<<< HEAD
-		if frappe.conf.get("developer_mode"):
-=======
 		if frappe.conf.developer_mode and not self.owner:
->>>>>>> version-15
 			self.owner = "Administrator"
 			self.modified_by = "Administrator"
 

@@ -2,10 +2,6 @@
 # License: MIT. See LICENSE
 
 import frappe
-<<<<<<< HEAD
-
-=======
->>>>>>> version-15
 
 
 def get(name):
@@ -30,12 +26,6 @@ def getpage(name: str):
 	"""
 	Load the page from `frappe.form` and send it via `frappe.response`
 	"""
-<<<<<<< HEAD
-	page = frappe.form_dict.get("name")
-	doc = get(page)
-
-=======
 
 	doc = get(name)
->>>>>>> version-15
 	frappe.response.docs.append(doc)

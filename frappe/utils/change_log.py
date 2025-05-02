@@ -184,12 +184,9 @@ def check_for_update():
 		branch_version = (
 			apps[app]["branch_version"].split(" ", 1)[0] if apps[app].get("branch_version", "") else ""
 		)
-<<<<<<< HEAD
-=======
 		if "develop" in branch_version:
 			return updates
 
->>>>>>> version-15
 		instance_version = Version(branch_version or apps[app].get("version"))
 
 		github_version, org_name = check_release_on_github(owner, repo, instance_version)

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-03-20 13:58+0000\n"
-"PO-Revision-Date: 2025-03-31 17:43\n"
+"PO-Revision-Date: 2025-04-11 16:17\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -2152,7 +2152,7 @@ msgstr "Sobrescribir la nomenclatura de enmiendas"
 
 #: frappe/model/document.py:444
 msgid "Amendment Not Allowed"
-msgstr ""
+msgstr "Enmienda no permitida"
 
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.py:207
 msgid "Amendment naming rules updated."

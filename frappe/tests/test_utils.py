@@ -24,10 +24,6 @@ from frappe.tests.utils import FrappeTestCase, MockedRequestTestCase, change_set
 from frappe.utils import (
 	ceil,
 	dict_to_str,
-<<<<<<< HEAD
-	evaluate_filters,
-=======
->>>>>>> version-15
 	execute_in_shell,
 	floor,
 	flt,
@@ -60,10 +56,7 @@ from frappe.utils.data import (
 	cint,
 	cstr,
 	duration_to_seconds,
-<<<<<<< HEAD
-=======
 	evaluate_filters,
->>>>>>> version-15
 	expand_relative_urls,
 	get_datetime,
 	get_first_day_of_week,
@@ -216,8 +209,6 @@ class TestFilters(FrappeTestCase):
 		for filter, expected_result in test_cases:
 			self.assertEqual(evaluate_filters(doc, filter), expected_result, msg=f"{filter}")
 
-<<<<<<< HEAD
-=======
 	def test_timespan(self):
 		doc = {
 			"doctype": "User",
@@ -232,7 +223,6 @@ class TestFilters(FrappeTestCase):
 		}
 		self.assertFalse(evaluate_filters(doc, [("last_password_reset_date", "Timespan", "today")]))
 
->>>>>>> version-15
 
 class TestMoney(FrappeTestCase):
 	def test_money_in_words(self):
@@ -655,8 +645,6 @@ class TestDateUtils(FrappeTestCase):
 		self.assertEqual(get_year_ending(date(2021, 1, 1)), date(2021, 12, 31))
 		self.assertEqual(get_year_ending(date(2021, 1, 31)), date(2021, 12, 31))
 
-<<<<<<< HEAD
-=======
 	@given(st.datetimes())
 	def test_get_datetime(self, original):
 		parsed = get_datetime(str(original))
@@ -667,7 +655,6 @@ class TestDateUtils(FrappeTestCase):
 		parsed = get_datetime(str(original))
 		self.assertEqual(parsed, original)
 
->>>>>>> version-15
 	def test_pretty_date(self):
 		from frappe import _
 

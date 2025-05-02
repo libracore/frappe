@@ -26,10 +26,7 @@ class RoleProfile(Document):
 		self.name = self.role_profile
 
 	def on_update(self):
-<<<<<<< HEAD
-=======
 		self.clear_cache()
->>>>>>> version-15
 		self.queue_action(
 			"update_all_users",
 			now=frappe.flags.in_test or frappe.flags.in_install,

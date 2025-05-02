@@ -53,11 +53,7 @@
  "icon": "fa fa-globe",
  "idx": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2022-08-05 18:33:27.880783",
-=======
  "modified": "2024-11-27 16:56:04.850422",
->>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Geo",
  "name": "Country",
@@ -89,8 +85,4 @@
  "states": [],
  "track_changes": 1,
  "translated_doctype": 1
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> version-15

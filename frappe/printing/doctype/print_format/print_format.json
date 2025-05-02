@@ -13,10 +13,7 @@
   "standard",
   "custom_format",
   "disabled",
-<<<<<<< HEAD
-=======
   "pdf_generator",
->>>>>>> version-15
   "section_break_6",
   "print_format_type",
   "raw_printing",
@@ -259,8 +256,6 @@
    "fieldtype": "Select",
    "label": "Page Number",
    "options": "Hide\nTop Left\nTop Center\nTop Right\nBottom Left\nBottom Center\nBottom Right"
-<<<<<<< HEAD
-=======
   },
   {
    "default": "wkhtmltopdf",
@@ -268,17 +263,12 @@
    "fieldtype": "Select",
    "label": "PDF Generator",
    "options": "wkhtmltopdf"
->>>>>>> version-15
   }
  ],
  "icon": "fa fa-print",
  "idx": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2023-12-12 19:59:37.133301",
-=======
  "modified": "2025-02-14 14:49:39.181074",
->>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Print Format",
@@ -305,8 +295,4 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> version-15

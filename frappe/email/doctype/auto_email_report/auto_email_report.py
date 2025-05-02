@@ -218,17 +218,6 @@ class AutoEmailReport(Document):
 			if self.dynamic_date_period == "Daily":
 				from_date = add_to_date(to_date, days=-1)
 			elif self.dynamic_date_period == "Weekly":
-<<<<<<< HEAD
-				from_date = get_first_day_of_week(from_date)
-			elif self.dynamic_date_period == "Monthly":
-				from_date = get_first_day(from_date)
-			elif self.dynamic_date_period == "Quarterly":
-				from_date = get_quarter_start(from_date)
-			elif self.dynamic_date_period == "Half Yearly":
-				from_date = get_half_year_start(from_date)
-			elif self.dynamic_date_period == "Yearly":
-				from_date = get_year_start(from_date)
-=======
 				from_date = get_first_day_of_week(from_date, as_str=True)
 			elif self.dynamic_date_period == "Monthly":
 				from_date = get_first_day(from_date, as_str=True)
@@ -238,7 +227,6 @@ class AutoEmailReport(Document):
 				from_date = get_half_year_start(as_str=True)
 			elif self.dynamic_date_period == "Yearly":
 				from_date = get_year_start(from_date, as_str=True)
->>>>>>> version-15
 
 			self.set_date_filters(from_date, to_date)
 		else:
@@ -283,10 +271,7 @@ class AutoEmailReport(Document):
 			attachments=attachments,
 			reference_doctype=self.doctype,
 			reference_name=self.name,
-<<<<<<< HEAD
-=======
 			queue_separately=True,
->>>>>>> version-15
 		)
 
 	def dynamic_date_filters_set(self):
@@ -316,38 +301,15 @@ def send_now(name):
 	auto_email_report.check_permission()
 	auto_email_report.send()
 
-<<<<<<< HEAD
 
 def send_daily():
 	"""Check reports to be sent daily"""
 
-	current_day = calendar.day_name[now_datetime().weekday()]
-=======
-
-def send_daily():
-	"""Check reports to be sent daily"""
-
->>>>>>> version-15
 	enabled_reports = frappe.get_all(
 		"Auto Email Report", filters={"enabled": 1, "frequency": ("in", ("Daily", "Weekdays", "Weekly"))}
 	)
 
 	for report in enabled_reports:
-<<<<<<< HEAD
-		auto_email_report = frappe.get_doc("Auto Email Report", report.name)
-
-		# if not correct weekday, skip
-		if auto_email_report.frequency == "Weekdays":
-			if current_day in ("Saturday", "Sunday"):
-				continue
-		elif auto_email_report.frequency == "Weekly":
-			if auto_email_report.day_of_week != current_day:
-				continue
-		try:
-			auto_email_report.send()
-		except Exception:
-			auto_email_report.log_error(f"Failed to send {auto_email_report.name} Auto Email Report")
-=======
 		frappe.enqueue(
 			"frappe.email.doctype.auto_email_report.auto_email_report.process_auto_email_report",
 			report=report,
@@ -373,7 +335,6 @@ def process_auto_email_report(report):
 		auto_email_report.send()
 	except Exception:
 		auto_email_report.log_error(f"Failed to send {auto_email_report.name} Auto Email Report")
->>>>>>> version-15
 
 
 def send_monthly():

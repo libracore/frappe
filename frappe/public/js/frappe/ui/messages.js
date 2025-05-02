@@ -230,11 +230,7 @@ frappe.msgprint = function (msg, title, is_minimizable) {
 		}
 
 		frappe.msg_dialog.set_primary_action(
-<<<<<<< HEAD
-			__(data.primary_action.label || data.primary_action_label || "Done"),
-=======
 			__(data.primary_action.label) || __(data.primary_action_label) || __("Done"),
->>>>>>> version-15
 			data.primary_action.action
 		);
 	} else {
@@ -246,13 +242,9 @@ frappe.msgprint = function (msg, title, is_minimizable) {
 
 	if (data.secondary_action) {
 		frappe.msg_dialog.set_secondary_action(data.secondary_action.action);
-<<<<<<< HEAD
-		frappe.msg_dialog.set_secondary_action_label(__(data.secondary_action.label || "Close"));
-=======
 		frappe.msg_dialog.set_secondary_action_label(
 			__(data.secondary_action.label) || __("Close")
 		);
->>>>>>> version-15
 	}
 
 	if (data.message == null) {

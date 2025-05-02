@@ -33,10 +33,7 @@ from frappe.utils import (
 )
 from frappe.utils.data import sha256_hash
 from frappe.utils.deprecations import deprecated
-<<<<<<< HEAD
-=======
 from frappe.utils.html_utils import sanitize_html
->>>>>>> version-15
 from frappe.utils.password import check_password, get_password_reset_limit
 from frappe.utils.password import update_password as _update_password
 from frappe.utils.user import get_system_managers
@@ -178,11 +175,7 @@ class User(Document):
 		if self.name not in STANDARD_USERS:
 			self.email = self.name
 			self.validate_email_type(self.name)
-<<<<<<< HEAD
-		self.add_system_manager_role()
-=======
 
->>>>>>> version-15
 		self.populate_role_profile_roles()
 		self.check_roles_added()
 		self.set_system_user()
@@ -263,14 +256,11 @@ class User(Document):
 		"""Returns true if current user is the session user"""
 		return self.name == frappe.session.user
 
-<<<<<<< HEAD
-=======
 	def clean_name(self):
 		for field in ("first_name", "middle_name", "last_name"):
 			if field_value := self.get(field):
 				self.set(field, sanitize_html(field_value, always_sanitize=True))
 
->>>>>>> version-15
 	def set_full_name(self):
 		self.full_name = " ".join(filter(None, [self.first_name, self.last_name]))
 
@@ -285,41 +275,6 @@ class User(Document):
 
 		# toggle notifications based on the user's status
 		toggle_notifications(self.name, enable=cint(self.enabled))
-<<<<<<< HEAD
-
-	def add_system_manager_role(self):
-		if self.is_system_manager_disabled():
-			return
-
-		# if adding system manager, do nothing
-		if not cint(self.enabled) or (
-			"System Manager" in [user_role.role for user_role in self.get("roles")]
-		):
-			return
-
-		if (
-			self.name not in STANDARD_USERS
-			and self.user_type == "System User"
-			and not self.get_other_system_managers()
-			and cint(frappe.db.get_single_value("System Settings", "setup_complete"))
-		):
-			msgprint(_("Adding System Manager to this User as there must be atleast one System Manager"))
-			self.append("roles", {"doctype": "Has Role", "role": "System Manager"})
-
-		if self.name == "Administrator":
-			# Administrator should always have System Manager Role
-			self.extend(
-				"roles",
-				[
-					{"doctype": "Has Role", "role": "System Manager"},
-					{"doctype": "Has Role", "role": "Administrator"},
-				],
-			)
-
-	def is_system_manager_disabled(self):
-		return frappe.db.get_value("Role", {"name": "System Manager"}, ["disabled"])
-=======
->>>>>>> version-15
 
 	def email_new_password(self, new_password=None):
 		if new_password and not self.flags.in_insert:
@@ -434,23 +389,6 @@ class User(Document):
 
 		return link
 
-<<<<<<< HEAD
-	def get_other_system_managers(self):
-		user_doctype = DocType("User").as_("user")
-		user_role_doctype = DocType("Has Role").as_("user_role")
-		return (
-			frappe.qb.from_(user_doctype)
-			.from_(user_role_doctype)
-			.select(user_doctype.name)
-			.where(user_role_doctype.role == "System Manager")
-			.where(user_doctype.enabled == 1)
-			.where(user_role_doctype.parent == user_doctype.name)
-			.where(user_role_doctype.parent.notin(["Administrator", self.name]))
-			.limit(1)
-		).run()
-
-=======
->>>>>>> version-15
 	def get_fullname(self):
 		"""get first_name space last_name"""
 		return (self.first_name or "") + (self.first_name and " " or "") + (self.last_name or "")
@@ -518,7 +456,6 @@ class User(Document):
 
 		if custom_template:
 			from frappe.email.doctype.email_template.email_template import get_email_template
-<<<<<<< HEAD
 
 			email_template = get_email_template(custom_template, args)
 			subject = email_template.get("subject")
@@ -535,31 +472,6 @@ class User(Document):
 			delayed=(not now) if now is not None else self.flags.delay_emails,
 			retry=3,
 		)
-
-	def a_system_manager_should_exist(self):
-		if self.is_system_manager_disabled():
-			return
-
-		if not self.get_other_system_managers():
-			throw(_("There should remain at least one System Manager"))
-=======
-
-			email_template = get_email_template(custom_template, args)
-			subject = email_template.get("subject")
-			content = email_template.get("message")
-
-		frappe.sendmail(
-			recipients=self.email,
-			sender=sender,
-			subject=subject,
-			template=template if not custom_template else None,
-			content=content if custom_template else None,
-			args=args,
-			header=[subject, "green"],
-			delayed=(not now) if now is not None else self.flags.delay_emails,
-			retry=3,
-		)
->>>>>>> version-15
 
 	def on_trash(self):
 		frappe.clear_cache(user=self.name)
@@ -1123,45 +1035,6 @@ def reset_password(user: str) -> str:
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
 def user_query(doctype, txt, searchfield, start, page_len, filters):
-<<<<<<< HEAD
-	from frappe.desk.reportview import get_filters_cond, get_match_cond
-
-	doctype = "User"
-	conditions = []
-
-	user_type_condition = "and user_type != 'Website User'"
-	if filters and filters.get("ignore_user_type") and frappe.session.data.user_type == "System User":
-		user_type_condition = ""
-	filters and filters.pop("ignore_user_type", None)
-
-	txt = f"%{txt}%"
-	return frappe.db.sql(
-		"""SELECT `name`, CONCAT_WS(' ', first_name, middle_name, last_name)
-		FROM `tabUser`
-		WHERE `enabled`=1
-			{user_type_condition}
-			AND `docstatus` < 2
-			AND `name` NOT IN ({standard_users})
-			AND ({key} LIKE %(txt)s
-				OR CONCAT_WS(' ', first_name, middle_name, last_name) LIKE %(txt)s)
-			{fcond} {mcond}
-		ORDER BY
-			CASE WHEN `name` LIKE %(txt)s THEN 0 ELSE 1 END,
-			CASE WHEN concat_ws(' ', first_name, middle_name, last_name) LIKE %(txt)s
-				THEN 0 ELSE 1 END,
-			NAME asc
-		LIMIT %(page_len)s OFFSET %(start)s
-	""".format(
-			user_type_condition=user_type_condition,
-			standard_users=", ".join(frappe.db.escape(u) for u in STANDARD_USERS),
-			key=searchfield,
-			fcond=get_filters_cond(doctype, filters, conditions),
-			mcond=get_match_cond(doctype),
-		),
-		dict(start=start, page_len=page_len, txt=txt),
-	)
-
-=======
 	doctype = "User"
 
 	list_filters = {
@@ -1192,7 +1065,6 @@ def user_query(doctype, txt, searchfield, start, page_len, filters):
 		as_list=True,
 	)
 
->>>>>>> version-15
 
 def get_total_users():
 	"""Returns total no. of system users"""

@@ -56,21 +56,6 @@ class TestScheduler(TestCase):
 			# 1st job is in the queue (or running), don't enqueue it again
 			self.assertFalse(job.enqueue())
 
-<<<<<<< HEAD
-	def test_is_dormant(self):
-		self.assertTrue(is_dormant(check_time=get_datetime("2100-01-01 00:00:00")))
-		self.assertTrue(is_dormant(check_time=add_days(frappe.db.get_last_created("Activity Log"), 5)))
-		self.assertFalse(is_dormant(check_time=frappe.db.get_last_created("Activity Log")))
-
-	def test_once_a_day_for_dormant(self):
-		frappe.db.truncate("Scheduled Job Log")
-		self.assertTrue(schedule_jobs_based_on_activity(check_time=get_datetime("2100-01-01 00:00:00")))
-		self.assertTrue(
-			schedule_jobs_based_on_activity(
-				check_time=add_days(frappe.db.get_last_created("Activity Log"), 5)
-			)
-		)
-=======
 	@patch.object(frappe.utils.frappecloud, "on_frappecloud", return_value=True)
 	@patch.dict(frappe.conf, {"developer_mode": 0})
 	def test_is_dormant(self, _mock):
@@ -90,31 +75,11 @@ class TestScheduler(TestCase):
 		frappe.db.truncate("Scheduled Job Log")
 		self.assertTrue(schedule_jobs_based_on_activity(check_time=get_datetime("2100-01-01 00:00:00")))
 		self.assertTrue(schedule_jobs_based_on_activity(check_time=add_days(last_activity, 5)))
->>>>>>> version-15
 
 		# create a fake job executed 5 days from now
 		job = get_test_job(method="frappe.tests.test_scheduler.test_method", frequency="Daily")
 		job.execute()
 		job_log = frappe.get_doc("Scheduled Job Log", dict(scheduled_job_type=job.name))
-<<<<<<< HEAD
-		job_log.db_set(
-			"modified", add_days(_get_last_modified_timestamp("Activity Log"), 5), update_modified=False
-		)
-
-		# inactive site with recent job, don't run
-		self.assertFalse(
-			schedule_jobs_based_on_activity(
-				check_time=add_days(_get_last_modified_timestamp("Activity Log"), 5)
-			)
-		)
-
-		# one more day has passed
-		self.assertTrue(
-			schedule_jobs_based_on_activity(
-				check_time=add_days(_get_last_modified_timestamp("Activity Log"), 6)
-			)
-		)
-=======
 		job_log.db_set("modified", add_days(last_activity, 5), update_modified=False)
 		schedule_jobs_based_on_activity.clear_cache()
 		is_dormant.clear_cache()
@@ -124,7 +89,6 @@ class TestScheduler(TestCase):
 
 		# one more day has passed
 		self.assertTrue(schedule_jobs_based_on_activity(check_time=add_days(last_activity, 6)))
->>>>>>> version-15
 
 
 def get_test_job(method="frappe.tests.test_scheduler.test_timeout_10", frequency="All") -> ScheduledJobType:

@@ -280,11 +280,7 @@ class EmailServer:
 
 	def get_email_seen_status(self, uid, flag_string):
 		"""parse the email FLAGS response"""
-<<<<<<< HEAD
-		if not flag_string:
-=======
 		if not flag_string or not isinstance(flag_string, str | bytes):
->>>>>>> version-15
 			return None
 
 		flags = []

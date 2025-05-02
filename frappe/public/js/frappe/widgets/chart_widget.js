@@ -125,11 +125,7 @@ export default class ChartWidget extends Widget {
 		if (this.chart_doc.type == "Heatmap") {
 			filters = [
 				{
-<<<<<<< HEAD
-					label: this.chart_settings.heatmap_year || this.chart_doc.heatmap_year,
-=======
 					label: __(this.chart_settings.heatmap_year) || __(this.chart_doc.heatmap_year),
->>>>>>> version-15
 					options: frappe.dashboard_utils.get_years_since_creation(
 						frappe.boot.user.creation
 					),
@@ -145,12 +141,8 @@ export default class ChartWidget extends Widget {
 		} else {
 			filters = [
 				{
-<<<<<<< HEAD
-					label: this.chart_settings.time_interval || this.chart_doc.time_interval,
-=======
 					label:
 						__(this.chart_settings.time_interval) || __(this.chart_doc.time_interval),
->>>>>>> version-15
 					options: ["Yearly", "Quarterly", "Monthly", "Weekly", "Daily"],
 					icon: "calendar",
 					class: "time-interval-filter",
@@ -163,11 +155,7 @@ export default class ChartWidget extends Widget {
 					},
 				},
 				{
-<<<<<<< HEAD
-					label: this.chart_settings.timespan || this.chart_doc.timespan,
-=======
 					label: __(this.chart_settings.timespan) || __(this.chart_doc.timespan),
->>>>>>> version-15
 					options: [
 						"Select Date Range",
 						"Last Year",
@@ -246,11 +234,7 @@ export default class ChartWidget extends Widget {
 				df: {
 					fieldtype: "DateRange",
 					fieldname: "from_date",
-<<<<<<< HEAD
-					placeholder: "Date Range",
-=======
 					placeholder: __("Date Range"),
->>>>>>> version-15
 					input_class: "input-xs",
 					default: [this.chart_settings.from_date, this.chart_settings.to_date],
 					value: [this.chart_settings.from_date, this.chart_settings.to_date],
@@ -331,11 +315,7 @@ export default class ChartWidget extends Widget {
 
 		if (this.chart_doc.document_type) {
 			actions.push({
-<<<<<<< HEAD
-				label: __("{0} List", [this.chart_doc.document_type]),
-=======
 				label: __("{0} List", [__(this.chart_doc.document_type)]),
->>>>>>> version-15
 				action: "action-list",
 				handler: () => {
 					frappe.set_route("List", this.chart_doc.document_type);
@@ -343,11 +323,7 @@ export default class ChartWidget extends Widget {
 			});
 		} else if (this.chart_doc.chart_type === "Report") {
 			actions.push({
-<<<<<<< HEAD
-				label: __("{0} Report", [this.chart_doc.report_name]),
-=======
 				label: __("{0} Report", [__(this.chart_doc.report_name)]),
->>>>>>> version-15
 				action: "action-list",
 				handler: () => {
 					frappe.set_route("query-report", this.chart_doc.report_name, this.filters);
@@ -417,11 +393,7 @@ export default class ChartWidget extends Widget {
 	setup_filter_dialog(fields) {
 		let me = this;
 		let dialog = new frappe.ui.Dialog({
-<<<<<<< HEAD
-			title: __("Set Filters for {0}", [this.chart_doc.chart_name]),
-=======
 			title: __("Set Filters for {0}", [__(this.chart_doc.chart_name)]),
->>>>>>> version-15
 			fields: fields,
 			primary_action: function () {
 				let values = this.get_values();
@@ -432,11 +404,7 @@ export default class ChartWidget extends Widget {
 					me.fetch_and_update_chart();
 				}
 			},
-<<<<<<< HEAD
-			primary_action_label: "Set",
-=======
 			primary_action_label: __("Set"),
->>>>>>> version-15
 		});
 
 		dialog.show();
@@ -506,13 +474,9 @@ export default class ChartWidget extends Widget {
 				${actions
 					.map(
 						(action) =>
-<<<<<<< HEAD
-							`<li><a class="dropdown-item" data-action="${action.action}">${action.label}</a></li>`
-=======
 							`<li><a class="dropdown-item" data-action="${action.action}">${__(
 								action.label
 							)}</a></li>`
->>>>>>> version-15
 					)
 					.join("")}
 			</ul>
@@ -635,16 +599,6 @@ export default class ChartWidget extends Widget {
 			options = this.report_result.chart.options;
 		}
 
-<<<<<<< HEAD
-		chart_args.tooltipOptions = {
-			formatTooltipY: (value) =>
-				frappe.format(
-					value,
-					{ fieldtype, options },
-					{ always_show_decimals: true, inline: true }
-				),
-		};
-=======
 		if (this.chart_doc.chart_type == "Custom" && this.chart_doc.custom_options) {
 			let chart_options = JSON.parse(this.chart_doc.custom_options);
 			fieldtype = chart_options.fieldtype;
@@ -665,7 +619,6 @@ export default class ChartWidget extends Widget {
 					),
 			};
 		}
->>>>>>> version-15
 
 		if (this.chart_doc.type == "Heatmap") {
 			const heatmap_year = parseInt(

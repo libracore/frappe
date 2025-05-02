@@ -8,53 +8,10 @@ Events:
 	weekly
 """
 
-<<<<<<< HEAD
-# imports - standard imports
-=======
->>>>>>> version-15
 import os
 import random
 import time
 from typing import NoReturn
-<<<<<<< HEAD
-
-from croniter import CroniterBadCronError
-
-# imports - module imports
-import frappe
-from frappe.utils import cint, get_datetime, get_sites, now_datetime
-from frappe.utils.background_jobs import set_niceness
-
-DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-
-
-def cprint(*args, **kwargs):
-	"""Prints only if called from STDOUT"""
-	try:
-		os.get_terminal_size()
-		print(*args, **kwargs)
-	except Exception:
-		pass
-
-
-def start_scheduler() -> NoReturn:
-	"""Run enqueue_events_for_all_sites based on scheduler tick.
-	Specify scheduler_interval in seconds in common_site_config.json"""
-
-	tick = get_scheduler_tick()
-	set_niceness()
-
-	while True:
-		time.sleep(tick)
-		enqueue_events_for_all_sites()
-
-
-def enqueue_events_for_all_sites() -> None:
-	"""Loop through sites and enqueue events that are not already queued"""
-
-	if os.path.exists(os.path.join(".", ".restarting")):
-		# Don't add task to queue if webserver is in restart mode
-=======
 
 from croniter import CroniterBadCronError
 from filelock import FileLock, Timeout
@@ -90,7 +47,6 @@ def start_scheduler() -> NoReturn:
 		lock.acquire(blocking=False)
 	except Timeout:
 		frappe.logger("scheduler").debug("Scheduler already running")
->>>>>>> version-15
 		return
 
 	while True:
@@ -158,13 +114,9 @@ def enqueue_events_for_site(site: str) -> None:
 def enqueue_events(site: str) -> list[str] | None:
 	if schedule_jobs_based_on_activity():
 		enqueued_jobs = []
-<<<<<<< HEAD
-		for job_type in frappe.get_all("Scheduled Job Type", filters={"stopped": 0}, fields="*"):
-=======
 		all_jobs = frappe.get_all("Scheduled Job Type", filters={"stopped": 0}, fields="*")
 		random.shuffle(all_jobs)
 		for job_type in all_jobs:
->>>>>>> version-15
 			job_type = frappe.get_doc(doctype="Scheduled Job Type", **job_type)
 			try:
 				if job_type.enqueue():
@@ -221,10 +173,7 @@ def disable_scheduler():
 	toggle_scheduler(False)
 
 
-<<<<<<< HEAD
-=======
 @redis_cache(ttl=60 * 60)
->>>>>>> version-15
 def schedule_jobs_based_on_activity(check_time=None):
 	"""Returns True for active sites defined by Activity Log
 	Returns True for inactive sites once in 24 hours"""
@@ -245,17 +194,6 @@ def schedule_jobs_based_on_activity(check_time=None):
 		return True
 
 
-<<<<<<< HEAD
-def is_dormant(check_time=None):
-	# Assume never dormant if developer_mode is enabled
-	if frappe.conf.developer_mode:
-		return False
-	last_activity_log_timestamp = _get_last_modified_timestamp("Activity Log")
-	since = (frappe.get_system_settings("dormant_days") or 4) * 86400
-	if not last_activity_log_timestamp:
-		return True
-	if ((check_time or now_datetime()) - last_activity_log_timestamp).total_seconds() >= since:
-=======
 @redis_cache(ttl=60 * 60)
 def is_dormant(check_time=None):
 	from frappe.utils.frappecloud import on_frappecloud
@@ -274,7 +212,6 @@ def is_dormant(check_time=None):
 	if not last_activity:
 		return True
 	if ((check_time or now_datetime()) - last_activity).total_seconds() >= threshold:
->>>>>>> version-15
 		return True
 	return False
 

@@ -110,13 +110,6 @@ class Exporter:
 		return fields or []
 
 	def get_data_to_export(self):
-<<<<<<< HEAD
-		frappe.permissions.can_export(self.doctype, raise_exception=True)
-
-		table_fields = [f for f in self.exportable_fields if f != self.doctype]
-		data = self.get_data_as_docs()
-
-=======
 		table_fields = [f for f in self.exportable_fields if f != self.doctype]
 		data = self.get_data_as_docs()
 
@@ -132,7 +125,6 @@ class Exporter:
 					_("You are not allowed to export {} doctype").format(self.doctype)
 				)
 
->>>>>>> version-15
 		for doc in data:
 			rows = []
 			rows = self.add_data_row(self.doctype, None, doc, rows, 0)
@@ -181,11 +173,7 @@ class Exporter:
 		parent_data = frappe.db.get_list(
 			self.doctype,
 			filters=filters,
-<<<<<<< HEAD
-			fields=["name", *parent_fields],
-=======
 			fields=["name", "owner", *parent_fields],
->>>>>>> version-15
 			limit_page_length=self.export_page_length,
 			order_by=order_by,
 			as_list=0,

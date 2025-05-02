@@ -2,10 +2,7 @@
 # For license information, please see license.txt
 
 import os
-<<<<<<< HEAD
-=======
 from string import ascii_letters, digits
->>>>>>> version-15
 
 import frappe
 from frappe.model.document import Document
@@ -38,13 +35,10 @@ class Package(Document):
 		if not self.package_name:
 			self.package_name = self.name.lower().replace(" ", "-")
 
-<<<<<<< HEAD
-=======
 		allowed_characters = ascii_letters + digits + "-"
 		if not all(c in allowed_characters for c in self.package_name):
 			frappe.throw("Package name can only contain letters, digits and hyphens")
 
->>>>>>> version-15
 
 @frappe.whitelist()
 def get_license_text(license_type: str) -> str | None:

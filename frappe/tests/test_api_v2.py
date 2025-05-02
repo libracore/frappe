@@ -33,6 +33,7 @@ class TestResourceAPIV2(FrappeAPITestCase):
 
 	@classmethod
 	def tearDownClass(cls):
+		frappe.db.commit()
 		for name in cls.GENERATED_DOCUMENTS:
 			frappe.delete_doc_if_exists(cls.DOCTYPE, name)
 		frappe.db.commit()
@@ -84,8 +85,6 @@ class TestResourceAPIV2(FrappeAPITestCase):
 		self.assertIsInstance(docname, str)
 		self.GENERATED_DOCUMENTS.append(docname)
 
-<<<<<<< HEAD
-=======
 	def test_copy_document(self):
 		doc = frappe.get_doc(self.DOCTYPE, self.GENERATED_DOCUMENTS[0])
 
@@ -105,7 +104,6 @@ class TestResourceAPIV2(FrappeAPITestCase):
 		self.assertNotIn("owner", data)
 		self.assertNotIn("docstatus", data)
 
->>>>>>> version-15
 	def test_delete_document(self):
 		doc_to_delete = choice(self.GENERATED_DOCUMENTS)
 		response = self.delete(self.resource(self.DOCTYPE, doc_to_delete))

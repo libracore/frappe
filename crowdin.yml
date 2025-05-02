@@ -4,10 +4,6 @@ files:
 pull_request_title: "fix: sync translations from crowdin"
 pull_request_labels:
   - translation
-<<<<<<< HEAD
-commit_message: "fix: %language% translations"
-append_commit_message: false
-=======
   - skip-release-notes
 pull_request_reviewers:
   - barredterra # change to your GitHub username if you copied this file
@@ -16,4 +12,3 @@ append_commit_message: false
 languages_mapping:
   two_letters_code:
     pt-BR: pt_BR
->>>>>>> version-15

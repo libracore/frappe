@@ -7,12 +7,9 @@ import mimetypes
 import types
 from contextlib import contextmanager
 from functools import lru_cache
-<<<<<<< HEAD
-=======
 from itertools import chain
 from types import FunctionType, MethodType, ModuleType
 from typing import TYPE_CHECKING, Any
->>>>>>> version-15
 
 import RestrictedPython.Guards
 from RestrictedPython import PrintCollector, compile_restricted, safe_globals
@@ -311,8 +308,6 @@ def get_safe_globals():
 	return out
 
 
-<<<<<<< HEAD
-=======
 def get_keys_for_autocomplete(
 	key: str,
 	value: Any,
@@ -359,7 +354,6 @@ def get_keys_for_autocomplete(
 		yield {"value": full_key, "score": score, "meta": meta}
 
 
->>>>>>> version-15
 def is_job_queued(job_name, queue="default"):
 	"""
 	:param job_name: used to identify a queued job, usually dotted path to function
@@ -697,10 +691,8 @@ VALID_UTILS = (
 	"formatdate",
 	"get_user_info_for_avatar",
 	"get_abbr",
-<<<<<<< HEAD
-=======
 	"get_month",
->>>>>>> version-15
+	"sha256_hash",
 )
 
 

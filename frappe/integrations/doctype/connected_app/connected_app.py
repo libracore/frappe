@@ -4,10 +4,7 @@
 import os
 from urllib.parse import urlencode, urljoin
 
-<<<<<<< HEAD
-=======
 from oauthlib.oauth2 import BackendApplicationClient
->>>>>>> version-15
 from requests_oauthlib import OAuth2Session
 
 import frappe
@@ -150,8 +147,6 @@ class ConnectedApp(Document):
 
 		return token_cache
 
-<<<<<<< HEAD
-=======
 	def get_backend_app_token(self, include_client_id=None):
 		"""Get an Access Token for the Cloud-Registered Service Principal"""
 		# There is no User assigned to the app, so we give it an empty string,
@@ -179,7 +174,6 @@ class ConnectedApp(Document):
 
 		return token_cache
 
->>>>>>> version-15
 
 @frappe.whitelist(methods=["GET"], allow_guest=True)
 def callback(code=None, state=None):

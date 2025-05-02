@@ -1,9 +1,6 @@
 import re
 from ast import literal_eval
-<<<<<<< HEAD
-=======
 from functools import lru_cache
->>>>>>> version-15
 from types import BuiltinFunctionType
 from typing import TYPE_CHECKING
 
@@ -276,21 +273,6 @@ class Engine:
 			return Function(func, *_args, alias=alias or None)
 
 	def sanitize_fields(self, fields: str | list | tuple):
-<<<<<<< HEAD
-		def _sanitize_field(field: str):
-			if not isinstance(field, str):
-				return field
-			stripped_field = sqlparse.format(field, strip_comments=True, keyword_case="lower")
-			if self.is_mariadb:
-				return MARIADB_SPECIFIC_COMMENT.sub("", stripped_field)
-			return stripped_field
-
-		if isinstance(fields, list | tuple):
-			return [_sanitize_field(field) for field in fields]
-		elif isinstance(fields, str):
-			return _sanitize_field(fields)
-
-=======
 		if isinstance(fields, list | tuple):
 			return [
 				_sanitize_field(field, self.is_mariadb) if isinstance(field, str) else field
@@ -298,7 +280,6 @@ class Engine:
 			]
 		elif isinstance(fields, str):
 			return _sanitize_field(fields, self.is_mariadb)
->>>>>>> version-15
 		return fields
 
 	def parse_string_field(self, field: str):
@@ -535,11 +516,7 @@ def literal_eval_(literal):
 def has_function(field):
 	_field = field.casefold() if (isinstance(field, str) and "`" not in field) else field
 	if not issubclass(type(_field), Criterion):
-<<<<<<< HEAD
-		if any([f"{func}(" in _field for func in SQL_FUNCTIONS]):
-=======
 		if any([f"{func}(" in _field for func in SQL_FUNCTIONS]):  # ) <- ignore this comment.
->>>>>>> version-15
 			return True
 
 
@@ -573,8 +550,6 @@ def get_nested_set_hierarchy_result(doctype: str, name: str, hierarchy: str) -> 
 			.run(pluck=True)
 		)
 	return result
-<<<<<<< HEAD
-=======
 
 
 @lru_cache(maxsize=1024)
@@ -587,4 +562,3 @@ def _sanitize_field(field: str, is_mariadb):
 	if is_mariadb:
 		return MARIADB_SPECIFIC_COMMENT.sub("", stripped_field)
 	return stripped_field
->>>>>>> version-15

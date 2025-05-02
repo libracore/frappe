@@ -35,23 +35,6 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 	}
 	clear_attachment() {
 		let me = this;
-<<<<<<< HEAD
-		if (this.frm) {
-			me.parse_validate_and_set_in_model(null);
-			me.refresh();
-			me.frm.attachments.remove_attachment_by_filename(me.value, async () => {
-				await me.parse_validate_and_set_in_model(null);
-				me.refresh();
-				me.frm.doc.docstatus == 1 ? me.frm.save("Update") : me.frm.save();
-			});
-		} else {
-			this.dataurl = null;
-			this.fileobj = null;
-			this.set_input(null);
-			this.parse_validate_and_set_in_model(null);
-			this.refresh();
-		}
-=======
 		frappe.confirm(__("Are you sure you want to delete the attachment?"), function () {
 			if (me.frm) {
 				me.parse_validate_and_set_in_model(null);
@@ -69,7 +52,6 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 				me.refresh();
 			}
 		});
->>>>>>> version-15
 	}
 	reload_attachment() {
 		if (this.file_uploader) {
@@ -114,10 +96,6 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 		this.last_value = this.value;
 		this.value = value;
 		if (this.value) {
-<<<<<<< HEAD
-			this.$input.toggle(false);
-=======
->>>>>>> version-15
 			// value can also be using this format: FILENAME,DATA_URL
 			// Important: We have to be careful because normal filenames may also contain ","
 			let file_url_parts = this.value.match(/^([^:]+),(.+):(.+)$/);
@@ -125,14 +103,6 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 			if (file_url_parts) {
 				filename = file_url_parts[1];
 				dataurl = file_url_parts[2] + ":" + file_url_parts[3];
-<<<<<<< HEAD
-			}
-			this.$value
-				.toggle(true)
-				.find(".attached-file-link")
-				.html(filename || this.value)
-				.attr("href", dataurl || this.value);
-=======
 			}
 			if (this.$input && this.$value) {
 				this.$input.toggle(false);
@@ -154,7 +124,6 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 					.text(filename || this.value)
 					.attr("href", dataurl || this.value);
 			}
->>>>>>> version-15
 		} else {
 			this.$input.toggle(true);
 			this.$value.toggle(false);

@@ -47,11 +47,7 @@ defineExpose({ focus_on_label });
 			ref="input_text"
 			:disabled="store.read_only"
 			type="text"
-<<<<<<< HEAD
-			:placeholder="placeholder"
-=======
 			:placeholder="__(placeholder)"
->>>>>>> version-15
 			:value="text"
 			:style="{ width: hidden_span_width }"
 			@input="(event) => $emit('update:modelValue', event.target.value)"
@@ -61,17 +57,10 @@ defineExpose({ focus_on_label });
 		/>
 		<span v-else-if="text" v-html="text"></span>
 		<i v-else class="text-muted">
-<<<<<<< HEAD
-			{{ empty_label }}
-		</i>
-		<span class="hidden-span" ref="hidden_text" v-html="text"></span>
-		<span class="hidden-span" ref="hidden_placeholder">{{ placeholder }}</span>
-=======
 			{{ __(empty_label) }}
 		</i>
 		<span class="hidden-span" ref="hidden_text" v-html="text"></span>
 		<span class="hidden-span" ref="hidden_placeholder">{{ __(placeholder) }}</span>
->>>>>>> version-15
 	</div>
 </template>
 

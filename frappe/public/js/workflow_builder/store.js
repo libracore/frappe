@@ -173,10 +173,6 @@ export const useStore = defineStore("workflow-builder-store", () => {
 
 		actions.forEach((action) => {
 			let states = workflow.value.elements.filter((e) => e.type == "state");
-<<<<<<< HEAD
-			let state = states.find((state) => state.data.state == action.data.from);
-			let next_state = states.find((state) => state.data.state == action.data.to);
-=======
 
 			let state = states.find(
 				(state) => state.data.workflow_builder_id == action.data.from_id
@@ -189,7 +185,6 @@ export const useStore = defineStore("workflow-builder-store", () => {
 				action.data.to = next_state.data.state;
 			}
 
->>>>>>> version-15
 			let error = validate_transitions(state.data, next_state.data);
 			if (error) {
 				frappe.throw({

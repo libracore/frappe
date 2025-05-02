@@ -4,10 +4,7 @@
 import frappe
 from frappe.cache_manager import clear_defaults_cache, common_default_keys
 from frappe.query_builder import DocType
-<<<<<<< HEAD
-=======
 from frappe.utils.data import cstr
->>>>>>> version-15
 
 # Note: DefaultValue records are identified by parent (e.g. __default, __global)
 
@@ -158,16 +155,6 @@ def set_default(key, value, parent, parenttype="__default"):
 	:param parent: Usually, **User** to whom the default belongs.
 	:param parenttype: [optional] default is `__default`."""
 	table = DocType("DefaultValue")
-<<<<<<< HEAD
-	key_exists = (
-		frappe.qb.from_(table)
-		.where((table.defkey == key) & (table.parent == parent))
-		.select(table.defkey)
-		.for_update()
-		.run()
-	)
-	if key_exists:
-=======
 	current_value = (
 		frappe.qb.from_(table)
 		.where((table.defkey == key) & (table.parent == parent))
@@ -179,7 +166,6 @@ def set_default(key, value, parent, parenttype="__default"):
 		if current_value[0].defvalue == cstr(value):
 			# Nothing has changed
 			return
->>>>>>> version-15
 		frappe.db.delete("DefaultValue", {"defkey": key, "parent": parent})
 	if value is not None:
 		add_default(key, value, parent)

@@ -14,31 +14,18 @@ from frappe.modules import load_doctype_module
 
 
 @frappe.whitelist()
-<<<<<<< HEAD
-def get_submitted_linked_docs(doctype: str, name: str) -> list[tuple]:
-=======
 def get_submitted_linked_docs(doctype: str, name: str, ignore_doctypes_on_cancel_all=None) -> list[tuple]:
->>>>>>> version-15
 	"""Get all the nested submitted documents those are present in referencing tables (dependent tables).
 
 	:param doctype: Document type
 	:param name: Name of the document
 
-<<<<<<< HEAD
-	Usecase:
-	* User should be able to cancel the linked documents along with the one user trying to cancel.
-
-	Case1: If document sd1-n1 (document name n1 from sumittable doctype sd1) is linked to sd2-n2 and sd2-n2 is linked to sd3-n3,
-	        Getting submittable linked docs of `sd1-n1`should give both sd2-n2 and sd3-n3.
-	Case2: If document sd1-n1 (document name n1 from sumittable doctype sd1) is linked to d2-n2 and d2-n2 is linked to sd3-n3,
-=======
 	Use-case:
 	* User should be able to cancel the linked documents along with the one user trying to cancel.
 
 	Case1: If document sd1-n1 (document name n1 from submittable doctype sd1) is linked to sd2-n2 and sd2-n2 is linked to sd3-n3,
 	        Getting submittable linked docs of `sd1-n1`should give both sd2-n2 and sd3-n3.
 	Case2: If document sd1-n1 (document name n1 from submittable doctype sd1) is linked to d2-n2 and d2-n2 is linked to sd3-n3,
->>>>>>> version-15
 	        Getting submittable linked docs of `sd1-n1`should give None. (because d2-n2 is not a submittable doctype)
 	Case3: If document sd1-n1 (document name n1 from submittable doctype sd1) is linked to d2-n2 & sd2-n2. d2-n2 is linked to sd3-n3.
 	        Getting submittable linked docs of `sd1-n1`should give sd2-n2.
@@ -51,11 +38,6 @@ def get_submitted_linked_docs(doctype: str, name: str, ignore_doctypes_on_cancel
 	3. Searching for links is going to be a tree like structure where at every level,
 	        you will be finding documents using parent document and parent document links.
 	"""
-<<<<<<< HEAD
-	frappe.has_permission(doctype, doc=name)
-	tree = SubmittableDocumentTree(doctype, name)
-	visited_documents = tree.get_all_children()
-=======
 
 	if isinstance(ignore_doctypes_on_cancel_all, str):
 		ignore_doctypes_on_cancel_all = json.loads(ignore_doctypes_on_cancel_all)
@@ -63,7 +45,6 @@ def get_submitted_linked_docs(doctype: str, name: str, ignore_doctypes_on_cancel
 	frappe.has_permission(doctype, doc=name)
 	tree = SubmittableDocumentTree(doctype, name)
 	visited_documents = tree.get_all_children(ignore_doctypes_on_cancel_all)
->>>>>>> version-15
 	docs = []
 
 	for dt, names in visited_documents.items():
@@ -92,11 +73,7 @@ class SubmittableDocumentTree:
 		self._submittable_doctypes = None  # All submittable doctypes in the system
 		self._references_across_doctypes = None  # doctype wise links/references
 
-<<<<<<< HEAD
-	def get_all_children(self):
-=======
 	def get_all_children(self, ignore_doctypes_on_cancel_all):
->>>>>>> version-15
 		"""Get all nodes of a tree except the root node (all the nested submitted
 		documents those are present in referencing tables dependent tables).
 		"""
@@ -104,13 +81,9 @@ class SubmittableDocumentTree:
 			next_level_children = defaultdict(list)
 			for parent_dt in list(self.to_be_visited_documents):
 				parent_docs = self.to_be_visited_documents.get(parent_dt)
-<<<<<<< HEAD
-				if not parent_docs:
-=======
 				if not parent_docs or (
 					ignore_doctypes_on_cancel_all and parent_dt in ignore_doctypes_on_cancel_all
 				):
->>>>>>> version-15
 					del self.to_be_visited_documents[parent_dt]
 					continue
 
@@ -457,13 +430,6 @@ def get_linked_docs(doctype: str, name: str, linkinfo: dict | None = None) -> di
 	is_target_doctype_table = frappe.get_meta(doctype).istable
 
 	for linked_doctype, link_context in linkinfo.items():
-<<<<<<< HEAD
-		linked_doctype_meta = frappe.get_meta(linked_doctype)
-
-		if linked_doctype_meta.issingle:
-			continue
-
-=======
 		# Don't try to fetch linked documents if the user can't read the doctype
 		if not frappe.has_permission(linked_doctype):
 			continue
@@ -473,7 +439,6 @@ def get_linked_docs(doctype: str, name: str, linkinfo: dict | None = None) -> di
 		if linked_doctype_meta.issingle:
 			continue
 
->>>>>>> version-15
 		filters = []
 		ret = None
 		parent_info = None
@@ -539,8 +504,6 @@ def get_linked_docs(doctype: str, name: str, linkinfo: dict | None = None) -> di
 			# dynamic link_context
 			if doctype_fieldname := link_context.get("doctype_fieldname"):
 				filters.append([linked_doctype, doctype_fieldname, "=", doctype])
-<<<<<<< HEAD
-=======
 			# check for child table that no one links to
 			if linked_doctype_meta.istable:
 				if not (
@@ -548,7 +511,6 @@ def get_linked_docs(doctype: str, name: str, linkinfo: dict | None = None) -> di
 					or frappe.db.exists(linked_doctype, {"parenttype": doctype, "parent": name})
 				):
 					continue
->>>>>>> version-15
 			ret = frappe.get_list(
 				doctype=linked_doctype, fields=fields, filters=filters, or_filters=or_filters, order_by=None
 			)
@@ -602,7 +564,16 @@ def _get_linked_doctypes(doctype, without_ignore_user_permissions_enabled=False)
 			continue
 		ret[dt] = {"get_parent": True}
 
+	custom_doctypes = frappe.get_all(
+		doctype="DocType", filters=[["custom", "=", 1], ["name", "in", list(ret.keys())]], as_list=True
+	)
+
+	custom_doctypes = [item[0] for item in custom_doctypes]
+
 	for dt in list(ret):
+		# if the custom checkbox is checked, then don't load the module of the DocType because it doesn't belong to any app.
+		if dt in custom_doctypes:
+			continue
 		try:
 			doctype_module = load_doctype_module(dt)
 		except (ImportError, KeyError):

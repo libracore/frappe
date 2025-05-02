@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-03-20 13:58+0000\n"
-"PO-Revision-Date: 2025-03-31 17:43\n"
+"PO-Revision-Date: 2025-04-17 17:22\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -821,7 +821,7 @@ msgstr ""
 #. Label of a Section Break field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Account"
-msgstr ""
+msgstr "บัญชี"
 
 #. Label of a Section Break field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
@@ -5020,7 +5020,7 @@ msgstr ""
 
 #: frappe/desk/page/leaderboard/leaderboard.js:112
 msgid "Company"
-msgstr ""
+msgstr "บริษัท"
 
 #. Name of a DocType
 #: frappe/website/doctype/company_history/company_history.json
@@ -7896,12 +7896,12 @@ msgstr ""
 #: frappe/email/doctype/auto_email_report/auto_email_report.js:8
 #: frappe/public/js/frappe/form/grid.js:63
 msgid "Download"
-msgstr ""
+msgstr "ดาวน์โหลด"
 
 #: frappe/public/js/frappe/views/reports/report_utils.js:229
 msgctxt "Export report"
 msgid "Download"
-msgstr ""
+msgstr "ดาวน์โหลด"
 
 #. Label of a Link in the Tools Workspace
 #: frappe/automation/workspace/tools/tools.json
@@ -7932,7 +7932,7 @@ msgstr ""
 #. Label of a Button field in DocType 'Data Import'
 #: frappe/core/doctype/data_import/data_import.json
 msgid "Download Template"
-msgstr ""
+msgstr "ดาวน์โหลดเทมเพลต"
 
 #: frappe/website/doctype/personal_data_download_request/personal_data_download_request.py:61
 #: frappe/website/doctype/personal_data_download_request/personal_data_download_request.py:69
@@ -12255,12 +12255,12 @@ msgstr ""
 #: frappe/core/doctype/recorder/recorder_list.js:16
 #: frappe/email/doctype/email_group/email_group.js:31
 msgid "Import"
-msgstr ""
+msgstr "นำเข้า"
 
 #: frappe/public/js/frappe/list/list_view.js:1696
 msgctxt "Button in list view menu"
 msgid "Import"
-msgstr ""
+msgstr "นำเข้า"
 
 #. Label of a Link in the Tools Workspace
 #. Label of a shortcut in the Tools Workspace
@@ -20986,7 +20986,7 @@ msgstr ""
 #: frappe/desk/doctype/module_onboarding/module_onboarding.js:17
 #: frappe/website/doctype/portal_settings/portal_settings.js:19
 msgid "Reset"
-msgstr ""
+msgstr "เริ่มใหม่"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:136
 msgid "Reset All Customizations"
@@ -22898,7 +22898,7 @@ msgstr ""
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/integrations/doctype/integration_request/integration_request.json
 msgid "Service"
-msgstr ""
+msgstr "บริการ"
 
 #. Name of a DocType
 #: frappe/core/doctype/session_default/session_default.json

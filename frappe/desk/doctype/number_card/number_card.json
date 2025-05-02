@@ -20,10 +20,7 @@
   "report_field",
   "report_function",
   "is_public",
-<<<<<<< HEAD
-=======
   "currency",
->>>>>>> version-15
   "custom_configuration_section",
   "filters_config",
   "stats_section",
@@ -204,12 +201,6 @@
    "fieldtype": "Link",
    "label": "Parent Document Type",
    "options": "DocType"
-<<<<<<< HEAD
-  }
- ],
- "links": [],
- "modified": "2023-11-09 13:44:00.280846",
-=======
   },
   {
    "fieldname": "currency",
@@ -220,7 +211,6 @@
  ],
  "links": [],
  "modified": "2025-01-28 18:22:27.268239",
->>>>>>> version-15
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Number Card",
@@ -266,8 +256,4 @@
  "states": [],
  "title_field": "label",
  "track_changes": 1
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> version-15

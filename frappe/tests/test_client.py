@@ -158,8 +158,6 @@ class TestClient(FrappeTestCase):
 		self.assertEqual(get("ToDo", filters={}), get("ToDo", filters="{}"))
 		todo.delete()
 
-<<<<<<< HEAD
-=======
 	def test_client_validatate_link(self):
 		from frappe.client import validate_link
 
@@ -179,7 +177,6 @@ class TestClient(FrappeTestCase):
 				validate_link("User", "Guest", fields=["enabled"]), {"name": "Guest", "enabled": 1}
 			)
 
->>>>>>> version-15
 	def test_client_insert(self):
 		from frappe.client import insert
 

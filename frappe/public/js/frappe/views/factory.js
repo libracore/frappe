@@ -34,11 +34,7 @@ frappe.views.Factory = class Factory {
 	}
 };
 
-<<<<<<< HEAD
-frappe.make_page = function (double_column, page_name) {
-=======
 frappe.make_page = function (double_column, page_name, disable_sidebar_toggle) {
->>>>>>> version-15
 	if (!page_name) {
 		page_name = frappe.get_route_str();
 	}
@@ -48,10 +44,7 @@ frappe.make_page = function (double_column, page_name, disable_sidebar_toggle) {
 	frappe.ui.make_app_page({
 		parent: page,
 		single_column: !double_column,
-<<<<<<< HEAD
-=======
 		disable_sidebar_toggle: disable_sidebar_toggle,
->>>>>>> version-15
 	});
 
 	frappe.container.change_to(page_name);

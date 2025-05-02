@@ -7,8 +7,6 @@ frappe.translate
 Translation tools for frappe
 """
 
-<<<<<<< HEAD
-
 import functools
 import io
 import itertools
@@ -19,18 +17,6 @@ import re
 from contextlib import contextmanager, suppress
 from csv import reader, writer
 
-=======
-import functools
-import io
-import itertools
-import json
-import operator
-import os
-import re
-from contextlib import contextmanager, suppress
-from csv import reader, writer
-
->>>>>>> version-15
 import frappe
 from frappe.query_builder import DocType, Field
 from frappe.utils import cstr, get_bench_path, is_html, strip, strip_html_tags, unique
@@ -146,12 +132,6 @@ def get_messages_for_boot():
 	return get_all_translations(frappe.local.lang)
 
 
-<<<<<<< HEAD
-def get_all_translations(lang: str) -> dict[str, str]:
-	"""Load and return the entire translations dictionary for a language from apps + user translations.
-
-	:param lang: Language Code, e.g. `hi`
-=======
 @frappe.whitelist(allow_guest=True)
 def get_app_translations():
 	if frappe.session.user != "Guest":
@@ -166,7 +146,6 @@ def get_all_translations(lang: str) -> dict[str, str]:
 	"""Load and return the entire translations dictionary for a language from apps + user translations.
 
 	:param lang: Language Code, e.g. `hi` or `es-CO`
->>>>>>> version-15
 	"""
 	if not lang:
 		return {}
@@ -174,10 +153,6 @@ def get_all_translations(lang: str) -> dict[str, str]:
 	def _merge_translations():
 		from frappe.geo.country_info import get_translated_countries
 
-<<<<<<< HEAD
-		all_translations = get_translations_from_apps(lang).copy()
-		with suppress(Exception):
-=======
 		parent_lang = get_parent_language(lang)
 
 		# Get translations for parent language
@@ -190,7 +165,6 @@ def get_all_translations(lang: str) -> dict[str, str]:
 			# Get translations for parent language
 			all_translations.update(get_user_translations(parent_lang) if parent_lang else {})
 			# Update with child language translations (overriding parent translations)
->>>>>>> version-15
 			all_translations.update(get_user_translations(lang))
 			all_translations.update(get_translated_countries())
 
@@ -202,11 +176,7 @@ def get_all_translations(lang: str) -> dict[str, str]:
 		if frappe.flags and frappe.flags.in_test:
 			raise
 		# People mistakenly call translation function on global variables
-<<<<<<< HEAD
-		# where locals are not initalized, translations dont make much sense there
-=======
 		# where locals are not initialized, translations don't make much sense there
->>>>>>> version-15
 		frappe.logger().error("Unable to load translations", exc_info=True)
 		return {}
 

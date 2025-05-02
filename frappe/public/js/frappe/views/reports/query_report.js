@@ -530,22 +530,12 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		const { filters = [] } = this.report_settings;
 
 		let filter_area = this.page.page_form;
-<<<<<<< HEAD
-
 		this.filters = filters
 			.map((df) => {
 				if (df.fieldtype === "Break") return;
 
 				let f = this.page.add_field(df, filter_area);
 
-=======
-		this.filters = filters
-			.map((df) => {
-				if (df.fieldtype === "Break") return;
-
-				let f = this.page.add_field(df, filter_area);
-
->>>>>>> version-15
 				if (df.default) {
 					f.set_input(df.default);
 				}
@@ -564,10 +554,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 						// filter values have not changed
 						return;
 					}
-<<<<<<< HEAD
-
-=======
->>>>>>> version-15
 					// clear previous_filters after 10 seconds, to allow refresh for new data
 					this.previous_filters = current_filters;
 					setTimeout(() => (this.previous_filters = null), 10000);
@@ -600,15 +586,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 	set_filters(filters) {
 		this.filters.map((f) => {
-<<<<<<< HEAD
-			f.set_input(filters[f.fieldname]);
-=======
 			if (f.fieldtype == "MultiSelectList") {
 				f.set_value(filters[f.fieldname]);
 			} else {
 				f.set_input(filters[f.fieldname]);
 			}
->>>>>>> version-15
 		});
 	}
 
@@ -622,13 +604,13 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			this.prepared_report_name = route_options.prepared_report_name;
 
 			const promises = filters_to_set.map((f) => {
-				return () => {
+				return async () => {
 					let value = route_options[f.df.fieldname];
 					if (typeof value === "string" && value[0] === "[") {
 						// multiselect array
 						value = JSON.parse(value);
 					}
-					f.set_value(value);
+					await f.set_value(value);
 				};
 			});
 			promises.push(() => {
@@ -1248,13 +1230,10 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	}
 
 	prepare_columns(columns) {
-<<<<<<< HEAD
-=======
 		let is_query_generated_report =
 			this.report_doc.query &&
 			this.report_doc.query != undefined &&
 			this.report_doc.query != "";
->>>>>>> version-15
 		return columns.map((column) => {
 			column = frappe.report_utils.prepare_field_from_column(column);
 
@@ -1272,11 +1251,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					}
 
 					if (column.colIndex === index && !value) {
-<<<<<<< HEAD
-						value = "Total";
-=======
 						value = __("Total");
->>>>>>> version-15
 						column = { fieldtype: "Data" }; // avoid type issues for value if Date column
 					} else if (["Currency", "Float"].includes(column.fieldtype)) {
 						// proxy for currency and float
@@ -1307,13 +1282,9 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				id: column.fieldname,
 				// The column label should have already been translated in the
 				// backend. Translating it again would cause unexpected behaviour.
-<<<<<<< HEAD
-				name: column.label,
-=======
 
 				// Translating based on condition: when a report is generated through a query, the label is not translated.
 				name: is_query_generated_report ? __(column.label) : column.label,
->>>>>>> version-15
 				width: parseInt(column.width) || null,
 				editable: column.editable ?? false,
 				compareValue: compareFn,
@@ -1735,13 +1706,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 								fieldname: "doctype",
 								label: __("From Document Type"),
 								options: this.linked_doctypes?.map((df) => ({
-<<<<<<< HEAD
-									label: df.doctype,
-									value: df.doctype,
-								})),
-								change: () => {
-									let doctype = d.get_value("doctype");
-=======
 									label: df.doctype + " (" + frappe.unscrub(df.fieldname) + ")",
 									value: JSON.stringify({
 										doctype: df.doctype,
@@ -1752,7 +1716,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 									const { doctype, fieldname } = JSON.parse(
 										d.get_value("doctype")
 									);
->>>>>>> version-15
 									frappe.model.with_doctype(doctype, () => {
 										let options = frappe.meta
 											.get_docfields(doctype)
@@ -1827,18 +1790,9 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 								},
 								callback: (r) => {
 									const custom_data = r.message;
-<<<<<<< HEAD
-									const link_field =
-										this.doctype_field_map[values.doctype].fieldname;
 									this.add_custom_column(
 										custom_columns,
 										custom_data,
-										link_field,
-=======
-									this.add_custom_column(
-										custom_columns,
-										custom_data,
->>>>>>> version-15
 										values,
 										insert_after_index
 									);
@@ -1920,17 +1874,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		}
 	}
 
-<<<<<<< HEAD
-	add_custom_column(
-		custom_column,
-		custom_data,
-		link_field,
-		new_column_data,
-		insert_after_index
-	) {
-=======
 	add_custom_column(custom_column, custom_data, new_column_data, insert_after_index) {
->>>>>>> version-15
 		const column = this.prepare_columns(custom_column);
 		const column_field = new_column_data.field;
 
@@ -1939,15 +1883,9 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		this.data.forEach((row) => {
 			if (column[0].fieldname.includes("-")) {
 				row[column_field + "-" + frappe.scrub(new_column_data.doctype)] =
-<<<<<<< HEAD
-					custom_data[row[link_field]];
-			} else {
-				row[column_field] = custom_data[row[link_field]];
-=======
 					custom_data[row[new_column_data.fieldname]];
 			} else {
 				row[column_field] = custom_data[row[new_column_data.fieldname]];
->>>>>>> version-15
 			}
 		});
 
@@ -2137,8 +2075,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	get get_values() {
 		return this.get_filter_values;
 	}
-<<<<<<< HEAD
-=======
 
 	add_translate_data_checkbox() {
 		if (this.report_doc.add_translate_data) {
@@ -2150,5 +2086,4 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			this.report_settings.filters.push(filter_config);
 		}
 	}
->>>>>>> version-15
 };

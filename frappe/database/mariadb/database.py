@@ -27,7 +27,8 @@ class MariaDBExceptionUtil:
 
 	@staticmethod
 	def is_deadlocked(e: pymysql.Error) -> bool:
-		return e.args[0] == ER.LOCK_DEADLOCK
+		# Snapshot isolation is also treated as deadlock from User POV
+		return e.args[0] in (ER.LOCK_DEADLOCK, ER.CHECKREAD)
 
 	@staticmethod
 	def is_timedout(e: pymysql.Error) -> bool:
@@ -120,28 +121,16 @@ class MariaDBConnectionUtil:
 
 	def get_connection_settings(self) -> dict:
 		conn_settings = {
-<<<<<<< HEAD
-			"host": self.host,
-			"user": self.user,
-			"password": self.password,
-			"conv": self.CONVERSION_MAP,
-			"charset": "utf8mb4",
-=======
 			"user": self.user,
 			"conv": self.CONVERSION_MAP,
 			"charset": "utf8mb4",
 			"collation": "utf8mb4_unicode_ci",
->>>>>>> version-15
 			"use_unicode": True,
 		}
 
 		if self.cur_db_name:
 			conn_settings["database"] = self.cur_db_name
 
-<<<<<<< HEAD
-		if self.port:
-			conn_settings["port"] = int(self.port)
-=======
 		if self.socket:
 			conn_settings["unix_socket"] = self.socket
 		else:
@@ -151,7 +140,6 @@ class MariaDBConnectionUtil:
 
 		if self.password:
 			conn_settings["password"] = self.password
->>>>>>> version-15
 
 		if frappe.conf.local_infile:
 			conn_settings["local_infile"] = frappe.conf.local_infile
@@ -335,11 +323,7 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 			`doctype` VARCHAR(180) NOT NULL,
 			`data` TEXT,
 			UNIQUE(user, doctype)
-<<<<<<< HEAD
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8"""
-=======
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"""
->>>>>>> version-15
 		)
 
 	@staticmethod
@@ -430,10 +414,6 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 			self.commit()
 			self.sql(
 				"""ALTER TABLE `{}`
-<<<<<<< HEAD
-				ADD INDEX `{}`({})""".format(table_name, index_name, ", ".join(fields))
-			)
-=======
 				ADD INDEX IF NOT EXISTS `{}`({})""".format(table_name, index_name, ", ".join(fields))
 			)
 			# Ensure that DB migration doesn't clear this index, assuming this is manually added
@@ -447,7 +427,6 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 					property_type="Check",
 					for_doctype=False,  # Applied on docfield
 				)
->>>>>>> version-15
 
 	def add_unique(self, doctype, fields, constraint_name=None):
 		if isinstance(fields, str):
@@ -501,11 +480,7 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 			tables = (
 				frappe.qb.from_(information_schema.tables)
 				.select(information_schema.tables.table_name)
-<<<<<<< HEAD
-				.where(information_schema.tables.table_schema != "information_schema")
-=======
 				.where(information_schema.tables.table_schema == frappe.db.cur_db_name)
->>>>>>> version-15
 				.run(pluck=True)
 			)
 			frappe.cache.set_value("db_tables", tables)
@@ -579,8 +554,6 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 		finally:
 			self._cursor = original_cursor
 			new_cursor.close()
-<<<<<<< HEAD
-=======
 
 	def estimate_count(self, doctype: str):
 		"""Get estimated count of total rows in a table."""
@@ -590,4 +563,3 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 
 		count = self.sql("select table_rows from information_schema.tables where table_name = %s", table)
 		return cint(count[0][0]) if count else 0
->>>>>>> version-15

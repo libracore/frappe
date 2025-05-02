@@ -7,11 +7,7 @@ frappe.listview_settings["DocType"] = {
 		let non_developer = frappe.session.user !== "Administrator" || !frappe.boot.developer_mode;
 		let fields = [
 			{
-<<<<<<< HEAD
-				label: __("DocType Name"),
-=======
 				label: __("Name"),
->>>>>>> version-15
 				fieldname: "name",
 				fieldtype: "Data",
 				reqd: 1,

@@ -2,10 +2,7 @@
 # License: MIT. See LICENSE
 import datetime
 import json
-<<<<<<< HEAD
-=======
 import threading
->>>>>>> version-15
 
 import frappe
 import frappe.desk.query_report
@@ -33,10 +30,7 @@ class Report(Document):
 		from frappe.types import DF
 
 		add_total_row: DF.Check
-<<<<<<< HEAD
-=======
 		add_translate_data: DF.Check
->>>>>>> version-15
 		columns: DF.Table[ReportColumn]
 		disabled: DF.Check
 		filters: DF.Table[ReportFilter]
@@ -165,39 +159,6 @@ class Report(Document):
 		res = []
 
 		start_time = datetime.datetime.now()
-<<<<<<< HEAD
-
-		# The JOB
-		if self.is_standard == "Yes":
-			res = self.execute_module(filters)
-		else:
-			res = self.execute_script(filters)
-
-		# automatically set as prepared
-		execution_time = (datetime.datetime.now() - start_time).total_seconds()
-		if execution_time > threshold and not self.prepared_report and not frappe.conf.developer_mode:
-			frappe.enqueue(enable_prepared_report, report=self.name)
-
-		frappe.cache.hset("report_execution_time", self.name, execution_time)
-
-		return res
-
-	def execute_module(self, filters):
-		# report in python module
-		module = self.module or frappe.db.get_value("DocType", self.ref_doctype, "module")
-		method_name = get_report_module_dotted_path(module, self.name) + ".execute"
-		return frappe.get_attr(method_name)(frappe._dict(filters))
-
-	def execute_script(self, filters):
-		# server script
-		loc = {"filters": frappe._dict(filters), "data": None, "result": None}
-		safe_exec(self.report_script, None, loc, script_filename=f"Report {self.name}")
-		if loc["data"]:
-			return loc["data"]
-		else:
-			return self.get_columns(), loc["result"]
-
-=======
 		prepared_report_watcher = None
 		if not self.prepared_report:
 			prepared_report_watcher = threading.Timer(
@@ -237,7 +198,6 @@ class Report(Document):
 		else:
 			return self.get_columns(), loc["result"]
 
->>>>>>> version-15
 	def get_data(
 		self,
 		filters=None,
@@ -465,14 +425,9 @@ def get_group_by_column_label(args, meta):
 	return label
 
 
-<<<<<<< HEAD
-def enable_prepared_report(report: str):
-	frappe.db.set_value("Report", report, "prepared_report", 1)
-=======
 def enable_prepared_report(report: str, site: str):
 	frappe.init(site)
 	frappe.connect()
 	frappe.db.set_value("Report", report, "prepared_report", 1)
 	frappe.db.commit()
 	frappe.destroy()
->>>>>>> version-15

@@ -43,10 +43,7 @@ class ScheduledJobType(Document):
 		last_execution: DF.Datetime | None
 		method: DF.Data
 		next_execution: DF.Datetime | None
-<<<<<<< HEAD
-=======
 		scheduler_event: DF.Link | None
->>>>>>> version-15
 		server_script: DF.Link | None
 		stopped: DF.Check
 
@@ -192,11 +189,8 @@ def execute_event(doc: str):
 
 def run_scheduled_job(job_type: str):
 	"""This is a wrapper function that runs a hooks.scheduler_events method"""
-<<<<<<< HEAD
-=======
 	if frappe.conf.maintenance_mode:
 		raise frappe.InReadOnlyMode("Scheduled jobs can't run in maintenance mode.")
->>>>>>> version-15
 	try:
 		frappe.get_doc("Scheduled Job Type", dict(method=job_type)).execute()
 	except Exception:
@@ -240,30 +234,11 @@ def insert_event_jobs(events: list, event_type: str) -> list:
 	return event_jobs
 
 
-<<<<<<< HEAD
-def insert_single_event(frequency: str, event: str, cron_format: str | None = None):
-	cron_expr = {"cron_format": cron_format} if cron_format else {}
-
-=======
 def insert_single_event(frequency: str, event: str, cron_format: str | None = ""):
->>>>>>> version-15
 	try:
 		frappe.get_attr(event)
 	except Exception as e:
 		click.secho(f"{event} is not a valid method: {e}", fg="yellow")
-<<<<<<< HEAD
-
-	doc = frappe.get_doc(
-		{
-			"doctype": "Scheduled Job Type",
-			"method": event,
-			"cron_format": cron_format,
-			"frequency": frequency,
-		}
-	)
-
-	if not frappe.db.exists("Scheduled Job Type", {"method": event, "frequency": frequency, **cron_expr}):
-=======
 		return
 
 	doc: ScheduledJobType
@@ -287,7 +262,6 @@ def insert_single_event(frequency: str, event: str, cron_format: str | None = ""
 			}
 		)
 
->>>>>>> version-15
 		savepoint = "scheduled_job_type_creation"
 		try:
 			frappe.db.savepoint(savepoint)
@@ -299,12 +273,6 @@ def insert_single_event(frequency: str, event: str, cron_format: str | None = ""
 
 
 def clear_events(all_events: list):
-<<<<<<< HEAD
-	for event in frappe.get_all("Scheduled Job Type", fields=["name", "method", "server_script"]):
-		is_server_script = event.server_script
-		is_defined_in_hooks = event.method in all_events
-
-=======
 	for event in frappe.get_all(
 		"Scheduled Job Type", fields=["name", "method", "server_script", "scheduler_event"]
 	):
@@ -314,6 +282,5 @@ def clear_events(all_events: list):
 		if event.scheduler_event:
 			continue
 
->>>>>>> version-15
 		if not (is_defined_in_hooks or is_server_script):
 			frappe.delete_doc("Scheduled Job Type", event.name)

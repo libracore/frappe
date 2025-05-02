@@ -24,18 +24,12 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	constructor(opts) {
 		super(opts);
 		this.show();
-<<<<<<< HEAD
-		this.debounced_refresh = frappe.utils.debounce(
-			this.process_document_refreshes.bind(this),
-			2000
-=======
 		const meta = frappe.get_meta(this.doctype);
 		this.is_large_table = meta?.is_large_table;
 
 		this.debounced_refresh = frappe.utils.debounce(
 			this.process_document_refreshes.bind(this),
 			this.is_large_table ? 15000 : 2000
->>>>>>> version-15
 		);
 		this.count_upper_bound = 1001;
 		this._element_factory = new ElementFactory(this.doctype);
@@ -121,8 +115,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		return this.get_list_view_settings().then(() => this.add_recent_filter_on_large_tables());
 	}
 
-<<<<<<< HEAD
-=======
 	add_recent_filter_on_large_tables() {
 		if (!this.is_large_table || this.list_view_settings?.disable_automatic_recency_filters) {
 			return;
@@ -145,7 +137,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		);
 	}
 
->>>>>>> version-15
 	on_sort_change(sort_by, sort_order) {
 		this.sort_by = sort_by;
 		this.sort_order = sort_order;
@@ -245,11 +236,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					) {
 						frappe.model.with_doctype(df.options, () => {
 							const meta = frappe.get_meta(df.options);
-<<<<<<< HEAD
-							if (meta.show_title_field_in_link) {
-=======
 							if (meta.show_title_field_in_link && meta.title_field) {
->>>>>>> version-15
 								this.link_field_title_fields[
 									typeof f === "string" ? f : f.fieldname
 								] = meta.title_field;
@@ -321,10 +308,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	make_new_doc() {
 		const doctype = this.doctype;
 		const options = {};
-<<<<<<< HEAD
-		this.filter_area.get().forEach((f) => {
-			if (f[2] === "=" && frappe.model.is_non_std_field(f[1])) {
-=======
 		const allowed_filter_types = [
 			"=",
 			"descendants of (inclusive)",
@@ -333,7 +316,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		];
 		this.filter_area.get().forEach((f) => {
 			if (allowed_filter_types.includes(f[2]) && frappe.model.is_non_std_field(f[1])) {
->>>>>>> version-15
 				options[f[1]] = f[3];
 			}
 		});
@@ -669,7 +651,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	render_count() {
-		if (this.list_view_settings.disable_count) return;
+		if (this.list_view_settings?.disable_count) {
+			return;
+		}
 
 		let me = this;
 		let $count = this.get_count_element();
@@ -1766,11 +1750,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		items.push({
 			label: __("Toggle Sidebar", null, "Button in list view menu"),
 			action: () => this.toggle_side_bar(),
-<<<<<<< HEAD
-			condition: () => !this.hide_sidebar,
-=======
 			condition: () => !this.page.disable_sidebar_toggle,
->>>>>>> version-15
 			standard: true,
 			shortcut: "Ctrl+K",
 		});
@@ -2140,16 +2120,12 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	parse_filters_from_route_options() {
 		const filters = [];
 
-<<<<<<< HEAD
-		for (let field in frappe.route_options) {
-=======
 		let params = new URLSearchParams(window.location.search);
 		if (!params.toString() && frappe.route_options) {
 			params = new Map(Object.entries(frappe.route_options));
 		}
 
 		params.forEach((value, field) => {
->>>>>>> version-15
 			let doctype = null;
 
 			let value_array;

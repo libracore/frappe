@@ -585,10 +585,7 @@ frappe.provide("frappe.views");
 				animation: 150,
 				dataIdAttr: "data-name",
 				forceFallback: true,
-<<<<<<< HEAD
-=======
 				fallbackTolerance: 20,
->>>>>>> version-15
 				onStart: function () {
 					wrapper.find(".kanban-card.add-card").fadeOut(200, function () {
 						wrapper.find(".kanban-cards").height("100vh");

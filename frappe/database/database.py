@@ -30,10 +30,7 @@ from frappe.database.utils import (
 )
 from frappe.exceptions import DoesNotExistError, ImplicitCommitError
 from frappe.monitor import get_trace_id
-<<<<<<< HEAD
-=======
 from frappe.query_builder import Case
->>>>>>> version-15
 from frappe.query_builder.functions import Count
 from frappe.utils import CallbackManager, cint, get_datetime, get_table_name, getdate, now, sbool
 from frappe.utils import cast as cast_fieldtype
@@ -51,11 +48,7 @@ INDEX_PATTERN = re.compile(r"\s*\([^)]+\)\s*")
 SINGLE_WORD_PATTERN = re.compile(r'([`"]?)(tab([A-Z]\w+))\1')
 MULTI_WORD_PATTERN = re.compile(r'([`"])(tab([A-Z]\w+)( [A-Z]\w+)+)\1')
 
-<<<<<<< HEAD
-SQL_ITERATOR_BATCH_SIZE = 100
-=======
 SQL_ITERATOR_BATCH_SIZE = 1000
->>>>>>> version-15
 
 
 class Database:
@@ -85,15 +78,10 @@ class Database:
 		password=None,
 		port=None,
 		cur_db_name=None,
-<<<<<<< HEAD
-	):
-		self.setup_type_map()
-=======
 		socket=None,
 	):
 		self.setup_type_map()
 		self.socket = socket
->>>>>>> version-15
 		self.host = host
 		self.port = port
 		self.user = user
@@ -1004,8 +992,6 @@ class Database:
 		if dt in self.value_cache:
 			del self.value_cache[dt]
 
-<<<<<<< HEAD
-=======
 	def bulk_update(
 		self,
 		doctype: str,
@@ -1139,7 +1125,6 @@ class Database:
 
 		update_query.where(dt.name.isin(docnames)).run(debug=debug)
 
->>>>>>> version-15
 	def set_global(self, key, val, user="__global"):
 		"""Save a global key value. Global values will be automatically set if they match fieldname."""
 		self.set_default(key, val, user)
@@ -1289,13 +1274,10 @@ class Database:
 		if not filters and cache:
 			frappe.cache.set_value(f"doctype:count:{dt}", count, expires_in_sec=86400)
 		return count
-<<<<<<< HEAD
-=======
 
 	def estimate_count(self, doctype: str) -> int:
 		"""Get estimated count of total rows in a table."""
 		raise NotImplementedError
->>>>>>> version-15
 
 	@staticmethod
 	def format_date(date):

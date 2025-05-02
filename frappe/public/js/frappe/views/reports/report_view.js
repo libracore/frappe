@@ -30,9 +30,6 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 				this.report_doc = doc;
 				this.report_doc.json = JSON.parse(this.report_doc.json);
 
-<<<<<<< HEAD
-				this.filters = this.report_doc.json.filters;
-=======
 				this.filters = [
 					...(Array.isArray(this.report_doc.json.filters)
 						? this.report_doc.json.filters
@@ -40,7 +37,6 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 					...this.parse_filters_from_route_options(),
 				];
 
->>>>>>> version-15
 				this.order_by = this.report_doc.json.order_by;
 				this.add_totals_row = this.report_doc.json.add_totals_row;
 				this.page_title = __(this.report_name);
@@ -725,10 +721,6 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 			!df.hidden &&
 			// not a standard field i.e., owner, modified_by, etc.
 			frappe.model.is_non_std_field(df.fieldname)
-<<<<<<< HEAD
-		)
-			return true;
-=======
 		) {
 			// don't check read_only_depends_on if there's child table fields
 			return (
@@ -737,7 +729,6 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 					!this.evaluate_read_only_depends_on(df.read_only_depends_on, data))
 			);
 		}
->>>>>>> version-15
 		return false;
 	}
 
@@ -1242,10 +1233,6 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 				// child table field
 				const cdt_field = (f) => `${col.docfield.parent}:${f}`;
 				const name = d[cdt_field("name")];
-<<<<<<< HEAD
-
-=======
->>>>>>> version-15
 				return {
 					name: name,
 					doctype: col.docfield.parent,

@@ -63,11 +63,7 @@ def update_document_title(
 	title_updated = updated_title and (title_field != "name") and (updated_title != doc.get(title_field))
 	name_updated = updated_name and (updated_name != doc.name)
 
-<<<<<<< HEAD
-	queue = kwargs.get("queue") or "default"
-=======
 	queue = kwargs.get("queue") or "long"
->>>>>>> version-15
 
 	if name_updated:
 		if action_enqueued:
@@ -90,11 +86,7 @@ def update_document_title(
 				save_point=True,
 			)
 
-<<<<<<< HEAD
-			doc.queue_action("rename", name=transformed_name, merge=merge, queue=queue)
-=======
 			doc.queue_action("rename", name=transformed_name, merge=merge, queue=queue, timeout=36000)
->>>>>>> version-15
 		else:
 			doc.rename(updated_name, merge=merge)
 
@@ -385,12 +377,6 @@ def validate_rename(
 
 	kwargs = {"doctype": doctype, "ptype": "write", "raise_exception": False}
 	if old_doc:
-<<<<<<< HEAD
-		kwargs |= {"doc": old_doc}
-
-	if not (ignore_permissions or frappe.permissions.has_permission(**kwargs)):
-		frappe.throw(_("You need write permission to rename"))
-=======
 		kwargs["doc"] = old_doc
 
 	if not (ignore_permissions or frappe.permissions.has_permission(**kwargs)):
@@ -400,7 +386,6 @@ def validate_rename(
 		kwargs["doc"] = frappe.get_doc(doctype, new)
 		if not (ignore_permissions or frappe.permissions.has_permission(**kwargs)):
 			frappe.throw(_("You need write permission on {0} {1} to merge").format(doctype, new))
->>>>>>> version-15
 
 	if not (force or ignore_permissions) and not meta.allow_rename:
 		frappe.throw(_("{0} not allowed to be renamed").format(_(doctype)))

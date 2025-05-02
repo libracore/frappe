@@ -14,17 +14,10 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		$(`<div class="link-field ui-front" style="position: relative;">
 			<input type="text" class="input-with-feedback form-control">
 			<span class="link-btn">
-<<<<<<< HEAD
-				<a class="btn-clear no-decoration">
-					${frappe.utils.icon("close-alt", "xs")}
-				</a>
-				<a class="btn-open no-decoration" title="${__("Open Link")}">
-=======
 				<a class="btn-clear" style="display: inline-block;" title="${__("Clear Link")}">
 					${frappe.utils.icon("close", "xs", "es-icon")}
 				</a>
 				<a class="btn-open" style="display: inline-block;" title="${__("Open Link")}">
->>>>>>> version-15
 					${frappe.utils.icon("arrow-right", "xs")}
 				</a>
 			</span>
@@ -33,32 +26,6 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		this.$input = this.$input_area.find("input");
 		this.$link = this.$input_area.find(".link-btn");
 		this.$link_clear = this.$input_area.find(".btn-clear");
-<<<<<<< HEAD
-		this.$link_open = this.$link.find(".btn-open");
-		this.set_input_attributes();
-		this.$input.on("focus", function () {
-			setTimeout(function () {
-				if (me.$input.val() && me.get_options()) {
-					let doctype = me.get_options();
-					let name = me.get_input_value();
-					me.$link.toggle(true);
-					me.$link_open.attr("href", frappe.utils.get_form_link(doctype, name));
-					me.$link_clear.on("click", function () {
-						me.$link.toggle(false);
-						me.set_value("");
-						me.validate();
-					});
-				}
-
-				if (!me.$input.val()) {
-					me.$input.val("").trigger("input");
-
-					// hide link arrow to doctype if none is set
-					me.$link.toggle(false);
-				}
-			}, 500);
-		});
-=======
 		this.$link_clear.on("click", function () {
 			me.$link.toggle(false);
 			me.$input.val("").focus();
@@ -72,7 +39,6 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 
 			me.show_link_and_clear_buttons();
 		});
->>>>>>> version-15
 		this.$input.on("blur", function () {
 			// if this disappears immediately, the user's click
 			// does not register, hence timeout
@@ -81,8 +47,6 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 				me.hide_link_and_clear_buttons();
 			}, 250);
 		});
-<<<<<<< HEAD
-=======
 
 		this.$input_area.on("mouseenter", () => {
 			this.show_link_and_clear_buttons();
@@ -94,7 +58,6 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 			}
 		});
 
->>>>>>> version-15
 		this.$input.attr("data-target", this.df.options);
 		this.input = this.$input.get(0);
 		this.has_input = true;
@@ -103,8 +66,6 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		this.setup_awesomeplete();
 		this.bind_change_event();
 	}
-<<<<<<< HEAD
-=======
 
 	show_link_and_clear_buttons() {
 		if (this.$input.val() && this.get_options()) {
@@ -121,7 +82,6 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		this.$link_clear.toggle(false);
 	}
 
->>>>>>> version-15
 	get_options() {
 		return this.df.options;
 	}
@@ -287,10 +247,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 				return $(`<div role="option">`)
 					.on("click", (event) => {
 						me.awesomplete.select(event.currentTarget, event.currentTarget);
-<<<<<<< HEAD
-=======
 						me.show_link_and_clear_buttons();
->>>>>>> version-15
 					})
 					.data("item.autocomplete", d)
 					.prop("aria-selected", "false")

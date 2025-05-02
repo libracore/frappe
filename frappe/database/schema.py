@@ -4,13 +4,9 @@ import frappe
 from frappe import _
 from frappe.utils import cint, cstr, flt
 
-<<<<<<< HEAD
-SPECIAL_CHAR_PATTERN = re.compile(r"[\W]", flags=re.UNICODE)
-=======
 # This matches anything that isn't [a-zA-Z0-9_]
 SPECIAL_CHAR_PATTERN = re.compile(r"[\W]", flags=re.UNICODE)
 
->>>>>>> version-15
 VARCHAR_CAST_PATTERN = re.compile(r"varchar\(([\d]+)\)")
 
 

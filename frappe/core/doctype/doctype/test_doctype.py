@@ -25,10 +25,7 @@ from frappe.desk.form.load import getdoc
 from frappe.model.delete_doc import delete_controllers
 from frappe.model.sync import remove_orphan_doctypes
 from frappe.tests.utils import FrappeTestCase
-<<<<<<< HEAD
-=======
 from frappe.utils import get_table_name
->>>>>>> version-15
 
 
 class TestDocType(FrappeTestCase):
@@ -791,8 +788,6 @@ class TestDocType(FrappeTestCase):
 		)
 		self.assertRaises(frappe.ValidationError, recursive_dt.insert)
 
-<<<<<<< HEAD
-=======
 	def test_row_compression(self):
 		if frappe.db.db_type != "mariadb":
 			return
@@ -817,7 +812,6 @@ class TestDocType(FrappeTestCase):
 		self.assertEqual(get_format(compressed_dt), "COMPRESSED")
 		self.assertEqual(get_format(dynamic_dt), "DYNAMIC")
 
->>>>>>> version-15
 
 def new_doctype(
 	name: str | None = None,

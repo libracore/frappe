@@ -491,12 +491,9 @@ class TestDB(FrappeTestCase):
 
 		self.assertEqual(frappe.db.exists(dt, [["name", "=", dn]]), dn)
 
-<<<<<<< HEAD
-=======
 	def test_estimated_count(self):
 		self.assertGreater(frappe.db.estimate_count("DocField"), 100)
 
->>>>>>> version-15
 	def test_bulk_insert(self):
 		current_count = frappe.db.count("ToDo")
 		test_body = f"test_bulk_insert - {random_string(10)}"
@@ -524,8 +521,6 @@ class TestDB(FrappeTestCase):
 
 		frappe.db.delete("ToDo", {"description": test_body})
 
-<<<<<<< HEAD
-=======
 	def test_bulk_update(self):
 		test_body = f"test_bulk_update - {random_string(10)}"
 
@@ -580,7 +575,6 @@ class TestDB(FrappeTestCase):
 		# cleanup
 		frappe.db.delete("ToDo", {"name": ("in", record_names)})
 
->>>>>>> version-15
 	def test_count(self):
 		frappe.db.delete("Note")
 

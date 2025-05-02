@@ -83,10 +83,7 @@ def has_permission(
 	*,
 	parent_doctype=None,
 	debug=False,
-<<<<<<< HEAD
-=======
 	ignore_share_permissions=False,
->>>>>>> version-15
 ) -> bool:
 	"""Return True if user has permission `ptype` for given `doctype`.
 	If `doc` is passed, also check user, share and owner permissions.
@@ -189,11 +186,7 @@ def has_permission(
 
 		return False
 
-<<<<<<< HEAD
-	if not perm:
-=======
 	if not perm and not ignore_share_permissions:
->>>>>>> version-15
 		debug and _debug_log("Checking if document/doctype is explicitly shared with user")
 		perm = false_if_not_shared()
 
@@ -400,7 +393,7 @@ def has_user_permission(doc, user=None, debug=False):
 					msg = _(
 						"You are not allowed to access this {0} record because it is linked to {1} '{2}' in row {3}, field {4}"
 					).format(
-						_(meta.doctype),
+						_(meta.name),
 						_(field.options),
 						d.get(field.fieldname) or _("empty"),
 						d.idx,
@@ -411,7 +404,7 @@ def has_user_permission(doc, user=None, debug=False):
 					msg = _(
 						"You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3}"
 					).format(
-						_(meta.doctype),
+						_(meta.name),
 						_(field.options),
 						d.get(field.fieldname) or _("empty"),
 						_(field.label, context=field.parent) if field.label else field.fieldname,
@@ -599,19 +592,11 @@ def can_import(doctype, raise_exception=False):
 	return True
 
 
-<<<<<<< HEAD
-def can_export(doctype, raise_exception=False):
-	if "System Manager" in frappe.get_roles():
-		return True
-	else:
-		role_permissions = frappe.permissions.get_role_permissions(doctype)
-=======
 def can_export(doctype, raise_exception=False, is_owner=False):
 	if "System Manager" in frappe.get_roles():
 		return True
 	else:
 		role_permissions = frappe.permissions.get_role_permissions(doctype, is_owner=is_owner)
->>>>>>> version-15
 		has_access = role_permissions.get("export") or role_permissions.get("if_owner").get("export")
 		if not has_access and raise_exception:
 			raise frappe.PermissionError(_("You are not allowed to export {} doctype").format(doctype))
@@ -849,8 +834,6 @@ def has_child_permission(
 
 def is_system_user(user: str | None = None) -> bool:
 	return frappe.get_cached_value("User", user or frappe.session.user, "user_type") == "System User"
-<<<<<<< HEAD
-=======
 
 
 def check_doctype_permission(doctype: str, ptype: str = "read") -> None:
@@ -887,4 +870,3 @@ def handle_does_not_exist_error(fn):
 		return fn(e, *args, **kwargs)
 
 	return wrapper
->>>>>>> version-15

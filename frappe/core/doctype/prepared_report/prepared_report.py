@@ -2,10 +2,7 @@
 # License: MIT. See LICENSE
 import gzip
 import json
-<<<<<<< HEAD
-=======
 import resource
->>>>>>> version-15
 from contextlib import suppress
 from typing import Any
 
@@ -21,7 +18,7 @@ from frappe.utils import add_to_date, now
 from frappe.utils.background_jobs import enqueue
 
 # If prepared report runs for longer than this time it's automatically considered as failed
-FAILURE_THRESHOLD = 60 * 60
+FAILURE_THRESHOLD = 6 * 60 * 60
 REPORT_TIMEOUT = 25 * 60
 
 
@@ -37,10 +34,7 @@ class PreparedReport(Document):
 		error_message: DF.Text | None
 		filters: DF.SmallText | None
 		job_id: DF.Data | None
-<<<<<<< HEAD
-=======
 		peak_memory_usage: DF.Int
->>>>>>> version-15
 		queued_at: DF.Datetime | None
 		queued_by: DF.Data | None
 		report_end_time: DF.Datetime | None
@@ -127,11 +121,8 @@ def generate_report(prepared_report):
 		_save_error(instance, error=frappe.get_traceback(with_context=True))
 
 	instance.report_end_time = frappe.utils.now()
-<<<<<<< HEAD
-=======
 	instance.peak_memory_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 	add_data_to_monitor(peak_memory_usage=instance.peak_memory_usage)
->>>>>>> version-15
 	instance.save(ignore_permissions=True)
 
 	frappe.publish_realtime(

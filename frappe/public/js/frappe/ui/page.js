@@ -188,10 +188,7 @@ frappe.ui.Page = class Page {
 		let sidebar_wrapper = this.wrapper.find(".layout-side-section");
 		if (this.disable_sidebar_toggle || !sidebar_wrapper.length) {
 			sidebar_toggle.last().remove();
-<<<<<<< HEAD
-=======
 			this.wrapper.addClass("no-list-sidebar");
->>>>>>> version-15
 		} else {
 			if (!frappe.is_mobile()) {
 				sidebar_toggle.attr("title", __("Toggle Sidebar"));
@@ -757,11 +754,7 @@ frappe.ui.Page = class Page {
 		}
 		let title_wrapper = this.$title_area.find(".title-text");
 		title_wrapper.html(title);
-<<<<<<< HEAD
-		title_wrapper.attr("title", tooltip_label || this.title);
-=======
 		title_wrapper.attr("title", __(tooltip_label) || this.title);
->>>>>>> version-15
 
 		if (tooltip_label) {
 			title_wrapper.tooltip({ delay: { show: 600, hide: 100 }, trigger: "hover" });

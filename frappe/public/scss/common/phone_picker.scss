@@ -70,12 +70,9 @@
 }
 
 .frappe-control[data-fieldtype="Phone"] {
-<<<<<<< HEAD
-=======
 	.control-input {
 		position: relative;
 	}
->>>>>>> version-15
 	input {
 		padding-left: 30px;
 	}
@@ -85,13 +82,9 @@
 		height: 20px;
 		border-radius: 5px;
 		position: absolute;
-<<<<<<< HEAD
-		top: calc(50% + 2px);
-=======
 		top: 0;
 		bottom: 0;
 		margin: auto;
->>>>>>> version-15
 		left: 8px;
 		content: " ";
 		align-items: center;
@@ -102,10 +95,7 @@
 			margin-left: 0.6rem;
 			align-items: flex-end;
 			flex-grow: 1;
-<<<<<<< HEAD
-=======
 			line-height: normal;
->>>>>>> version-15
 		}
 
 		img {

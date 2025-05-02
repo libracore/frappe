@@ -1,10 +1,7 @@
 from werkzeug.wrappers import Response
 
 import frappe
-<<<<<<< HEAD
-=======
 from frappe.permissions import handle_does_not_exist_error
->>>>>>> version-15
 from frappe.website.page_renderers.error_page import ErrorPage
 from frappe.website.page_renderers.not_found_page import NotFoundPage
 from frappe.website.page_renderers.not_permitted_page import NotPermittedPage
@@ -14,29 +11,12 @@ from frappe.website.path_resolver import PathResolver
 
 def get_response(path=None, http_status_code=200) -> Response:
 	"""Resolves path and renders page"""
-<<<<<<< HEAD
-	response = None
-=======
->>>>>>> version-15
 	path = path or frappe.local.request.path
 	endpoint = path
 
 	try:
 		path_resolver = PathResolver(path, http_status_code)
 		endpoint, renderer_instance = path_resolver.resolve()
-<<<<<<< HEAD
-		response = renderer_instance.render()
-	except frappe.Redirect as e:
-		return RedirectPage(endpoint or path, e.http_status_code).render()
-	except frappe.PermissionError as e:
-		response = NotPermittedPage(endpoint, http_status_code, exception=e).render()
-	except frappe.PageDoesNotExistError:
-		response = NotFoundPage(endpoint, http_status_code).render()
-	except Exception as e:
-		response = ErrorPage(exception=e).render()
-
-	return response
-=======
 		return renderer_instance.render()
 
 	except Exception as e:
@@ -55,7 +35,6 @@ def handle_exception(e, endpoint, path, http_status_code):
 		return NotFoundPage(endpoint, http_status_code).render()
 
 	return ErrorPage(exception=e).render()
->>>>>>> version-15
 
 
 def get_response_content(path=None, http_status_code=200) -> str:
