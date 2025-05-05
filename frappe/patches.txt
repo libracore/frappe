@@ -26,7 +26,7 @@ frappe.patches.v11_0.change_email_signature_fieldtype
 execute:frappe.reload_doc('core', 'doctype', 'activity_log')
 execute:frappe.reload_doc('core', 'doctype', 'deleted_document')
 execute:frappe.reload_doc('core', 'doctype', 'domain_settings')
-frappe.patches.v13_0.rename_custom_client_script
+#frappe.patches.v13_0.rename_custom_client_script
 execute:frappe.reload_doc('core', 'doctype', 'role') #2017-05-23
 execute:frappe.reload_doc('core', 'doctype', 'user') #2017-10-27
 execute:frappe.reload_doc('core', 'doctype', 'report_column')
@@ -97,10 +97,10 @@ frappe.patches.v12_0.delete_feedback_request_if_exists #1
 frappe.patches.v12_0.rename_events_repeat_on
 frappe.patches.v12_0.fix_public_private_files
 frappe.patches.v12_0.move_email_and_phone_to_child_table
-frappe.patches.v12_0.delete_duplicate_indexes  # 2022-12-15
+#frappe.patches.v12_0.delete_duplicate_indexes  # 2022-12-15
 frappe.patches.v12_0.set_default_incoming_email_port
 frappe.patches.v12_0.update_global_search
-frappe.patches.v12_0.setup_tags
+#frappe.patches.v12_0.setup_tags
 frappe.patches.v12_0.update_auto_repeat_status_and_not_submittable
 frappe.patches.v12_0.create_notification_settings_for_user
 frappe.patches.v11_0.make_all_prepared_report_attachments_private #2019-11-26
@@ -139,7 +139,7 @@ execute:frappe.delete_doc("DocType", "Onboarding Slide Help Link")
 frappe.patches.v13_0.update_date_filters_in_user_settings
 frappe.patches.v13_0.update_duration_options
 frappe.patches.v13_0.replace_old_data_import # 2020-06-24
-frappe.patches.v13_0.create_custom_dashboards_cards_and_charts
+#frappe.patches.v13_0.create_custom_dashboards_cards_and_charts
 frappe.patches.v13_0.rename_is_custom_field_in_dashboard_chart
 frappe.patches.v13_0.add_standard_navbar_items # 2020-12-15
 frappe.patches.v13_0.generate_theme_files_in_public_folder
@@ -151,7 +151,7 @@ frappe.patches.v13_0.remove_duplicate_navbar_items
 frappe.patches.v13_0.set_social_icons
 frappe.patches.v12_0.set_default_password_reset_limit
 frappe.patches.v13_0.set_route_for_blog_category
-frappe.patches.v13_0.enable_custom_script
+#frappe.patches.v13_0.enable_custom_script
 frappe.patches.v13_0.update_newsletter_content_type
 execute:frappe.db.set_value('Website Settings', 'Website Settings', {'navbar_template': 'Standard Navbar', 'footer_template': 'Standard Footer'})
 frappe.patches.v13_0.web_template_set_module #2020-10-05
