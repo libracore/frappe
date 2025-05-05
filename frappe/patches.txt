@@ -190,7 +190,7 @@ frappe.patches.v14_0.clear_long_pending_stale_logs
 frappe.patches.v14_0.log_settings_migration
 #frappe.patches.v14_0.setup_likes_from_feedback
 frappe.patches.v14_0.update_webforms
-frappe.patches.v14_0.delete_payment_gateways
+#frappe.patches.v14_0.delete_payment_gateways
 frappe.patches.v15_0.remove_event_streaming
 frappe.patches.v15_0.copy_disable_prepared_report_to_prepared_report
 execute:frappe.reload_doc("desk", "doctype", "Form Tour")
