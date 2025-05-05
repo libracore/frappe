@@ -177,3 +177,142 @@ def get_queue():
 		{"now": now_datetime()},
 		as_dict=True,
 	)
+
+
+
+def send(recipients=None, sender=None, subject=None, message=None, text_content=None, reference_doctype=None,
+		reference_name=None, unsubscribe_method=None, unsubscribe_params=None, unsubscribe_message=None,
+		attachments=None, reply_to=None, cc=[], bcc=[], message_id=None, in_reply_to=None, send_after=None,
+		expose_recipients=None, send_priority=1, communication=None, now=False, read_receipt=None,
+		queue_separately=False, is_notification=False, add_unsubscribe_link=1, inline_images=None,
+		header=None, print_letterhead=False):
+	"""Add email to sending queue (Email Queue)
+
+	:param recipients: List of recipients.
+	:param sender: Email sender.
+	:param subject: Email subject.
+	:param message: Email message.
+	:param text_content: Text version of email message.
+	:param reference_doctype: Reference DocType of caller document.
+	:param reference_name: Reference name of caller document.
+	:param send_priority: Priority for Email Queue, default 1.
+	:param unsubscribe_method: URL method for unsubscribe. Default is `/api/method/frappe.email.queue.unsubscribe`.
+	:param unsubscribe_params: additional params for unsubscribed links. default are name, doctype, email
+	:param attachments: Attachments to be sent.
+	:param reply_to: Reply to be captured here (default inbox)
+	:param in_reply_to: Used to send the Message-Id of a received email back as In-Reply-To.
+	:param send_after: Send this email after the given datetime. If value is in integer, then `send_after` will be the automatically set to no of days from current date.
+	:param communication: Communication link to be set in Email Queue record
+	:param now: Send immediately (don't send in the background)
+	:param queue_separately: Queue each email separately
+	:param is_notification: Marks email as notification so will not trigger notifications from system
+	:param add_unsubscribe_link: Send unsubscribe link in the footer of the Email, default 1.
+	:param inline_images: List of inline images as {"filename", "filecontent"}. All src properties will be replaced with random Content-Id
+	:param header: Append header in email (boolean)
+	"""
+	if not unsubscribe_method:
+		unsubscribe_method = "/api/method/frappe.email.queue.unsubscribe"
+
+	if not recipients and not cc:
+		return
+
+	if isinstance(recipients, string_types):
+		recipients = split_emails(recipients)
+
+	if isinstance(cc, string_types):
+		cc = split_emails(cc)
+
+	if isinstance(bcc, string_types):
+		bcc = split_emails(bcc)
+
+	if isinstance(send_after, int):
+		send_after = add_days(nowdate(), send_after)
+
+	email_account = get_outgoing_email_account(True, append_to=reference_doctype, sender=sender)
+	if not sender or sender == "Administrator":
+		sender = email_account.default_sender
+
+
+	if not text_content:
+		try:
+			text_content = html2text(message)
+		except HTMLParser.HTMLParseError:
+			text_content = "See html attachment"
+
+	recipients = list(set(recipients))
+	cc = list(set(cc))
+
+	all_ids = tuple(recipients + cc)
+
+	unsubscribed = frappe.db.sql_list('''
+		SELECT
+			distinct email
+		from
+			`tabEmail Unsubscribe`
+		where
+			email in %(all_ids)s
+			and (
+				(
+					reference_doctype = %(reference_doctype)s
+					and reference_name = %(reference_name)s
+				)
+				or global_unsubscribe = 1
+			)
+	''', {
+		'all_ids': all_ids,
+		'reference_doctype': reference_doctype,
+		'reference_name': reference_name,
+	})
+
+	recipients = [r for r in recipients if r and r not in unsubscribed]
+
+	if cc:
+		cc = [r for r in cc if r and r not in unsubscribed]
+
+	if not recipients and not cc:
+		# Recipients may have been unsubscribed, exit quietly
+		return
+
+	email_text_context = text_content
+
+	should_append_unsubscribe = (add_unsubscribe_link
+		and reference_doctype
+		and (unsubscribe_message or reference_doctype=="Newsletter")
+		and add_unsubscribe_link==1)
+
+	unsubscribe_link = None
+	if should_append_unsubscribe:
+		unsubscribe_link = get_unsubscribe_message(unsubscribe_message, expose_recipients)
+		email_text_context += unsubscribe_link.text
+
+	email_content = get_formatted_html(subject, message,
+		email_account=email_account, header=header,
+		unsubscribe_link=unsubscribe_link)
+
+	# add to queue
+	add(recipients, sender, subject,
+		formatted=email_content,
+		text_content=email_text_context,
+		reference_doctype=reference_doctype,
+		reference_name=reference_name,
+		attachments=attachments,
+		reply_to=reply_to,
+		cc=cc,
+		bcc=bcc,
+		message_id=message_id,
+		in_reply_to=in_reply_to,
+		send_after=send_after,
+		send_priority=send_priority,
+		email_account=email_account,
+		communication=communication,
+		add_unsubscribe_link=add_unsubscribe_link,
+		unsubscribe_method=unsubscribe_method,
+		unsubscribe_params=unsubscribe_params,
+		expose_recipients=expose_recipients,
+		read_receipt=read_receipt,
+		queue_separately=queue_separately,
+		is_notification = is_notification,
+		inline_images = inline_images,
+		header=header,
+		now=now,
+		print_letterhead=print_letterhead)

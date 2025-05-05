@@ -841,3 +841,12 @@ def get_permission_query_conditions(user: str | None = None) -> str:
 
 # Note: kept at the end to not cause circular, partial imports & maintain backwards compatibility
 from frappe.core.api.file import *
+
+#Added from V12 to avoid migrate Errors in ERPNextswiss
+def create_new_folder(file_name, folder):
+	""" create new folder under current parent folder """
+	file = frappe.new_doc("File")
+	file.file_name = file_name
+	file.is_folder = 1
+	file.folder = folder
+	file.insert()
