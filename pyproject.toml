@@ -89,7 +89,7 @@ dependencies = [
     "vobject~=0.9.7",
     
     # payment gateways
-    "braintree~=-4.35.0",
+    "braintree~=4.35.0",
     
 ]
 
