@@ -1,6 +1,13 @@
+.nav {
+    color: var(--gray-50) !important;
+}
+a.nav {
+    color: var(--gray-50) !important;
+}
+
 .navbar {
 	height: $navbar-height;
-	background: var(--navbar-bg);
+	background: #1a3f77;
 	border-bottom: 1px solid var(--border-color);
 	padding: 0;
 	.navbar-brand {
