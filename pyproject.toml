@@ -87,6 +87,10 @@ dependencies = [
     "google-auth~=1.29.0",
     "posthog~=3.21.0",
     "vobject~=0.9.7",
+    
+    # payment gateways
+    "braintree~=-4.35.0",
+    
 ]
 
 [project.urls]
