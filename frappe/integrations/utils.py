@@ -124,3 +124,18 @@ def create_payment_gateway(gateway, settings=None, controller=None):
 			"gateway_controller": controller
 		})
 		payment_gateway.insert(ignore_permissions=True)
+
+def get_payment_gateway_controller(payment_gateway):
+	"""Return payment gateway controller"""
+	gateway = frappe.get_doc("Payment Gateway", payment_gateway)
+	if gateway.gateway_controller is None:
+		try:
+			return frappe.get_doc("{0} Settings".format(payment_gateway))
+		except Exception:
+			frappe.throw(_("{0} Settings not found").format(payment_gateway))
+	else:
+		try:
+			return frappe.get_doc(gateway.gateway_settings, gateway.gateway_controller)
+		except Exception:
+			frappe.throw(_("{0} Settings not found").format(payment_gateway))
+

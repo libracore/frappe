@@ -18,6 +18,10 @@
 	stroke: var(--icon-fill);
 }
 
+.nav-item .es-icon {
+	stroke: white !important;
+}
+
 /* like icon */
 use.like-icon {
 	--icon-stroke: transparent;
