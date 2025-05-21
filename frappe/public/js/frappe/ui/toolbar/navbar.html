@@ -75,7 +75,7 @@
 							</span>
 						</button>
 					</li>
-					<li class="vertical-bar d-none d-sm-block></li>
+					<!-- <li class="vertical-bar d-none d-sm-block></li>
 					<li class="nav-item dropdown dropdown-help dropdown-mobile d-none d-lg-block">
 						<button
 							class="btn-reset nav-link"
@@ -84,6 +84,39 @@
 							aria-label="{{ __("Help Dropdown") }}"
 						>
 							<span style="color: #cccccc; ">
+								{{ __("Help") }}
+								<svg class="es-icon icon-xs"><use href="#es-line-down"></use></svg>
+							</span>
+						</button>
+						<div class="dropdown-menu dropdown-menu-right" id="toolbar-help" role="menu">
+							<div id="help-links"></div>
+							<div class="dropdown-divider documentation-links"></div>
+							{% for item in navbar_settings.help_dropdown %}
+								{% if (!item.hidden) { %}
+									{% if (item.route) { %}
+										<a class="dropdown-item" href="{{ item.route }}">
+											{%= __(item.item_label) %}
+										</a>
+									{% } else if (item.action) { %}
+										<button class="btn-reset dropdown-item" onclick="return {{ item.action }}">
+											{%= __(item.item_label) %}
+										</button>
+									{% } else { %}
+										<div class="dropdown-divider"></div>
+									{% } %}
+								{% } %}
+							{% endfor %}
+						</div>
+					</li> -->
+                    <li class="vertical-bar d-none d-sm-block"></li>
+					<li class="nav-item dropdown dropdown-help dropdown-mobile d-none d-lg-block">
+						<button
+							class="btn-reset nav-link"
+							data-toggle="dropdown"
+							aria-controls="toolbar-help"
+							aria-label="{{ __("Help Dropdown") }}"
+						>
+							<span style="color: white;">
 								{{ __("Help") }}
 								<svg class="es-icon icon-xs"><use href="#es-line-down"></use></svg>
 							</span>
