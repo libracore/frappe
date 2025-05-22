@@ -90,6 +90,9 @@ dependencies = [
     
     # payment gateways
     "braintree~=4.35.0",
+    "future~=1.0.1",
+    "stripe~=11.2.0",
+    "gocardless_pro~=1.48.0",
     
 ]
 
