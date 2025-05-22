@@ -20,6 +20,7 @@ from frappe.utils import call_hook_method, cint, get_files_path, get_hook_method
 from frappe.utils.file_manager import is_safe_path
 from frappe.utils.image import optimize_image, strip_exif_data
 
+
 from .exceptions import (
 	AttachmentLimitReached,
 	FileTypeNotAllowed,
@@ -840,7 +841,7 @@ def get_permission_query_conditions(user: str | None = None) -> str:
 
 
 # Note: kept at the end to not cause circular, partial imports & maintain backwards compatibility
-from frappe.core.api.file import *
+# ~ from frappe.core.api.file import *
 
 #Added from V12 to avoid migrate Errors in ERPNextswiss
 def create_new_folder(file_name, folder):
