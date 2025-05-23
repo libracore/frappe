@@ -94,6 +94,19 @@
 	}
 }
 
+[data-theme="light"] {
+	.btn.btn-default.btn-new-doc {
+		background-color: var(--blue-libracore);
+		color: var(--neutral-white);
+		border: 1px solid var(--blue-libracore);
+		&:hover,
+		&:active {
+			background: var(--neutral-white);
+			color: var(--blue-libracore);
+		}
+	}
+}
+
 .btn.btn-primary {
 	background-color: var(--btn-primary);
 	color: var(--neutral);
