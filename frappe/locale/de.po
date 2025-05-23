@@ -30369,7 +30369,7 @@ msgstr "kursiv"
 
 #: frappe/templates/signup.html:11 frappe/www/login.html:10
 msgid "jane@example.com"
-msgstr "beate@beispiel.de"
+msgstr "hans@muster.ch"
 
 #: frappe/public/js/frappe/utils/pretty_date.js:46
 msgid "just now"
