@@ -116,35 +116,6 @@ frappe.ui.form.on("Email Account", {
 			delete locals['User'][frappe.route_flags.linked_user];
 		}
 	},
-‎frappe/email/doctype/email_account/email_account.js
-+40-9Lines changed: 40 additions & 9 deletions
-Original file line number	Diff line number	Diff line change
-@@ -76,7 +76,6 @@
-				frm.set_value(key, value);
-			});
-		}
-		frm.events.show_gmail_message_for_less_secure_apps(frm);
-	},
-
-	use_imap: function(frm) {
-@@ -109,48 +108,80 @@
-	onload: function(frm) {
-		frm.set_df_property("append_to", "only_select", true);
-		frm.set_query("append_to", "frappe.email.doctype.email_account.email_account.get_append_to");
-		frm.events.show_oauth_authorization_message(frm);
-	},
-
-	refresh: function(frm) {
-		frm.events.set_domain_fields(frm);
-		frm.events.enable_incoming(frm);
-		frm.events.notify_if_unreplied(frm);
-		frm.events.show_gmail_message_for_less_secure_apps(frm);
-
-		if(frappe.route_flags.delete_user_from_locals && frappe.route_flags.linked_user) {
-			delete frappe.route_flags.delete_user_from_locals;
-			delete locals['User'][frappe.route_flags.linked_user];
-		}
-	},
 
 	authorize_api_access: function (frm) {
 		frm.events.oauth_access(frm);
@@ -210,7 +181,7 @@ Original file line number	Diff line number	Diff line change
 				}
 			}
 		});
-	}
+	},
 
 	email_id:function(frm) {
 		//pull domain and if no matching domain go create one
