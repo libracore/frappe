@@ -76,7 +76,6 @@ frappe.ui.form.on("Email Account", {
 				frm.set_value(key, value);
 			});
 		}
-		frm.events.show_gmail_message_for_less_secure_apps(frm);
 	},
 
 	use_imap: function(frm) {
@@ -104,6 +103,35 @@ frappe.ui.form.on("Email Account", {
 	onload: function(frm) {
 		frm.set_df_property("append_to", "only_select", true);
 		frm.set_query("append_to", "frappe.email.doctype.email_account.email_account.get_append_to");
+		frm.events.show_oauth_authorization_message(frm);
+	},
+
+	refresh: function(frm) {
+		frm.events.set_domain_fields(frm);
+		frm.events.enable_incoming(frm);
+		frm.events.notify_if_unreplied(frm);
+
+		if(frappe.route_flags.delete_user_from_locals && frappe.route_flags.linked_user) {
+			delete frappe.route_flags.delete_user_from_locals;
+			delete locals['User'][frappe.route_flags.linked_user];
+		}
+	},
+‎frappe/email/doctype/email_account/email_account.js
++40-9Lines changed: 40 additions & 9 deletions
+Original file line number	Diff line number	Diff line change
+@@ -76,7 +76,6 @@
+				frm.set_value(key, value);
+			});
+		}
+		frm.events.show_gmail_message_for_less_secure_apps(frm);
+	},
+
+	use_imap: function(frm) {
+@@ -109,48 +108,80 @@
+	onload: function(frm) {
+		frm.set_df_property("append_to", "only_select", true);
+		frm.set_query("append_to", "frappe.email.doctype.email_account.email_account.get_append_to");
+		frm.events.show_oauth_authorization_message(frm);
 	},
 
 	refresh: function(frm) {
@@ -118,14 +146,71 @@ frappe.ui.form.on("Email Account", {
 		}
 	},
 
-	show_gmail_message_for_less_secure_apps: function(frm) {
-		frm.dashboard.clear_headline();
-		if(frm.doc.service==="GMail") {
-			frm.dashboard.set_headline_alert('Gmail will only work if you allow access for less secure \
-				apps in Gmail settings. <a target="_blank" \
-				href="https://support.google.com/accounts/answer/6010255?hl=en">Read this for details</a>');
+	authorize_api_access: function (frm) {
+		frm.events.oauth_access(frm);
+	},
+
+	oauth_access: function(frm) {
+		frappe.model.with_doc("Connected App", frm.doc.connected_app, () => {
+			const connected_app = frappe.get_doc("Connected App", frm.doc.connected_app);
+			return frappe.call({
+				doc: connected_app,
+				method: "initiate_web_application_flow",
+				args: {
+					success_uri: window.location.pathname,
+					user: frm.doc.connected_user,
+				},
+				callback: function (r) {
+					window.open(r.message, "_self");
+				},
+			});
+		});
+	},
+
+	show_oauth_authorization_message(frm) {
+		if (frm.doc.auth_method === "OAuth") {
+			frappe.call({
+				method: "frappe.integrations.doctype.connected_app.connected_app.has_token",
+				args: {
+					connected_app: frm.doc.connected_app,
+					connected_user: frm.doc.connected_user,
+				},
+				callback: (r) => {
+					if (!r.message) {
+						let msg = __(
+							'OAuth has been enabled but not authorised. Please use "Authorise API Access" button to do the same.'
+						);
+						frm.dashboard.clear_headline();
+						frm.dashboard.set_headline_alert(msg, "yellow");
+					}
+				},
+			});
 		}
 	},
+
+	email_id:function(frm) {
+		//pull domain and if no matching domain go create one
+		frm.events.update_domain(frm);
+	},
+
+	update_domain: function(frm){
+		if (!frm.doc.email_id && !frm.doc.service){
+			return;
+		}
+
+		frappe.call({
+			method: 'get_domain',
+			doc: frm.doc,
+			args: {
+				"email_id": frm.doc.email_id
+			},
+			callback: function (r) {
+				if (r.message) {
+					frm.events.set_domain_fields(frm, r.message);
+				}
+			}
+		});
+	}
 
 	email_id:function(frm) {
 		//pull domain and if no matching domain go create one

@@ -15,6 +15,7 @@ from frappe.utils import (extract_email_id, convert_utc_to_user_timezone, now,
 	cint, cstr, strip, markdown, parse_addr)
 from frappe.utils.scheduler import log
 from frappe.core.doctype.file.file import get_random_filename, MaxFileSizeReachedError
+from frappe.email.oauth import Oauth
 
 class EmailSizeExceededError(frappe.ValidationError): pass
 class EmailTimeoutError(frappe.ValidationError): pass
@@ -55,7 +56,15 @@ class EmailServer:
 				if cint(self.settings.use_imap_tls):
 					context = ssl.create_default_context()
 					self.imap.starttls()
-			self.imap.login(self.settings.username, self.settings.password)
+			if self.settings.use_oauth:
+				Oauth(
+					self.imap,
+					self.settings.email_account,
+					self.settings.username,
+					self.settings.access_token,
+				).connect()
+			else:
+				self.imap.login(self.settings.username, self.settings.password)
 			# connection established!
 			return True
 
@@ -76,8 +85,16 @@ class EmailServer:
 			else:
 				self.pop = Timed_POP3(self.settings.host, self.settings.incoming_port, timeout=frappe.conf.get("pop_timeout"))
 
-			self.pop.user(self.settings.username)
-			self.pop.pass_(self.settings.password)
+			if self.settings.use_oauth:
+				Oauth(
+					self.pop,
+					self.settings.email_account,
+					self.settings.username,
+					self.settings.access_token,
+				).connect()
+			else:
+				self.pop.user(self.settings.username)
+				self.pop.pass_(self.settings.password)
 
 			# connection established!
 			return True

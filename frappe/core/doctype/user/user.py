@@ -627,11 +627,6 @@ def get_email_awaiting(user):
 		and parent = %(user)s""", {"user":user}, as_dict=1)
 	if waiting:
 		return waiting
-	else:
-		frappe.db.sql("""update `tabUser Email`
-				set awaiting_password =0
-				where parent = %(user)s""",{"user":user})
-		return False
 
 @frappe.whitelist(allow_guest=False)
 def set_email_password(email_account, user, password):
