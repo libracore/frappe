@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-03-20 13:58+0000\n"
-"PO-Revision-Date: 2025-04-15 17:06\n"
+"PO-Revision-Date: 2025-06-02 05:14\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -1192,7 +1192,7 @@ msgstr "افزودن یک نقش جدید"
 
 #: frappe/public/js/frappe/form/form_tour.js:211
 msgid "Add a Row"
-msgstr ""
+msgstr "افزودن یک ردیف"
 
 #: frappe/templates/includes/comments/comments.html:30
 #: frappe/templates/includes/comments/comments.html:47
@@ -1289,7 +1289,7 @@ msgstr "HTML در &lt;head&gt; بخشی از صفحه وب، که در درجه 
 
 #: frappe/core/doctype/log_settings/log_settings.py:82
 msgid "Added default log doctypes: {}"
-msgstr "افزودن پیش‌فرض اسناد گزارش: {}"
+msgstr "افزودن پیش‌فرض اسناد لاگ: {}"
 
 #: frappe/core/doctype/file/file.py:730
 msgid "Added {0}"
@@ -2125,7 +2125,7 @@ msgstr "افزودن به می‌تواند یکی از {0} باشد"
 #. Description of the 'Append To' (Link) field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Append as communication against this DocType (must have fields: \"Sender\" and \"Subject\"). These fields can be defined in the email settings section of the appended doctype."
-msgstr "به عنوان ارتباط در مقابل این DocType اضافه شود (باید دارای فیلدهای: \"فرستنده\" و \"موضوع\"). این فیلدها را می‌توان در قسمت تنظیمات ایمیل از doctype ضمیمه شده تعریف کرد."
+msgstr "به عنوان ارتباط در مقابل این DocType اضافه شود (باید دارای فیلدهای: \"فرستنده\" و \"موضوع\"). این فیلدها را می‌توان در قسمت تنظیمات ایمیل از doctype پیوست شده تعریف کرد."
 
 #: frappe/core/doctype/user_permission/user_permission_list.js:105
 msgid "Applicable Document Types"
@@ -2147,7 +2147,7 @@ msgstr "لوگوی برنامه"
 #: frappe/core/doctype/installed_application/installed_application.json
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Application Name"
-msgstr "نام نرم افزار"
+msgstr "نام نرم‌افزار"
 
 #. Label of a Data field in DocType 'Installed Application'
 #: frappe/core/doctype/installed_application/installed_application.json
@@ -2531,7 +2531,7 @@ msgstr "پیوست"
 
 #: frappe/public/js/frappe/views/communication.js:143
 msgid "Attach Document Print"
-msgstr "ضمیمه چاپ سند"
+msgstr "پیوست چاپ سند"
 
 #. Option for the 'Type' (Select) field in DocType 'DocField'
 #. Option for the 'Field Type' (Select) field in DocType 'Custom Field'
@@ -2567,7 +2567,7 @@ msgstr "فایل ها / آدرس ها را پیوست کنید و در جدول 
 #. Label of a Code field in DocType 'Notification Log'
 #: frappe/desk/doctype/notification_log/notification_log.json
 msgid "Attached File"
-msgstr "فایل ضمیمه شده"
+msgstr "فایل پیوست شده"
 
 #. Label of a Link field in DocType 'File'
 #: frappe/core/doctype/file/file.json
@@ -3030,7 +3030,7 @@ msgstr "بازگشت"
 
 #: frappe/templates/pages/integrations/gcalendar-success.html:13
 msgid "Back to Desk"
-msgstr "بازگشت به میز"
+msgstr "بازگشت به پیشخوان"
 
 #: frappe/www/404.html:20
 msgid "Back to Home"
@@ -3491,7 +3491,7 @@ msgstr "پرش کرد"
 #. Label of a Section Break field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Brand"
-msgstr "نام تجاری"
+msgstr "برند"
 
 #. Label of a Code field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
@@ -3501,7 +3501,7 @@ msgstr "HTML برند"
 #. Label of a Attach Image field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Brand Image"
-msgstr "تصویر نام تجاری"
+msgstr "تصویر برند"
 
 #. Label of a Attach Image field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
@@ -3512,7 +3512,7 @@ msgstr "لوگوی برند"
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Brand is what appears on the top-left of the toolbar. If it is an image, make sure it\n"
 "has a transparent background and use the &lt;img /&gt; tag. Keep size as 200px x 30px"
-msgstr "نام تجاری همان چیزی است که در سمت چپ بالای نوار ابزار ظاهر می‌شود. اگر تصویر است، مطمئن شوید که\n"
+msgstr "برند همان چیزی است که در سمت چپ بالای نوار ابزار ظاهر می‌شود. اگر تصویر است، مطمئن شوید که\n"
 "دارای پس‌زمینه شفاف است و از تگ &lt;img /&gt; استفاده کنید. اندازه را 200×30 پیکسل نگه دارید"
 
 #. Label of a Code field in DocType 'Web Form'
@@ -4400,11 +4400,11 @@ msgstr "برای انتخاب، ستون‌ها را علامت بزنید، ب�
 
 #: frappe/automation/doctype/auto_repeat/auto_repeat.py:449
 msgid "Check the Error Log for more information: {0}"
-msgstr "برای اطلاعات بیشتر، گزارش خطا را بررسی کنید: {0}"
+msgstr "برای اطلاعات بیشتر، لاگ خطا را بررسی کنید: {0}"
 
 #: frappe/website/doctype/website_settings/website_settings.js:147
 msgid "Check this if you don't want users to sign up for an account on your site. Users won't get desk access unless you explicitly provide it."
-msgstr "اگر نمی‌خواهید کاربران برای یک حساب کاربری در سایت شما ثبت نام کنند، این را بررسی کنید. کاربران به میز کار دسترسی نخواهند داشت مگر اینکه به صراحت آن را ارائه دهید."
+msgstr "اگر نمی‌خواهید کاربران برای یک حساب کاربری در سایت شما ثبت نام کنند، این را بررسی کنید. کاربران به پیشخوان دسترسی نخواهند داشت مگر اینکه به صراحت آن را ارائه دهید."
 
 #. Description of the 'User must always select' (Check) field in DocType
 #. 'Document Naming Settings'
@@ -5481,7 +5481,7 @@ msgstr "ماژول های اصلی {0} را نمی‌توان در جستجوی 
 
 #: frappe/printing/page/print/print.js:620
 msgid "Correct version :"
-msgstr ""
+msgstr "نسخه صحیح:"
 
 #: frappe/email/smtp.py:78
 msgid "Could not connect to outgoing email server"
@@ -5497,7 +5497,7 @@ msgstr "ستون {0} به فیلد {1} نگاشت نشد"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:222
 msgid "Could not start up: "
-msgstr "راه اندازی نشد: "
+msgstr "راه‌اندازی نشد: "
 
 #: frappe/public/js/frappe/web_form/web_form.js:359
 msgid "Couldn't save, please check the data you have entered"
@@ -5623,7 +5623,7 @@ msgstr "ایجاد ثبت"
 #: frappe/public/js/print_format_builder/LetterHeadEditor.vue:59
 #: frappe/public/js/print_format_builder/LetterHeadEditor.vue:195
 msgid "Create Letter Head"
-msgstr ""
+msgstr "ایجاد سربرگ"
 
 #. Label of a Check field in DocType 'Scheduled Job Type'
 #: frappe/core/doctype/scheduled_job_type/scheduled_job_type.json
@@ -6395,7 +6395,7 @@ msgstr "استفاده از اندازه ردیف پایگاه داده"
 #. Name of a report
 #: frappe/core/report/database_storage_usage_by_tables/database_storage_usage_by_tables.json
 msgid "Database Storage Usage By Tables"
-msgstr "استفاده از ذخیره سازی پایگاه داده بر اساس جداول"
+msgstr "استفاده از ذخیره‌سازی پایگاه داده بر اساس جداول"
 
 #: frappe/custom/doctype/customize_form/customize_form.py:245
 msgid "Database Table Row Size Limit"
@@ -6995,17 +6995,17 @@ msgstr "نقش سازمانی"
 #. Label of a Check field in DocType 'Role'
 #: frappe/core/doctype/role/role.json
 msgid "Desk Access"
-msgstr "دسترسی به میز"
+msgstr "دسترسی به پیشخوان"
 
 #. Label of a Section Break field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Desk Settings"
-msgstr "تنظیمات میز"
+msgstr "تنظیمات پیشخوان"
 
 #. Label of a Select field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Desk Theme"
-msgstr "تم میز"
+msgstr "تم پیشخوان"
 
 #. Name of a role
 #: frappe/automation/doctype/reminder/reminder.json
@@ -7039,7 +7039,7 @@ msgstr "تم میز"
 #: frappe/workflow/doctype/workflow_action/workflow_action.json
 #: frappe/workflow/doctype/workflow_state/workflow_state.json
 msgid "Desk User"
-msgstr "کاربر میز"
+msgstr "کاربر پیشخوان"
 
 #. Name of a DocType
 #: frappe/desk/doctype/desktop_icon/desktop_icon.json
@@ -7048,7 +7048,7 @@ msgstr "آیکون دسکتاپ"
 
 #: frappe/desk/doctype/desktop_icon/desktop_icon.py:225
 msgid "Desktop Icon already exists"
-msgstr "نماد دسکتاپ از قبل وجود دارد"
+msgstr "آیکون دسکتاپ از قبل وجود دارد"
 
 #. Label of a Code field in DocType 'Scheduled Job Log'
 #. Label of a Tab Break field in DocType 'Customize Form'
@@ -7105,7 +7105,7 @@ msgstr ""
 #. Label of a Check field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Disable Change Log Notification"
-msgstr "اعلان گزارش تغییر را غیرفعال کنید"
+msgstr ""
 
 #. Label of a Check field in DocType 'List View Settings'
 #: frappe/desk/doctype/list_view_settings/list_view_settings.json
@@ -7125,7 +7125,7 @@ msgstr "غیرفعال کردن شمارش"
 #. Label of a Check field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Disable Document Sharing"
-msgstr "اشتراک گذاری سند را غیرفعال کنید"
+msgstr "غیرفعال کردن اشتراک گذاری سند"
 
 #. Label of a Check field in DocType 'Blog Post'
 #: frappe/website/doctype/blog_post/blog_post.json
@@ -7153,12 +7153,12 @@ msgstr "ثبت نام برای سایت خود را غیرفعال کنید"
 #. Label of a Check field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Disable Standard Email Footer"
-msgstr "پاورقی استاندارد ایمیل را غیرفعال کنید"
+msgstr ""
 
 #. Label of a Check field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Disable System Update Notification"
-msgstr "اعلان به روز رسانی سیستم را غیرفعال کنید"
+msgstr ""
 
 #. Label of a Check field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -8931,7 +8931,7 @@ msgstr "نقطه انرژی"
 #: frappe/core/doctype/user/user.json
 #: frappe/social/doctype/energy_point_log/energy_point_log.json
 msgid "Energy Point Log"
-msgstr "گزارش نقطه انرژی"
+msgstr "لاگ نقطه انرژی"
 
 #. Linked DocType in DocType's connections
 #. Name of a DocType
@@ -9086,7 +9086,7 @@ msgstr "لاگ‌های خطا"
 #. Label of a Text field in DocType 'Prepared Report'
 #: frappe/core/doctype/prepared_report/prepared_report.json
 msgid "Error Message"
-msgstr "پیغام خطا"
+msgstr "پیام خطا"
 
 #: frappe/public/js/frappe/form/print_utils.js:128
 msgid "Error connecting to QZ Tray Application...<br><br> You need to have QZ Tray application installed and running, to use the Raw Print feature.<br><br><a target=\"_blank\" href=\"https://qz.io/download/\">Click here to Download and install QZ Tray</a>.<br> <a target=\"_blank\" href=\"https://erpnext.com/docs/user/manual/en/setting-up/print/raw-printing\">Click here to learn more about Raw Printing</a>."
@@ -10656,7 +10656,7 @@ msgstr "صفحه ساز Frappe با استفاده از کامپوننت ها"
 #: frappe/public/js/frappe/file_uploader/ImageCropper.vue:112
 msgctxt "Image Cropper"
 msgid "Free"
-msgstr "رایگان"
+msgstr "آزاد"
 
 #. Label of a Select field in DocType 'Auto Repeat'
 #. Label of a Select field in DocType 'Scheduled Job Type'
@@ -12738,7 +12738,7 @@ msgstr "محدودیت پیوست ناکافی"
 #: frappe/website/doctype/web_form_field/web_form_field.json
 #: frappe/website/doctype/web_template_field/web_template_field.json
 msgid "Int"
-msgstr "بین المللی"
+msgstr "عدد صحیح"
 
 #. Name of a DocType
 #: frappe/integrations/doctype/integration_request/integration_request.json
@@ -13671,7 +13671,7 @@ msgstr "LDAP فعال نیست."
 #. Label of a Data field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
 msgid "LDAP search path for Groups"
-msgstr "مسیر جستجوی LDAP برای گروه ها"
+msgstr "مسیر جستجوی LDAP برای گروه‌ها"
 
 #. Label of a Data field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
@@ -13964,13 +13964,13 @@ msgstr "دفتر"
 #: frappe/printing/doctype/letter_head/letter_head.json
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Left"
-msgstr "ترک کرد"
+msgstr "چپ"
 
 #: frappe/printing/page/print_format_builder/print_format_builder.js:483
 #: frappe/public/js/print_format_builder/PrintFormatControls.vue:155
 msgctxt "alignment"
 msgid "Left"
-msgstr "ترک کرد"
+msgstr "چپ"
 
 #. Option for the 'Position' (Select) field in DocType 'Form Tour Step'
 #: frappe/desk/doctype/form_tour_step/form_tour_step.json
@@ -13989,7 +13989,7 @@ msgstr "این گفتگو را ترک کرد"
 #. Option for the 'PDF Page Size' (Select) field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
 msgid "Legal"
-msgstr "مجاز"
+msgstr "حقوقی"
 
 #. Label of a Int field in DocType 'DocField'
 #. Label of a Int field in DocType 'Custom Field'
@@ -14052,7 +14052,7 @@ msgstr "بیایید شما را به آشناسازی برگردانیم"
 #. Option for the 'PDF Page Size' (Select) field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
 msgid "Letter"
-msgstr "حرف"
+msgstr "نامه"
 
 #. Label of a Link field in DocType 'Report'
 #. Name of a DocType
@@ -15207,7 +15207,7 @@ msgstr "پارامتر پیام"
 
 #: frappe/templates/includes/contact.js:36
 msgid "Message Sent"
-msgstr "پیغام فرستاده شد"
+msgstr "پیام فرستاده شد"
 
 #. Label of a Select field in DocType 'Notification'
 #: frappe/email/doctype/notification/notification.json
@@ -15997,7 +15997,7 @@ msgstr "نظر جدید در مورد {0}: {1}"
 
 #: frappe/public/js/frappe/form/templates/contact_list.html:90
 msgid "New Contact"
-msgstr "تماس جدید"
+msgstr "مخاطب جدید"
 
 #: frappe/printing/page/print/print.js:295
 #: frappe/printing/page/print/print.js:342
@@ -17069,7 +17069,7 @@ msgstr "تعداد بک آپ های DB نمی‌تواند کمتر از 1 با�
 #. Label of a Int field in DocType 'Dashboard Chart'
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
 msgid "Number of Groups"
-msgstr "تعداد گروه ها"
+msgstr "تعداد گروه‌ها"
 
 #. Label of a Int field in DocType 'Recorder'
 #: frappe/core/doctype/recorder/recorder.json
@@ -17563,7 +17563,7 @@ msgstr "اپراتور باید یکی از {0} باشد"
 #: frappe/core/report/database_storage_usage_by_tables/database_storage_usage_by_tables.js:8
 #: frappe/public/js/frappe/file_uploader/FilePreview.vue:27
 msgid "Optimize"
-msgstr "بهینه سازی کنید"
+msgstr "بهینه‌سازی"
 
 #: frappe/core/doctype/file/file.js:96
 msgid "Optimizing image..."
@@ -17754,7 +17754,7 @@ msgstr "ایجاد PDF در حال انجام است"
 #. Label of a Float field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
 msgid "PDF Page Height (in mm)"
-msgstr "ارتفاع صفحه PDF (به میلی متر)"
+msgstr "ارتفاع صفحه PDF (به میلی‌متر)"
 
 #. Label of a Select field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
@@ -17764,7 +17764,7 @@ msgstr "اندازه صفحه PDF"
 #. Label of a Float field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
 msgid "PDF Page Width (in mm)"
-msgstr "عرض صفحه PDF (به میلی متر)"
+msgstr "عرض صفحه PDF (به میلی‌متر)"
 
 #. Label of a Section Break field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
@@ -17887,7 +17887,7 @@ msgstr "صفحه HTML"
 
 #: frappe/public/js/frappe/list/bulk_operations.js:73
 msgid "Page Height (in mm)"
-msgstr "ارتفاع صفحه (بر حسب میلی متر)"
+msgstr "ارتفاع صفحه (بر حسب میلی‌متر)"
 
 #: frappe/public/js/print_format_builder/PrintFormatControls.vue:5
 msgid "Page Margins"
@@ -17933,7 +17933,7 @@ msgstr "عنوان صفحه"
 
 #: frappe/public/js/frappe/list/bulk_operations.js:80
 msgid "Page Width (in mm)"
-msgstr "عرض صفحه (به میلی متر)"
+msgstr "عرض صفحه (به میلی‌متر)"
 
 #: frappe/www/qrcode.py:35
 msgid "Page has expired!"
@@ -19848,7 +19848,7 @@ msgstr "نقل قول باید بین 0 تا 3 باشد"
 #. Label of a Section Break field in DocType 'Access Log'
 #: frappe/core/doctype/access_log/access_log.json
 msgid "RAW Information Log"
-msgstr "گزارش اطلاعات خام"
+msgstr "لاگ اطلاعات خام"
 
 #. Name of a DocType
 #: frappe/core/doctype/rq_job/rq_job.json
@@ -20038,11 +20038,11 @@ msgstr "دلیل"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:823
 msgid "Rebuild"
-msgstr "بازسازی کنید"
+msgstr "بازسازی"
 
 #: frappe/public/js/frappe/views/treeview.js:475
 msgid "Rebuild Tree"
-msgstr "درخت را بازسازی کنید"
+msgstr "بازسازی درخت"
 
 #: frappe/utils/nestedset.py:181
 msgid "Rebuilding of tree is not supported for {}"
@@ -20618,7 +20618,7 @@ msgstr ""
 #: frappe/core/doctype/communication/communication.js:43
 #: frappe/desk/doctype/todo/todo.js:36
 msgid "Reopen"
-msgstr "دوباره باز کنید"
+msgstr "باز کردن دوباره"
 
 #: frappe/public/js/frappe/form/toolbar.js:503
 msgid "Repeat"
@@ -20972,7 +20972,7 @@ msgstr "نیاز به گواهی مورد اعتماد"
 #. 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
 msgid "Requires any valid fdn path. i.e. ou=groups,dc=example,dc=com"
-msgstr "به هر مسیر fdn معتبر نیاز دارد. یعنی ou=گروه ها،dc=example,dc=com"
+msgstr "به هر مسیر fdn معتبر نیاز دارد. یعنی ou=گروه‌ها،dc=example,dc=com"
 
 #. Description of the 'LDAP search path for Users' (Data) field in DocType
 #. 'LDAP Settings'
@@ -21219,11 +21219,11 @@ msgstr "بررسی سطوح"
 #: frappe/desk/page/user_profile/user_profile_controller.js:402
 #: frappe/social/doctype/review_level/review_level.json
 msgid "Review Points"
-msgstr "نکات بازبینی"
+msgstr ""
 
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:87
 msgid "Reviews"
-msgstr "بررسی ها"
+msgstr ""
 
 #. Label of a Data field in DocType 'Connected App'
 #: frappe/integrations/doctype/connected_app/connected_app.json
@@ -21256,13 +21256,13 @@ msgstr "متن غنی"
 #: frappe/printing/doctype/letter_head/letter_head.json
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Right"
-msgstr "درست"
+msgstr "راست"
 
 #: frappe/printing/page/print_format_builder/print_format_builder.js:484
 #: frappe/public/js/print_format_builder/PrintFormatControls.vue:156
 msgctxt "alignment"
 msgid "Right"
-msgstr "درست"
+msgstr "راست"
 
 #. Option for the 'Position' (Select) field in DocType 'Form Tour Step'
 #: frappe/desk/doctype/form_tour_step/form_tour_step.json
@@ -21318,7 +21318,7 @@ msgstr "نقش \"همه\" به همه کاربران سیستم + وب سایت 
 
 #: frappe/core/doctype/role/role.js:13
 msgid "Role 'Desk User' will be given to all system users."
-msgstr "نقش \"کاربر میز\" به همه کاربران سیستم داده می‌شود."
+msgstr "نقش \"کاربر پیشخوان\" به همه کاربران سیستم داده می‌شود."
 
 #. Label of a Data field in DocType 'Role'
 #. Label of a Data field in DocType 'Role Profile'
@@ -21911,7 +21911,7 @@ msgstr "کار زمان‌بندی شده"
 #: frappe/core/doctype/scheduled_job_log/scheduled_job_log.json
 #: frappe/core/doctype/scheduled_job_type/scheduled_job_type.json
 msgid "Scheduled Job Log"
-msgstr "گزارش کار زمان‌بندی شده"
+msgstr "لاگ کار زمان‌بندی شده"
 
 #. Name of a DocType
 #. Linked DocType in Server Script's connections
@@ -22293,7 +22293,7 @@ msgstr "کشور را انتخاب کنید"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:404
 msgid "Select Currency"
-msgstr "واحد پول را انتخاب کنید"
+msgstr "انتخاب واحد پول"
 
 #. Label of a Link field in DocType 'Form Tour'
 #: frappe/desk/doctype/form_tour/form_tour.json
@@ -23225,7 +23225,7 @@ msgstr "راه‌اندازی سری برای تراکنش ها"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:224
 msgid "Setup failed"
-msgstr "راه اندازی انجام نشد"
+msgstr "راه‌اندازی انجام نشد"
 
 #. Label of a Check field in DocType 'Custom DocPerm'
 #. Label of a Check field in DocType 'DocPerm'
@@ -23399,12 +23399,12 @@ msgstr "نمایش لیست"
 
 #: frappe/desk/page/user_profile/user_profile_controller.js:472
 msgid "Show More Activity"
-msgstr "نمایش فعالیت بیشتر"
+msgstr ""
 
 #. Label of a Check field in DocType 'Data Import'
 #: frappe/core/doctype/data_import/data_import.json
 msgid "Show Only Failed Logs"
-msgstr "نمایش فقط گزارش های ناموفق"
+msgstr "نمایش فقط لاگ های ناموفق"
 
 #. Label of a Check field in DocType 'Number Card'
 #: frappe/desk/doctype/number_card/number_card.json
@@ -24695,7 +24695,7 @@ msgstr "تغییر تم"
 
 #: frappe/templates/includes/navbar/navbar_login.html:17
 msgid "Switch To Desk"
-msgstr "سوئیچ به میز"
+msgstr "سوئیچ به پیشخوان"
 
 #: frappe/public/js/frappe/list/list_sidebar.js:296
 msgid "Switch to Frappe CRM for smarter sales"
@@ -25078,7 +25078,7 @@ msgstr "جدول {0} نمی‌تواند خالی باشد"
 #. Option for the 'PDF Page Size' (Select) field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
 msgid "Tabloid"
-msgstr "تبلوید"
+msgstr "نیم قطع"
 
 #. Name of a DocType
 #: frappe/desk/doctype/tag/tag.json
@@ -26767,7 +26767,7 @@ msgstr "نوع"
 
 #: frappe/desk/page/user_profile/user_profile.html:17
 msgid "Type Distribution"
-msgstr "نوع توزیع"
+msgstr ""
 
 #: frappe/public/js/frappe/form/controls/comment.js:78
 msgid "Type a reply / comment"
@@ -27280,7 +27280,7 @@ msgstr "استفاده از POST"
 #. Label of a Check field in DocType 'Dashboard Chart'
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
 msgid "Use Report Chart"
-msgstr "از نمودار گزارش استفاده کنید"
+msgstr "استفاده از نمودار گزارش"
 
 #. Label of a Check field in DocType 'Email Account'
 #. Label of a Check field in DocType 'Email Domain'
@@ -28538,7 +28538,7 @@ msgstr "وقتی فعال باشد، به مهمانان اجازه می‌ده�
 #. 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "When sending document using email, store the PDF on Communication. Warning: This can increase your storage usage."
-msgstr "هنگام ارسال سند با استفاده از ایمیل، PDF را در Communication ذخیره کنید. هشدار: این می‌تواند میزان استفاده از فضای ذخیره سازی شما را افزایش دهد."
+msgstr "هنگام ارسال سند با استفاده از ایمیل، PDF را در Communication ذخیره کنید. هشدار: این می‌تواند میزان استفاده از فضای ذخیره‌سازی شما را افزایش دهد."
 
 #. Description of the 'Force Web Capture Mode for Uploads' (Check) field in
 #. DocType 'System Settings'
@@ -28579,7 +28579,7 @@ msgstr "عرض ها را می‌توان بر حسب px یا % تنظیم کرد
 #. Label of a Check field in DocType 'Report Filter'
 #: frappe/core/doctype/report_filter/report_filter.json
 msgid "Wildcard Filter"
-msgstr "فیلتر عجایب"
+msgstr "فیلتر نویسه جانشین"
 
 #. Description of the 'Wildcard Filter' (Check) field in DocType 'Report
 #. Filter'
@@ -29118,7 +29118,7 @@ msgstr "برای تنظیم سطوح فیلدها می‌توانید از سف�
 
 #: frappe/public/js/frappe/form/link_selector.js:30
 msgid "You can use wildcard %"
-msgstr "می‌توانید از علامت % استفاده کنید"
+msgstr "می‌توانید از نویسه جانشین % استفاده کنید"
 
 #: frappe/custom/doctype/customize_form/customize_form.py:386
 msgid "You can't set 'Options' for field {0}"
@@ -30778,7 +30778,7 @@ msgstr "آپلود"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:358
 msgid "use % as wildcard"
-msgstr "از % به عنوان حروف استفاده کنید"
+msgstr "استفاده از % به عنوان نویسه جانشین"
 
 #. Option for the 'Icon' (Select) field in DocType 'Workflow State'
 #: frappe/workflow/doctype/workflow_state/workflow_state.json

@@ -51,8 +51,7 @@ from .utils.jinja import (
 )
 from .utils.lazy_loader import lazy_import
 
-__version__ = "2025.67.0"
-__title__ = "Frappe Framework"
+__version__ = "2025.72.4"
 
 # This if block is never executed when running the code. It is only used for
 # telling static code analyzer where to find dynamically defined attributes.
@@ -711,6 +710,7 @@ def sendmail(
 	with_container=False,
 	email_read_tracker_url=None,
 	x_priority: Literal[1, 3, 5] = 3,
+	email_headers=None,
 ) -> Optional["EmailQueue"]:
 	"""Send email using user's default **Email Account** or global default **Email Account**.
 
@@ -739,6 +739,7 @@ def sendmail(
 	:param header: Append header in email
 	:param with_container: Wraps email inside a styled container
 	:param x_priority: 1 = HIGHEST, 3 = NORMAL, 5 = LOWEST
+	:param email_headers: Additional headers to be added in the email, e.g. {"X-Custom-Header": "value"} or {"Custom-Header": "value"}. Automatically prepends "X-" to the header name if not present.
 	"""
 
 	if recipients is None:
@@ -795,6 +796,7 @@ def sendmail(
 		with_container=with_container,
 		email_read_tracker_url=email_read_tracker_url,
 		x_priority=x_priority,
+		email_headers=email_headers,
 	)
 
 	# build email queue and send the email if send_now is True.
@@ -861,7 +863,7 @@ def is_whitelisted(method):
 
 	is_guest = session["user"] == "Guest"
 	if method not in whitelisted or is_guest and method not in guest_methods:
-		summary = _("You are not permitted to access this resource.")
+		summary = _("You are not permitted to access this resource. Login to access")
 		detail = _("Function {0} is not whitelisted.").format(bold(f"{method.__module__}.{method.__name__}"))
 		msg = f"<details><summary>{summary}</summary>{detail}</details>"
 		throw(msg, PermissionError, title=_("Method Not Allowed"))
@@ -1303,6 +1305,15 @@ def get_doc(*args, **kwargs):
 	import frappe.model.document
 
 	return frappe.model.document.get_doc(*args, **kwargs)
+
+
+def get_single_value(setting: str, fieldname: str, /, *, as_dict: bool = False):
+	"""Return the cached value associated with the given fieldname from single DocType.
+
+	Usage:
+	        telemetry_enabled = frappe.get_single_value("System Settings", "telemetry_enabled")
+	"""
+	return get_cached_value(setting, setting, fieldname=fieldname, as_dict=as_dict)
 
 
 def get_last_doc(doctype, filters=None, order_by="creation desc", *, for_update=False):
@@ -2389,6 +2400,18 @@ def get_version(doctype, name, limit=None, head=False, raise_err=True):
 			raise ValueError(_("{0} has no versions tracked.").format(doctype))
 
 
+@request_cache
+def is_setup_complete():
+	is_setup_complete = False
+	if not frappe.db.table_exists("Installed Application"):
+		return is_setup_complete
+
+	if all(frappe.get_all("Installed Application", {"has_setup_wizard": 1}, pluck="is_setup_complete")):
+		is_setup_complete = True
+
+	return is_setup_complete
+
+
 @whitelist(allow_guest=True)
 def ping():
 	return "pong"
@@ -2493,3 +2516,5 @@ if _tune_gc:
 
 # Remove references to pattern that are pre-compiled and loaded to global scopes.
 re.purge()
+
+get_lazy_doc = get_doc

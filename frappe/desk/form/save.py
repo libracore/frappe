@@ -12,7 +12,7 @@ from frappe.utils.scheduler import is_scheduler_inactive
 from frappe.utils.telemetry import capture_doc
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "PUT"])
 def savedocs(doc, action):
 	"""save / submit / update doclist"""
 	doc = frappe.get_doc(json.loads(doc))
@@ -47,7 +47,7 @@ def savedocs(doc, action):
 	frappe.msgprint(frappe._(status_message), indicator="green", alert=True)
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "PUT"])
 def cancel(doctype=None, name=None, workflow_state_fieldname=None, workflow_state=None):
 	"""cancel a doclist"""
 	doc = frappe.get_doc(doctype, name)

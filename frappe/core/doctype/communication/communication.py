@@ -608,7 +608,7 @@ def parse_email(email_strings):
 				if len(document_parts) != 2:
 					continue
 
-				doctype = unquote(document_parts[0])
+				doctype = frappe.unscrub(unquote(document_parts[0]))
 				docname = unquote(document_parts[1])
 
 			if doctype and docname:

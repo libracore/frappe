@@ -285,6 +285,8 @@ def get_context(context):
 			"Page {0} of {1}",
 			"Couldn't save, please check the data you have entered",
 			"Validation Error",
+			"No {0} found",
+			"Create a new {0}",
 			self.title,
 			self.introduction_text,
 			self.success_title,
@@ -329,7 +331,7 @@ def get_context(context):
 			messages.append("Upload")
 			messages.append("Last")
 			messages.append("First")
-			messages.append("No.:Title of the 'row number' column")
+			messages.append("No.")
 
 		# Phone Picker
 		if any(field.fieldtype == "Phone" for field in self.web_form_fields):
