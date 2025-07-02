@@ -48,9 +48,7 @@ class Oauth:
 
 		except Exception:
 			frappe.log_error(
-				"Email Connection Error - Authentication Failed",
-				reference_doctype="Email Account",
-				reference_name=self.email_account,
+				"Email Connection Error - Authentication Failed for email account {0}".format(self.email_account)
 			)
 			# raising a bare exception here as we have a lot of exception handling present
 			# where the connect method is called from - hence just logging and raising.
