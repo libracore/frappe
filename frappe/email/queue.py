@@ -515,8 +515,9 @@ def prepare_message(email, recipient, recipients_list):
 
 	# On-demand attachments
 	from email.parser import Parser
+	from email.policy import SMTP
 
-	msg_obj = Parser().parsestr(message)
+	msg_obj = Parser(policy=SMTP).parsestr(message)
 	attachments = json.loads(email.attachments)
 
 	for attachment in attachments:
