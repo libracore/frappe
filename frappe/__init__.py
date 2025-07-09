@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2025, libracore, Frappe Technologies Pvt. Ltd. and Contributors
+# Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 """
 Frappe - Low Code Open Source Framework in Python and JS
@@ -51,7 +51,8 @@ from .utils.jinja import (
 )
 from .utils.lazy_loader import lazy_import
 
-__version__ = "2025.72.4"
+__version__ = "2025.73.0"
+__title__ = "Frappe Framework"
 
 # This if block is never executed when running the code. It is only used for
 # telling static code analyzer where to find dynamically defined attributes.

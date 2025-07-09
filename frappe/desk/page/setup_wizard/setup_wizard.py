@@ -89,28 +89,6 @@ def initialize_system_settings_and_user(system_settings_data, user_data):
 	create_or_update_user(user_data)
 
 
-@frappe.whitelist()
-def initialize_system_settings_and_user(system_settings_data, user_data):
-	system_settings = frappe.get_single("System Settings")
-
-	if cint(system_settings.setup_complete):
-		return
-
-	system_settings_data = parse_args(sanitize_input(system_settings_data))
-	system_settings.update(
-		{
-			"language": system_settings_data.get("language"),
-			"country": system_settings_data.get("country"),
-			"currency": system_settings_data.get("currency"),
-			"time_zone": system_settings_data.get("time_zone"),
-		}
-	)
-	system_settings.save()
-
-	user_data = parse_args(sanitize_input(user_data))
-	create_or_update_user(user_data)
-
-
 @frappe.task()
 def process_setup_stages(stages, user_input, is_background_task=False):
 	from frappe.utils.telemetry import capture
@@ -209,9 +187,30 @@ def run_setup_success(args):  # nosemgrep
 
 def get_stages_hooks(args):  # nosemgrep
 	stages = []
-	for method in frappe.get_hooks("setup_wizard_stages"):
-		stages += frappe.get_attr(method)(args)
+
+	installed_apps = frappe.get_installed_apps(_ensure_on_bench=True)
+	for app_name in installed_apps:
+		setup_wizard_stages = frappe.get_hooks(app_name=app_name).get("setup_wizard_stages")
+		if not setup_wizard_stages:
+			continue
+
+		for method in setup_wizard_stages:
+			_stages = frappe.get_attr(method)(args)
+			update_app_details_in_stages(_stages, app_name)
+			stages += _stages
+
 	return stages
+
+
+def update_app_details_in_stages(_stages, app_name):
+	for stage in _stages:
+		for key in stage:
+			if key != "tasks":
+				continue
+
+			for task in stage[key]:
+				if task.get("app_name") is None:
+					task["app_name"] = app_name
 
 
 def get_setup_complete_hooks(args):  # nosemgrep
@@ -370,7 +369,9 @@ def _get_default_roles() -> set[str]:
 def disable_future_access():
 	frappe.db.set_default("desktop:home_page", "workspace")
 	# Enable onboarding after install
+	frappe.clear_cache(doctype="System Settings")
 	frappe.db.set_single_value("System Settings", "enable_onboarding", 1)
+	frappe.db.set_single_value("System Settings", "setup_complete", frappe.is_setup_complete())
 
 
 @frappe.whitelist()

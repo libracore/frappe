@@ -50,6 +50,8 @@ class InstalledApplications(Document):
 			)
 
 		self.save()
+		frappe.clear_cache(doctype="System Settings")
+		frappe.db.set_single_value("System Settings", "setup_complete", frappe.is_setup_complete())
 
 	def get_app_wise_setup_details(self):
 		"""Get app wise setup details from the Installed Application doctype"""
@@ -67,6 +69,8 @@ class InstalledApplications(Document):
 			return
 
 		frappe.reload_doc("core", "doctype", "installed_application")
+		frappe.reload_doc("core", "doctype", "installed_applications")
+		frappe.reload_doc("integrations", "doctype", "webhook")
 
 
 @frappe.whitelist()

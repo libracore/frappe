@@ -13556,7 +13556,7 @@ msgstr "JSON-Anforderungshauptteil"
 
 #: frappe/templates/signup.html:5
 msgid "Jane Doe"
-msgstr "Beate Beispiel"
+msgstr "Hans Muster"
 
 #. Label of a Code field in DocType 'Website Theme'
 #: frappe/website/doctype/website_theme/website_theme.json

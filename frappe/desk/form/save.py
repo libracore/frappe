@@ -64,7 +64,7 @@ def send_updated_docs(doc):
 	from .load import get_docinfo
 
 	get_docinfo(doc)
-
+	doc.apply_fieldlevel_read_permissions()
 	d = doc.as_dict()
 	if hasattr(doc, "localname"):
 		d["localname"] = doc.localname
