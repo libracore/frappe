@@ -358,6 +358,8 @@ def get_contacts(email_strings):
 
 		try:
 			if not contact_name:
+				if frappe.get_value("System Settings", "System Settings", "do_not_create_contacts_from_mails"):
+					continue        # create contact disabled - skip
 				contact = frappe.get_doc({
 					"doctype": "Contact",
 					"first_name": frappe.unscrub(email.split("@")[0]),
@@ -419,3 +421,11 @@ def get_email_without_link(email):
 	email_host = email.split("@")[1]
 
 	return "{0}@{1}".format(email_id, email_host)
+
+
+@frappe.whitelist()
+def create_contact_from_email():
+    if frappe.get_value("System Settings", "System Settings", "do_not_create_contacts_from_mails"):
+        return False
+    else:
+        return True
