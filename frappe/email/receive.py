@@ -311,7 +311,10 @@ class EmailServer:
 			self.seen_status.update({ uid: "UNSEEN" })
 
 	def has_login_limit_exceeded(self, e):
-		return "-ERR Exceeded the login limit" in strip(cstr(e.message))
+		return self.error_message_includes("-ERR Exceeded the login limit", e)
+
+	def error_message_includes(self, message, e):
+		return message in strip(cstr(getattr(e, 'message', ''))) or message in strip(cstr(getattr(e, 'strerror', '')))
 
 	def is_temporary_system_problem(self, e):
 		messages = (
@@ -319,7 +322,7 @@ class EmailServer:
 			"Connection timed out",
 		)
 		for message in messages:
-			if message in strip(cstr(e.message)) or message in strip(cstr(getattr(e, 'strerror', ''))):
+			if self.error_message_includes(message, e):
 				return True
 		return False
 
