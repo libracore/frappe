@@ -14,6 +14,8 @@ from frappe.utils import get_url, nowdate, encode, now_datetime, add_days, split
 from rq.timeouts import JobTimeoutException
 from frappe.utils.scheduler import log
 from six import text_type, string_types
+from email.parser import Parser
+from email.policy import SMTP
 
 class EmailLimitCrossedError(frappe.ValidationError): pass
 
@@ -510,14 +512,12 @@ def prepare_message(email, recipient, recipients_list):
 
 	message = (message and message.encode('utf8')) or ''
 	message = safe_decode(message)
+	msg_obj = Parser(policy=SMTP).parsestr(message)
+
 	if not email.attachments:
-		return message
+		return msg_obj.as_string()
 
 	# On-demand attachments
-	from email.parser import Parser
-	from email.policy import SMTP
-
-	msg_obj = Parser(policy=SMTP).parsestr(message)
 	attachments = json.loads(email.attachments)
 
 	for attachment in attachments:
