@@ -142,6 +142,9 @@ def get_time_zone():
 
 	return frappe.cache().get_value("time_zone", _get_time_zone)
 
+def get_system_timezone():
+	return _get_time_zone()
+
 def convert_utc_to_user_timezone(utc_timestamp):
 	from pytz import timezone, UnknownTimeZoneError
 	utcnow = timezone('UTC').localize(utc_timestamp)
