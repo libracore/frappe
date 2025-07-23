@@ -16,6 +16,7 @@ def get_print(
 	pdf_options=None,
 	letterhead=None,
 	pdf_generator: Literal["wkhtmltopdf", "chrome"] | None = None,
+	ignore_zugferd=False
 ):
 	"""Get Print Format for given document.
 	:param doctype: DocType of document.
@@ -85,5 +86,12 @@ def get_print(
 			# if hook returns a value, assume it was the correct pdf_generator and return it
 			if pdf:
 				return pdf
-
-	return get_pdf(html, options=pdf_options, output=output)
+	else:
+		if doctype == "Sales Invoice" and not ignore_zugferd:
+			# include ZUGFeRD document creation when available
+			from erpnextswiss.erpnextswiss.zugferd.zugferd import create_zugferd_pdf
+			if not doc and name:
+				doc = get_doc(doctype, name)
+			return create_zugferd_pdf(docname=name, verify=True, format=print_format, doc=doc, doctype=doctype, no_letterhead=no_letterhead)
+		else:
+			return get_pdf(html, output=output, options=options, print_format=print_format)
