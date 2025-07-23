@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
+# Copyright (c) 2015-2025, libracore, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 import base64
 import contextlib
@@ -86,9 +86,22 @@ def get_pdf(html, options=None, output: PdfWriter | None = None):
 	options.update({"disable-javascript": "", "disable-local-file-access": ""})
 
 	filedata = ""
-	if Version(get_wkhtmltopdf_version()) > Version("0.12.3"):
-		options.update({"disable-smart-shrinking": ""})
-
+	if print_format and frappe.db.exists("Print Format", print_format):
+		pf = frappe.get_doc("Print Format", print_format)
+		if cint(pf.disable_smart_shrinking) == 1:
+			options.update({
+				"disable-smart-shrinking": ""
+			})
+	elif frappe.form_dict.doctype:
+		# fallback for standard format
+		from frappe.www.printview import get_print_format_doc
+		print_format_doc = get_print_format_doc(print_format, frappe.get_meta(frappe.form_dict.doctype))
+		if print_format_doc:
+			if cint(print_format_doc.disable_smart_shrinking) == 1:
+				options.update({
+					"disable-smart-shrinking": ""
+				})
+	
 	try:
 		# Set filename property to false, so no file is actually created
 		filedata = pdfkit.from_string(html, options=options or {}, verbose=True)

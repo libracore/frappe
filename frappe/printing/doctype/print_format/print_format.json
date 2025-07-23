@@ -12,6 +12,7 @@
   "column_break_3",
   "standard",
   "custom_format",
+  "disable_smart_shrinking",
   "disabled",
   "pdf_generator",
   "section_break_6",
@@ -263,12 +264,18 @@
    "fieldtype": "Select",
    "label": "PDF Generator",
    "options": "wkhtmltopdf"
+  },
+  {
+   "default": "1",
+   "fieldname": "disable_smart_shrinking",
+   "fieldtype": "Check",
+   "label": "Disable Smart Shrinking"
   }
  ],
  "icon": "fa fa-print",
  "idx": 1,
  "links": [],
- "modified": "2025-02-14 14:49:39.181074",
+ "modified": "2025-07-23 15:59:39.181074",
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Print Format",
