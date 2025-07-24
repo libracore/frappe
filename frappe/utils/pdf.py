@@ -20,6 +20,7 @@ from frappe.core.doctype.file.utils import find_file_by_url
 from frappe.utils import cstr, scrub_urls
 from frappe.utils.caching import redis_cache
 from frappe.utils.jinja_globals import bundled_asset, is_rtl
+from frappe.utils import cint
 
 PDF_CONTENT_ERRORS = [
 	"ContentNotFoundError",
@@ -79,7 +80,7 @@ def pdf_footer_html(soup, head, content, styles, html_id, css, path=None):
 	)
 
 
-def get_pdf(html, options=None, output: PdfWriter | None = None):
+def get_pdf(html, options=None, output: PdfWriter | None = None, print_format=None):
 	html = scrub_urls(html)
 	html, options = prepare_options(html, options)
 
