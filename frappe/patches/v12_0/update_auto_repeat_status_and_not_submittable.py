@@ -24,11 +24,18 @@ def execute():
 			print_hide=1,
 			read_only=1,
 		)
-		create_custom_field(doc.reference_doctype, df)
+		try:
+			create_custom_field(doc.reference_doctype, df)
+		except Exception as err:
+			print("Cannot create custom field for {0}: {1} ({2})".format(doc.reference_doctype, df, err))
 
 		if doc.status in ["Draft", "Stopped", "Cancelled"]:
 			doc.disabled = 1
 
 		doc.flags.ignore_links = 1
 		# updates current status as Active, Disabled or Completed on validate
-		doc.save()
+		try:
+			doc.save()
+		except Exception as err:
+			print("{0}".format(err))
+
