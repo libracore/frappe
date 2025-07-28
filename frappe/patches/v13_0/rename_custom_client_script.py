@@ -7,9 +7,12 @@ def execute():
         return
 
     # cleanup relics in case of an imported DB
-    frappe.db.sql("""DROP TABLE `tabClient Script`;""")
-    frappe.db.sql("""DELETE FROM `tabDocType` WHERE `name` = "Client Script";""")
-    
+    try:
+        frappe.db.sql("""DROP TABLE `tabClient Script`;""")
+        frappe.db.sql("""DELETE FROM `tabDocType` WHERE `name` = "Client Script";""")
+    except:
+        print("Unable to cleanup client script...")
+        
     frappe.flags.ignore_route_conflict_validation = True
     rename_doc("DocType", "Custom Script", "Client Script")
     frappe.flags.ignore_route_conflict_validation = False
