@@ -4,6 +4,9 @@ from frappe.utils.dashboard import get_dashboards_with_link
 
 
 def execute():
+	print("This patch is obsolete in v2025 because number cards no longer exist. Passing")
+	return
+
 	if (
 		not frappe.db.table_exists("Dashboard Chart")
 		or not frappe.db.table_exists("Number Card")
