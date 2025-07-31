@@ -99,7 +99,7 @@ def compress(data, args = {}):
 		"values": values
 	}
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "PUT"])
 def save_report():
 	"""save report"""
 
@@ -230,7 +230,7 @@ def get_labels(fields, doctype):
 
 	return labels
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "DELETE"])
 def delete_items():
 	"""delete selected items"""
 	import json
