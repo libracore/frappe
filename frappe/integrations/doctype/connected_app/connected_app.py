@@ -29,18 +29,18 @@ class ConnectedApp(Document):
 		from frappe.integrations.doctype.query_parameters.query_parameters import QueryParameters
 		from frappe.types import DF
 
-		authorization_uri: DF.SmallText | None
-		client_id: DF.Data | None
-		client_secret: DF.Password | None
-		introspection_uri: DF.Data | None
-		openid_configuration: DF.Data | None
-		provider_name: DF.Data
-		query_parameters: DF.Table[QueryParameters]
-		redirect_uri: DF.Data | None
-		revocation_uri: DF.Data | None
-		scopes: DF.Table[OAuthScope]
-		token_uri: DF.Data | None
-		userinfo_uri: DF.Data | None
+		authorization_uri = None # type: DF.SmallText | None
+		client_id = None # type: DF.Data | None
+		client_secret = None # type: DF.Password | None
+		introspection_uri = None # type: DF.Data | None
+		openid_configuration = None # type: DF.Data | None
+		provider_name = None # type: DF.Data
+		query_parameters = None # type: DF.Table[QueryParameters]
+		redirect_uri = None # type: DF.Data | None
+		revocation_uri = None # type: DF.Data | None
+		scopes = None # type: DF.Table[OAuthScope]
+		token_uri = None # type: DF.Data | None
+		userinfo_uri = None # type: DF.Data | None
 	# end: auto-generated types
 
 	"""Connect to a remote oAuth Server. Retrieve and store user's access token
@@ -137,7 +137,7 @@ class ConnectedApp(Document):
 
 			try:
 				token = oauth_session.refresh_token(
-					body=f"redirect_uri={self.redirect_uri}",
+					body="redirect_uri={0}".format(self.redirect_uri),
 					token_url=self.token_uri,
 				)
 			except Exception:

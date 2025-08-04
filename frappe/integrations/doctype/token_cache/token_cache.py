@@ -2,7 +2,7 @@
 # License: MIT. See LICENSE
 
 import datetime
-from zoneinfo import ZoneInfo
+import pytz
 
 import frappe
 from frappe import _
@@ -20,16 +20,16 @@ class TokenCache(Document):
 		from frappe.integrations.doctype.oauth_scope.oauth_scope import OAuthScope
 		from frappe.types import DF
 
-		access_token: DF.Password | None
-		connected_app: DF.Link | None
-		expires_in: DF.Int
-		provider_name: DF.Data | None
-		refresh_token: DF.Password | None
-		scopes: DF.Table[OAuthScope]
-		state: DF.Data | None
-		success_uri: DF.Data | None
-		token_type: DF.Data | None
-		user: DF.Link | None
+		access_token = None # type: DF.Password | None
+		connected_app = None # type: DF.Link | None
+		expires_in = None # type: DF.Int
+		provider_name = None # type: DF.Data | None
+		refresh_token = None # type: DF.Password | None
+		scopes = None # type: DF.Table[OAuthScope]
+		state = None # type: DF.Data | None
+		success_uri = None # type: DF.Data | None
+		token_type = None # type: DF.Data | None
+		user = None # type: DF.Link | None
 	# end: auto-generated types
 
 	def get_auth_header(self):
@@ -72,10 +72,12 @@ class TokenCache(Document):
 		return self
 
 	def get_expires_in(self):
-		system_timezone = ZoneInfo(get_system_timezone())
-		modified: datetime.datetime = get_datetime(self.modified).replace(tzinfo=system_timezone)
-		expiry_utc = modified.astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=self.expires_in)
-		now_utc = datetime.datetime.now(datetime.timezone.utc)
+		system_timezone = pytz.timezone(get_system_timezone())
+		modified = get_datetime(self.modified)  # type: datetime.datetime
+		modified = system_timezone.localize(modified)
+
+		expiry_utc = modified.astimezone(pytz.UTC) + datetime.timedelta(seconds=self.expires_in)
+		now_utc = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 		return cint((expiry_utc - now_utc).total_seconds())
 
 	def is_expired(self):
