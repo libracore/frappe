@@ -32,7 +32,7 @@ class Oauth:
 
 	@property
 	def _auth_string(self) -> str:
-		return f"user={self.email}\1auth=Bearer {self._access_token}\1\1"
+		return "user={0}\1auth=Bearer {1}\1\1".format(self.email, self._access_token)
 
 	def connect(self) -> None:
 		try:

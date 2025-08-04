@@ -52,6 +52,7 @@ def execute_cmd(cmd, from_async=False):
 		method = method.queue
 
 	is_whitelisted(method)
+	is_valid_http_method(method)
 
 	return frappe.call(method, **frappe.form_dict)
 
@@ -82,6 +83,12 @@ def version():
 @frappe.whitelist()
 def runserverobj(method, docs=None, dt=None, dn=None, arg=None, args=None):
 	frappe.desk.form.run_method.runserverobj(method, docs=docs, dt=dt, dn=dn, arg=arg, args=args)
+
+def is_valid_http_method(method):
+	http_method = frappe.local.request.method
+
+	if http_method not in frappe.allowed_http_methods_for_whitelisted_func[method]:
+		frappe.throw(_("Not permitted"), frappe.PermissionError)
 
 @frappe.whitelist(allow_guest=True)
 def logout():

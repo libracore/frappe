@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import frappe, json
 from frappe.desk.form.load import run_onload
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "PUT"])
 def savedocs(doc, action):
 	"""save / submit / update doclist"""
 	try:
@@ -32,7 +32,7 @@ def savedocs(doc, action):
 		frappe.errprint(frappe.utils.get_traceback())
 		raise
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "PUT"])
 def cancel(doctype=None, name=None, workflow_state_fieldname=None, workflow_state=None):
 	"""cancel a doclist"""
 	try:
