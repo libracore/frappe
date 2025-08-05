@@ -1,5 +1,4 @@
 [pre_model_sync]
-execute:frappe.reload_doc('core', 'doctype', 'doctype', force=True)     # LaMu 2025-07-24
 #frappe.patches.v16_0.enable_setup_complete #01-07-2025 re-run-patch
 frappe.patches.v15_0.remove_implicit_primary_key
 frappe.patches.v12_0.remove_deprecated_fields_from_doctype #3
@@ -28,6 +27,7 @@ frappe.patches.v11_0.change_email_signature_fieldtype
 execute:frappe.reload_doc('core', 'doctype', 'activity_log')
 execute:frappe.reload_doc('core', 'doctype', 'deleted_document')
 execute:frappe.reload_doc('core', 'doctype', 'domain_settings')
+execute:frappe.reload_doc('core', 'doctype', 'doctype', force=True)     # LaMu 2025-07-24
 frappe.patches.v13_0.rename_custom_client_script
 execute:frappe.reload_doc('core', 'doctype', 'role') #2017-05-23
 execute:frappe.reload_doc('core', 'doctype', 'user') #2017-10-27
