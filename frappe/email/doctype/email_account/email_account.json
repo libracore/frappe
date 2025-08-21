@@ -390,7 +390,7 @@
   },
   {
    "default": "0",
-   "description": "For more information, <a class=\"text-muted\" href=\"https://erpnext.com/docs/user/manual/en/setting-up/email/linking-emails-to-document\">click here</a>.",
+   "description": "For more information, <a class=\"text-muted\" href=\"https://docs.libracore.io/index.php?title=Setting_Up/Email/Linking_Emails_To_Document\">click here</a>.",
    "fieldname": "enable_automatic_linking",
    "fieldtype": "Check",
    "label": "Enable Automatic Linking in Documents"
