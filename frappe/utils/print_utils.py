@@ -91,7 +91,7 @@ def get_print(
 			# include ZUGFeRD document creation when available
 			from erpnextswiss.erpnextswiss.zugferd.zugferd import create_zugferd_pdf
 			if not doc and name:
-				doc = get_doc(doctype, name)
+				doc = frappe.get_doc(doctype, name)
 			return create_zugferd_pdf(docname=name, verify=True, format=print_format, doc=doc, doctype=doctype, no_letterhead=no_letterhead)
 		else:
 			return get_pdf(html, output=output, options=pdf_options, print_format=print_format)
