@@ -307,9 +307,9 @@ class EmailAccount(Document):
 
 				else:
 					frappe.db.commit()
-					if communication:
-						attachments = [d.file_name for d in communication._attachments]
-						communication.notify(attachments=attachments, fetched_from_email_account=True)
+					#if communication:
+					#	attachments = [d.file_name for d in communication._attachments]
+					#	communication.notify(attachments=attachments, fetched_from_email_account=True)
 
 			#notify if user is linked to account
 			if len(incoming_mails)>0 and not frappe.local.flags.in_test:
