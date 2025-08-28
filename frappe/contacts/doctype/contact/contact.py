@@ -14,6 +14,8 @@ from frappe.contacts.address_and_contact import set_link_title
 
 import functools
 
+sender_field = "email_id"
+
 class Contact(Document):
     def autoname(self):
         # concat first and last name
@@ -118,7 +120,7 @@ class Contact(Document):
             # no number of this class
             setattr(self, fieldname, "")
             return
-            
+
         for d in self.phone_nos:
             if d.get(field_name) == 1:
                 setattr(self, fieldname, d.phone)

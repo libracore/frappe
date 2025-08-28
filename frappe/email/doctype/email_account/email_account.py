@@ -26,6 +26,7 @@ from frappe.utils.html_utils import clean_email_html
 from frappe.email.utils import get_port
 
 class SentEmailInInbox(Exception): pass
+class NoReferenceFound(Exception): pass
 
 class EmailAccount(Document):
 	def autoname(self):
@@ -294,6 +295,9 @@ class EmailAccount(Document):
 				except SentEmailInInbox:
 					frappe.db.rollback()
 
+				except NoReferenceFound:
+					frappe.db.rollback()
+
 				except Exception:
 					frappe.db.rollback()
 					log('email_account.receive')
@@ -391,8 +395,11 @@ class EmailAccount(Document):
 			"has_attachment": 1 if email.attachments else 0,
 			"seen": seen or 0
 		})
+		print(email.from_email)
 
-		self.set_thread(communication, email)
+		if not self.set_thread(communication, email):
+			raise NoReferenceFound # Ignore messages that cannot be referenced
+
 		if communication.seen:
 			# get email account user and set communication as seen
 			users = frappe.get_all("User Email", filters={ "email_account": self.name },
@@ -431,7 +438,10 @@ class EmailAccount(Document):
 		communication. Also set the status of parent transaction to Open or Replied.
 
 		If no thread id is found and `append_to` is set for the email account,
-		it will create a new parent transaction (e.g. Issue)"""
+		it will create a new parent transaction (e.g. Issue).
+
+		If the parent transaction is 'Contact' and no valid reference is found,
+		it will return false instead (no auto-creation of contacts)."""
 		parent = None
 
 		parent = self.find_parent_from_in_reply_to(communication, email)
@@ -442,18 +452,21 @@ class EmailAccount(Document):
 		if not parent and self.append_to:
 			parent = self.find_parent_based_on_subject_and_sender(communication, email)
 
-		if not parent and self.append_to and self.append_to!="Communication":
+		if not parent and self.append_to and self.append_to != "Communication" and self.append_to != "Contact":
 			parent = self.create_new_parent(communication, email)
 
 		if parent:
 			communication.reference_doctype = parent.doctype
 			communication.reference_name = parent.name
+		else:
+			return False
 
 		# check if message is notification and disable notifications for this message
 		isnotification = email.mail.get("isnotification")
 		if isnotification:
 			if "notification" in isnotification:
 				communication.unread_notification_sent = 1
+		return True
 
 	def set_sender_field_and_subject_field(self):
 		'''Identify the sender and subject fields from the `append_to` DocType'''
@@ -495,6 +508,18 @@ class EmailAccount(Document):
 						self.subject_field: ("like", "%{0}%".format(subject)),
 						"creation": (">", (get_datetime() - relativedelta(days=60)).strftime(DATE_FORMAT))
 					}, fields="name")
+			else:
+				# This query is customer specific!
+				# We could use self.sender_field (email_id) instead of checking tabContact Email, but then we'd miss email addresses that aren't marked as primary.
+				# Similarly, we could ignore the Dynamic Links, but then we might accidentally catch inactive contacts.
+				parent = frappe.db.sql("""
+					SELECT tc.name FROM
+						tabContact tc
+						INNER JOIN `tabDynamic Link` tdl ON tdl.parent = tc.name
+						INNER JOIN `tabContact Email` tce ON tce.parent = tc.name
+					WHERE
+						tce.email_id = '{email}' AND tdl.link_doctype = 'Customer'
+					""".format(email=email.from_email), as_dict=1)
 
 			if parent:
 				parent = frappe._dict(doctype=self.append_to, name=parent[0].name)
@@ -782,7 +807,7 @@ def pull_from_email_account(email_account):
 	email_account.mark_emails_as_read_unread()
 
 	# cleanup mailbox if enabled
-	if cint(email_account.use_imap) and cint(email_account.enable_automatic_linking) and cint(email_account.auto_cleanup_mailbox):
+	if cint(email_account.use_imap) and cint(email_account.auto_cleanup_mailbox):
 		email_account.cleanup_mailbox()
 
 	return
