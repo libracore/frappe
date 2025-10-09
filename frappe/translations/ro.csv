@@ -2930,7 +2930,7 @@ DocType: Custom Field,Permission Level,Nivelul de permisiune
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Nu se poate configura Transmiteți, Anulați, Modificați fără sa Scrieți"
 DocType: List View Setting,Disable Count,Dezactivați numărul
 DocType: Google Maps Settings,Client Key,Cheia clientului
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Sunteţi sigur că doriți ștergerea atașamentului ?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Sunteţi sigur că doriți ștergerea atașamentului ?
 apps/frappe/frappe/__init__.py,Thank you,Mulțumesc
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Se salveaza...
 DocType: Print Settings,Print Style Preview,Print Preview Style

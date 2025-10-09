@@ -2227,7 +2227,7 @@ DocType: Custom Field,Permission Level,權限級別
 DocType: User,Send Notifications for Transactions I Follow,發送通知進行交易我跟隨
 apps/frappe/frappe/core/doctype/doctype/doctype.py +806,"{0}: Cannot set Submit, Cancel, Amend without Write",{0} ：沒有寫入則無法設定提交，取消，修改
 DocType: Google Maps Settings,Client Key,客戶端密鑰
-apps/frappe/frappe/public/js/frappe/form/footer/attachments.js +78,Are you sure you want to delete the attachment?,您確定要刪除附件？
+apps/frappe/frappe/public/js/frappe/form/footer/attachments.js +78,Are you sure you want to delete the attachment {0}?,您確定要刪除附件？
 apps/frappe/frappe/__init__.py +1178,Thank you,謝謝
 apps/frappe/frappe/public/js/frappe/form/save.js +11,Saving,儲存中
 DocType: Print Settings,Print Style Preview,列印樣式預覽

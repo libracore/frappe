@@ -2901,7 +2901,7 @@ DocType: Custom Field,Permission Level,Επίπεδο δικαιωμάτων
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0} : Δεν είναι δυνατή η ρύθμιση υποβολή, ακύρωση, τροποποίηση χωρίς εγγραφή"
 DocType: List View Setting,Disable Count,Απενεργοποίηση καταμέτρησης
 DocType: Google Maps Settings,Client Key,Κλειδί πελάτη
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Είστε σίγουροι ότι θέλετε να διαγράψετε το συνημμένο;
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Είστε σίγουροι ότι θέλετε να διαγράψετε το συνημμένο;
 apps/frappe/frappe/__init__.py,Thank you,Σας ευχαριστούμε
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Οικονομία
 DocType: Print Settings,Print Style Preview,Προεπισκόπηση στυλ εκτύπωσης

@@ -2900,7 +2900,7 @@ DocType: Custom Field,Permission Level,leyfi Level
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Get ekki sett Senda, Hætta, breytt án Write"
 DocType: List View Setting,Disable Count,Slökkva á talningu
 DocType: Google Maps Settings,Client Key,Viðskiptavinur lykill
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Ertu viss um að þú viljir eyða viðhengi?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Ertu viss um að þú viljir eyða viðhengi?
 apps/frappe/frappe/__init__.py,Thank you,Þakka þér
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Saving
 DocType: Print Settings,Print Style Preview,Print Style Forskoða

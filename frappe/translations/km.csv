@@ -2875,7 +2875,7 @@ DocType: Custom Field,Permission Level,កម្រិតសិទ្ធិ
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: មិនអាចកំណត់ការដាក់ស្នើ, បោះបង់ធ្វើវិសោធនកម្មដោយគ្មានការសរសេរ"
 DocType: List View Setting,Disable Count,បិទរាប់។
 DocType: Google Maps Settings,Client Key,កូនសោអតិថិជន
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,តើអ្នកពិតជាចង់លុបឯកសារភ្ជាប់ហើយឬនៅ?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,តើអ្នកពិតជាចង់លុបឯកសារភ្ជាប់ហើយឬនៅ?
 apps/frappe/frappe/__init__.py,Thank you,សូមអរគុណអ្នក
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,ការរក្សាទុកដោយ
 DocType: Print Settings,Print Style Preview,បោះពុម្ពរចនាប័ទ្មមើលជាមុន

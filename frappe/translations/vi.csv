@@ -2932,7 +2932,7 @@ DocType: Custom Field,Permission Level,Cấp phép
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Không thể thiết lập quyền Duyệt, Hủy bỏ, sửa đổi mà không chọn quyền ""Viết"""
 DocType: List View Setting,Disable Count,Vô hiệu hóa Đếm
 DocType: Google Maps Settings,Client Key,Khóa Khách hàng
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Bạn có chắc bạn muốn xóa các tập tin đính kèm?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Bạn có chắc bạn muốn xóa các tập tin đính kèm?
 apps/frappe/frappe/__init__.py,Thank you,Cảm ơn bạn
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Tiết kiệm
 DocType: Print Settings,Print Style Preview,xem trước kiểu in

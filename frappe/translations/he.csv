@@ -486,7 +486,7 @@ apps/frappe/frappe/model/mapper.py,Cannot map because following condition fails:
 DocType: Blog Settings,Blog Title,כותרת בלוג
 DocType: Workflow State,remove,להסיר
 apps/frappe/frappe/core/page/permission_manager/permission_manager_help.html,Permissions at higher levels are Field Level permissions. All Fields have a Permission Level set against them and the rules defined at that permissions apply to the field. This is useful in case you want to hide or make certain field read-only for certain Roles.,הרשאות ברמות גבוהות יותר הן הרשאות שדה רמה. כל השדות סט רמת הרשאה נגדם וכללים שהוגדרו שבהרשאות חלות על השדה. זה שימושי במקרה שאתה רוצה להסתיר או לעשות תחום מסוים לקריאה בלבד לתפקידים מסוימים.
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,האם אתה בטוח שאתה רוצה למחוק את הקובץ המצורף?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,האם אתה בטוח שאתה רוצה למחוק את הקובץ המצורף?
 apps/frappe/frappe/model/base_document.py,Duplicate name {0} {1},שם לשכפל {0} {1}
 apps/frappe/frappe/public/js/frappe/form/link_selector.js,Set Quantity,כמות שנקבעה
 apps/frappe/frappe/config/customization.py,Add custom forms.,להוסיף צורות מותאמות אישית.

@@ -1100,7 +1100,7 @@ apps/frappe/frappe/www/printview.py +83,Not allowed to print cancelled documents
 apps/frappe/frappe/core/doctype/data_import/exporter.py +272,Info:,Info:
 DocType: User,Send Notifications for Transactions I Follow,Enviar notificações para transações seguidas por mim
 apps/frappe/frappe/core/doctype/doctype/doctype.py +806,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Não é possível definir Enviar, Cancelar, Alterar sem Salvar"
-apps/frappe/frappe/public/js/frappe/form/footer/attachments.js +78,Are you sure you want to delete the attachment?,Tem certeza de que deseja excluir o anexo?
+apps/frappe/frappe/public/js/frappe/form/footer/attachments.js +78,Are you sure you want to delete the attachment {0}?,Tem certeza de que deseja excluir o anexo?
 apps/frappe/frappe/public/js/frappe/form/save.js +11,Saving,Salvando
 DocType: Print Settings,Print Style Preview,Estilo de visualização de impressão
 DocType: About Us Settings,About Us Settings,Configurações do Quem Somos

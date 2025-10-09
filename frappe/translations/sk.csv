@@ -2931,7 +2931,7 @@ DocType: Custom Field,Permission Level,úroveň oprávnění
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Nie je možné nastaviť Odoslanie, Zrušenie, Zmenu bez zápisu"
 DocType: List View Setting,Disable Count,Zakázať počet
 DocType: Google Maps Settings,Client Key,Kľúč klienta
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,"Jste si jisti, že chcete smazat přílohu?"
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,"Jste si jisti, že chcete smazat přílohu?"
 apps/frappe/frappe/__init__.py,Thank you,Děkujeme Vám
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Sporenie
 DocType: Print Settings,Print Style Preview,Náhľad štýlu tlače

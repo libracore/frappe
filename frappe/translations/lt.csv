@@ -2935,7 +2935,7 @@ DocType: Custom Field,Permission Level,leidimas lygis
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Negalima nustatyti Pateikti, atšaukti pakeisti be Rašykite"
 DocType: List View Setting,Disable Count,Išjungti skaičiavimą
 DocType: Google Maps Settings,Client Key,Kliento raktas
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Ar tikrai norite ištrinti priedą?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Ar tikrai norite ištrinti priedą?
 apps/frappe/frappe/__init__.py,Thank you,Ačiū
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Vyksta išsaugojimas
 DocType: Print Settings,Print Style Preview,Spausdinti Stilius Peržiūra

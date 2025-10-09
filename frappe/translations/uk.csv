@@ -2935,7 +2935,7 @@ DocType: Custom Field,Permission Level,Рівень дозволів
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Неможливо встановити Провести, Скасувати, Відновити без Записати"
 DocType: List View Setting,Disable Count,Відключити кількість
 DocType: Google Maps Settings,Client Key,Клієнтський ключ
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,"Ви впевнені, що хочете видалити долучення?"
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,"Ви впевнені, що хочете видалити долучення?"
 apps/frappe/frappe/__init__.py,Thank you,Дякую
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Зберігається
 DocType: Print Settings,Print Style Preview,Роздрукувати Style Preview

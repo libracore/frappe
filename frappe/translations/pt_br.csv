@@ -744,7 +744,7 @@ DocType: Website Slideshow,Slideshow Name,Nome da Apresentação de Slides
 apps/frappe/frappe/public/js/frappe/views/communication.js,Send Me A Copy,Envie-me uma Cópia
 apps/frappe/frappe/public/js/frappe/chat.js,Start a conversation.,Inicie uma conversa.
 apps/frappe/frappe/workflow/doctype/workflow/workflow.py,{0} not a valid State,{0} não é um status válido
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Tem certeza de que deseja excluir o anexo?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Tem certeza de que deseja excluir o anexo?
 apps/frappe/frappe/model/mapper.py,Cannot map because following condition fails: ,Não é possível mapear porque seguinte condição de falha:
 apps/frappe/frappe/core/doctype/error_snapshot/error_snapshot_list.js,Relapsed,Reincidente
 DocType: Contact Us Settings,Contact Us Settings,Configurações do Fale Conosco

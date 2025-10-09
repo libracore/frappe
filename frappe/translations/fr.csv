@@ -2903,7 +2903,7 @@ DocType: Custom Field,Permission Level,Niveau d'Autorisation
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0} : Vous ne pouvez pas choisir Envoyer, Annuler, Modifier sans Écrire"
 DocType: List View Setting,Disable Count,Désactiver le compte
 DocType: Google Maps Settings,Client Key,Clé client
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Êtes-vous sûr de vouloir supprimer la pièce jointe?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Êtes-vous sûr de vouloir supprimer la pièce jointe {0}?
 apps/frappe/frappe/__init__.py,Thank you,Merci
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,En Cours d'Enregistrement
 DocType: Print Settings,Print Style Preview,Aperçu Style d'Impression

@@ -2903,7 +2903,7 @@ DocType: Custom Field,Permission Level,Berechtigungsebene
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Kann nicht auf ""Übertragen"", ""Stornieren"", ""Ändern"" eingestellt werden ohne ""Schreiben"""
 DocType: List View Setting,Disable Count,Zählung deaktivieren
 DocType: Google Maps Settings,Client Key,Kundenschlüssel
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Soll die Anlage wirklich gelöscht werden?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Soll die Anlage {0} wirklich gelöscht werden?
 apps/frappe/frappe/__init__.py,Thank you,Danke
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Speichere
 DocType: Print Settings,Print Style Preview,Druckstil-Vorschau

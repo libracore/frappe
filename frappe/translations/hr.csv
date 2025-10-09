@@ -2899,7 +2899,7 @@ DocType: Custom Field,Permission Level,Razina ovlasti
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0} : Ne može se postaviti Potvrdi, Odustani, Izmijeni bez zapisivanja"
 DocType: List View Setting,Disable Count,Onemogući brojanje
 DocType: Google Maps Settings,Client Key,Klijent klijenta
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Jeste li sigurni da želite izbrisati privitak?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Jeste li sigurni da želite izbrisati privitak?
 apps/frappe/frappe/__init__.py,Thank you,Hvala
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Spašavanje
 DocType: Print Settings,Print Style Preview,Prikaz stila ispisa

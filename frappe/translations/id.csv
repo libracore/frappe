@@ -2901,7 +2901,7 @@ DocType: Custom Field,Permission Level,Izin Tingkat
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Tidak dapat mengatur Pengajuan, Pembatalan, Perubahan tanpa Pencatatan"
 DocType: List View Setting,Disable Count,Nonaktifkan Count
 DocType: Google Maps Settings,Client Key,Kunci klien
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Apakah Anda yakin ingin menghapus lampiran?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Apakah Anda yakin ingin menghapus lampiran {0}?
 apps/frappe/frappe/__init__.py,Thank you,Terima kasih
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Menyimpan
 DocType: Print Settings,Print Style Preview,Print Style Preview

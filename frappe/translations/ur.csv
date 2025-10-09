@@ -2875,7 +2875,7 @@ DocType: Custom Field,Permission Level,اجازت لیول
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write",{0}: جمع کرائیں منسوخ، لکھیں بغیر ترمیم مقرر نہیں کر سکتے ہیں
 DocType: List View Setting,Disable Count,غیر فعال گنتی۔
 DocType: Google Maps Settings,Client Key,کلائنٹ کلید
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,آپ ملحق کو خارج کرنا چاہتے ہیں اس بات کا یقین کر رہے ہیں؟
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,آپ ملحق کو خارج کرنا چاہتے ہیں اس بات کا یقین کر رہے ہیں؟
 apps/frappe/frappe/__init__.py,Thank you,آپ کا شکریہ
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,محفوظ کر رہا ہے
 DocType: Print Settings,Print Style Preview,انداز کا مشاہدہ کریں پرنٹ کریں

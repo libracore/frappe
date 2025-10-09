@@ -75,7 +75,7 @@ frappe.ui.form.Attachments = Class.extend({
 			.data("fileid", fileid)
 			.click(function() {
 				var remove_btn = this;
-				frappe.confirm(__("Are you sure you want to delete the attachment?"),
+				frappe.confirm(__("Are you sure you want to delete the attachment {0}?").replace("{0}", file_name),
 					function() {
 						me.remove_attachment($(remove_btn).data("fileid"))
 					}

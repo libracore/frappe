@@ -2935,7 +2935,7 @@ DocType: Custom Field,Permission Level,ລະດັບອະນຸຍາດ
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: ບໍ່ສາມາດກໍານົດຍື່ນສະເຫນີການ, ຍົກເລີກ, ແກ້ໂດຍບໍ່ມີການຂຽນ"
 DocType: List View Setting,Disable Count,ປິດການນັບ
 DocType: Google Maps Settings,Client Key,ລູກຄ້າທີ່ສໍາຄັນ
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,ທ່ານວ່າທ່ານແມ່ນແນ່ໃຈວ່າຕ້ອງການລຶບການຕິດ?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,ທ່ານວ່າທ່ານແມ່ນແນ່ໃຈວ່າຕ້ອງການລຶບການຕິດ?
 apps/frappe/frappe/__init__.py,Thank you,ຂອບໃຈ
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,ຝາກປະຢັດ
 DocType: Print Settings,Print Style Preview,ພິມ Preview ແບບ

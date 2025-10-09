@@ -2901,7 +2901,7 @@ DocType: Custom Field,Permission Level,Nivell de permís
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: No es pot establir a Presentat, Anul·lat, Modificat sense escriptura"
 DocType: List View Setting,Disable Count,Desactiva el compte
 DocType: Google Maps Settings,Client Key,Clau del client
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Segur que vols eliminar l'adjunt?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Segur que vols eliminar l'adjunt?
 apps/frappe/frappe/__init__.py,Thank you,Gràcies
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Estalvi
 DocType: Print Settings,Print Style Preview,Vista prèvia de l'estil d'impressió

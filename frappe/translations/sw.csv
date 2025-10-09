@@ -2890,7 +2890,7 @@ DocType: Custom Field,Permission Level,Kiwango cha Ruhusa
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Haiwezi kuweka Isilisha, Futa, Badilisha au Andika"
 DocType: List View Setting,Disable Count,Lemaza Hesabu
 DocType: Google Maps Settings,Client Key,Muhimu wa Mteja
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Una uhakika unataka kufuta kiambatisho?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Una uhakika unataka kufuta kiambatisho?
 apps/frappe/frappe/__init__.py,Thank you,Asante
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Inahifadhi
 DocType: Print Settings,Print Style Preview,Angalia Sinema Preview
