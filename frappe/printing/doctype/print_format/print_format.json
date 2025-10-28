@@ -263,7 +263,7 @@
    "fieldname": "pdf_generator",
    "fieldtype": "Select",
    "label": "PDF Generator",
-   "options": "wkhtmltopdf"
+   "options": "wkhtmltopdf\nchrome"
   },
   {
    "default": "1",
@@ -275,7 +275,7 @@
  "icon": "fa fa-print",
  "idx": 1,
  "links": [],
- "modified": "2025-07-23 15:59:39.181074",
+ "modified": "2025-10-28 17:00:39.181074",
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Print Format",
