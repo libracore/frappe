@@ -510,8 +510,9 @@ def prepare_message(email, recipient, recipients_list):
 
 	message = (message and message.encode('utf8')) or ''
 	message = safe_decode(message)
-	# MVZH Mail Haeder Hack (2025-11-20)
-	message.replace("From: =?utf-8?q?MV_Z=C3=BCrich_=3Cno-reply=40mvd=2Emieterverband=2Ech=3E?=", "From: =?utf-8?q?MV_Z=C3=BCrich?= <no-reply@mvd.mieterverband.ch>")
+	# MVZH Mail Header Hack (2025-11-20)
+	frappe.log_error(str(message), "Pre: MVZH Mail Header Hack (2025-11-20)")
+	message = message.replace("From: =?utf-8?q?MV_Z=C3=BCrich_=3Cno-reply=40mvd=2Emieterverband=2Ech=3E?=", "From: =?utf-8?q?MV_Z=C3=BCrich?= <no-reply@mvd.mieterverband.ch>")
 	if not email.attachments:
 		return message
 
