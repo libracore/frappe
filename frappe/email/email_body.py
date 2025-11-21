@@ -173,8 +173,7 @@ class EMail:
 		validate_email_address(strip(self.sender), True)
 		self.reply_to = validate_email_address(strip(self.reply_to) or self.sender, True)
 
-		self.replace_sender()
-		self.replace_sender_name()
+		self.handle_sender_and_sender_name()
 
 		self.recipients = [strip(r) for r in self.recipients]
 		self.cc = [strip(r) for r in self.cc]
@@ -182,18 +181,31 @@ class EMail:
 
 		for e in self.recipients + (self.cc or []) + (self.bcc or []):
 			validate_email_address(e, True)
-
-	def replace_sender(self):
-		if cint(self.email_account.always_use_account_email_id_as_sender):
-			self.set_header('X-Original-From', self.sender)
-			sender_name, sender_email = parse_addr(self.sender)
+	
+	def handle_sender_and_sender_name(self):
+		sender_name, sender_email = parse_addr(self.sender)
+		
+		if cint(self.email_account.always_use_account_email_id_as_sender) \
+		and not cint(self.email_account.always_use_account_name_as_sender_name):
+			x_original_from = email.utils.formataddr((str(Header(sender_name or self.email_account.name, 'utf-8')), sender_email))
+			self.set_header('X-Original-From', x_original_from)
 			self.sender = email.utils.formataddr((str(Header(sender_name or self.email_account.name, 'utf-8')), self.email_account.email_id))
-
-	def replace_sender_name(self):
-		if cint(self.email_account.always_use_account_name_as_sender_name):
-			self.set_header('X-Original-From', self.sender)
-			sender_name, sender_email = parse_addr(self.sender)
+		
+		if cint(self.email_account.always_use_account_name_as_sender_name) \
+		and not cint(self.email_account.always_use_account_email_id_as_sender):
+			x_original_from = email.utils.formataddr((str(Header(sender_name or self.email_account.name, 'utf-8')), sender_email))
+			self.set_header('X-Original-From', x_original_from)
 			self.sender = email.utils.formataddr((str(Header(self.email_account.name, 'utf-8')), sender_email))
+		
+		if cint(self.email_account.always_use_account_name_as_sender_name) \
+		and cint(self.email_account.always_use_account_email_id_as_sender):
+			x_original_from = email.utils.formataddr((str(Header(sender_name or self.email_account.name, 'utf-8')), sender_email))
+			self.set_header('X-Original-From', x_original_from)
+			self.sender = email.utils.formataddr((str(Header(self.email_account.name, 'utf-8')), self.email_account.email_id))
+		
+		if not cint(self.email_account.always_use_account_name_as_sender_name) \
+		and not cint(self.email_account.always_use_account_email_id_as_sender):
+			self.sender = email.utils.formataddr((str(Header(sender_name or self.email_account.name, 'utf-8')), sender_email))
 
 	def set_message_id(self, message_id, is_notification=False):
 		if message_id:
