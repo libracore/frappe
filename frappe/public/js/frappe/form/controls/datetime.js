@@ -23,6 +23,7 @@ frappe.ui.form.ControlDatetime = class ControlDatetime extends frappe.ui.form.Co
 	set_date_options() {
 		super.set_date_options();
 		this.today_text = __("Now");
+		this.expected_format += " " + frappe.defaultTimeFormat;
 		let sysdefaults = frappe.boot.sysdefaults;
 		this.date_format = frappe.defaultDatetimeFormat;
 		let time_format =
@@ -36,8 +37,13 @@ frappe.ui.form.ControlDatetime = class ControlDatetime extends frappe.ui.form.Co
 		return frappe.datetime.now_datetime(true);
 	}
 	parse(value) {
-		if (value) {
-			value = frappe.datetime.user_to_str(value, false);
+		if(value) {
+			// If only a time is given, set date to today
+			if(value.includes(':') && value.length <= 8) {
+				value = frappe.datetime.now_date(false) + " " + frappe.datetime.user_to_str(value, true);
+			} else {
+				value = frappe.datetime.user_to_str(value);
+			}
 
 			if (!frappe.datetime.is_system_time_zone()) {
 				value = frappe.datetime.convert_to_system_tz(value, true);
