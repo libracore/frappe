@@ -99,7 +99,7 @@ class User(Document):
 		if self.name not in ('Administrator', 'Guest') and not self.user_image:
 			frappe.enqueue('frappe.core.doctype.user.user.update_gravatar', name=self.name)
 		# Update cached home settings
-		frappe.cache().hset('home_settings', self.name, frappe.parse_json(self.home_settings))
+		frappe.cache().hset('home_settings', self.name, frappe.parse_json(self.home_settings or '{}'))
 
 	def has_website_permission(self, ptype, user, verbose=False):
 		"""Returns true if current user is the session user"""

@@ -415,8 +415,8 @@ def get_options_for_show_hide_cards():
 			if module.module_name in user_saved_modules_by_category[category]:
 				module.category = category
 				module_found_in_user = True
-		# Modules that are not in this user's module list at all: Show as hidden
-		if not module_found_in_user:
+		# If a user has configuration for this module's category, but it doesn't contain the module, and it also isn't shown elsewhere: show the module as hidden
+		if module.category in user_saved_modules_by_category.keys() and not module_found_in_user:
 			hidden_modules.append(module.module_name)
 
 		options.append({
