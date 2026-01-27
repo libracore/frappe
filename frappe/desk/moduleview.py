@@ -356,6 +356,7 @@ def get_desktop_settings():
 def update_hidden_modules(category_map):
 	category_map = frappe.parse_json(category_map)
 	home_settings = get_home_settings()
+	cat_settings = home_settings.modules_by_category or {}
 
 	saved_hidden_modules = home_settings.hidden_modules or []
 
@@ -363,6 +364,10 @@ def update_hidden_modules(category_map):
 		config = frappe._dict(category_map[category])
 		saved_hidden_modules += config.removed or []
 		saved_hidden_modules = [d for d in saved_hidden_modules if d not in (config.added or [])]
+		if category in cat_settings:
+			for d in config.added:
+				if d not in cat_settings[category]:
+					home_settings.modules_by_category[category].append(d)
 
 	home_settings.hidden_modules = saved_hidden_modules
 	set_home_settings(home_settings)
@@ -398,12 +403,22 @@ def get_options_for_show_hide_cards():
 	from frappe.config import get_modules_from_all_apps_for_user
 	all_modules = get_modules_from_all_apps_for_user()
 	home_settings = get_home_settings()
-
+	user_saved_modules_by_category = home_settings.get('modules_by_category', {})
 	hidden_modules = home_settings.hidden_modules or []
 
 	options = []
 	for module in all_modules:
 		module = frappe._dict(module)
+		# Modules that this user has moved to another category: Show in that category
+		module_found_in_user = False
+		for category in user_saved_modules_by_category.keys():
+			if module.module_name in user_saved_modules_by_category[category]:
+				module.category = category
+				module_found_in_user = True
+		# If a user has configuration for this module's category, but it doesn't contain the module, and it also isn't shown elsewhere: show the module as hidden
+		if module.category in user_saved_modules_by_category.keys() and not module_found_in_user:
+			hidden_modules.append(module.module_name)
+
 		options.append({
 			'category': module.category,
 			'label': module.label,
