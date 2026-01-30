@@ -145,7 +145,6 @@ frappe.ui.Tree = class {
 
 	load_children(node, deep=false) {
 		let value = node.data.value, is_root = node.is_root;
-
 		if(!deep) {
 			frappe.run_serially([
 				() => {return this.get_nodes(value, is_root);},
@@ -284,8 +283,10 @@ frappe.ui.Tree = class {
 				.addClass('tree-toolbar-button ' + (obj.btnClass || ''))
 				.appendTo($toolbar);
 			$link.on('click', () => {
+				let trigger_refresh = true;
+				if (obj.dont_trigger_refresh) trigger_refresh = false;
 				obj.click(node);
-				this.refresh();
+				if (trigger_refresh === true) this.refresh();
 			});
 		});
 
