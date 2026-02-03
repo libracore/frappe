@@ -35,7 +35,7 @@ def send(email, append_to=None, retry=1):
 
 	_send(retry)
 
-def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sender=None):
+def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sender=None, communication=None):
 	"""Returns outgoing email account based on `append_to` or the default
 		outgoing account. If default outgoing account is not found, it will
 		try getting settings from `site_config.json`."""
@@ -68,6 +68,12 @@ def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sen
 					"email_id": sender_email_id
 				})
 
+			# Fallback in Case of Communication (Git-Ticket libracore/MVD#1647)
+			if communication:
+				communication_email_account = frappe.db.get_value("Communication", communication, "email_account")
+				if communication_email_account:
+					email_account = frappe.get_doc("Email Account", communication_email_account)
+				
 			# else find the first Email Account with append_to
 			if not email_account:
 				email_account = _get_email_account({
