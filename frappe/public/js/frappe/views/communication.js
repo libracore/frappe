@@ -64,7 +64,7 @@ frappe.views.CommunicationComposer = Class.extend({
 			}
 		})
 		this.prepare();
-		this.dialog.set_value("attach_document_print", 1);	// force-enable attach document
+		this.dialog.set_value("attach_document_print", 0);	// force-enable attach document
 		this.dialog.show();
 	},
 
@@ -95,7 +95,7 @@ frappe.views.CommunicationComposer = Class.extend({
 			{label:__("Send Read Receipt"), fieldtype:"Check",
 				fieldname:"send_read_receipt"},
 			{label:__("Attach Document Print"), fieldtype:"Check",
-				fieldname:"attach_document_print", 'default': 1},
+				fieldname:"attach_document_print", 'default': 0},
 			{label:__("Select Print Format"), fieldtype:"Select",
 				fieldname:"select_print_format"},
 			{label:__("Select Languages"), fieldtype:"Select",
