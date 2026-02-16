@@ -82,6 +82,8 @@ def get_print(
 				options=pdf_options,
 				output=output,
 				pdf_generator=local.form_dict.pdf_generator,
+				doctype=doctype,
+				docname=name
 			)
 			# if hook returns a value, assume it was the correct pdf_generator and return it
 			if pdf:
