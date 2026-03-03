@@ -62,6 +62,10 @@ class SentEmailInInboxError(Exception):
 	pass
 
 
+class NoReferenceFoundError(Exception):
+	pass
+
+
 class EmailServer:
 	"""Wrapper for POP server to pull emails."""
 
@@ -663,11 +667,13 @@ class InboundMail(Email):
 		if self.reference_document():
 			data["reference_doctype"] = self.reference_document().doctype
 			data["reference_name"] = self.reference_document().name
-		elif append_to and append_to != "Communication":
+		elif append_to and append_to != "Communication" and append_to != "Contact":
 			reference_name = self._create_reference_document(append_to)
 			if reference_name:
 				data["reference_doctype"] = append_to
 				data["reference_name"] = reference_name
+		else:
+			raise NoReferenceFoundError
 
 		if self.is_notification():
 			# Disable notifications for notification.
@@ -814,21 +820,36 @@ class InboundMail(Email):
 		name = self.get_reference_name_from_subject()
 		email_fields = self.get_email_fields(doctype)
 
-		record = self.get_doc(doctype, name, ignore_error=True) if name else None
-
-		if not record:
-			subject = self.clean_subject(self.subject)
-			filters = {
-				email_fields.subject_field: ("like", f"%{subject}%"),
-				"creation": (">", self.get_relative_dt(days=-60)),
-			}
-
-			# Sender check is not needed incase mail is from system user.
-			if not (len(subject) > 10 and is_system_user(self.from_email)):
-				filters[email_fields.sender_field] = self.from_email
-
-			name = frappe.db.get_value(self.email_account.append_to, filters=filters)
+		if email_fields.subject_field:
 			record = self.get_doc(doctype, name, ignore_error=True) if name else None
+
+			if not record:
+				subject = self.clean_subject(self.subject)
+				filters = {
+					email_fields.subject_field: ("like", f"%{subject}%"),
+					"creation": (">", self.get_relative_dt(days=-60)),
+				}
+
+				# Sender check is not needed incase mail is from system user.
+				if not (len(subject) > 10 and is_system_user(self.from_email)):
+					filters[email_fields.sender_field] = self.from_email
+
+				name = frappe.db.get_value(self.email_account.append_to, filters=filters)
+
+		elif doctype == 'Contact':
+			# To make this more generic, we could use email_fields.sender_field (email_id) instead of checking tabContact Email, but then we'd miss email addresses that aren't marked as primary.
+			# Similarly, we could ignore the Dynamic Links, but then we might accidentally catch inactive contacts.
+
+			name = frappe.db.sql("""
+					SELECT tc.name FROM
+						tabContact tc
+						INNER JOIN `tabDynamic Link` tdl ON tdl.parent = tc.name
+						INNER JOIN `tabContact Email` tce ON tce.parent = tc.name
+					WHERE
+						tce.email_id = '{email}' AND tdl.link_doctype = 'Customer'
+					""".format(email=self.from_email), as_dict=1)
+
+		record = self.get_doc(doctype, name, ignore_error=True) if name else None
 		return record
 
 	def _create_reference_document(self, doctype):

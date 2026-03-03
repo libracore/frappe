@@ -9,6 +9,7 @@ from frappe.model.document import Document
 from frappe.model.naming import append_number_if_name_exists
 from frappe.utils import cstr, has_gravatar
 
+sender_field = "email_id"
 
 class Contact(Document):
 	# begin: auto-generated types
