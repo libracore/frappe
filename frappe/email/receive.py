@@ -847,6 +847,9 @@ class InboundMail(Email):
 						INNER JOIN `tabContact Email` tce ON tce.parent = tc.name
 					WHERE
 						tce.email_id = '{email}' AND tdl.link_doctype = 'Customer'
+                                        ORDER BY
+                                                tc.modified DESC
+                                        LIMIT 1
 					""".format(email=self.from_email), as_dict=1)
 
 		record = self.get_doc(doctype, name, ignore_error=True) if name else None
