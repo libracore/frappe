@@ -569,7 +569,7 @@ class EmailAccount(Document):
 
 			frappe.sendmail(recipients = [email.from_email],
 				sender = self.email_id,
-				reply_to = communication.incoming_email_account,
+				reply_to = self.email_id, # communication.incoming_email_account, --> Auskommentiert aufgrund MVD-Issue #1718
 				subject = _("Re: ") + communication.subject,
 				content = render_template(self.auto_reply_message or "", communication.as_dict()) or \
 					 frappe.get_template("templates/emails/auto_reply.html").render(communication.as_dict()),
