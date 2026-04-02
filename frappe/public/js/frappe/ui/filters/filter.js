@@ -454,6 +454,41 @@ frappe.ui.filter_utils = {
 		return frappe.format(value, field.df, { only_value: 1 });
 	},
 
+    get_select_option_map(df) {
+        const map = {};
+
+        if (!df || !df.options) return map;
+
+        if (Array.isArray(df.options)) {
+            df.options.forEach((opt) => {
+                if (opt && typeof opt === "object") {
+                    const value = opt.value;
+                    const label = opt.label ?? __(opt.value);
+
+                    if (value !== undefined) {
+                        map[String(value)] = value;
+                        map[String(label)] = value;
+                        map[__(String(value))] = value;
+                    }
+                } else if (opt != null) {
+                    const value = String(opt).trim();
+                    map[value] = value;
+                    map[__(value)] = value;
+                }
+            });
+        } else if (typeof df.options === "string") {
+            df.options.split("\n").forEach((opt) => {
+                opt = String(opt).trim();
+                if (!opt) return;
+
+                map[opt] = opt;
+                map[__(opt)] = opt;
+            });
+        }
+
+        return map;
+    },
+
 	get_selected_value(field, condition) {
 		if (!field) return;
 
@@ -485,6 +520,11 @@ frappe.ui.filter_utils = {
 		} else if (["in", "not in"].includes(condition)) {
 			if (val) {
 				val = val.split(",").map((v) => strip(v));
+                // #65 FIX: map translated labels back to actual option values
+                if (field.df.original_type === "Select") {
+                    const option_map = frappe.ui.filter_utils.get_select_option_map(field.df);
+                    val = val.map((v) => option_map[v] || v);
+                }
 			}
 		} else if (frappe.boot.additional_filters_config[condition]) {
 			val = field.value || val;
