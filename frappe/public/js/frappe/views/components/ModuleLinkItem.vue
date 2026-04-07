@@ -67,6 +67,8 @@ export default {
 		handle_click(e) {
 			if (this.youtube_id) {
 				frappe.help.show_video(this.youtube_id);
+			} else if (this.route && /^https?:\/\//.test(this.route)) {
+				window.open(this.route, "_blank");
 			} else {
 				frappe.set_route(this.route);
 			}
