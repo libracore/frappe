@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
+# Copyright (c) 2015-2026, libracore, Frappe Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
 
 from __future__ import unicode_literals
@@ -321,7 +321,7 @@ class CookieManager:
 		# sid expires in 3 days
 		expires = datetime.datetime.now() + datetime.timedelta(days=3)
 		if frappe.session.sid:
-			self.set_cookie("sid", frappe.session.sid, max_age=get_expiry_in_seconds(), httponly=True)
+			self.set_cookie("sid", frappe.session.sid, max_age=get_expiry_in_seconds())
 		if frappe.session.session_country:
 			self.cookies["country"] = {"value": frappe.session.get("session_country")}
 
