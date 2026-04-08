@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
+# Copyright (c) 2015-2026, libracore, Frappe Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
 
 from __future__ import unicode_literals
@@ -19,8 +19,7 @@ from werkzeug.wrappers import Response
 from werkzeug.exceptions import NotFound, Forbidden
 from frappe.website.render import render
 from frappe.utils import cint
-from six import text_type
-from six.moves.urllib.parse import quote
+from urllib.parse import quote
 from frappe.core.doctype.access_log.access_log import make_access_log
 
 
@@ -126,13 +125,13 @@ def json_handler(obj):
 	import collections
 
 	if isinstance(obj, (datetime.date, datetime.timedelta, datetime.datetime)):
-		return text_type(obj)
+		return str(obj)
 
 	elif isinstance(obj, decimal.Decimal):
 		return float(obj)
 
 	elif isinstance(obj, LocalProxy):
-		return text_type(obj)
+		return str(obj)
 
 	elif isinstance(obj, frappe.model.document.BaseDocument):
 		doc = obj.as_dict(no_nulls=True)
@@ -210,7 +209,7 @@ def send_private_file(path):
 	blacklist = ['.svg', '.html', '.htm', '.xml']
 
 	if extension.lower() in blacklist:
-		response.headers.add(b'Content-Disposition', b'attachment', filename=filename.encode("utf-8"))
+		response.headers.add('Content-Disposition', 'attachment', filename=quotae(filename.encode("utf-8")))
 
 	response.mimetype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
 
