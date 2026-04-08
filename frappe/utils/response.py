@@ -209,7 +209,7 @@ def send_private_file(path):
 	blacklist = ['.svg', '.html', '.htm', '.xml']
 
 	if extension.lower() in blacklist:
-		response.headers.add('Content-Disposition', 'attachment', filename=quotae(filename.encode("utf-8")))
+		response.headers.add('Content-Disposition', 'attachment', filename=quote(filename.encode("utf-8")))
 
 	response.mimetype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
 
