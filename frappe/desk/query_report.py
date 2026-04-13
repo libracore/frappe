@@ -359,7 +359,7 @@ def export_query():
 		file_extension = "xlsx"
 		content = make_xlsx(xlsx_data, "Query Report", column_widths=column_widths).getvalue()
 
-	if include_filters:
+	if cint(include_filters):
 		for value in (data.filters or {}).values():
 			suffix = ""
 			if isinstance(value, list):
