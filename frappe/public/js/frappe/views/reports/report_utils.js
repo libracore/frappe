@@ -180,11 +180,11 @@ frappe.report_utils = {
 				default: "Excel",
 				reqd: 1,
 			},
-			{
+			/*{                     // disable background reports (xhr issues) /LaMu
 				label: __("Export in Background"),
 				fieldname: "export_in_background",
 				fieldtype: "Check",
-			},
+			},*/
 			{
 				fieldtype: "Section Break",
 				fieldname: "csv_settings",
