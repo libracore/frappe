@@ -112,7 +112,7 @@ class TestSearch(FrappeTestCase):
 			self.assertIn("User", [x["value"] for x in results])
 
 			frappe.local.lang = "de"
-			results = do_search("nutzer")
+			results = do_search("Benutzer")
 			self.assertIn("User", [x["value"] for x in results])
 		finally:
 			frappe.local.lang = "en"

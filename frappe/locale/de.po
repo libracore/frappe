@@ -14971,7 +14971,7 @@ msgstr "Leiter der Wartung"
 #: frappe/contacts/doctype/address/address.json
 #: frappe/contacts/doctype/contact/contact.json
 msgid "Maintenance User"
-msgstr "Nutzer Instandhaltung"
+msgstr "Mitarbeiter Instandhaltung"
 
 #. Label of a Int field in DocType 'Package Release'
 #: frappe/core/doctype/package_release/package_release.json
@@ -19832,7 +19832,7 @@ msgstr "Einkaufsstammdaten-Manager"
 #: frappe/contacts/doctype/contact/contact.json
 #: frappe/geo/doctype/currency/currency.json
 msgid "Purchase User"
-msgstr "Nutzer Einkauf"
+msgstr "Mitarbeiter Einkauf"
 
 #. Option for the 'Color' (Select) field in DocType 'DocType State'
 #. Option for the 'Indicator' (Select) field in DocType 'Kanban Board Column'
@@ -21918,7 +21918,7 @@ msgstr "Hauptvertriebsleiter"
 #: frappe/contacts/doctype/contact/contact.json
 #: frappe/geo/doctype/currency/currency.json
 msgid "Sales User"
-msgstr "Nutzer Vertrieb"
+msgstr "Mitarbeiter Vertrieb"
 
 #. Option for the 'Social Login Provider' (Select) field in DocType 'Social
 #. Login Key'
@@ -23229,7 +23229,7 @@ msgstr "Rolle anwenden auf"
 #: frappe/core/doctype/user/user.js:138
 #: frappe/core/page/permission_manager/permission_manager.js:65
 msgid "Set User Permissions"
-msgstr "Nutzer-Berechtigungen setzen"
+msgstr "Benutzer-Berechtigungen setzen"
 
 #. Label of a Small Text field in DocType 'Property Setter'
 #: frappe/custom/doctype/property_setter/property_setter.json
@@ -27635,7 +27635,7 @@ msgstr "OAuh verwendet"
 #: frappe/website/doctype/personal_data_download_request/personal_data_download_request.json
 #: frappe/workflow/doctype/workflow_action/workflow_action.json
 msgid "User"
-msgstr "Nutzer"
+msgstr "Benutzer"
 
 #. Label of a Link field in DocType 'Access Log'
 #: frappe/core/doctype/access_log/access_log.json
@@ -27765,7 +27765,7 @@ msgstr "Benutzermenü"
 #. Label of a Data field in DocType 'Personal Data Download Request'
 #: frappe/website/doctype/personal_data_download_request/personal_data_download_request.json
 msgid "User Name"
-msgstr "Nutzername"
+msgstr "Benutzername"
 
 #. Linked DocType in User's connections
 #. Name of a DocType
@@ -31022,7 +31022,7 @@ msgstr "% als Platzhalter verwenden"
 #. Option for the 'Icon' (Select) field in DocType 'Workflow State'
 #: frappe/workflow/doctype/workflow_state/workflow_state.json
 msgid "user"
-msgstr "Nutzer"
+msgstr "Benutzer"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:357
 msgid "values separated by commas"
