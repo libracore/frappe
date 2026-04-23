@@ -337,7 +337,7 @@ msgstr "<div class=\"well\">\n"
 
 #. Content of the 'Custom HTML Help' (HTML) field in DocType 'Print Format'
 #: frappe/printing/doctype/print_format/print_format.json
-msgid "<h3>Custom CSS Help</h3>\n\n"
+msgid "<h3>Custom Css Help</h3>\n\n"
 "<p>Notes:</p>\n\n"
 "<ol>\n"
 "<li>All field groups (label + value) are set attributes <code>data-fieldtype</code> and <code>data-fieldname</code></li>\n"
@@ -351,7 +351,7 @@ msgid "<h3>Custom CSS Help</h3>\n\n"
 "<p>1. Add border to sections except the last section</p>\n\n"
 "<pre><code>.section-break { padding: 30px 0px; border-bottom: 1px solid #eee; }\n"
 ".section-break:last-child { padding-bottom: 0px; border-bottom: 0px;  }</code></pre>\n"
-msgstr "<h3>Hilfe zu benutzerdefinierten CSS</h3>\n\n"
+msgstr "<h3>Hilfe zu benutzerdefinierten Css</h3>\n\n"
 "<p>Hinweise:</p>\n\n"
 "<ol>\n"
 "<li>Alle Feldgruppen (label + value) erhalten die Attribute <code>data-fieldtype</code> und <code>data-fieldname</code></li>\n"
@@ -362,7 +362,7 @@ msgstr "<h3>Hilfe zu benutzerdefinierten CSS</h3>\n\n"
 "<h4>Beispiele</h4>\n\n"
 "<p>1. Ganzzahlen links ausrichten</p>\n\n"
 "<pre><code>[data-fieldtype=\"Int\"] .value { text-align: left; }</code></pre>\n\n"
-"<p>1. Allen Abschnitten außer dem letzten einen Rahmen hinzufügen</p>\n\n"
+"<p>1. Allen Abschnitten ausser dem letzten einen Rahmen hinzufügen</p>\n\n"
 "<pre><code>.section-break { padding: 30px 0px; border-bottom: 1px solid #eee; }\n"
 ".section-break:last-child { padding-bottom: 0px; border-bottom: 0px; }</code></pre>\n"
 
@@ -373,12 +373,12 @@ msgid "<h3>Print Format Help</h3>\n"
 "<hr>\n"
 "<h4>Introduction</h4>\n"
 "<p>Print Formats are rendered on the server side using the Jinja Templating Language. All forms have access to the <code>doc</code> object which contains information about the document that is being formatted. You can also access common utilities via the <code>frappe</code> module.</p>\n"
-"<p>For styling, the Boostrap CSS framework is provided and you can enjoy the full range of classes.</p>\n"
+"<p>For styling, the Boostrap Css framework is provided and you can enjoy the full range of classes.</p>\n"
 "<hr>\n"
 "<h4>References</h4>\n"
 "<ol>\n"
 "\t<li><a href=\"http://jinja.pocoo.org/docs/templates/\" target=\"_blank\">Jinja Templating Language</a></li>\n"
-"\t<li><a href=\"http://getbootstrap.com\" target=\"_blank\">Bootstrap CSS Framework</a></li>\n"
+"\t<li><a href=\"http://getbootstrap.com\" target=\"_blank\">Bootstrap Css Framework</a></li>\n"
 "</ol>\n"
 "<hr>\n"
 "<h4>Example</h4>\n"
@@ -439,12 +439,12 @@ msgstr "<h3>Hilfe zu Druckformaten</h3>\n"
 "<hr>\n"
 "<h4>Einführung</h4>\n"
 "<p>Druckformate werden auf der Serverseite mit der Jinja Templating Language gerendert. Alle Formulare haben Zugriff auf das <code>doc</code> Objekt, das Informationen über das Dokument enthält, das formatiert wird. Sie können auch über das Modul <code>frappe</code> auf allgemeine Dienstprogramme zugreifen.</p>\n"
-"<p>Für das Styling steht Ihnen das Boostrap CSS-Framework zur Verfügung und Sie können die gesamte Bandbreite an Klassen nutzen.</p>\n"
+"<p>Für das Styling steht Ihnen das Boostrap Css-Framework zur Verfügung und Sie können die gesamte Bandbreite an Klassen nutzen.</p>\n"
 "<hr>\n"
 "<h4>Referenzen</h4>\n"
 "<ol>\n"
 "\t<li><a href=\"http://jinja.pocoo.org/docs/templates/\" target=\"_blank\">Jinja Templating Language</a></li>\n"
-"\t<li><a href=\"http://getbootstrap.com\" target=\"_blank\">Bootstrap CSS Framework</a></li>\n"
+"\t<li><a href=\"http://getbootstrap.com\" target=\"_blank\">Bootstrap Css Framework</a></li>\n"
 "</ol>\n"
 "<hr>\n"
 "<h4>Beispiel</h4>\n"
@@ -518,7 +518,7 @@ msgid "<h4>Default Template</h4>\n"
 "{% if email_id %}Email: {{ email_id }}&lt;br&gt;{% endif -%}\n"
 "</code></pre>"
 msgstr "<h4>Standardvorlage</h4>\n"
-"<p>Verwendet <a href=\"http://jinja.pocoo.org/docs/templates/\">Jinja Templating</a> und alle Felder der Adresse (einschließlich der benutzerdefinierten Felder, falls vorhanden) werden verfügbar sein</p>\n"
+"<p>Verwendet <a href=\"http://jinja.pocoo.org/docs/templates/\">Jinja Templating</a> und alle Felder der Adresse (einschliesslich der benutzerdefinierten Felder, falls vorhanden) werden verfügbar sein</p>\n"
 "<pre><code>{{ address_line1 }}&lt;br&gt;\n"
 "{% if address_line2 %}{{ address_line2 }}&lt;br&gt;{% endif -%}\n"
 "{{ city }}&lt;br&gt;\n"
@@ -545,7 +545,7 @@ msgid "<h4>Email Reply Example</h4>\n\n"
 "<p>Templates are compiled using the Jinja Templating Language. To learn more about Jinja, <a class=\"strong\" href=\"http://jinja.pocoo.org/docs/dev/templates/\">read this documentation.</a></p>\n"
 msgstr "<h4>Beispiel für eine E-Mail-Antwort</h4>\n\n"
 "<pre>Überfällige Bestellung\n\n"
-"Die Transaktion {{ name }} hat das Fälligkeitsdatum überschritten. Bitte ergreifen Sie die notwendigen Maßnahmen.\n\n"
+"Die Transaktion {{ name }} hat das Fälligkeitsdatum überschritten. Bitte ergreifen Sie die notwendigen Massnahmen.\n\n"
 "Details\n\n"
 "- Kunde: {{ customer }}\n"
 "- Betrag: {{ grand_total }}\n"
@@ -578,7 +578,7 @@ msgid "<h5>Message Example</h5>\n\n"
 "</pre>"
 msgstr "<h5>Nachrichtenbeispiel</h5>\n\n"
 "<pre>&lt;h3&gt;Bestellung überfällig&lt;/h3&gt;\n\n"
-"&lt;p&gt;Transaktion {{ doc.name }} hat das Fälligkeitsdatum überschritten. Bitte ergreifen Sie die notwendigen Maßnahmen.&lt;/p&gt;\n\n"
+"&lt;p&gt;Transaktion {{ doc.name }} hat das Fälligkeitsdatum überschritten. Bitte ergreifen Sie die notwendigen Massnahmen.&lt;/p&gt;\n\n"
 "&lt;!-- letzten Kommentar anzeigen --&gt;\n"
 "{% if comments %}\n"
 "Letzter Kommentar: {{ comments[-1].comment }} von {{ comments[-1].by }}\n"
@@ -634,7 +634,7 @@ msgid "<p>To interact with above HTML you will have to use `root_element` as a p
 "let some_class_element = root_element.querySelector('.some-class');\n"
 "some_class_element.textContent = \"New content\";\n"
 "</code></pre>"
-msgstr "<p>Um mit dem oben genannten HTML zu interagieren, müssen Sie „root_element“ als übergeordneten Selektor verwenden.</p><p>Zum Beispiel:</p><pre class=\"p-3 bg-gray-100 border-radius rounded-sm mb-0\" style=\"width: fit-content;\"><code>// hier wird root_element standardmäßig bereitgestellt\n"
+msgstr "<p>Um mit dem oben genannten HTML zu interagieren, müssen Sie „root_element“ als übergeordneten Selektor verwenden.</p><p>Zum Beispiel:</p><pre class=\"p-3 bg-gray-100 border-radius rounded-sm mb-0\" style=\"width: fit-content;\"><code>// hier wird root_element standardmässig bereitgestellt\n"
 "let some_class_element = root_element.querySelector('.some-class');\n"
 "some_class_element.textContent = \"Neuer Inhalt\";\n"
 "</code></pre>"
@@ -768,7 +768,7 @@ msgstr ">="
 #. Description of the Onboarding Step 'Custom Document Types'
 #: frappe/custom/onboarding_step/custom_doctype/custom_doctype.json
 msgid "A DocType (Document Type) is used to insert forms in ERPNext. Forms such as Customer, Orders, and Invoices are Doctypes in the backend. You can also create new DocTypes to create new forms in ERPNext as per your business needs."
-msgstr "Ein DocType (Dokumententyp) wird verwendet, um Formulare in ERPNext einzufügen. Formulare wie Kunden, Bestellungen und Rechnungen sind DocTypes im Backend. Sie können auch neue DocTypes erstellen, um neue Formulare in ERPNext gemäß Ihren geschäftlichen Anforderungen zu erstellen."
+msgstr "Ein DocType (Dokumententyp) wird verwendet, um Formulare in ERPNext einzufügen. Formulare wie Kunden, Bestellungen und Rechnungen sind DocTypes im Backend. Sie können auch neue DocTypes erstellen, um neue Formulare in ERPNext gemäss Ihren geschäftlichen Anforderungen zu erstellen."
 
 #: frappe/core/doctype/doctype/doctype.py:1011
 msgid "A DocType's name should start with a letter and can only consist of letters, numbers, spaces, underscores and hyphens"
@@ -1542,7 +1542,7 @@ msgstr "Adresstyp"
 #. Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Address and other legal information you may want to put in the footer."
-msgstr "Adresse und andere rechtliche Informationen, die Sie in die Fußzeile setzen können."
+msgstr "Adresse und andere rechtliche Informationen, die Sie in die Fusszeile setzen können."
 
 #: frappe/contacts/doctype/address/address.py:206
 msgid "Addresses"
@@ -1769,7 +1769,7 @@ msgstr "Alle möglichen Workflow-Zustände und Rollen des Workflows. Status-Opti
 
 #: frappe/utils/password_strength.py:179
 msgid "All-uppercase is almost as easy to guess as all-lowercase."
-msgstr "Ausschließlich Großbuchstaben sind fast so einfach zu erraten wie ausschließlich Kleinbuchstaben."
+msgstr "Ausschliesslich Grossbuchstaben sind fast so einfach zu erraten wie ausschliesslich Kleinbuchstaben."
 
 #. Label of a Link field in DocType 'ToDo'
 #: frappe/desk/doctype/todo/todo.json
@@ -2079,7 +2079,7 @@ msgstr "Bereits in der folgenden Benutzer-ToDo-Liste: {0}"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:876
 msgid "Also adding the dependent currency field {0}"
-msgstr "Außerdem wird das abhängige Währungsfeld {0} hinzugefügt."
+msgstr "Ausserdem wird das abhängige Währungsfeld {0} hinzugefügt."
 
 #: frappe/public/js/frappe/views/reports/report_view.js:889
 msgid "Also adding the status dependency field {0}"
@@ -2165,7 +2165,7 @@ msgstr "Beim Festlegen der Sitzungsstandards ist ein Fehler aufgetreten"
 #. Description of the 'FavIcon' (Attach) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "An icon file with .ico extension. Should be 16 x 16 px. Generated using a favicon generator. [favicon-generator.org]"
-msgstr "Eine Icon-Datei mit ICO-Erweiterung. Sie sollte 16 x 16 pixel groß sein. Wurde unter Verwendung eines Favicon-Generators erstellt. [favicon-generator.org]"
+msgstr "Eine Icon-Datei mit ICO-Erweiterung. Sie sollte 16 x 16 pixel gross sein. Wurde unter Verwendung eines Favicon-Generators erstellt. [favicon-generator.org]"
 
 #: frappe/templates/includes/oauth_confirmation.html:35
 msgid "An unexpected error occurred while authorizing {}."
@@ -2786,7 +2786,7 @@ msgstr "Anhang"
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/email/doctype/email_domain/email_domain.json
 msgid "Attachment Limit (MB)"
-msgstr "Beschränkung der Größe des Anhangs (MB)"
+msgstr "Beschränkung der Grösse des Anhangs (MB)"
 
 #: frappe/core/doctype/file/file.py:320
 #: frappe/public/js/frappe/form/sidebar/attachments.js:36
@@ -3133,7 +3133,7 @@ msgstr "Warte auf Passwort"
 
 #: frappe/public/js/frappe/widgets/onboarding_widget.js:200
 msgid "Awesome Work"
-msgstr "Großartige Arbeit"
+msgstr "Grossartige Arbeit"
 
 #: frappe/public/js/frappe/widgets/onboarding_widget.js:358
 msgid "Awesome, now try making an entry yourself"
@@ -3697,7 +3697,7 @@ msgstr "Markenlogo"
 msgid "Brand is what appears on the top-left of the toolbar. If it is an image, make sure it\n"
 "has a transparent background and use the &lt;img /&gt; tag. Keep size as 200px x 30px"
 msgstr "Marke ist das, was oben links in der Navigationsleiste erscheint. Wenn es sich um ein Bild handelt, stellen Sie sicher, dass es\n"
-"einen transparenten Hintergrund hat und verwenden Sie das &lt;img /&gt; Tag. Die Größe sollte 200px x 30px sein."
+"einen transparenten Hintergrund hat und verwenden Sie das &lt;img /&gt; Tag. Die Grösse sollte 200px x 30px sein."
 
 #. Label of a Code field in DocType 'Web Form'
 #. Label of a Code field in DocType 'Web Page'
@@ -3745,7 +3745,7 @@ msgstr "Bucket {0} nicht gefunden."
 #. Label of a Data field in DocType 'System Health Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
 msgid "Bufferpool Size"
-msgstr "Pufferpoolgröße"
+msgstr "Pufferpoolgrösse"
 
 #. Name of a Workspace
 #: frappe/core/workspace/build/build.json
@@ -3851,13 +3851,13 @@ msgstr "Nach \"Nummernkreis\"-Feld"
 #: frappe/website/doctype/web_page/web_page.js:111
 #: frappe/website/doctype/web_page/web_page.js:118
 msgid "By default the title is used as meta title, adding a value here will override it."
-msgstr "Standardmäßig wird der Titel als Metatitel verwendet. Wenn Sie hier einen Wert hinzufügen, wird dieser überschrieben."
+msgstr "Standardmässig wird der Titel als Metatitel verwendet. Wenn Sie hier einen Wert hinzufügen, wird dieser überschrieben."
 
 #. Description of the 'Send Email for Successful Backup' (Check) field in
 #. DocType 'S3 Backup Settings'
 #: frappe/integrations/doctype/s3_backup_settings/s3_backup_settings.json
 msgid "By default, emails are only sent for failed backups."
-msgstr "E-Mails werden standardmäßig nur für fehlgeschlagene Sicherungen versendet."
+msgstr "E-Mails werden standardmässig nur für fehlgeschlagene Sicherungen versendet."
 
 #. Option for the 'Naming Rule' (Select) field in DocType 'DocType'
 #. Option for the 'Naming Rule' (Select) field in DocType 'Customize Form'
@@ -3920,19 +3920,19 @@ msgstr "FARBWÄHLER"
 #: frappe/desk/doctype/custom_html_block/custom_html_block.json
 #: frappe/printing/doctype/print_style/print_style.json
 #: frappe/website/doctype/web_page/web_page.json
-msgid "CSS"
-msgstr "CSS"
+msgid "Css"
+msgstr "Css"
 
 #. Label of a Small Text field in DocType 'Web Page Block'
 #: frappe/website/doctype/web_page_block/web_page_block.json
-msgid "CSS Class"
-msgstr "CSS-Klasse"
+msgid "Css Class"
+msgstr "Css-Klasse"
 
 #. Description of the 'Element Selector' (Data) field in DocType 'Form Tour
 #. Step'
 #: frappe/desk/doctype/form_tour_step/form_tour_step.json
-msgid "CSS selector for the element you want to highlight."
-msgstr "CSS-Selektor für das Element, das Sie hervorheben möchten."
+msgid "Css selector for the element you want to highlight."
+msgstr "Css-Selektor für das Element, das Sie hervorheben möchten."
 
 #. Option for the 'File Type' (Select) field in DocType 'Data Export'
 #. Option for the 'Format' (Select) field in DocType 'Auto Email Report'
@@ -4368,7 +4368,7 @@ msgstr "Kann {1} nicht {0}."
 
 #: frappe/utils/password_strength.py:177
 msgid "Capitalization doesn't help very much."
-msgstr "Großschreibung hilft nicht besonders viel."
+msgstr "Grossschreibung hilft nicht besonders viel."
 
 #: frappe/public/js/frappe/ui/capture.js:286
 msgid "Capture"
@@ -4762,7 +4762,7 @@ msgstr "Klicken Sie auf den folgenden Link, um die Anfrage zu genehmigen"
 
 #: frappe/templates/emails/new_user.html:7
 msgid "Click on the link below to complete your registration and set a new password"
-msgstr "Auf den Link unten klicken, um die Registrierung abzuschließen und ein neues Passwort zu setzen"
+msgstr "Auf den Link unten klicken, um die Registrierung abzuschliessen und ein neues Passwort zu setzen"
 
 #: frappe/templates/emails/download_data.html:3
 msgid "Click on the link below to download your data"
@@ -4886,16 +4886,16 @@ msgstr "Client-Skript"
 #: frappe/public/js/frappe/ui/messages.js:246
 #: frappe/website/js/bootstrap-4.js:24
 msgid "Close"
-msgstr "Schließen"
+msgstr "Schliessen"
 
 #. Label of a Code field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Close Condition"
-msgstr "Zustand schließen"
+msgstr "Zustand schliessen"
 
 #: frappe/public/js/form_builder/components/FieldProperties.vue:79
 msgid "Close properties"
-msgstr "Eigenschaften schließen"
+msgstr "Eigenschaften schliessen"
 
 #. Option for the 'Status' (Select) field in DocType 'Activity Log'
 #. Option for the 'Status' (Select) field in DocType 'Communication'
@@ -4949,7 +4949,7 @@ msgstr "Zuklappen"
 #: frappe/public/js/frappe/views/reports/query_report.js:1980
 #: frappe/public/js/frappe/views/treeview.js:110
 msgid "Collapse All"
-msgstr "Alles schließen"
+msgstr "Alles schliessen"
 
 #. Label of a Check field in DocType 'DocField'
 #. Label of a Check field in DocType 'Custom Field'
@@ -5257,7 +5257,7 @@ msgstr "Anmeldung abschliessen"
 #: frappe/public/js/frappe/ui/slides.js:355
 msgctxt "Finish the setup wizard"
 msgid "Complete Setup"
-msgstr "Einrichtung abschließen"
+msgstr "Einrichtung abschliessen"
 
 #. Option for the 'Status' (Select) field in DocType 'Auto Repeat'
 #. Option for the 'Status' (Select) field in DocType 'Prepared Report'
@@ -5362,7 +5362,7 @@ msgid "Configure how amended documents will be named.<br>\n\n"
 "Default behaviour is to follow an amend counter which adds a number to the end of the original name indicating the amended version. <br>\n\n"
 "Default Naming will make the amended document to behave same as new documents."
 msgstr "Legen Sie fest, wie berichtigte Dokumente benannt werden sollen.<br>\n\n"
-"Standardmäßig wird ein Berichtigungszähler verwendet, der am Ende des Originalnamens eine Zahl anhängt, die die berichtigte Version angibt. <br>\n\n"
+"Standardmässig wird ein Berichtigungszähler verwendet, der am Ende des Originalnamens eine Zahl anhängt, die die berichtigte Version angibt. <br>\n\n"
 "Die Standardbenennung bewirkt, dass sich das berichtigte Dokument genauso verhält wie neue Dokumente."
 
 #. Description of a DocType
@@ -5871,7 +5871,7 @@ msgstr "Ein {0} Konto erstellen"
 #. Description of a DocType
 #: frappe/email/doctype/newsletter/newsletter.json
 msgid "Create and send emails to a specific group of subscribers periodically."
-msgstr "Erstellen und versenden Sie in regelmäßigen Abständen E-Mails an eine bestimmte Gruppe von Abonnenten."
+msgstr "Erstellen und versenden Sie in regelmässigen Abständen E-Mails an eine bestimmte Gruppe von Abonnenten."
 
 #. Description of a Card Break in the Build Workspace
 #: frappe/core/workspace/build/build.json
@@ -6091,8 +6091,8 @@ msgstr "Benutzerdefinierte Blöcke"
 #. Label of a Code field in DocType 'Web Form'
 #: frappe/printing/doctype/print_format/print_format.json
 #: frappe/website/doctype/web_form/web_form.json
-msgid "Custom CSS"
-msgstr "Benutzerdefiniertes CSS"
+msgid "Custom Css"
+msgstr "Benutzerdefiniertes Css"
 
 #. Label of a Section Break field in DocType 'Number Card'
 #: frappe/desk/doctype/number_card/number_card.json
@@ -6153,7 +6153,7 @@ msgstr "Benutzerdefinierte Felder können nicht zu zentralen DocTypes hinzugefü
 #. Label of a Section Break field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Custom Footer"
-msgstr "Benutzerdefinierte Fußzeile"
+msgstr "Benutzerdefinierte Fusszeile"
 
 #. Label of a Check field in DocType 'Print Format'
 #: frappe/printing/doctype/print_format/print_format.json
@@ -6227,8 +6227,8 @@ msgstr "benutzerdefinierte Rolle"
 
 #. Label of a Code field in DocType 'Website Theme'
 #: frappe/website/doctype/website_theme/website_theme.json
-msgid "Custom SCSS"
-msgstr "Benutzerdefiniertes SCSS"
+msgid "Custom SCss"
+msgstr "Benutzerdefiniertes SCss"
 
 #. Label of a Section Break field in DocType 'Portal Settings'
 #: frappe/website/doctype/portal_settings/portal_settings.json
@@ -6577,7 +6577,7 @@ msgstr "Datenbankprozesse"
 
 #: frappe/public/js/frappe/doctype/index.js:38
 msgid "Database Row Size Utilization"
-msgstr "Auslastung der Datenbankzeilengröße"
+msgstr "Auslastung der Datenbankzeilengrösse"
 
 #. Name of a report
 #: frappe/core/report/database_storage_usage_by_tables/database_storage_usage_by_tables.json
@@ -6586,11 +6586,11 @@ msgstr "Datenbankspeichernutzung nach Tabellen"
 
 #: frappe/custom/doctype/customize_form/customize_form.py:245
 msgid "Database Table Row Size Limit"
-msgstr "Begrenzung der Zeilengröße von Datenbanktabellen"
+msgstr "Begrenzung der Zeilengrösse von Datenbanktabellen"
 
 #: frappe/public/js/frappe/doctype/index.js:40
 msgid "Database Table Row Size Utilization: {0}%, this limits number of fields you can add."
-msgstr "Auslastung der Zeilengröße der Datenbanktabelle: {0}%, dadurch wird die Anzahl der Felder begrenzt, die Sie hinzufügen können."
+msgstr "Auslastung der Zeilengrösse der Datenbanktabelle: {0}%, dadurch wird die Anzahl der Felder begrenzt, die Sie hinzufügen können."
 
 #. Label of a Data field in DocType 'System Health Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
@@ -6736,7 +6736,7 @@ msgstr "Standard-Adressvorlage kann nicht gelöscht werden"
 #. Label of a Select field in DocType 'Document Naming Settings'
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.json
 msgid "Default Amendment Naming"
-msgstr "Standardmäßige Benennung von Änderungen"
+msgstr "Standardmässige Benennung von Änderungen"
 
 #. Label of a Select field in DocType 'System Settings'
 #. Label of a Select field in DocType 'User'
@@ -7121,7 +7121,7 @@ msgstr "Nachkommen von"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:33
 msgid "Descendants Of (inclusive)"
-msgstr "Nachkommen von (einschließlich)"
+msgstr "Nachkommen von (einschliesslich)"
 
 #. Label of a Small Text field in DocType 'Assignment Rule'
 #. Label of a Small Text field in DocType 'Reminder'
@@ -7340,7 +7340,7 @@ msgstr "Deaktivieren Sie die Anmeldung für Ihre Site"
 #. Label of a Check field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Disable Standard Email Footer"
-msgstr "Standard-E-Mail-Fußzeile deaktivieren"
+msgstr "Standard-E-Mail-Fusszeile deaktivieren"
 
 #. Label of a Check field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -8032,7 +8032,7 @@ msgstr "Domäneneinstellungen"
 msgid "Domains HTML"
 msgstr "Domänen HTML"
 
-#. Description of the 'Ignore XSS Filter' (Check) field in DocType 'Custom
+#. Description of the 'Ignore Xss Filter' (Check) field in DocType 'Custom
 #. Field'
 #: frappe/custom/doctype/custom_field/custom_field.json
 msgid "Don't HTML Encode HTML tags like &lt;script&gt; or just characters like &lt; or &gt;, as they could be intentionally used in this field"
@@ -8054,8 +8054,8 @@ msgstr "Status nicht überschreiben"
 msgid "Don't Send Emails"
 msgstr "Senden Sie keine E-Mails"
 
-#. Description of the 'Ignore XSS Filter' (Check) field in DocType 'DocField'
-#. Description of the 'Ignore XSS Filter' (Check) field in DocType 'Customize
+#. Description of the 'Ignore Xss Filter' (Check) field in DocType 'DocField'
+#. Description of the 'Ignore Xss Filter' (Check) field in DocType 'Customize
 #. Form Field'
 #: frappe/core/doctype/docfield/docfield.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
@@ -8395,7 +8395,7 @@ msgstr "Filter bearbeiten"
 
 #: frappe/public/js/print_format_builder/PrintFormat.vue:29
 msgid "Edit Footer"
-msgstr "Fußzeile bearbeiten"
+msgstr "Fusszeile bearbeiten"
 
 #: frappe/printing/doctype/print_format/print_format.js:28
 msgid "Edit Format"
@@ -8425,7 +8425,7 @@ msgstr "Briefkopf bearbeiten"
 
 #: frappe/public/js/print_format_builder/PrintFormat.vue:35
 msgid "Edit Letter Head Footer"
-msgstr "Briefkopf-Fußzeile bearbeiten"
+msgstr "Briefkopf-Fusszeile bearbeiten"
 
 #: frappe/public/js/print_format_builder/print_format_builder.bundle.js:24
 msgid "Edit Print Format"
@@ -8621,7 +8621,7 @@ msgstr "E-Mail-Flag-Warteschlange"
 #. Label of a Small Text field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Email Footer Address"
-msgstr "Signatur in der E-Mail-Fußzeile"
+msgstr "Signatur in der E-Mail-Fusszeile"
 
 #. Label of a Link in the Tools Workspace
 #. Name of a DocType
@@ -9305,7 +9305,7 @@ msgstr "Fehler im Client-Skript."
 
 #: frappe/printing/doctype/letter_head/letter_head.js:21
 msgid "Error in Header/Footer Script"
-msgstr "Fehler im Kopf-/Fußzeilenskript"
+msgstr "Fehler im Kopf-/Fusszeilenskript"
 
 #: frappe/email/doctype/notification/notification.py:396
 #: frappe/email/doctype/notification/notification.py:512
@@ -10148,7 +10148,7 @@ msgstr "Dateiname"
 #. Label of a Int field in DocType 'File'
 #: frappe/core/doctype/file/file.json
 msgid "File Size"
-msgstr "Dateigröße"
+msgstr "Dateigrösse"
 
 #. Label of a Section Break field in DocType 'System Health Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
@@ -10185,11 +10185,11 @@ msgstr "Datei nicht angehängt"
 #: frappe/core/doctype/file/file.py:694 frappe/public/js/frappe/request.js:197
 #: frappe/utils/file_manager.py:222
 msgid "File size exceeded the maximum allowed size of {0} MB"
-msgstr "Dateigröße hat die maximal zulässige Größe von {0} MB überschritten"
+msgstr "Dateigrösse hat die maximal zulässige Grösse von {0} MB überschritten"
 
 #: frappe/public/js/frappe/request.js:195
 msgid "File too big"
-msgstr "Datei zu groß"
+msgstr "Datei zu gross"
 
 #: frappe/core/doctype/file/file.py:371
 msgid "File type of {0} is not allowed"
@@ -10512,7 +10512,7 @@ msgstr "Schrifteigenschaften"
 #: frappe/public/js/print_format_builder/PrintFormatControls.vue:45
 #: frappe/website/doctype/website_theme/website_theme.json
 msgid "Font Size"
-msgstr "Schriftgröße"
+msgstr "Schriftgrösse"
 
 #. Label of a Section Break field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
@@ -10530,77 +10530,77 @@ msgstr "Schriftarten"
 #: frappe/website/doctype/web_template/web_template.json
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Footer"
-msgstr "Fußzeile"
+msgstr "Fusszeile"
 
 #. Label of a Small Text field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Footer \"Powered By\""
-msgstr "Fußzeile \"Powered by\""
+msgstr "Fusszeile \"Powered by\""
 
 #. Label of a Select field in DocType 'Letter Head'
 #: frappe/printing/doctype/letter_head/letter_head.json
 msgid "Footer Based On"
-msgstr "Fußzeile basierend auf"
+msgstr "Fusszeile basierend auf"
 
 #. Label of a Text Editor field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Footer Content"
-msgstr "Inhalt der Fußzeile"
+msgstr "Inhalt der Fusszeile"
 
 #. Label of a Section Break field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Footer Details"
-msgstr "Fußzeile Details"
+msgstr "Fusszeile Details"
 
 #. Label of a HTML Editor field in DocType 'Letter Head'
 #: frappe/printing/doctype/letter_head/letter_head.json
 msgid "Footer HTML"
-msgstr "Fußzeile HTML"
+msgstr "Fusszeile HTML"
 
 #: frappe/printing/doctype/letter_head/letter_head.py:73
 msgid "Footer HTML set from attachment {0}"
-msgstr "Fußzeilen-HTML aus Anhang {0} festgelegt"
+msgstr "Fusszeilen-HTML aus Anhang {0} festgelegt"
 
 #. Label of a Section Break field in DocType 'Letter Head'
 #: frappe/printing/doctype/letter_head/letter_head.json
 msgid "Footer Image"
-msgstr "Fußzeilenbild"
+msgstr "Fusszeilenbild"
 
 #. Label of a Section Break field in DocType 'Website Settings'
 #. Label of a Table field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Footer Items"
-msgstr "Fußzeilen-Objekte"
+msgstr "Fusszeilen-Objekte"
 
 #. Label of a Attach Image field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Footer Logo"
-msgstr "Fußzeile Logo"
+msgstr "Fusszeile Logo"
 
 #. Label of a Code field in DocType 'Letter Head'
 #: frappe/printing/doctype/letter_head/letter_head.json
 msgid "Footer Script"
-msgstr "Fußzeilenskript"
+msgstr "Fusszeilenskript"
 
 #. Label of a Link field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Footer Template"
-msgstr "Fußzeilenvorlage"
+msgstr "Fusszeilenvorlage"
 
 #. Label of a Code field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Footer Template Values"
-msgstr "Werte für Fußzeilenvorlagen"
+msgstr "Werte für Fusszeilenvorlagen"
 
 #: frappe/printing/page/print/print.js:116
 msgid "Footer might not be visible as {0} option is disabled</div>"
-msgstr "Die Fußzeile ist möglicherweise nicht sichtbar, da die Option {0} deaktiviert ist</div>"
+msgstr "Die Fusszeile ist möglicherweise nicht sichtbar, da die Option {0} deaktiviert ist</div>"
 
 #. Description of the 'Footer HTML' (HTML Editor) field in DocType 'Letter
 #. Head'
 #: frappe/printing/doctype/letter_head/letter_head.json
 msgid "Footer will display correctly only in PDF"
-msgstr "Die Fußzeile wird nur in PDF korrekt angezeigt"
+msgstr "Die Fusszeile wird nur in PDF korrekt angezeigt"
 
 #. Description of the 'Row Name' (Data) field in DocType 'Property Setter'
 #: frappe/custom/doctype/property_setter/property_setter.json
@@ -11070,7 +11070,7 @@ msgstr "Felder erhalten"
 
 #: frappe/printing/doctype/letter_head/letter_head.js:32
 msgid "Get Header and Footer wkhtmltopdf variables"
-msgstr "Variablen für Kopf- und Fußzeilen abrufen"
+msgstr "Variablen für Kopf- und Fusszeilen abrufen"
 
 #: frappe/public/js/frappe/form/multi_select_dialog.js:86
 msgid "Get Items"
@@ -11404,11 +11404,11 @@ msgstr "Grau"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:23
 msgid "Greater Than"
-msgstr "Größer als"
+msgstr "Grösser als"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:25
 msgid "Greater Than Or Equal To"
-msgstr "Größer oder gleich"
+msgstr "Grösser oder gleich"
 
 #. Option for the 'Color' (Select) field in DocType 'DocType State'
 #. Option for the 'Indicator' (Select) field in DocType 'Kanban Board Column'
@@ -11634,7 +11634,7 @@ msgstr "Header, Robots"
 
 #: frappe/printing/doctype/letter_head/letter_head.js:30
 msgid "Header/Footer scripts can be used to add dynamic behaviours."
-msgstr "Kopf-/Fußzeilen-Skripte können verwendet werden, um dynamische Verhaltensweisen hinzuzufügen."
+msgstr "Kopf-/Fusszeilen-Skripte können verwendet werden, um dynamische Verhaltensweisen hinzuzufügen."
 
 #. Label of a Table field in DocType 'Webhook'
 #. Label of a Code field in DocType 'Webhook Request Log'
@@ -11844,7 +11844,7 @@ msgstr "Vorschau verbergen"
 #. Description of the 'Hide Buttons' (Check) field in DocType 'Form Tour Step'
 #: frappe/desk/doctype/form_tour_step/form_tour_step.json
 msgid "Hide Previous, Next and Close button on highlight dialog."
-msgstr "Die Schaltflächen Zurück, Weiter und Schließen ausblenden."
+msgstr "Die Schaltflächen Zurück, Weiter und Schliessen ausblenden."
 
 #: frappe/public/js/frappe/list/list_filter.js:87
 msgid "Hide Saved"
@@ -11894,12 +11894,12 @@ msgstr "Details ausblenden"
 #. Label of a Check field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Hide footer in auto email reports"
-msgstr "Fußzeile in automatischen E-Mail-Berichten ausblenden"
+msgstr "Fusszeile in automatischen E-Mail-Berichten ausblenden"
 
 #. Label of a Check field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Hide footer signup"
-msgstr "Registrierung in der Fußzeile ausblenden"
+msgstr "Registrierung in der Fusszeile ausblenden"
 
 #. Option for the 'Priority' (Select) field in DocType 'ToDo'
 #: frappe/desk/doctype/todo/todo.json
@@ -11919,7 +11919,7 @@ msgstr "Hervorheben"
 
 #: frappe/www/update-password.html:274
 msgid "Hint: Include symbols, numbers and capital letters in the password"
-msgstr "Hinweis: Geben Sie Symbole, Zahlen und Großbuchstaben in das Passwort ein"
+msgstr "Hinweis: Geben Sie Symbole, Zahlen und Grossbuchstaben in das Passwort ein"
 
 #. Label of a Tab Break field in DocType 'Website Settings'
 #: frappe/core/doctype/file/utils.py:29
@@ -12215,7 +12215,7 @@ msgstr "Wenn nicht Standard-Port (zB 587). Versuchen Sie in Google Cloud den Por
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/email/doctype/email_domain/email_domain.json
 msgid "If non-standard port (e.g. POP3: 995/110, IMAP: 993/143)"
-msgstr "Wenn nicht standardmäßiger Port (z. B. POP3: 995/110, IMAP: 993/143)"
+msgstr "Wenn nicht standardmässiger Port (z. B. POP3: 995/110, IMAP: 993/143)"
 
 #. Description of the 'Currency Precision' (Select) field in DocType 'System
 #. Settings'
@@ -12310,8 +12310,8 @@ msgstr "Ignorieren von Benutzerberechtigungen"
 #: frappe/core/doctype/docfield/docfield.json
 #: frappe/custom/doctype/custom_field/custom_field.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
-msgid "Ignore XSS Filter"
-msgstr "XSS-Filter ignorieren"
+msgid "Ignore Xss Filter"
+msgstr "Xss-Filter ignorieren"
 
 #. Description of the 'Attachment Limit (MB)' (Int) field in DocType 'Email
 #. Account'
@@ -12320,7 +12320,7 @@ msgstr "XSS-Filter ignorieren"
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/email/doctype/email_domain/email_domain.json
 msgid "Ignore attachments over this size"
-msgstr "Anhänge mit einer Größe über diesem Wert ignorieren"
+msgstr "Anhänge mit einer Grösse über diesem Wert ignorieren"
 
 #. Label of a Table field in DocType 'Website Theme'
 #: frappe/website/doctype/website_theme/website_theme.json
@@ -12675,7 +12675,7 @@ msgstr "Suchen In Top Bar"
 
 #: frappe/website/doctype/website_theme/website_theme.js:61
 msgid "Include Theme from Apps"
-msgstr "Thema aus Apps einschließen"
+msgstr "Thema aus Apps einschliessen"
 
 #. Label of a Check field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -12688,11 +12688,11 @@ msgstr "Filter einbeziehen"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1516
 msgid "Include indentation"
-msgstr "Einrückung einschließen"
+msgstr "Einrückung einschliessen"
 
 #: frappe/public/js/frappe/form/controls/password.js:106
 msgid "Include symbols, numbers and capital letters in the password"
-msgstr "Geben Sie Symbole, Zahlen und Großbuchstaben in das Passwort ein"
+msgstr "Geben Sie Symbole, Zahlen und Grossbuchstaben in das Passwort ein"
 
 #. Label of a Section Break field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
@@ -14195,7 +14195,7 @@ msgstr "Länge"
 
 #: frappe/public/js/frappe/ui/chart.js:11
 msgid "Length of passed data array is greater than value of maximum allowed label points!"
-msgstr "Die Länge des übergebenen Datenarrays ist größer als der Wert der maximal erlaubten Beschriftungspunkte!"
+msgstr "Die Länge des übergebenen Datenarrays ist grösser als der Wert der maximal erlaubten Beschriftungspunkte!"
 
 #: frappe/database/schema.py:131
 msgid "Length of {0} should be between 1 and 1000"
@@ -14986,7 +14986,7 @@ msgstr "Machen Sie &quot;name&quot; durchsuchbar in Global Search"
 #. Label of a Check field in DocType 'DocField'
 #: frappe/core/doctype/docfield/docfield.json
 msgid "Make Attachment Public (by default)"
-msgstr "Anhang öffentlich machen (standardmäßig)"
+msgstr "Anhang öffentlich machen (standardmässig)"
 
 #. Label of a Check field in DocType 'DocType'
 #. Label of a Check field in DocType 'Customize Form'
@@ -15203,7 +15203,7 @@ msgstr "Maximale Anzahl an Anhängen"
 #. Label of a Int field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Max File Size (MB)"
-msgstr "Max. Dateigröße (MB)"
+msgstr "Max. Dateigrösse (MB)"
 
 #. Label of a Data field in DocType 'DocField'
 #: frappe/core/doctype/docfield/docfield.json
@@ -15223,7 +15223,7 @@ msgstr "Maximaler Wert"
 #. Label of a Int field in DocType 'Web Form'
 #: frappe/website/doctype/web_form/web_form.json
 msgid "Max attachment size"
-msgstr "Maximale Größe für Anhänge"
+msgstr "Maximale Grösse für Anhänge"
 
 #. Label of a Int field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -15991,7 +15991,7 @@ msgstr "MyISAM"
 
 #: frappe/workflow/doctype/workflow/workflow.js:19
 msgid "NOTE: If you add states or transitions in the table, it will be reflected in the Workflow Builder but you will have to position them manually. Also Workflow Builder is currently in <b>BETA</b>."
-msgstr "HINWEIS: Wenn Sie in der Tabelle Zustände oder Übergänge hinzufügen, wird dies im Workflow Builder berücksichtigt, aber Sie müssen sie manuell positionieren. Außerdem befindet sich Workflow Builder derzeit noch in der <b>BETA-Phase</b>."
+msgstr "HINWEIS: Wenn Sie in der Tabelle Zustände oder Übergänge hinzufügen, wird dies im Workflow Builder berücksichtigt, aber Sie müssen sie manuell positionieren. Ausserdem befindet sich Workflow Builder derzeit noch in der <b>BETA-Phase</b>."
 
 #. Description of the 'LDAP Group Field' (Data) field in DocType 'LDAP
 #. Settings'
@@ -16060,7 +16060,7 @@ msgid "Naming Options:\n"
 "<li><b>format:EXAMPLE-{MM}morewords{fieldname1}-{fieldname2}-{#####}</b> - Replace all braced words (fieldnames, date words (DD, MM, YY), series) with their value. Outside braces, any characters can be used.</li></ol>"
 msgstr "Benennungsoptionen:\n"
 "<ol><li><b>field:[fieldname]</b> - Nach Feld</li><li><b>autoincrement</b> - Verwendet die Funktion Auto Increment der Datenbanken</li><li><b>naming_series:</b> - Nach Nummernkreis (ein Feld namens naming_series muss vorhanden sein)</li><li><b>Prompt</b> - Fragt den Benutzer nach einem Namen</li><li><b>[series]</b> - Zähler nach Präfix (durch einen Punkt getrennt); zum Beispiel PRE.#####</li>\n"
-"<li><b>format:EXAMPLE-{MM}morewords{fieldname1}-{fieldname2}-{#####}</b> - Ersetzt alle Wörter in geschweiften Klammern (Feldnamen, Datumskürzel (DD, MM, YY), Zähler) durch ihren Wert. Außerhalb der geschweiften Klammern können beliebige Zeichen verwendet werden.</li></ol>"
+"<li><b>format:EXAMPLE-{MM}morewords{fieldname1}-{fieldname2}-{#####}</b> - Ersetzt alle Wörter in geschweiften Klammern (Feldnamen, Datumskürzel (DD, MM, YY), Zähler) durch ihren Wert. Ausserhalb der geschweiften Klammern können beliebige Zeichen verwendet werden.</li></ol>"
 
 #. Description of the 'Auto Name' (Data) field in DocType 'Customize Form'
 #: frappe/custom/doctype/customize_form/customize_form.json
@@ -16069,7 +16069,7 @@ msgid "Naming Options:\n"
 "<li><b>format:EXAMPLE-{MM}morewords{fieldname1}-{fieldname2}-{#####}</b> - Replace all braced words (fieldnames, date words (DD, MM, YY), series) with their value. Outside braces, any characters can be used.</li></ol>"
 msgstr "Benennungsoptionen:\n"
 "<ol><li><b>field:[fieldname]</b> - Nach Feld</li><li><b>naming_series:</b> - Nach Nummernkreis (ein Feld namens naming_series muss vorhanden sein)</li><li><b>Prompt</b> - Aufforderung zur Eingabe eines Namens</li><li><b>[series]</b> - Zähler nach Präfix (durch einen Punkt getrennt); zum Beispiel PRE.#####</li>\n"
-"<li><b>format:EXAMPLE-{MM}morewords{fieldname1}-{fieldname2}-{#####}</b> - Ersetzt alle Wörter in geschweiften Klammern (Feldnamen, Datumskürzel (DD, MM, YY), Zähler) durch ihren Wert. Außerhalb der geschweiften Klammern können beliebige Zeichen verwendet werden.</li></ol>"
+"<li><b>format:EXAMPLE-{MM}morewords{fieldname1}-{fieldname2}-{#####}</b> - Ersetzt alle Wörter in geschweiften Klammern (Feldnamen, Datumskürzel (DD, MM, YY), Zähler) durch ihren Wert. Ausserhalb der geschweiften Klammern können beliebige Zeichen verwendet werden.</li></ol>"
 
 #. Label of a Select field in DocType 'DocType'
 #. Label of a Select field in DocType 'Customize Form'
@@ -16752,7 +16752,7 @@ msgstr "Keine weiteren Elemente zum Anzeigen"
 
 #: frappe/utils/password_strength.py:35
 msgid "No need for symbols, digits, or uppercase letters."
-msgstr "Keine Notwendigkeit für Symbole, Ziffern oder Großbuchstaben."
+msgstr "Keine Notwendigkeit für Symbole, Ziffern oder Grossbuchstaben."
 
 #: frappe/integrations/doctype/google_contacts/google_contacts.py:197
 msgid "No new Google Contacts synced."
@@ -17059,7 +17059,7 @@ msgstr "Hinweis:"
 #: frappe/integrations/doctype/dropbox_settings/dropbox_settings.json
 #: frappe/integrations/doctype/google_drive/google_drive.json
 msgid "Note: By default emails for failed backups are sent."
-msgstr "Hinweis: Standardmäßig werden E-Mails für fehlgeschlagene Backups gesendet."
+msgstr "Hinweis: Standardmässig werden E-Mails für fehlgeschlagene Backups gesendet."
 
 #: frappe/public/js/frappe/utils/utils.js:786
 msgid "Note: Changing the Page Name will break previous URL to this page."
@@ -17073,7 +17073,7 @@ msgstr "Hinweis: Bei \"Etc\"-Zeitzonen sind die Vorzeichen umgekehrt."
 #. Slideshow'
 #: frappe/website/doctype/website_slideshow/website_slideshow.json
 msgid "Note: For best results,  images must be of the same size and width must be greater than height."
-msgstr "Hinweis: Um optimale Ergebnisse zu erzielen, müssen die Bilder dieselbe Größe und Breite haben und größer als die Höhe sein."
+msgstr "Hinweis: Um optimale Ergebnisse zu erzielen, müssen die Bilder dieselbe Grösse und Breite haben und grösser als die Höhe sein."
 
 #. Description of the 'Allow only one session per user' (Check) field in
 #. DocType 'System Settings'
@@ -17276,11 +17276,11 @@ msgstr "Anzahl der Abfragen"
 #: frappe/core/doctype/doctype/doctype.py:437
 #: frappe/public/js/frappe/doctype/index.js:59
 msgid "Number of attachment fields are more than {}, limit updated to {}."
-msgstr "Anzahl der Anhangsfelder ist größer als {}, Limit auf {} aktualisiert."
+msgstr "Anzahl der Anhangsfelder ist grösser als {}, Limit auf {} aktualisiert."
 
 #: frappe/core/doctype/system_settings/system_settings.py:165
 msgid "Number of backups must be greater than zero."
-msgstr "Anzahl der Backups muss größer als Null sein."
+msgstr "Anzahl der Backups muss grösser als Null sein."
 
 #. Description of the 'Columns' (Int) field in DocType 'Customize Form Field'
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
@@ -17403,7 +17403,7 @@ msgstr "Die OTP-Einrichtung mit der OTP-App wurde nicht abgeschlossen. Bitte kon
 msgid "Occurrences"
 msgstr "Vorkommnisse"
 
-#. Option for the 'SSL/TLS Mode' (Select) field in DocType 'LDAP Settings'
+#. Option for the 'ssL/TLS Mode' (Select) field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
 msgid "Off"
 msgstr "aus"
@@ -17625,7 +17625,7 @@ msgstr "Nur Standard-DocTypes dürfen über Formular anpassen angepasst werden."
 
 #: frappe/desk/form/assign_to.py:198
 msgid "Only the assignee can complete this to-do."
-msgstr "Nur der zugewiesene Benutzer kann diese Aufgabe abschließen."
+msgstr "Nur der zugewiesene Benutzer kann diese Aufgabe abschliessen."
 
 #: frappe/public/js/frappe/form/sidebar/review.js:54
 msgid "Only users involved in the document are listed"
@@ -17956,7 +17956,7 @@ msgstr "PDF-Seitenhöhe (in mm)"
 #. Label of a Select field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
 msgid "PDF Page Size"
-msgstr "PDF-Seitengröße"
+msgstr "PDF-Seitengrösse"
 
 #. Label of a Float field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
@@ -18121,7 +18121,7 @@ msgstr "Seitenkürzel"
 
 #: frappe/public/js/frappe/list/bulk_operations.js:66
 msgid "Page Size"
-msgstr "Seitengröße"
+msgstr "Seitengrösse"
 
 #. Label of a Data field in DocType 'About Us Settings'
 #: frappe/website/doctype/about_us_settings/about_us_settings.json
@@ -18728,7 +18728,7 @@ msgstr "Bitte zuerst eine Datei anhängen."
 
 #: frappe/printing/doctype/letter_head/letter_head.py:74
 msgid "Please attach an image file to set HTML for Footer."
-msgstr "Bitte fügen Sie eine Bilddatei an, um HTML für die Fußzeile festzulegen."
+msgstr "Bitte fügen Sie eine Bilddatei an, um HTML für die Fusszeile festzulegen."
 
 #: frappe/printing/doctype/letter_head/letter_head.py:62
 msgid "Please attach an image file to set HTML for Letter Head."
@@ -18772,7 +18772,7 @@ msgstr "Bitte auf die folgende Verknüpfung klicken um ein neues Passwort zu set
 
 #: frappe/integrations/doctype/dropbox_settings/dropbox_settings.py:343
 msgid "Please close this window"
-msgstr "Bitte schließen Sie dieses Fenster"
+msgstr "Bitte schliessen Sie dieses Fenster"
 
 #: frappe/www/confirm_workflow_action.html:4
 msgid "Please confirm your action to {0} this document."
@@ -19105,7 +19105,7 @@ msgstr "Punkte gegeben"
 #. Health Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
 msgid "Polling"
-msgstr "Regelmäßige Abfrage"
+msgstr "Regelmässige Abfrage"
 
 #. Label of a Check field in DocType 'Form Tour Step'
 #: frappe/desk/doctype/form_tour_step/form_tour_step.json
@@ -20824,7 +20824,7 @@ msgstr "Wiederholen"
 #. Label of a Check field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
 msgid "Repeat Header and Footer"
-msgstr "Kopf- und Fußzeile wiederholen"
+msgstr "Kopf- und Fusszeile wiederholen"
 
 #. Label of a Select field in DocType 'Event'
 #: frappe/desk/doctype/event/event.json
@@ -21565,7 +21565,7 @@ msgstr "Rolle und Ebene"
 
 #: frappe/core/doctype/user/user.py:306
 msgid "Role has been set as per the user type {0}"
-msgstr "Die Rolle wurde gemäß Benutzertyp {0} festgelegt"
+msgstr "Die Rolle wurde gemäss Benutzertyp {0} festgelegt"
 
 #. Label of a Table field in DocType 'Page'
 #. Label of a Table field in DocType 'Report'
@@ -21896,8 +21896,8 @@ msgstr "SQL-Abfragen"
 
 #. Label of a Select field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
-msgid "SSL/TLS Mode"
-msgstr "SSL / TLS-Modus"
+msgid "ssL/TLS Mode"
+msgstr "ssL / TLS-Modus"
 
 #: frappe/public/js/frappe/color_picker/color_picker.js:20
 msgid "SWATCHES"
@@ -23284,7 +23284,7 @@ msgstr "Nur einmal festlegen"
 #. Description of the 'Max attachment size' (Int) field in DocType 'Web Form'
 #: frappe/website/doctype/web_form/web_form.json
 msgid "Set size in MB"
-msgstr "Größe in MB festlegen"
+msgstr "Grösse in MB festlegen"
 
 #. Description of the 'Filters Configuration' (Code) field in DocType 'Number
 #. Card'
@@ -23745,7 +23745,7 @@ msgstr "Stellen Sie als cc"
 #. Label of a Check field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Show footer on login"
-msgstr "Fußzeile beim Login anzeigen"
+msgstr "Fusszeile beim Login anzeigen"
 
 #. Description of the 'Show Full Form?' (Check) field in DocType 'Onboarding
 #. Step'
@@ -23782,7 +23782,7 @@ msgstr "Auf Zeitachse anzeigen"
 #. Card'
 #: frappe/desk/doctype/number_card/number_card.json
 msgid "Show percentage difference according to this time interval"
-msgstr "Prozentuale Differenz gemäß diesem Zeitintervall anzeigen"
+msgstr "Prozentuale Differenz gemäss diesem Zeitintervall anzeigen"
 
 #. Description of the 'Title Prefix' (Data) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
@@ -23901,12 +23901,12 @@ msgstr "Diese Instanz läuft im schreibgeschützten Modus für Wartungsarbeiten 
 
 #: frappe/public/js/frappe/views/file/file_view.js:318
 msgid "Size"
-msgstr "Größe"
+msgstr "Grösse"
 
 #. Label of a Float field in DocType 'System Health Report Tables'
 #: frappe/desk/doctype/system_health_report_tables/system_health_report_tables.json
 msgid "Size (MB)"
-msgstr "Größe (MB)"
+msgstr "Grösse (MB)"
 
 #: frappe/public/js/frappe/widgets/onboarding_widget.js:82
 #: frappe/public/js/onboarding_tours/onboarding_tours.js:18
@@ -24172,7 +24172,7 @@ msgstr "Sonderzeichen sind nicht erlaubt"
 
 #: frappe/model/naming.py:61
 msgid "Special Characters except '-', '#', '.', '/', '{{' and '}}' not allowed in naming series {0}"
-msgstr "Sonderzeichen außer &quot;-&quot;, &quot;#&quot;, &quot;.&quot;, &quot;/&quot;, &quot;{{&quot; Und &quot;}}&quot; sind bei der Benennung von Serien nicht zulässig {0}"
+msgstr "Sonderzeichen ausser &quot;-&quot;, &quot;#&quot;, &quot;.&quot;, &quot;/&quot;, &quot;{{&quot; Und &quot;}}&quot; sind bei der Benennung von Serien nicht zulässig {0}"
 
 #. Description of the 'Timeout (In Seconds)' (Int) field in DocType 'Report'
 #: frappe/core/doctype/report/report.json
@@ -24334,7 +24334,7 @@ msgstr "Eingabe von Daten unterhalb dieser Linie beginnen"
 msgid "Start new Format"
 msgstr "Neues Format starten"
 
-#. Option for the 'SSL/TLS Mode' (Select) field in DocType 'LDAP Settings'
+#. Option for the 'ssL/TLS Mode' (Select) field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
 msgid "StartTLS"
 msgstr "StartTLS"
@@ -24697,7 +24697,7 @@ msgstr "Nach Erstellung buchen"
 
 #: frappe/public/js/frappe/widgets/onboarding_widget.js:400
 msgid "Submit this document to complete this step."
-msgstr "Senden Sie dieses Dokument, um diesen Schritt abzuschließen."
+msgstr "Senden Sie dieses Dokument, um diesen Schritt abzuschliessen."
 
 #: frappe/public/js/frappe/form/form.js:1144
 msgid "Submit this document to confirm"
@@ -25215,7 +25215,7 @@ msgstr "Systemverwaltung"
 #. 'Module Onboarding'
 #: frappe/desk/doctype/module_onboarding/module_onboarding.json
 msgid "System managers are allowed by default"
-msgstr "Systemmanager sind standardmäßig zulässig"
+msgstr "Systemmanager sind standardmässig zulässig"
 
 #: frappe/public/js/frappe/utils/number_systems.js:5
 msgctxt "Number system"
@@ -25512,7 +25512,7 @@ msgstr "Die automatische Wiederholung für dieses Dokument wurde deaktiviert."
 
 #: frappe/public/js/frappe/form/grid.js:1176
 msgid "The CSV format is case sensitive"
-msgstr "Das CSV-Format unterscheidet zwischen Groß- und Kleinschreibung"
+msgstr "Das CSV-Format unterscheidet zwischen Gross- und Kleinschreibung"
 
 #. Description of the 'Client ID' (Data) field in DocType 'Google Settings'
 #: frappe/integrations/doctype/google_settings/google_settings.json
@@ -25848,7 +25848,7 @@ msgstr "Diese Einstellungen sind erforderlich, wenn das 'Benutzerdefinierte' LDA
 #. Description of the 'Defaults' (Section Break) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "These values will be automatically updated in transactions and also will be useful to restrict permissions for this user on transactions containing these values."
-msgstr "Diese Werte werden automatisch in Transaktionen aktualisiert. Außerdem sind sie nützlich, um die Berechtigungen dieses Benutzers bei Transaktionen mit diesen Werten zu beschränken."
+msgstr "Diese Werte werden automatisch in Transaktionen aktualisiert. Ausserdem sind sie nützlich, um die Berechtigungen dieses Benutzers bei Transaktionen mit diesen Werten zu beschränken."
 
 #: frappe/www/third_party_apps.html:3 frappe/www/third_party_apps.html:13
 msgid "Third Party Apps"
@@ -26005,7 +26005,7 @@ msgstr "Dies ist ein sehr verbreitetes Passwort."
 
 #: frappe/core/doctype/rq_job/rq_job.js:9
 msgid "This is a virtual doctype and data is cleared periodically."
-msgstr "Dies ist ein virtueller Dokumenttyp und die Daten werden regelmäßig gelöscht."
+msgstr "Dies ist ein virtueller Dokumenttyp und die Daten werden regelmässig gelöscht."
 
 #: frappe/templates/emails/auto_reply.html:5
 msgid "This is an automatically generated reply"
@@ -26053,7 +26053,7 @@ msgstr "Der Versand dieses Newsletters war zu einem späteren Zeitpunkt geplant.
 
 #: frappe/public/js/frappe/views/reports/query_report.js:967
 msgid "This report contains {0} rows and is too big to display in browser, you can {1} this report instead."
-msgstr "Dieser Bericht enthält {0} Zeilen und ist zu groß, um im Browser angezeigt zu werden. Sie können diesen Bericht stattdessen unter {1} aufrufen."
+msgstr "Dieser Bericht enthält {0} Zeilen und ist zu gross, um im Browser angezeigt zu werden. Sie können diesen Bericht stattdessen unter {1} aufrufen."
 
 #: frappe/templates/emails/auto_email_report.html:57
 msgid "This report was generated on {0}"
@@ -27406,7 +27406,7 @@ msgstr "Aktualisieren des Status der E-Mail-Warteschlange. Die E-Mails werden be
 
 #: frappe/core/doctype/document_naming_rule/document_naming_rule.js:17
 msgid "Updating counter may lead to document name conflicts if not done properly"
-msgstr "Aktualisierungszähler kann zu Dokumentennamenskonflikten führen, wenn sie nicht ordnungsgemäß ausgeführt werden"
+msgstr "Aktualisierungszähler kann zu Dokumentennamenskonflikten führen, wenn sie nicht ordnungsgemäss ausgeführt werden"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.py:22
 msgid "Updating global settings"
@@ -27525,8 +27525,8 @@ msgstr "Berichtsdiagramm verwenden"
 #. Label of a Check field in DocType 'Email Domain'
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/email/doctype/email_domain/email_domain.json
-msgid "Use SSL"
-msgstr "SSL verwenden"
+msgid "Use ssL"
+msgstr "ssL verwenden"
 
 #. Label of a Check field in DocType 'Email Account'
 #. Label of a Check field in DocType 'Email Domain'
@@ -28114,7 +28114,7 @@ msgstr "Zu validierender Wert"
 
 #: frappe/model/base_document.py:1041
 msgid "Value too big"
-msgstr "Wert zu groß"
+msgstr "Wert zu gross"
 
 #: frappe/core/doctype/data_import/importer.py:720
 msgid "Value {0} missing for {1}"
@@ -28345,7 +28345,7 @@ msgid "Warning"
 msgstr "Warnung"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:217
-msgid "Warning: DATA LOSS IMMINENT! Proceeding will permanently delete following database columns from doctype {0}:"
+msgid "Warning: DATA LOss IMMINENT! Proceeding will permanently delete following database columns from doctype {0}:"
 msgstr "Warnung: DROHENDER DATENVERLUST! Wenn Sie fortfahren, werden die folgenden Datenbankspalten von DocType {0} dauerhaft gelöscht:"
 
 #: frappe/public/js/frappe/model/meta.js:179
@@ -28355,7 +28355,7 @@ msgstr "Warnung: {0} kann in keiner Tabelle zu {1} gefunden werden"
 #. Description of the 'Counter' (Int) field in DocType 'Document Naming Rule'
 #: frappe/core/doctype/document_naming_rule/document_naming_rule.json
 msgid "Warning: Updating counter may lead to document name conflicts if not done properly"
-msgstr "Warnung: Die Aktualisierung des Zählers kann zu Konflikten bei den Dokumentennamen führen, wenn sie nicht ordnungsgemäß durchgeführt wird."
+msgstr "Warnung: Die Aktualisierung des Zählers kann zu Konflikten bei den Dokumentennamen führen, wenn sie nicht ordnungsgemäss durchgeführt wird."
 
 #: frappe/website/doctype/help_article/templates/help_article.html:24
 msgid "Was this article helpful?"
@@ -28783,7 +28783,7 @@ msgstr "Wenn Sie ein Dokument per E-Mail versenden, wird die PDF-Datei an die Ko
 #. DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "When uploading files, force the use of the web-based image capture. If this is unchecked, the default behavior is to use the mobile native camera when use from a mobile is detected."
-msgstr "Erzwingen Sie beim Hochladen von Dateien die Verwendung der webbasierten Bilderfassung. Falls diese Option nicht aktiviert ist, wird standardmäßig die native Kamera des Mobiltelefons verwendet, wenn eine Nutzung von einem Mobiltelefon aus erkannt wird."
+msgstr "Erzwingen Sie beim Hochladen von Dateien die Verwendung der webbasierten Bilderfassung. Falls diese Option nicht aktiviert ist, wird standardmässig die native Kamera des Mobiltelefons verwendet, wenn eine Nutzung von einem Mobiltelefon aus erkannt wird."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:18
 msgid "When you Amend a document after Cancel and save it, it will get a new number that is a version of the old number."
@@ -28921,7 +28921,7 @@ msgstr "Workflow-Generator-ID"
 
 #: frappe/workflow/doctype/workflow/workflow.js:11
 msgid "Workflow Builder allows you to create workflows visually. You can drag and drop states and link them to create transitions. Also you can update thieir properties from the sidebar."
-msgstr "Mit dem Workflow-Generator können Sie Arbeitsabläufe visuell erstellen. Sie können Zustände per Drag-and-Drop verschieben und sie miteinander verknüpfen, um Übergänge zu erstellen. Außerdem können Sie ihre Eigenschaften über die Seitenleiste aktualisieren."
+msgstr "Mit dem Workflow-Generator können Sie Arbeitsabläufe visuell erstellen. Sie können Zustände per Drag-and-Drop verschieben und sie miteinander verknüpfen, um Übergänge zu erstellen. Ausserdem können Sie ihre Eigenschaften über die Seitenleiste aktualisieren."
 
 #. Label of a JSON field in DocType 'Workflow'
 #: frappe/workflow/doctype/workflow/workflow.json
@@ -29295,7 +29295,7 @@ msgstr "Sie können diese {0} auch kopieren und in Ihren Browser einfügen"
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:17
 msgid "You can change Submitted documents by cancelling them and then, amending them."
-msgstr "Sie können gebuchte Dokumente ändern, indem Sie sie stornieren und anschließend berichtigen."
+msgstr "Sie können gebuchte Dokumente ändern, indem Sie sie stornieren und anschliessend berichtigen."
 
 #: frappe/public/js/frappe/logtypes.js:21
 msgid "You can change the retention policy from {0}."
@@ -29482,7 +29482,7 @@ msgstr "Sie haben sich erfolgreich abgemeldet"
 
 #: frappe/custom/doctype/customize_form/customize_form.py:241
 msgid "You have hit the row size limit on database table: {0}"
-msgstr "Sie haben das Limit für die Zeilengröße in der Datenbanktabelle erreicht: {0}"
+msgstr "Sie haben das Limit für die Zeilengrösse in der Datenbanktabelle erreicht: {0}"
 
 #: frappe/public/js/frappe/list/bulk_operations.js:412
 msgid "You have not entered a value. The field will be set to empty."
@@ -29709,7 +29709,7 @@ msgstr "Ihr altes Passwort ist falsch."
 #. 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Your organization name and address for the email footer."
-msgstr "Name und Anschrift Ihrer Firma für die Fußzeile der E-Mail."
+msgstr "Name und Anschrift Ihrer Firma für die Fusszeile der E-Mail."
 
 #: frappe/templates/emails/auto_reply.html:2
 msgid "Your query has been received. We will reply back shortly. If you have any additional information, please reply to this mail."
@@ -30781,7 +30781,7 @@ msgstr "Erneut tweeten"
 #. Option for the 'Icon' (Select) field in DocType 'Workflow State'
 #: frappe/workflow/doctype/workflow_state/workflow_state.json
 msgid "road"
-msgstr "Straße"
+msgstr "Strasse"
 
 #: frappe/public/js/frappe/utils/utils.js:1136
 msgctxt "Seconds (Field: Duration)"
@@ -31121,7 +31121,7 @@ msgstr "JJJJ-MM-TT"
 #. Option for the 'Icon' (Select) field in DocType 'Workflow State'
 #: frappe/workflow/doctype/workflow_state/workflow_state.json
 msgid "zoom-in"
-msgstr "vergrößern"
+msgstr "vergrössern"
 
 #. Option for the 'Icon' (Select) field in DocType 'Workflow State'
 #: frappe/workflow/doctype/workflow_state/workflow_state.json
@@ -31321,7 +31321,7 @@ msgstr "{0} hat {1} angehängt"
 
 #: frappe/core/doctype/system_settings/system_settings.py:145
 msgid "{0} can not be more than {1}"
-msgstr "{0} darf nicht größer als {1} sein"
+msgstr "{0} darf nicht grösser als {1} sein"
 
 #: frappe/public/js/frappe/form/footer/version_timeline_content_builder.js:77
 msgid "{0} cancelled this document"
@@ -31513,11 +31513,11 @@ msgstr "{0} ist gleich {1}"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:1420
 msgid "{0} is greater than or equal to {1}"
-msgstr "{0} ist größer oder gleich {1}"
+msgstr "{0} ist grösser oder gleich {1}"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:1410
 msgid "{0} is greater than {1}"
-msgstr "{0} ist größer als {1}"
+msgstr "{0} ist grösser als {1}"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:1425
 msgid "{0} is less than or equal to {1}"
