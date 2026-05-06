@@ -1604,6 +1604,16 @@ msgstr "Administrator hat auf {0} über {1} zugegriffen mit IP-Adresse {2}."
 msgid "Advanced"
 msgstr "Fortgeschritten"
 
+#. Label  in DocType 'System Settings'
+#: frappe/core/doctype/system_settings/system_settings.json
+msgid "Disable automatic prepared reports"
+msgstr "Automatische Aktivierung von vorbereiteten Berichten deaktivieren"
+
+#. Description in DocType 'System Settings'
+#: frappe/core/doctype/system_settings/system_settings.json
+msgid "Use this to prevent reports being switched to prepared reports based on a timeout of 15 seconds"
+msgstr "Wenn das aktiviert ist, setzt das System langsame Berichte nicht automatisch auf vorbereitete Berichte"
+
 #. Label of a Section Break field in DocType 'User Permission'
 #: frappe/core/doctype/user_permission/user_permission.json
 msgid "Advanced Control"
@@ -5368,7 +5378,7 @@ msgstr "Legen Sie fest, wie berichtigte Dokumente benannt werden sollen.<br>\n\n
 #. Description of a DocType
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.json
 msgid "Configure various aspects of how document naming works like naming series, current counter."
-msgstr "Konfigurieren Sie verschiedene Aspekte der Funktionsweise der Dokumentbenennung, z. B. die Nummernkreise und den aktuellen Zähler."
+msgstr "Konfigurieren Sie verschiedene Aspekte der Funktionsweise der Dokumentbenennung, z. B. die Nummernkreise und den aktuellen Zähler."
 
 #: frappe/core/doctype/user/user.js:395 frappe/public/js/frappe/dom.js:331
 #: frappe/www/update-password.html:30
@@ -12864,7 +12874,7 @@ msgstr "Fügen Sie neue Datensätze ein"
 #. Label of a Check field in DocType 'Web Page'
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Insert Style"
-msgstr "Stil einfügen"
+msgstr "Stil einfügen"
 
 #: frappe/public/js/frappe/ui/toolbar/search_utils.js:691
 #: frappe/public/js/frappe/ui/toolbar/search_utils.js:692
@@ -18903,7 +18913,7 @@ msgstr "Bitte stellen Sie sicher, dass die Referenzkommunikationsdokumente nicht
 
 #: frappe/model/document.py:866
 msgid "Please refresh to get the latest document."
-msgstr "Bitte aktualisieren, um das neueste Dokument zu erhalten."
+msgstr "Bitte aktualisieren, um das neueste Dokument zu erhalten."
 
 #: frappe/printing/page/print/print.js:535
 msgid "Please remove the printer mapping in Printer Settings and try again."
@@ -22630,7 +22640,7 @@ msgstr "Zeitzone auswählen"
 #. Label of a Autocomplete field in DocType 'Document Naming Settings'
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.json
 msgid "Select Transaction"
-msgstr "Bitte Transaktionen auswählen"
+msgstr "Bitte Transaktionen auswählen"
 
 #: frappe/workflow/page/workflow_builder/workflow_builder.js:68
 msgid "Select Workflow"
@@ -27355,7 +27365,7 @@ msgstr "Übersetzungen aktualisieren"
 #: frappe/desk/doctype/bulk_update/bulk_update.json
 #: frappe/workflow/doctype/workflow_document_state/workflow_document_state.json
 msgid "Update Value"
-msgstr "Wert aktualisieren"
+msgstr "Wert aktualisieren"
 
 #: frappe/utils/change_log.py:386
 msgid "Update from Frappe Cloud"
