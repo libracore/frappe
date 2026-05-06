@@ -426,8 +426,12 @@ def get_group_by_column_label(args, meta):
 
 
 def enable_prepared_report(report: str, site: str):
-	frappe.init(site)
-	frappe.connect()
-	frappe.db.set_value("Report", report, "prepared_report", 1)
-	frappe.db.commit()
-	frappe.destroy()
+    # check if it is allowed to enable prepared report
+    if cint(frappe.get_value("System Settings", "System Settings", "disable_automatic_prepared_reports")):
+        return
+        
+    frappe.init(site)
+    frappe.connect()
+    frappe.db.set_value("Report", report, "prepared_report", 1)
+    frappe.db.commit()
+    frappe.destroy()
