@@ -708,17 +708,17 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "1",
+   "description": "Use this to prevent reports being switched to prepared reports based on a timeout of 15 seconds",
    "fieldname": "disable_automatic_prepared_reports",
    "fieldtype": "Check",
-   "label": "Disable automatic prepared reports",
-   "options": "Use this to prevent reports being switched to prepared reports based on a timeout of 15 seconds"
+   "label": "Disable automatic prepared reports"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2026-05-06 10:21:26.906701",
+ "modified": "2026-05-06 10:53:43.807703",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
