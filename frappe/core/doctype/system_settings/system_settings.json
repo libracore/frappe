@@ -96,6 +96,8 @@
   "prepared_report_section",
   "max_auto_email_report_per_user",
   "max_report_rows",
+  "column_break_ftgi",
+  "disable_automatic_prepared_reports",
   "background_workers",
   "enable_scheduler",
   "dormant_days",
@@ -534,7 +536,7 @@
    "label": "Login with email link expiry (in minutes)"
   },
   {
-   "default": "Banker's Rounding (legacy)",
+   "default": "Commercial Rounding",
    "fieldname": "rounding_method",
    "fieldtype": "Select",
    "label": "Rounding Method",
@@ -700,12 +702,23 @@
    "fieldname": "max_report_rows",
    "fieldtype": "Int",
    "label": "Max Report Rows"
+  },
+  {
+   "fieldname": "column_break_ftgi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "disable_automatic_prepared_reports",
+   "fieldtype": "Check",
+   "label": "Disable automatic prepared reports",
+   "options": "Use this to prevent reports being switched to prepared reports based on a timeout of 15 seconds"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2025-05-19 14:17:40.748786",
+ "modified": "2026-05-06 10:21:26.906701",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
@@ -720,6 +733,7 @@
   }
  ],
  "quick_entry": 1,
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
