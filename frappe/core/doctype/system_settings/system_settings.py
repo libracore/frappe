@@ -40,6 +40,7 @@ class SystemSettings(Document):
 		deny_multiple_sessions: DF.Check
 		disable_automatic_prepared_reports: DF.Check
 		disable_change_log_notification: DF.Check
+		disable_collapsible_navbar: DF.Check
 		disable_document_sharing: DF.Check
 		disable_standard_email_footer: DF.Check
 		disable_system_update_notification: DF.Check

@@ -15,6 +15,7 @@
   "enable_onboarding",
   "setup_complete",
   "disable_document_sharing",
+  "disable_collapsible_navbar",
   "date_and_number_format",
   "date_format",
   "time_format",
@@ -713,12 +714,19 @@
    "fieldname": "disable_automatic_prepared_reports",
    "fieldtype": "Check",
    "label": "Disable automatic prepared reports"
+  },
+  {
+   "default": "1",
+   "description": "By default, the secondary navbar (with Save, title, etc.) hides while scrolling down and reappears while scrolling up. Enable this to keep it always visible.",
+   "fieldname": "disable_collapsible_navbar",
+   "fieldtype": "Check",
+   "label": "Disable Collapsible Navbar"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2026-06-17 09:10:43.807703",
+ "modified": "2026-06-17 11:19:38.222456",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
