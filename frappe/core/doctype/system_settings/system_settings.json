@@ -502,7 +502,7 @@
    "label": "Disable Change Log Notification"
   },
   {
-   "default": "1200",
+   "default": "259200",
    "fieldname": "reset_password_link_expiry_duration",
    "fieldtype": "Duration",
    "label": "Reset Password Link Expiry Duration",
@@ -718,7 +718,7 @@
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2026-05-06 10:53:43.807703",
+ "modified": "2026-06-17 09:10:43.807703",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
