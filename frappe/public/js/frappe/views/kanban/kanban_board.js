@@ -180,6 +180,13 @@ frappe.provide("frappe.views");
 					callback: (r) => {
 						var board = r.message[0];
 						var updated_cards = r.message[1];
+						// the column field was changed server-side via a full
+						// doc.save(); drop any cached copy of the moved docs so an
+						// open/subsequent form reloads fresh instead of showing the
+						// stale status (and any fields recomputed during save)
+						updated_cards.forEach(function(uc) {
+							frappe.model.clear_doc(this.doctype, uc.name);
+						}, this);
 						var cards = update_cards_column(updated_cards);
 						var columns = prepare_columns(board.columns);
 						updater.set({

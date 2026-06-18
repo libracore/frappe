@@ -2853,7 +2853,7 @@ DocType: Custom Field,Permission Level,অনুমতি শ্রেনী
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: সরিয়ে ফেলতে চান, লেখা ছাড়া সংশোধন সেট করা যায় না"
 DocType: List View Setting,Disable Count,গণনা অক্ষম করুন
 DocType: Google Maps Settings,Client Key,ক্লায়েন্ট কী
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,আপনি সংযুক্তি মুছে ফেলতে চান আপনি কি নিশ্চিত?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,আপনি সংযুক্তি মুছে ফেলতে চান আপনি কি নিশ্চিত?
 apps/frappe/frappe/__init__.py,Thank you,তোমাকে ধন্যবাদ
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,রক্ষা
 DocType: Print Settings,Print Style Preview,স্টাইল মুদ্রণের পূর্বরূপ

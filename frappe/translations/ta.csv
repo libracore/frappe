@@ -2881,7 +2881,7 @@ DocType: Custom Field,Permission Level,அனுமதி நிலை
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0} : எழுது இல்லாமல் , திருத்தவோ, ரத்து , சமர்ப்பி அமைக்க முடியாது"
 DocType: List View Setting,Disable Count,எண்ணிக்கையை முடக்கு
 DocType: Google Maps Settings,Client Key,வாடிக்கையாளர் விசை
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,நீங்கள் இணைப்பு நீக்க வேண்டும் நீங்கள் உறுதியாக இருக்கிறீர்களா?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,நீங்கள் இணைப்பு நீக்க வேண்டும் நீங்கள் உறுதியாக இருக்கிறீர்களா?
 apps/frappe/frappe/__init__.py,Thank you,நன்றி
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,சேமிப்பு
 DocType: Print Settings,Print Style Preview,அச்சு உடை முன்னோட்டம்

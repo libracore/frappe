@@ -2900,7 +2900,7 @@ DocType: Custom Field,Permission Level,Ниво на достъп
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Cannot set Submit, Cancel, Amend without Write"
 DocType: List View Setting,Disable Count,Деактивиране на броя
 DocType: Google Maps Settings,Client Key,Клиентски ключ
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,"Сигурни ли сте, че искате да изтриете прикачения файл?"
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,"Сигурни ли сте, че искате да изтриете прикачения файл?"
 apps/frappe/frappe/__init__.py,Thank you,Благодаря
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Запазване
 DocType: Print Settings,Print Style Preview,Печат Style Preview

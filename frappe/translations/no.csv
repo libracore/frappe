@@ -2930,7 +2930,7 @@ DocType: Custom Field,Permission Level,Tillatelse nivå
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Kan ikke sette Send, Avbryt: Bedre uten Write"
 DocType: List View Setting,Disable Count,Deaktiver telling
 DocType: Google Maps Settings,Client Key,Klientnøkkel
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Er du sikker på at du vil slette vedlegget?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Er du sikker på at du vil slette vedlegget {0}?
 apps/frappe/frappe/__init__.py,Thank you,Takk
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Besparende
 DocType: Print Settings,Print Style Preview,Print Stil Preview

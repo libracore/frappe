@@ -2935,7 +2935,7 @@ DocType: Custom Field,Permission Level,ခွင့်ပြုချက်အ�
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Submit သတ်မှတ် Cancel, Write မပါဘဲပြင်ဆင်ချက်မရပါ"
 DocType: List View Setting,Disable Count,Disable လုပ်ထားအရေအတွက်
 DocType: Google Maps Settings,Client Key,client Key ကို
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,သင်ပူးတွဲဖိုင်ပယ်ဖျက်ချင်တာသေချာမှန်သလော
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,သင်ပူးတွဲဖိုင်ပယ်ဖျက်ချင်တာသေချာမှန်သလော
 apps/frappe/frappe/__init__.py,Thank you,ကျေးဇူးတင်ပါသည်
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,သိမ်းဆည်းခြင်း
 DocType: Print Settings,Print Style Preview,ပုံနှိပ်ပုံစံကို Preview

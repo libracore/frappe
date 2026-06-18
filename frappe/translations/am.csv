@@ -2897,7 +2897,7 @@ DocType: Custom Field,Permission Level,ፍቃድ ደረጃ
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: አስገባ ሰርዝ, ጻፍ ያለ እንዲሻሻል ማዘጋጀት አይቻልም"
 DocType: List View Setting,Disable Count,ቆጠራን ያሰናክሉ።
 DocType: Google Maps Settings,Client Key,የደንበኛ ቁልፍ
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,ወደ አባሪ መሰረዝ ይፈልጋሉ እርግጠኛ ነዎት?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,ወደ አባሪ መሰረዝ ይፈልጋሉ እርግጠኛ ነዎት?
 apps/frappe/frappe/__init__.py,Thank you,አመሰግናለሁ
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,በማስቀመጥ ላይ
 DocType: Print Settings,Print Style Preview,ቅጥ የህትመት ቅድመ እይታ

@@ -2936,7 +2936,7 @@ DocType: Custom Field,Permission Level,권한 수준
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0} : 쓰기없이 정정, 취소, 제출 설정할 수"
 DocType: List View Setting,Disable Count,개수 비활성화
 DocType: Google Maps Settings,Client Key,클라이언트 키
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,첨부 파일을 삭제 하시겠습니까?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,첨부 파일을 삭제 하시겠습니까?
 apps/frappe/frappe/__init__.py,Thank you,감사합니다
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,절약
 DocType: Print Settings,Print Style Preview,인쇄 스타일 미리보기

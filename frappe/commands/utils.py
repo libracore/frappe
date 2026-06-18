@@ -725,7 +725,7 @@ def auto_deploy(context, app, migrate=False, restart=False, remote='upstream'):
 		print('No Updates')
 
 def print_in_app_help_deprecation():
-	print("In app help has been removed.\nYou can access the documentation on erpnext.com/docs or frappe.io/docs")
+	print("In app help has been removed.\nYou can access the documentation at https://docs.libracore.io")
 	return
 
 commands = [

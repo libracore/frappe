@@ -2928,7 +2928,7 @@ DocType: Custom Field,Permission Level,Dovoljenje Raven
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write",{0}: Ne morem nastaviti brez možnosti zapisa
 DocType: List View Setting,Disable Count,Onemogoči štetje
 DocType: Google Maps Settings,Client Key,KljuÄŤni kljuÄŤ
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,"Ali ste prepričani, da želite izbrisati prilogo?"
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,"Ali ste prepričani, da želite izbrisati prilogo?"
 apps/frappe/frappe/__init__.py,Thank you,Hvala
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Shranjevanje
 DocType: Print Settings,Print Style Preview,Print Style Predogled

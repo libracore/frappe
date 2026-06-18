@@ -2869,7 +2869,7 @@ DocType: Custom Field,Permission Level,Level destûr
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Can set ne Submit, Cancel, Qanûnên bê Write"
 DocType: List View Setting,Disable Count,Hejmartin disekinî
 DocType: Google Maps Settings,Client Key,Key Client
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,"Ma tu dizanî, tu dixwazî jê bibî girêdayî?"
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,"Ma tu dizanî, tu dixwazî jê bibî girêdayî?"
 apps/frappe/frappe/__init__.py,Thank you,Spas dikim
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Saving
 DocType: Print Settings,Print Style Preview,Print Preview Style

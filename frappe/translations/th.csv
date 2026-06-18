@@ -2934,7 +2934,7 @@ DocType: Custom Field,Permission Level,ระดับของสิทธิ�
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write",{0} : ไม่สามารถตั้งค่า การส่ง การยกเลิก และ การแก้ไข ได้โดยไม่ได้ เขียน
 DocType: List View Setting,Disable Count,ปิดใช้งานการนับ
 DocType: Google Maps Settings,Client Key,คีย์ไคลเอ็นต์
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,คุณแน่ใจหรือว่าต้องการลบสิ่งที่แนบมา?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,คุณแน่ใจหรือว่าต้องการลบสิ่งที่แนบมา?
 apps/frappe/frappe/__init__.py,Thank you,ขอบคุณ
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,กำลังบันทึก
 DocType: Print Settings,Print Style Preview,ตัวอย่างรูปแบบการพิมพ์

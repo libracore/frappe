@@ -14,11 +14,11 @@ class QueryParameters(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		key: DF.Data
-		parent: DF.Data
-		parentfield: DF.Data
-		parenttype: DF.Data
-		value: DF.Data
+		key = None  # type: DF.Data
+		parent = None  # type: DF.Data
+		parentfield = None  # type: DF.Data
+		parenttype = None  # type: DF.Data
+		value = None  # type: DF.Data
 	# end: auto-generated types
 
 	pass

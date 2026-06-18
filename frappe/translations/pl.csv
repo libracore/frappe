@@ -2934,7 +2934,7 @@ DocType: Custom Field,Permission Level,Poziom dostępu
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0} : Nie można ustawić Zatwierdź , Anuluj , Zmienić bez wypełnienia pola"
 DocType: List View Setting,Disable Count,Wyłącz liczbę
 DocType: Google Maps Settings,Client Key,Klucz klienta
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,"Czy jesteś pewien, że chcesz usunąć ten załącznik?"
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,"Czy jesteś pewien, że chcesz usunąć ten załącznik?"
 apps/frappe/frappe/__init__.py,Thank you,Dziękuję
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Zapisywanie
 DocType: Print Settings,Print Style Preview,Podgląd Wydruku Stylu

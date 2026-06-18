@@ -2855,7 +2855,7 @@ DocType: Custom Field,Permission Level,Niveli leje
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Nuk mund të vënë Submit, Cancel Ndreqni pa Shkruani"
 DocType: List View Setting,Disable Count,Disaktivizo numërimin
 DocType: Google Maps Settings,Client Key,Klienti Çelësi
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,A jeni i sigurt se doni të fshini shtojcën?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,A jeni i sigurt se doni të fshini shtojcën?
 apps/frappe/frappe/__init__.py,Thank you,Faleminderit
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Kursim
 DocType: Print Settings,Print Style Preview,Print Preview Style

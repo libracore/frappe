@@ -2895,7 +2895,7 @@ DocType: Custom Field,Permission Level,Ruxsat darajasi
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Yuborish, Bekor qilish, Yozmasdan o&#39;zgartirish mumkin emas"
 DocType: List View Setting,Disable Count,Hisobni o‘chirib qo‘yish
 DocType: Google Maps Settings,Client Key,Mijoz kalitlari
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Ilovani o&#39;chirmoqchimisiz?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Ilovani o&#39;chirmoqchimisiz?
 apps/frappe/frappe/__init__.py,Thank you,rahmat
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Saqlash
 DocType: Print Settings,Print Style Preview,Stil uslubini ko&#39;rib chiqish

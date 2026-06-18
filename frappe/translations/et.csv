@@ -2900,7 +2900,7 @@ DocType: Custom Field,Permission Level,Luba Level
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Ei saa määrata Esita, Loobu, Muuta ilma kirjutamine"
 DocType: List View Setting,Disable Count,Keela krahv
 DocType: Google Maps Settings,Client Key,Kliendi võti
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,"Olete kindel, et soovite kustutada manust?"
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,"Olete kindel, et soovite kustutada manust?"
 apps/frappe/frappe/__init__.py,Thank you,Aitäh
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Salvestamine
 DocType: Print Settings,Print Style Preview,Trüki Style eelvaade

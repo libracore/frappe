@@ -2933,7 +2933,7 @@ DocType: Custom Field,Permission Level,Atļauja Level
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Nevar iestatīt Iesniegt, Atcelt, Grozīt bez Write"
 DocType: List View Setting,Disable Count,Atspējot skaitīšanu
 DocType: Google Maps Settings,Client Key,Klienta atslēga
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Vai jūs tiešām vēlaties dzēst pielikumu?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Vai jūs tiešām vēlaties dzēst pielikumu?
 apps/frappe/frappe/__init__.py,Thank you,Paldies
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Glābšana
 DocType: Print Settings,Print Style Preview,Izdrukāt Style Preview

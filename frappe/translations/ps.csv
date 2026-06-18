@@ -2892,7 +2892,7 @@ DocType: Custom Field,Permission Level,د اجازې د ليول
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write",{0}: جوړ نشي سپارل، لغوه، پرته نوشتن راولی
 DocType: List View Setting,Disable Count,شمېرنه ناتوان کړئ
 DocType: Google Maps Settings,Client Key,د مراجع کیلي
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,آيا تاسو په ډاډمنه توګه غواړئ چې په ضمیمه کی ړنګ کړئ؟
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,آيا تاسو په ډاډمنه توګه غواړئ چې په ضمیمه کی ړنګ کړئ؟
 apps/frappe/frappe/__init__.py,Thank you,مننه
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,ژغورل
 DocType: Print Settings,Print Style Preview,دچاپ Style د مخکتنې

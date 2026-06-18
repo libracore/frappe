@@ -2897,7 +2897,7 @@ DocType: Custom Field,Permission Level,Jogosultsági szint
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Írás nélkül nem elérhető a Küldés, Törlés, és Módosítás"
 DocType: List View Setting,Disable Count,A gróf letiltása
 DocType: Google Maps Settings,Client Key,Ügyfél kulcs
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,"Biztos benne, hogy törölni szeretné a mellékletet?"
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,"Biztos benne, hogy törölni szeretné a mellékletet {0}?"
 apps/frappe/frappe/__init__.py,Thank you,Köszönöm
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Mentés
 DocType: Print Settings,Print Style Preview,Nyomtatvány stílus előnézet

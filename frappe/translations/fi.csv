@@ -2900,7 +2900,7 @@ DocType: Custom Field,Permission Level,Käyttöoikeustaso
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Ei voi vahvistaa, perua tai korjata ilman kirjoitusoikeutta"
 DocType: List View Setting,Disable Count,Poista laskenta käytöstä
 DocType: Google Maps Settings,Client Key,Asiakkaan avain
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,"Oletko varma, että haluat poistaa liitetiedoston?"
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,"Oletko varma, että haluat poistaa liitetiedoston?"
 apps/frappe/frappe/__init__.py,Thank you,Kiitos
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Tallennetaan...
 DocType: Print Settings,Print Style Preview,Tulosta Style esikatselu

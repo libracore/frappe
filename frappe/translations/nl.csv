@@ -2932,7 +2932,7 @@ DocType: Custom Field,Permission Level,Machtigingsniveau
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0} : Kan niet Indienen, Annuleren, Wijzigen zonder te Schrijven"
 DocType: List View Setting,Disable Count,Schakel graaf uit
 DocType: Google Maps Settings,Client Key,Client Key
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Weet u zeker dat u de bijlage wilt verwijderen?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Weet u zeker dat u de bijlage wilt verwijderen?
 apps/frappe/frappe/__init__.py,Thank you,Dankjewel
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,Opslaan
 DocType: Print Settings,Print Style Preview,Print Stijl Voorbeeld

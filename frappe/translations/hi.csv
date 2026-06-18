@@ -2899,7 +2899,7 @@ DocType: Custom Field,Permission Level,अनुमति स्तर
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0} : लिखने के बिना संशोधन रद्द , सबमिट सेट नहीं कर सकता"
 DocType: List View Setting,Disable Count,गणना अक्षम करें
 DocType: Google Maps Settings,Client Key,क्लाइंट कुंजी
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,क्या आप सुनिश्चित करें कि आप अनुलग्नक हटाना चाहते हैं?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,क्या आप सुनिश्चित करें कि आप अनुलग्नक हटाना चाहते हैं?
 apps/frappe/frappe/__init__.py,Thank you,धन्यवाद
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,बचत
 DocType: Print Settings,Print Style Preview,मुद्रण शैली पूर्वावलोकन

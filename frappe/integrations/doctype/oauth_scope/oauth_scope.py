@@ -14,10 +14,10 @@ class OAuthScope(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		parent: DF.Data
-		parentfield: DF.Data
-		parenttype: DF.Data
-		scope: DF.Data | None
+		parent = None # type: DF.Data
+		parentfield = None # type: DF.Data
+		parenttype = None # type: DF.Data
+		scope = None # type: DF.Data | None
 	# end: auto-generated types
 
 	pass

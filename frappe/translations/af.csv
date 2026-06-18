@@ -2900,7 +2900,7 @@ DocType: Custom Field,Permission Level,Toestemmingsvlak
 apps/frappe/frappe/core/doctype/doctype/doctype.py,"{0}: Cannot set Submit, Cancel, Amend without Write","{0}: Kan nie Stel, Kanselleer, Wysig sonder Skryf, stel nie"
 DocType: List View Setting,Disable Count,Deaktiveer telling
 DocType: Google Maps Settings,Client Key,Kliënt Sleutel
-apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment?,Is jy seker jy wil die aanhangsel uitvee?
+apps/frappe/frappe/public/js/frappe/form/sidebar/attachments.js,Are you sure you want to delete the attachment {0}?,Is jy seker jy wil die aanhangsel uitvee?
 apps/frappe/frappe/__init__.py,Thank you,Dankie
 apps/frappe/frappe/public/js/frappe/form/save.js,Saving,spaar
 DocType: Print Settings,Print Style Preview,Druk Styl Voorskou
