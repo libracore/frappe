@@ -321,6 +321,14 @@ def add_attachment(fname, fcontent, content_type=None,
 		part = MIMEImage(fcontent, _subtype=subtype)
 	elif maintype == 'audio':
 		part = MIMEAudio(fcontent, _subtype=subtype)
+	elif content_type == 'application/xml':                             # patch LaMu 2026-06-18: prevent xml-encoding issue
+		if isinstance(fcontent, text_type):
+			fcontent = fcontent.encode("utf-8")
+		part = MIMEBase(maintype, subtype)
+		part.set_payload(fcontent)
+		# Encode the payload using Base64
+		from email import encoders
+		encoders.encode_base64(part)
 	else:
 		part = MIMEBase(maintype, subtype)
 		part.set_payload(fcontent)
