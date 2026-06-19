@@ -29,39 +29,38 @@
 .fc-scroller {
 	overflow: hidden !important;
 }
-/* Query Report: Total height of report scales with page */
-#page-query-report .layout-main {
+/* Query Report: No change (looks OK) */
+/* #page-query-report .layout-main {
 	height: calc(100vh - 140px);
-}
+}*/
 /* 2x Flex layout, so the table view in reports always fills the screen and never shows two vertical scrollbars */
 /* Outer layer of Flex layout (.report-wrapper variable) */
-.layout-main-section {
-	height: 100%;
+.page-container[id^="page-List"] .layout-main-section {
 	display: flex;
 	flex-direction: column;
 }
-.layout-main-section > * {
+.page-container[id^="page-List"] .layout-main-section > * {
 	flex-grow: 0;
 }
-.layout-main-section > .report-wrapper {
+.page-container[id^="page-List"] .layout-main-section > .report-wrapper {
 	flex-grow: 1;
 }
-.layout-main-section-wrapper {
+.page-container[id^="page-List"] .layout-main-section-wrapper {
 	height: 100%;
 }
-.datatable-wrapper {
+.page-container[id^="page-List"] .datatable-wrapper {
 	height: 100%;
 }
 /* Inner layer of Flex layout (.dt-scrollable variable) */
-.datatable {
+.page-container[id^="page-List"] .datatable {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 }
-.datatable > * {
+.page-container[id^="page-List"] .datatable > * {
 	flex-grow: 0;
 }
-.datatable > .dt-scrollable {
+.page-container[id^="page-List"] .datatable > .dt-scrollable {
 	height: initial !important; /* Useless height value that depends on Viewport width (!) - overwrite with flex layout */
 	max-height: initial !important;
 	width: initial !important;
