@@ -1,0 +1,69 @@
+/* BETTER REPORT LAYOUT, Double Scroll Issue */
+/* Avoid outer scrollbar in lists and reports (1) */
+.page-body {
+	min-height: calc(100vh - 140px);
+}
+/* Avoid outer scrollbar in lists and reports (2) */
+.page-container[id^=page-List] .layout-main-section-wrapper {
+	margin-bottom: -1px !important;
+}
+/* List and report view (not calendar): Footer always visible, scrollbar appears within table */
+.page-container[id^="page-List"][id$="/List"] .frappe-list .result,
+.page-container[id^="page-List"][id$="/List"] .frappe-list .no-result,
+.page-container[id^="page-List"][id$="/List"] .frappe-list .freeze,
+.page-container[id^="page-List"][id$="/Report"] .frappe-list .result,
+.page-container[id^="page-List"][id$="/Report"] .frappe-list .no-result,
+.page-container[id^="page-List"][id$="/Report"] .frappe-list .freeze,
+.page-container[id^="page-List"][id*="/Report/"] .frappe-list .result,
+.page-container[id^="page-List"][id*="/Report/"] .frappe-list .no-result,
+.page-container[id^="page-List"][id*="/Report/"] .frappe-list .freeze {
+	overflow-y: auto;
+	height: calc(100vh - 284px) !important;
+}
+/* Similar rule for Gantt Chart */
+.page-container[id^="page-List"][id$="/Gantt"] .frappe-list .gantt-container {
+	overflow-y: auto;
+	height: calc(100vh - 284px) !important;
+}
+/* Calendar: no inner scrollbar even when "full" */
+.fc-scroller {
+	overflow: hidden !important;
+}
+/* Query Report: Total height of report scales with page */
+#page-query-report .layout-main {
+	height: calc(100vh - 140px);
+}
+/* 2x Flex layout, so the table view in reports always fills the screen and never shows two vertical scrollbars */
+/* Outer layer of Flex layout (.report-wrapper variable) */
+.layout-main-section {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.layout-main-section > * {
+	flex-grow: 0;
+}
+.layout-main-section > .report-wrapper {
+	flex-grow: 1;
+}
+.layout-main-section-wrapper {
+	height: 100%;
+}
+.datatable-wrapper {
+	height: 100%;
+}
+/* Inner layer of Flex layout (.dt-scrollable variable) */
+.datatable {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.datatable > * {
+	flex-grow: 0;
+}
+.datatable > .dt-scrollable {
+	height: initial !important; /* Useless height value that depends on Viewport width (!) - overwrite with flex layout */
+	max-height: initial !important;
+	width: initial !important;
+	flex-grow: 1;
+}
