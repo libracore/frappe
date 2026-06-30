@@ -1062,9 +1062,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					// give HyperList enough height to render every visible row...
 					scrollable.style.height = rows.length * cell_height + 100 + "px";
 					orig_render_rows(rows);
-					// ...then shrink the box to the real content height
+					// ...then shrink the box to the real content height, plus 2px to
+					// avoid an inner scrollbar... plus another 29px for optical reasons
+					// (make the gap equal to one row height)
 					const content_height = br.hyperlist && br.hyperlist._scrollHeight;
-					if (content_height) scrollable.style.height = content_height + "px";
+					if (content_height) scrollable.style.height = content_height + 31 + "px";
 				}
 			} finally {
 				fitting = false;
