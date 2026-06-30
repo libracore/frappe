@@ -29,10 +29,36 @@
 .fc-scroller {
 	overflow: hidden !important;
 }
-/* Query Report: No change (looks OK) */
-/* #page-query-report .layout-main {
+/* Query Report: Special treatment. Similar to dual-flex layout as below (perhaps not as elaborate but seems to work) */
+#page-query-report .layout-main-section {
 	height: calc(100vh - 140px);
-}*/
+	display: flex;
+	flex-direction: column;
+}
+#page-query-report .layout-main-section .page-form,
+#page-query-report .layout-main-section .report-footer {
+    flex-grow: 0;
+}
+#page-query-report .layout-main-section .report-wrapper {
+    flex-grow: 1;
+}
+
+#page-query-report .layout-main-section .report-wrapper .datatable {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#page-query-report .layout-main-section .report-wrapper .dt-header,
+#page-query-report .layout-main-section .report-wrapper .dt-footer {
+    flex-grow: 0;
+}
+
+#page-query-report .layout-main-section .report-wrapper .dt-scrollable {
+	flex-grow: 1;
+}
+
+
 /* 2x Flex layout, so the table view in reports always fills the screen and never shows two vertical scrollbars */
 /* Outer layer of Flex layout (.report-wrapper variable) */
 .page-container[id^="page-List"] .layout-main-section {
