@@ -1016,6 +1016,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				datatable_options = this.report_settings.get_datatable_options(datatable_options);
 			}
 			this.datatable = new window.DataTable(this.$report[0], datatable_options);
+			this.setup_full_height_datatable();
 		}
 
 		if (typeof this.report_settings.initial_depth == "number") {
@@ -1024,6 +1025,55 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		if (this.report_settings.after_datatable_render) {
 			this.report_settings.after_datatable_render(this.datatable);
 		}
+	}
+
+	// Show query reports at their full height so the whole page scrolls, instead
+	// of cramming the table into a short inner-scroll box below the chart.
+	// The datatable body is a virtual list (HyperList) that only re-fits its
+	// height on a full render, not on tree expand/collapse. We wrap renderRows()
+	// — every render path (initial, refresh, tree toggle, collapse/expand all,
+	// setTreeDepth) funnels through it — and size .dt-scrollable to the exact
+	// content height each time: no empty gap on collapse, no inner scrollbar on
+	// expand. Works together with the CSS in scss/desk/no_double_scrolling.scss.
+	setup_full_height_datatable() {
+		const dt = this.datatable;
+		const br = dt && dt.bodyRenderer;
+		if (!br || br._full_height_patched) return;
+		br._full_height_patched = true;
+
+		// Beyond this many visible rows we keep the datatable's normal virtual
+		// scrolling (a bounded box) so huge reports don't render thousands of
+		// DOM rows and freeze the browser.
+		const MAX_FULL_ROWS = 600;
+		const cell_height = dt.options.cellHeight || 33;
+		const orig_render_rows = br.renderRows.bind(br);
+		let fitting = false;
+
+		br.renderRows = (rows) => {
+			if (fitting) return orig_render_rows(rows);
+			fitting = true;
+			try {
+				const scrollable = br.bodyScrollable;
+				if (rows.length > MAX_FULL_ROWS) {
+					// too many rows: fall back to the bounded, virtually-scrolled box
+					scrollable.style.height = "";
+					orig_render_rows(rows);
+				} else {
+					// give HyperList enough height to render every visible row...
+					scrollable.style.height = rows.length * cell_height + 100 + "px";
+					orig_render_rows(rows);
+					// ...then shrink the box to the real content height
+					const content_height = br.hyperlist && br.hyperlist._scrollHeight;
+					if (content_height) scrollable.style.height = content_height + "px";
+				}
+			} finally {
+				fitting = false;
+			}
+		};
+
+		// fit the initial (constructor) render, which ran before this patch
+		const initial_rows = br.visibleRows || dt.datamanager.getRowsForView();
+		if (initial_rows && initial_rows.length) br.renderRows(initial_rows);
 	}
 
 	show_loading_screen() {

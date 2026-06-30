@@ -29,33 +29,31 @@
 .fc-scroller {
 	overflow: hidden !important;
 }
-/* Query Report: Special treatment. Similar to dual-flex layout as below (perhaps not as elaborate but seems to work) */
+/* Query Report (e.g. financial statements with a chart on top): show the table
+   at its full height and let the WHOLE PAGE scroll, instead of squeezing the
+   table into a tiny inner-scroll box below the chart.
+   The table body (.dt-scrollable) is a virtual list (frappe-datatable/HyperList)
+   that needs a concrete pixel height to know how many rows to render. We give it
+   a large height; the datatable's own setBodyStyle() then shrinks that box down
+   to the actual content height, yielding a full-height table with no inner
+   scrollbar. The large value also caps pathological multi-thousand-row reports,
+   which keep an inner scrollbar instead of rendering every row. */
 #page-query-report .layout-main-section {
-	height: calc(100vh - 140px);
-	display: flex;
-	flex-direction: column;
-}
-#page-query-report .layout-main-section .page-form,
-#page-query-report .layout-main-section .report-footer {
-    flex-grow: 0;
+	display: block; /* undo the viewport-fitting flex column so content can grow */
 }
 #page-query-report .layout-main-section .report-wrapper {
-    flex-grow: 1;
+	overflow: visible; /* don't trap the table in its own scrollbar */
 }
-
 #page-query-report .layout-main-section .report-wrapper .datatable {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+	height: auto !important; /* size to content, not to the viewport */
 }
-
-#page-query-report .layout-main-section .report-wrapper .dt-header,
-#page-query-report .layout-main-section .report-wrapper .dt-footer {
-    flex-grow: 0;
-}
-
 #page-query-report .layout-main-section .report-wrapper .dt-scrollable {
-	flex-grow: 1;
+	/* NB: height must NOT be !important — the datatable's setBodyStyle() shrinks
+	   this box to the real content height via an inline style, and an !important
+	   rule here would block that and leave a tall empty gap below the table. */
+	height: 4000px;
+	max-height: none !important;
+	width: initial !important;
 }
 
 
