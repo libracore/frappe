@@ -26530,7 +26530,7 @@ msgstr "Heute"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:1533
 msgid "Toggle Chart"
-msgstr "Diagramm/Grafik(?)  umschalten\\nplease verify context!"
+msgstr "Grafik  umschalten"
 
 #. Label of a standard navbar item
 #. Type: Action
