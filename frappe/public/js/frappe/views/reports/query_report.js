@@ -1027,55 +1027,141 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		}
 	}
 
-	// Show query reports at their full height so the whole page scrolls, instead
-	// of cramming the table into a short inner-scroll box below the chart.
-	// The datatable body is a virtual list (HyperList) that only re-fits its
-	// height on a full render, not on tree expand/collapse. We wrap renderRows()
-	// — every render path (initial, refresh, tree toggle, collapse/expand all,
-	// setTreeDepth) funnels through it — and size .dt-scrollable to the exact
-	// content height each time: no empty gap on collapse, no inner scrollbar on
-	// expand. Works together with the CSS in scss/desk/no_double_scrolling.scss.
+	// Size a query report's table to avoid double scrolling, picking one of two
+	// layouts per render depending on how much room the table has:
+	//
+	//   * full height  – the table is shown in full and the WHOLE PAGE scrolls.
+	//                    Used when the table fits the viewport, or when there is
+	//                    too little room for a usable inner-scroll box (e.g. a
+	//                    chart/summary above the table eats the vertical space,
+	//                    as on Balance Sheet).
+	//   * inner scroll – .dt-scrollable is capped to the viewport and only the
+	//                    table body scrolls; the page itself does not. Used for
+	//                    long, chart-less reports (e.g. General Ledger) where
+	//                    there is room to show at least MIN_INNER_ROWS rows.
+	//
+	// The table body is a virtual list (HyperList) that needs an explicit pixel
+	// height and only re-fits on a full render, not on tree expand/collapse. We
+	// wrap renderRows() — every render path (initial, refresh, tree toggle,
+	// collapse/expand all, setTreeDepth) funnels through it — so the chosen
+	// layout is reapplied on every change. Works together with the CSS in
+	// scss/desk/no_double_scrolling.scss.
 	setup_full_height_datatable() {
 		const dt = this.datatable;
 		const br = dt && dt.bodyRenderer;
 		if (!br || br._full_height_patched) return;
 		br._full_height_patched = true;
 
-		// Beyond this many visible rows we keep the datatable's normal virtual
-		// scrolling (a bounded box) so huge reports don't render thousands of
-		// DOM rows and freeze the browser.
+		// Above this many visible rows, never render the whole table at once (it
+		// would create thousands of DOM rows); always use the inner-scroll box.
 		const MAX_FULL_ROWS = 600;
+		// Only use the inner-scroll layout if the available space can show at
+		// least this many rows; otherwise scroll the whole page instead.
+		const MIN_INNER_ROWS = 20;
 		const cell_height = dt.options.cellHeight || 33;
 		const orig_render_rows = br.renderRows.bind(br);
 		let fitting = false;
 
-		br.renderRows = (rows) => {
-			if (fitting) return orig_render_rows(rows);
+		const fit = (rows) => {
+			const scrollable = br.bodyScrollable;
+
+			// Vertical space left for the table body within one viewport,
+			// measured independent of the current scroll position. Reserve the
+			// footer (.report-footer: Expand/Collapse buttons + comparison /
+			// execution-time line) plus a margin so the inner-scroll layout never
+			// spills into a page scrollbar. The footer is created after the first
+			// render, so fall back to an estimate until it exists.
+			const rect = scrollable.getBoundingClientRect();
+			const table_top = rect.top + window.scrollY;
+			const main = scrollable.closest(".layout-main-section");
+			const footer = main && main.querySelector(".report-footer");
+			const reserve = (footer ? footer.offsetHeight : 40) + 12;
+			const available = Math.floor(window.innerHeight - table_top - reserve);
+			const est_content = rows.length * cell_height;
+
+			// Decide the layout. Crucially, never render more than MAX_FULL_ROWS
+			// rows in full (would create thousands of DOM nodes and freeze the
+			// browser) — not even if a transiently bad measurement makes it look
+			// like there is no room.
+			let use_inner;
+			if (rows.length > MAX_FULL_ROWS) {
+				use_inner = true;
+			} else if (est_content <= available) {
+				use_inner = false; // whole table fits the viewport: show it all
+			} else {
+				use_inner = available / cell_height >= MIN_INNER_ROWS;
+			}
+
+			if (use_inner) {
+				// viewport-fit: the table body scrolls, the page does not. Guard
+				// against a non-positive available (e.g. measured before the filter
+				// form settled) with a safe fallback; a deferred re-fit corrects it.
+				const h = available > 0 ? available : Math.round(window.innerHeight / 2);
+				scrollable.style.height = h + "px";
+				orig_render_rows(rows);
+			} else {
+				// full height + page scroll (only reached with <= MAX_FULL_ROWS rows).
+				// Give HyperList enough height to lay out every visible row...
+				scrollable.style.height = est_content + 100 + "px";
+				orig_render_rows(rows);
+				// ...then fit the box to the real content height, plus 31px so the
+				// box is a hair taller than its content (no inner scrollbar) and
+				// leaves a one-row optical gap below the table.
+				const content_height = (br.hyperlist && br.hyperlist._scrollHeight) || est_content;
+				scrollable.style.height = content_height + 31 + "px";
+			}
+		};
+
+		const apply_fit = () => {
+			if (fitting || !(br.visibleRows && br.visibleRows.length)) return;
 			fitting = true;
 			try {
-				const scrollable = br.bodyScrollable;
-				if (rows.length > MAX_FULL_ROWS) {
-					// too many rows: fall back to the bounded, virtually-scrolled box
-					scrollable.style.height = "";
-					orig_render_rows(rows);
-				} else {
-					// give HyperList enough height to render every visible row...
-					scrollable.style.height = rows.length * cell_height + 100 + "px";
-					orig_render_rows(rows);
-					// ...then shrink the box to the real content height, plus 2px to
-					// avoid an inner scrollbar... plus another 29px for optical reasons
-					// (make the gap equal to one row height)
-					const content_height = br.hyperlist && br.hyperlist._scrollHeight;
-					if (content_height) scrollable.style.height = content_height + 31 + "px";
-				}
+				fit(br.visibleRows);
 			} finally {
 				fitting = false;
 			}
 		};
 
-		// fit the initial (constructor) render, which ran before this patch
-		const initial_rows = br.visibleRows || dt.datamanager.getRowsForView();
-		if (initial_rows && initial_rows.length) br.renderRows(initial_rows);
+		// Schedule a single re-fit on the next animation frame. rAF callbacks run
+		// just before paint, so this overrides — without any visible flash — the
+		// height reset that datatable.refresh()/render() does via setDimensions() →
+		// setBodyStyle() right after our synchronous fit (e.g. on a filter reload).
+		// It also corrects a measurement taken before the layout fully settled.
+		let pending_raf = 0;
+		const schedule_refit = () => {
+			if (pending_raf) return;
+			pending_raf = requestAnimationFrame(() => {
+				pending_raf = 0;
+				apply_fit();
+			});
+		};
+
+		br.renderRows = (rows) => {
+			if (fitting) return orig_render_rows(rows);
+			fitting = true;
+			try {
+				fit(rows);
+			} finally {
+				fitting = false;
+			}
+			schedule_refit();
+		};
+
+		// Re-fit on viewport resize so the inner-scroll / full-height choice
+		// stays correct across screen sizes and window changes.
+		let resize_timer;
+		window.addEventListener("resize", () => {
+			clearTimeout(resize_timer);
+			resize_timer = setTimeout(apply_fit, 150);
+		});
+
+		// Fit the initial render. Defer it so the filter form (which can be tall
+		// while its fields are still stacking before they flex into rows) has
+		// settled — otherwise we'd misjudge how much room the table has. A second
+		// delayed pass catches anything that settles a little later (footer, late
+		// field rendering).
+		requestAnimationFrame(() => requestAnimationFrame(apply_fit));
+		setTimeout(apply_fit, 250);
 	}
 
 	show_loading_screen() {
