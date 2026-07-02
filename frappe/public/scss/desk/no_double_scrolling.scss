@@ -56,6 +56,19 @@
 	width: initial !important;
 }
 
+/* frappe-datatable's $.measureTextWidth() (node_modules/frappe-datatable/src/dom.js)
+   appends a hidden, absolutely-positioned probe <div> to <body> to measure text
+   width and never removes it. Having no `top`, each leaked probe settles at the
+   bottom of the body flow and adds ~20px of height, producing a spurious outer
+   scrollbar on reports whose table exactly fills the viewport (inner-scroll mode).
+   Pin these probes to the top with zero height so they can't extend the page —
+   their width, the only thing measured, is unaffected. */
+body > div[style*="position: absolute"][style*="visibility: hidden"][style*="white-space: nowrap"] {
+	top: 0 !important;
+	height: 0 !important;
+	overflow: hidden !important;
+}
+
 
 /* 2x Flex layout, so the table view in reports always fills the screen and never shows two vertical scrollbars */
 /* Outer layer of Flex layout (.report-wrapper variable) */
