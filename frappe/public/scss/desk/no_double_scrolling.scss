@@ -41,6 +41,12 @@
 #page-query-report .layout-main-section {
 	display: block; /* undo the viewport-fitting flex column so content can grow */
 }
+/* Full-height mode (page scrolls): leave a 20px gap below the footer. The class
+   is toggled by setup_full_height_datatable() in query_report.js and is absent in
+   inner-scroll mode, where extra bottom space would cause an outer scrollbar. */
+#page-query-report .layout-main-section.query-report-full-scroll {
+	margin-bottom: 20px;
+}
 #page-query-report .layout-main-section .report-wrapper {
 	overflow: visible; /* don't trap the table in its own scrollbar */
 }

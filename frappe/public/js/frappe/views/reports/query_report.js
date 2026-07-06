@@ -1092,6 +1092,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				use_inner = available / cell_height >= MIN_INNER_ROWS;
 			}
 
+			// In full-height mode the page scrolls, so add a little breathing room
+			// below the footer (see the CSS). Not in inner-scroll mode, where extra
+			// bottom space would push the page past the viewport (outer scrollbar).
+			if (main) main.classList.toggle("query-report-full-scroll", !use_inner);
+
 			if (use_inner) {
 				// viewport-fit: the table body scrolls, the page does not. Guard
 				// against a non-positive available (e.g. measured before the filter
