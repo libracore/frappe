@@ -289,22 +289,49 @@ def prepare_to_notify(doc, print_html=None, print_format=None, attachments=None)
 		if isinstance(attachments, string_types):
 			attachments = json.loads(attachments)
 
+		# MVD Spezifische Erweiterung (Email Versand mit Attachments aus Nextcloud)
+		import requests
+		from urllib.parse import urlparse
+		from mvd.mvd.utils.nextcloud import NCSettings
+
 		for a in attachments:
 			if isinstance(a, string_types):
-				# is it a filename?
 				try:
-					# check for both filename and file id
-					file_id = frappe.db.get_list('File', or_filters={'file_name': a, 'name': a}, limit=1)
+					file_id = frappe.db.get_list(
+						"File",
+						or_filters={"file_name": a, "name": a},
+						limit=1
+					)
+
 					if not file_id:
 						frappe.throw(_("Unable to find attachment {0}").format(a))
-					file_id = file_id[0]['name']
+
+					file_id = file_id[0]["name"]
 					_file = frappe.get_doc("File", file_id)
-					_file.get_content()
-					# these attachments will be attached on-demand
-					# and won't be stored in the message
-					doc.attachments.append({"fid": file_id})
+
+					# Externe Datei, z.B. Nextcloud-Link
+					if _file.nc_remote_path and _file.file_url.startswith("http"):
+						ncs = NCSettings(sektion='MVZH')
+						content = ncs.download_file(_file.nc_remote_path)
+						doc.attachments.append({
+							"fname": _file.file_name or file_id,
+							"fcontent": content
+						})
+
+					else:
+						# Standard-Frappe-Verhalten
+						_file.get_content()
+						doc.attachments.append({"fid": file_id})
+
 				except IOError:
 					frappe.throw(_("Unable to find attachment {0}").format(a))
+
+				except requests.exceptions.RequestException as e:
+					frappe.throw(
+						_("Unable to download external attachment {0}: {1}")
+						.format(a, str(e))
+					)
+
 			else:
 				doc.attachments.append(a)
 
