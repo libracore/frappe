@@ -289,11 +289,6 @@ def prepare_to_notify(doc, print_html=None, print_format=None, attachments=None)
 		if isinstance(attachments, string_types):
 			attachments = json.loads(attachments)
 
-		# MVD Spezifische Erweiterung (Email Versand mit Attachments aus Nextcloud)
-		import requests
-		from urllib.parse import urlparse
-		from mvd.mvd.utils.nextcloud import NCSettings
-
 		for a in attachments:
 			if isinstance(a, string_types):
 				try:
@@ -309,8 +304,11 @@ def prepare_to_notify(doc, print_html=None, print_format=None, attachments=None)
 					file_id = file_id[0]["name"]
 					_file = frappe.get_doc("File", file_id)
 
-					# Externe Datei, z.B. Nextcloud-Link
-					if _file.nc_remote_path and _file.file_url.startswith("http"):
+					# MVD Spezifische Erweiterung (Email Versand mit Attachments aus Nextcloud)
+					# Externe Datei (Nextcloud-Link)
+					if _file.get("nc_remote_path", False) and _file.file_url.startswith("http"):
+						import requests
+						from mvd.mvd.utils.nextcloud import NCSettings
 						ncs = NCSettings(sektion='MVZH')
 						content = ncs.download_file(_file.nc_remote_path)
 						doc.attachments.append({
