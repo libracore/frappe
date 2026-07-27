@@ -324,7 +324,7 @@ frappe.ui.Filter = class {
 			$desc = $('<div class="text-muted small">').appendTo(this.field.wrapper);
 		}
 		// set description
-		$desc.html((in_list(["in", "not in"], condition)==="in"
+		$desc.html((in_list(["in", "not in"], condition.toLowerCase())  //==="in"
 			? __("values separated by commas")
 			: __("use % as wildcard"))+'</div>');
 	}

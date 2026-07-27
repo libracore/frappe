@@ -251,13 +251,13 @@ frappe.ui.Filter = Class.extend({
 		me.wrapper.find('.condition').change(function() {
 			if(!me.field) return;
 			var condition = $(this).val();
-			if(in_list(["in", "like", "not in", "not like"], condition)) {
+			if(in_list(["in", "like", "not in", "not like"], condition.toLowerCase())) {
 				me.set_field(me.field.df.parent, me.field.df.fieldname, 'Data', condition);
 				if(!me.field.desc_area) {
 					me.field.desc_area = $('<div class="text-muted small">').appendTo(me.field.wrapper);
 				}
 				// set description
-				me.field.desc_area.html((in_list(["in", "not in"], condition)==="in"
+				me.field.desc_area.html((in_list(["in", "not in"], condition.toLowerCase())
 					? __("values separated by commas")
 					: __("use % as wildcard"))+'</div>');
 			} else {
