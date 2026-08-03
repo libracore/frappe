@@ -4,7 +4,7 @@
 import frappe
 from frappe.model.document import Document
 
-DEFAULT_ENABLED_CURRENCIES = ("INR", "USD", "GBP", "EUR", "AED", "AUD", "JPY", "CNY", "CHF")
+DEFAULT_ENABLED_CURRENCIES = ("CHF", "EUR", "USD", "GBP")
 
 
 class Currency(Document):
