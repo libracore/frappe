@@ -60,6 +60,7 @@ class SystemSettings(Document):
 		force_user_to_reset_password: DF.Int
 		force_web_capture_mode_for_uploads: DF.Check
 		hide_footer_in_auto_email_reports: DF.Check
+		ignore_party_address_validation: DF.Check
 		language: DF.Link
 		lifespan_qrcode_image: DF.Int
 		link_field_results_limit: DF.Int

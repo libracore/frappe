@@ -106,7 +106,9 @@
   "allow_error_traceback",
   "enable_telemetry",
   "search_section",
-  "link_field_results_limit"
+  "link_field_results_limit",
+  "sec_other",
+  "ignore_party_address_validation"
  ],
  "fields": [
   {
@@ -721,12 +723,23 @@
    "fieldname": "disable_collapsible_navbar",
    "fieldtype": "Check",
    "label": "Disable Collapsible Navbar"
+  },
+  {
+   "fieldname": "sec_other",
+   "fieldtype": "Section Break",
+   "label": "Other"
+  },
+  {
+   "default": "0",
+   "fieldname": "ignore_party_address_validation",
+   "fieldtype": "Check",
+   "label": "Ignore Party Address Validation"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2026-06-17 11:19:38.222456",
+ "modified": "2026-08-03 18:27:18.379103",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
