@@ -3,7 +3,7 @@ chardet
 dropbox==9.1.0
 gunicorn
 jinja2
-markdown2==2.3.5
+markdown2==2.4.0
 pymysql==0.10.1
 maxminddb-geolite2
 python-dateutil
