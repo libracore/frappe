@@ -46,6 +46,12 @@ def get_print(
 			)
 		local.form_dict.pdf_generator = pdf_generator
 
+	# printview resolves the default print format itself, but get_pdf below only sees what was
+	# passed in, and it needs the name to read disable_smart_shrinking. Left unresolved, that
+	# option is dropped and wkhtmltopdf shrinks the whole page to fit.
+	if doctype and not print_format:
+		print_format = frappe.get_meta(doctype).default_print_format
+
 	original_form_dict = copy.deepcopy(local.form_dict)
 	try:
 		local.form_dict.doctype = doctype
