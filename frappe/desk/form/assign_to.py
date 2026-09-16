@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
+# Copyright (c) 2015-2026, libracore, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
 """assign/unassign to ToDo"""
@@ -67,8 +67,12 @@ def add(args=None, *, ignore_permissions=False):
 		if not ignore_permissions:
 			frappe.get_doc(args["doctype"], args["name"]).check_permission()
 
-		if frappe.get_all("ToDo", filters=filters):
+		existing_todos = frappe.get_all("ToDo", filters=filters)
+		if existing_todos:
 			users_with_duplicate_todo.append(assign_to)
+			# add comment
+			td = frappe.get_doc("ToDo", existing_todos[0]['name'])
+			td.add_comment(comment_type="Comment", text=args.get("description"))
 		else:
 			from frappe.utils import nowdate
 
