@@ -72,7 +72,7 @@ class Address(Document):
 			throw(_("Address Title is mandatory."))
 
 	def validate(self):
-		self.link_address()
+		# self.link_address()						# LaMu/2026-06-01: dropped, this is a stupid featured that will lead to more invalid data than anything else
 		self.validate_preferred_address()
 		set_link_title(self)
 		deduplicate_dynamic_links(self)

@@ -1,0 +1,111 @@
+/* BETTER REPORT LAYOUT, Double Scroll Issue */
+/* Avoid outer scrollbar in lists and reports (1) */
+.page-body {
+	min-height: calc(100vh - 140px);
+}
+/* Avoid outer scrollbar in lists and reports (2) */
+.page-container[id^=page-List] .layout-main-section-wrapper {
+	margin-bottom: -1px !important;
+}
+/* List and report view (not calendar): Footer always visible, scrollbar appears within table */
+.page-container[id^="page-List"][id$="/List"] .frappe-list .result,
+.page-container[id^="page-List"][id$="/List"] .frappe-list .no-result,
+.page-container[id^="page-List"][id$="/List"] .frappe-list .freeze,
+.page-container[id^="page-List"][id$="/Report"] .frappe-list .result,
+.page-container[id^="page-List"][id$="/Report"] .frappe-list .no-result,
+.page-container[id^="page-List"][id$="/Report"] .frappe-list .freeze,
+.page-container[id^="page-List"][id*="/Report/"] .frappe-list .result,
+.page-container[id^="page-List"][id*="/Report/"] .frappe-list .no-result,
+.page-container[id^="page-List"][id*="/Report/"] .frappe-list .freeze {
+	overflow-y: auto;
+	height: calc(100vh - 284px) !important;
+}
+/* Similar rule for Gantt Chart */
+.page-container[id^="page-List"][id$="/Gantt"] .frappe-list .gantt-container {
+	overflow-y: auto;
+	height: calc(100vh - 284px) !important;
+}
+/* Calendar: no inner scrollbar even when "full" */
+.fc-scroller {
+	overflow: hidden !important;
+}
+/* Query Report (e.g. financial statements with a chart on top): show the table
+   at its full height and let the WHOLE PAGE scroll, instead of squeezing the
+   table into a tiny inner-scroll box below the chart.
+   The table body (.dt-scrollable) is a virtual list (frappe-datatable/HyperList)
+   that needs a concrete pixel height to know how many rows to render. We give it
+   a large height; the datatable's own setBodyStyle() then shrinks that box down
+   to the actual content height, yielding a full-height table with no inner
+   scrollbar. The large value also caps pathological multi-thousand-row reports,
+   which keep an inner scrollbar instead of rendering every row. */
+#page-query-report .layout-main-section {
+	display: block; /* undo the viewport-fitting flex column so content can grow */
+}
+/* Full-height mode (page scrolls): leave a 20px gap below the footer. The class
+   is toggled by setup_full_height_datatable() in query_report.js and is absent in
+   inner-scroll mode, where extra bottom space would cause an outer scrollbar. */
+#page-query-report .layout-main-section.query-report-full-scroll {
+	margin-bottom: 20px;
+}
+#page-query-report .layout-main-section .report-wrapper {
+	overflow: visible; /* don't trap the table in its own scrollbar */
+}
+#page-query-report .layout-main-section .report-wrapper .datatable {
+	height: auto !important; /* size to content, not to the viewport */
+}
+#page-query-report .layout-main-section .report-wrapper .dt-scrollable {
+	/* NB: height must NOT be !important — the datatable's setBodyStyle() shrinks
+	   this box to the real content height via an inline style, and an !important
+	   rule here would block that and leave a tall empty gap below the table. */
+	height: 4000px;
+	max-height: none !important;
+	width: initial !important;
+}
+
+/* frappe-datatable's $.measureTextWidth() (node_modules/frappe-datatable/src/dom.js)
+   appends a hidden, absolutely-positioned probe <div> to <body> to measure text
+   width and never removes it. Having no `top`, each leaked probe settles at the
+   bottom of the body flow and adds ~20px of height, producing a spurious outer
+   scrollbar on reports whose table exactly fills the viewport (inner-scroll mode).
+   Pin these probes to the top with zero height so they can't extend the page —
+   their width, the only thing measured, is unaffected. */
+body > div[style*="position: absolute"][style*="visibility: hidden"][style*="white-space: nowrap"] {
+	top: 0 !important;
+	height: 0 !important;
+	overflow: hidden !important;
+}
+
+
+/* 2x Flex layout, so the table view in reports always fills the screen and never shows two vertical scrollbars */
+/* Outer layer of Flex layout (.report-wrapper variable) */
+.page-container[id^="page-List"] .layout-main-section {
+	display: flex;
+	flex-direction: column;
+}
+.page-container[id^="page-List"] .layout-main-section > * {
+	flex-grow: 0;
+}
+.page-container[id^="page-List"] .layout-main-section > .report-wrapper {
+	flex-grow: 1;
+}
+.page-container[id^="page-List"] .layout-main-section-wrapper {
+	height: 100%;
+}
+.page-container[id^="page-List"] .datatable-wrapper {
+	height: 100%;
+}
+/* Inner layer of Flex layout (.dt-scrollable variable) */
+.page-container[id^="page-List"] .datatable {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.page-container[id^="page-List"] .datatable > * {
+	flex-grow: 0;
+}
+.page-container[id^="page-List"] .datatable > .dt-scrollable {
+	height: initial !important; /* Useless height value that depends on Viewport width (!) - overwrite with flex layout */
+	max-height: initial !important;
+	width: initial !important;
+	flex-grow: 1;
+}

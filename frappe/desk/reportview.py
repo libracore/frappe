@@ -376,6 +376,9 @@ def export_query():
 		filters=form_params.filters,
 	)
 
+	# drop export_in_background to prevent this crashing the DB controller
+	form_params.pop("export_in_background", None)
+
 	db_query = DatabaseQuery(doctype)
 	ret = db_query.execute(**form_params)
 

@@ -40,6 +40,7 @@ class SystemSettings(Document):
 		deny_multiple_sessions: DF.Check
 		disable_automatic_prepared_reports: DF.Check
 		disable_change_log_notification: DF.Check
+		disable_collapsible_navbar: DF.Check
 		disable_document_sharing: DF.Check
 		disable_standard_email_footer: DF.Check
 		disable_system_update_notification: DF.Check
@@ -59,6 +60,7 @@ class SystemSettings(Document):
 		force_user_to_reset_password: DF.Int
 		force_web_capture_mode_for_uploads: DF.Check
 		hide_footer_in_auto_email_reports: DF.Check
+		ignore_party_address_validation: DF.Check
 		language: DF.Link
 		lifespan_qrcode_image: DF.Int
 		link_field_results_limit: DF.Int

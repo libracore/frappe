@@ -47,9 +47,13 @@ frappe.ui.Page = class Page {
 
 	setup_scroll_handler() {
 		let last_scroll = 0;
+        const keep_navbar_fixed = cint(frappe.boot.sysdefaults?.disable_collapsible_navbar);
 		$(window).scroll(
 			frappe.utils.throttle(() => {
 				$(".page-head").toggleClass("drop-shadow", !!document.documentElement.scrollTop);
+                if (keep_navbar_fixed) {        // allows to fix the secondary navbar
+                    return;
+                }
 				let current_scroll = document.documentElement.scrollTop;
 				if (current_scroll > 0 && last_scroll <= current_scroll) {
 					$(".page-head").css("top", "-15px");

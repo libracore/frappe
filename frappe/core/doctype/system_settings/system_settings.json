@@ -15,6 +15,7 @@
   "enable_onboarding",
   "setup_complete",
   "disable_document_sharing",
+  "disable_collapsible_navbar",
   "date_and_number_format",
   "date_format",
   "time_format",
@@ -105,7 +106,9 @@
   "allow_error_traceback",
   "enable_telemetry",
   "search_section",
-  "link_field_results_limit"
+  "link_field_results_limit",
+  "sec_other",
+  "ignore_party_address_validation"
  ],
  "fields": [
   {
@@ -502,7 +505,7 @@
    "label": "Disable Change Log Notification"
   },
   {
-   "default": "1200",
+   "default": "259200",
    "fieldname": "reset_password_link_expiry_duration",
    "fieldtype": "Duration",
    "label": "Reset Password Link Expiry Duration",
@@ -713,12 +716,30 @@
    "fieldname": "disable_automatic_prepared_reports",
    "fieldtype": "Check",
    "label": "Disable automatic prepared reports"
+  },
+  {
+   "default": "1",
+   "description": "By default, the secondary navbar (with Save, title, etc.) hides while scrolling down and reappears while scrolling up. Enable this to keep it always visible.",
+   "fieldname": "disable_collapsible_navbar",
+   "fieldtype": "Check",
+   "label": "Disable Collapsible Navbar"
+  },
+  {
+   "fieldname": "sec_other",
+   "fieldtype": "Section Break",
+   "label": "Other"
+  },
+  {
+   "default": "0",
+   "fieldname": "ignore_party_address_validation",
+   "fieldtype": "Check",
+   "label": "Ignore Party Address Validation"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2026-05-06 10:53:43.807703",
+ "modified": "2026-08-03 18:27:18.379103",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",

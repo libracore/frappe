@@ -2827,6 +2827,7 @@
   "currency_name": "Pound Sterling",
   "currency_symbol": "\u00a3",
   "number_format": "#,###.##",
+  "smallest_currency_fraction_value": 0.01,
   "timezones": [
    "Europe/London"
   ],
