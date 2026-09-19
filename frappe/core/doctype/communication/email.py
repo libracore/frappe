@@ -388,12 +388,12 @@ def get_cc(doc, recipients=None, fetched_from_email_account=False):
 	"""Build a list of email addresses for CC"""
 	# get a copy of CC list
 	cc = split_emails(doc.cc)
-
-	if doc.reference_doctype and doc.reference_name:
-		if fetched_from_email_account:
+	# Siehe #2095
+	# if doc.reference_doctype and doc.reference_name:
+		# if fetched_from_email_account:
 			# if it is a fetched email, add follows to CC
-			cc.append(get_owner_email(doc))
-			cc += get_assignees(doc)
+			# cc.append(get_owner_email(doc))
+			# cc += get_assignees(doc)
 
 	if getattr(doc, "send_me_a_copy", False) and doc.sender not in cc:
 		cc.append(doc.sender)
