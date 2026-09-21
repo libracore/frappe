@@ -445,6 +445,14 @@ def add_attachments(name, attachments):
 			attach = frappe.db.get_value("File", {"file_name":a},
 				["file_name", "file_url", "is_private"], as_dict=1)
 
+			if not attach:
+				attach = frappe.db.get_value("File", {"name":a},
+					["file_name", "file_url", "is_private"], as_dict=1)
+
+			if not attach:
+				frappe.log_error("{0}\n{1}".format(name, attachments), "add_attachments failed")
+				frappe.throw("Das Attachment konnte nicht gefunden werden")
+
 			# save attachments to new doc
 			_file = frappe.get_doc({
 				"doctype": "File",
