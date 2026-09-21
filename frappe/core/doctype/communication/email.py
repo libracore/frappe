@@ -294,9 +294,27 @@ def prepare_to_notify(doc, print_html=None, print_format=None, attachments=None)
 				try:
 					file_id = frappe.db.get_list(
 						"File",
-						or_filters={"file_name": a, "name": a},
+						filters={
+							"attached_to_doctype": "Communication",
+							"attached_to_name": doc.name
+						},
+						or_filters={
+							"file_name": a,
+							"name": a
+						},
 						limit=1
 					)
+
+					# Fallback auf Standard-Verhalten
+					if not file_id:
+						file_id = frappe.db.get_list(
+							"File",
+							or_filters={
+								"file_name": a,
+								"name": a
+							},
+							limit=1
+						)
 
 					if not file_id:
 						frappe.throw(_("Unable to find attachment {0}").format(a))
