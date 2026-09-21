@@ -442,24 +442,40 @@ def add_attachments(name, attachments):
 	# loop through attachments
 	for a in attachments:
 		if isinstance(a, string_types):
-			attach = frappe.db.get_value("File", {"file_name":a},
-				["file_name", "file_url", "is_private"], as_dict=1)
+			attach = frappe.db.get_value(
+				"File",
+				{"file_name": a},
+				["file_name", "file_url", "is_private", "nc_remote_path"],
+				as_dict=1
+			)
 
 			if not attach:
-				attach = frappe.db.get_value("File", {"name":a},
-					["file_name", "file_url", "is_private"], as_dict=1)
+				attach = frappe.db.get_value(
+					"File",
+					{"name": a},
+					["file_name", "file_url", "is_private", "nc_remote_path"],
+					as_dict=1
+				)
 
 			if not attach:
-				frappe.log_error("{0}\n{1}".format(name, attachments), "add_attachments failed")
+				frappe.log_error(
+					"{0}\n{1}".format(name, attachments),
+					"add_attachments failed"
+				)
 				frappe.throw("Das Attachment konnte nicht gefunden werden")
 
 			# save attachments to new doc
 			_file = frappe.get_doc({
 				"doctype": "File",
 				"file_url": attach.file_url,
+				"file_name": attach.file_name,
+				"is_private": attach.is_private,
+				"nc_remote_path": attach.nc_remote_path,
 				"attached_to_doctype": "Communication",
 				"attached_to_name": name,
-				"folder": "Home/Attachments"})
+				"folder": "Home/Attachments"
+			})
+
 			_file.save(ignore_permissions=True)
 
 def filter_email_list(doc, email_list, exclude, is_cc=False, is_bcc=False):
