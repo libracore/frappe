@@ -112,13 +112,15 @@ def get_pdf(html, options=None, output: PdfWriter | None = None, print_format=No
 	except OSError as e:
 		if any([error in str(e) for error in PDF_CONTENT_ERRORS]):
 			if not filedata:
-				print(html, options)
+				#print(html, options)
+				frappe.log_error("PDF creation error: content not found", html)
 				frappe.throw(_("PDF generation failed because of broken image links"))
 
 			# allow pdfs with missing images if file got created
 			if output:
 				output.append_pages_from_reader(reader)
 		else:
+			frappe.log_error("PDF creation error", html)
 			raise
 	finally:
 		cleanup(options)
