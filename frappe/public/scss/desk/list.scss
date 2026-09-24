@@ -102,7 +102,7 @@
 		min-width: 80%;
 	}
 	.level-right {
-		flex: 1;
+		// flex: 1;                                     // leads to cropped IDs and a lot of unused spaces in list view
 		overflow: visible;
 		align-items: center;
 	}
