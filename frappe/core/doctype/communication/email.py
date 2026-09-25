@@ -326,9 +326,14 @@ def prepare_to_notify(doc, print_html=None, print_format=None, attachments=None)
 					# Externe Datei (Nextcloud-Link)
 					if _file.get("nc_remote_path", False) and _file.file_url.startswith("http"):
 						import requests
-						from mvd.mvd.utils.nextcloud import NCSettings
-						ncs = NCSettings(sektion='MVZH')
-						content = ncs.download_file(_file.nc_remote_path)
+						if _file.attached_to_doctype == "RSVMitglied":
+							from mvd.mvd.doctype.rsvmitglied.rsvmitglied import get_rsv_file_content
+							rsvmitglied = frappe.get_doc("RSVMitglied", _file.attached_to_name)
+							_, content = get_rsv_file_content(_file.file_url, rsvmitglied)
+						else:
+							from mvd.mvd.utils.nextcloud import NCSettings
+							ncs = NCSettings(sektion='MVZH')
+							content = ncs.download_file(_file.nc_remote_path)
 						doc.attachments.append({
 							"fname": _file.file_name or file_id,
 							"fcontent": content
