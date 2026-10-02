@@ -179,6 +179,8 @@ def download_private_file(path):
 			break
 
 	if not can_access:
+		if frappe.session.user == "Guest":
+			return werkzeug.utils.redirect("/login")
 		raise Forbidden(_("You don't have permission to access this file"))
 
 	return send_private_file(path.split("/private", 1)[1])
