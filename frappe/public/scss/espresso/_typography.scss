@@ -1,6 +1,6 @@
 :root {
-	--font-stack: "InterVariable", "Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI",
-		"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+	--font-stack: "Roboto", "-apple-system", "BlinkMacSystemFont", "Segoe UI",
+		"Inter", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
 		sans-serif;
 	// font size
 	--text-tiny: 11px;
@@ -24,7 +24,7 @@
 	--text-12xl: 64px;
 
 	// font weight
-	--weight-regular: 420;
+	--weight-regular: 400;
 	--weight-medium: 500;
 	--weight-semibold: 600;
 	--weight-bold: 700;
