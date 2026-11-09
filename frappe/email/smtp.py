@@ -44,12 +44,16 @@ def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sen
 	if sender:
 		sender_email_id = parse_addr(sender)[1]
 
+	communication_email_account = None
+	if communication:
+		communication_email_account = frappe.db.get_value("Communication", communication, "email_account")
+	
+	cache_key = (append_to, sender_email_id, communication_email_account)
+
 	if not getattr(frappe.local, "outgoing_email_account", None):
 		frappe.local.outgoing_email_account = {}
 
-	if not (frappe.local.outgoing_email_account.get(append_to)
-		or frappe.local.outgoing_email_account.get(sender_email_id)
-		or frappe.local.outgoing_email_account.get("default")):
+	if not frappe.local.outgoing_email_account.get(cache_key):
 		email_account = None
 
 		if append_to:
@@ -69,10 +73,8 @@ def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sen
 				})
 
 			# Fallback in Case of Communication (Git-Ticket libracore/MVD#1647)
-			if communication:
-				communication_email_account = frappe.db.get_value("Communication", communication, "email_account")
-				if communication_email_account:
-					email_account = frappe.get_doc("Email Account", communication_email_account)
+			if communication_email_account:
+				email_account = frappe.get_doc("Email Account", communication_email_account)
 				
 			# else find the first Email Account with append_to
 			if not email_account:
@@ -105,11 +107,9 @@ def get_outgoing_email_account(raise_exception_not_set=True, append_to=None, sen
 				email_account.password = email_account.get_password(raise_exception=raise_exception)
 			email_account.default_sender = email.utils.formataddr((email_account.name, email_account.get("email_id")))
 
-		frappe.local.outgoing_email_account[append_to or sender_email_id or "default"] = email_account
+		frappe.local.outgoing_email_account[cache_key] = email_account
 
-	return frappe.local.outgoing_email_account.get(append_to) \
-		or frappe.local.outgoing_email_account.get(sender_email_id) \
-		or frappe.local.outgoing_email_account.get("default")
+	return frappe.local.outgoing_email_account.get(cache_key)
 
 def get_default_outgoing_email_account(raise_exception_not_set=True):
 	'''conf should be like:

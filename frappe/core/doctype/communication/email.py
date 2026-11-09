@@ -359,6 +359,11 @@ def prepare_to_notify(doc, print_html=None, print_format=None, attachments=None)
 def set_incoming_outgoing_accounts(doc):
 	doc.incoming_email_account = doc.outgoing_email_account = None
 
+	# Absender-Handling für Beratungen; Sicherstellung dass nur Mailadressen der Beratungs-Sektion verwendet werden
+	if doc.reference_doctype == "Beratung" and doc.sent_or_received == "Sent":
+		_set_beratung_email_accounts(doc)
+		return
+
 	if not doc.incoming_email_account and doc.sender:
 		doc.incoming_email_account = frappe.db.get_value("Email Account",
 			{"email_id": doc.sender, "enable_incoming": 1}, "email_id")
@@ -391,6 +396,42 @@ def set_incoming_outgoing_accounts(doc):
 
 	if doc.sent_or_received == "Sent":
 		doc.db_set("email_account", doc.outgoing_email_account.name)
+
+def _set_beratung_email_accounts(doc):
+	sektion = frappe.db.get_value("Beratung", doc.reference_name, "sektion_id") if doc.reference_name else None
+	if not sektion:
+		frappe.throw(_("E-Mail-Versand nicht möglich: Der Beratung ist keine Sektion zugeordnet."))
+
+	fields = [
+		"name", "email_id", "enable_incoming",
+		"always_use_account_email_id_as_sender",
+		"always_use_account_name_as_sender_name",
+		"send_unsubscribe_message"
+	]
+	sender = parse_addr(doc.sender)[1] if doc.sender else None
+	account = None
+	if sender:
+		account = frappe.db.get_value("Email Account",
+			{"email_id": sender, "sektion_id": sektion, "enable_outgoing": 1},
+			fields, as_dict=True, order_by="name asc")
+
+	if not account:
+		account = frappe.db.get_value("Email Account",
+			{"append_to": "Beratung", "sektion_id": sektion, "enable_outgoing": 1},
+			fields, as_dict=True, order_by="default_outgoing desc, name asc")
+
+	if not account:
+		frappe.throw(_("E-Mail-Versand nicht möglich: Für Beratungen der Sektion {0} ist kein Ausgangskonto aktiviert.").format(sektion))
+
+	doc.outgoing_email_account = account
+	if account.enable_incoming:
+		doc.incoming_email_account = account.email_id
+	else:
+		doc.incoming_email_account = frappe.db.get_value("Email Account",
+			{"append_to": "Beratung", "sektion_id": sektion, "enable_incoming": 1},
+			"email_id", order_by="default_incoming desc, name asc")
+
+	doc.db_set("email_account", account.name)
 
 def get_recipients(doc, fetched_from_email_account=False):
 	"""Build a list of email addresses for To"""
